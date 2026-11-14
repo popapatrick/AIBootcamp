@@ -7,7 +7,7 @@ O cerere de racordare vine uneori fără locație exactă: textul are doar o adr
 ## What Changes
 
 - Buton explicit „Folosește locația operatorului (simulată)" pe cererea de racordare fără coordonate.
-- Endpoint nou `GET /locatie-operator-demo?adresa=&lat=&lon=`: generează determinist o poziție GPS dummy pe strada din adresă (nume OSM cunoscut), cu zgomot GPS mic. Adresă nelocalizabilă: eroare clară, fără punct inventat.
+- Endpoint nou `GET /locatie-operator-demo?text=&lat=&lon=` (`adresa` ca alias): generează determinist o poziție GPS dummy din textul scris de operator, în zona descrisă (stradă, colț de străzi, cartier, combinații), cu zgomot GPS mic. Răspunsul arată indiciile folosite (`indicii`, `gasit`) și zona. Niciun indiciu găsit în datele locale: eroare clară, fără punct inventat.
 - `POST /rapoarte` acceptă `locatie_operator {lat, lon, precizie_m, simulata}`; motorul îl folosește pentru `cerere_racordare` doar dacă nu există coordonate în text și nici clic.
 - Scorul predicției e mai mic decât la coordonate exacte (factor nou în `weights.yaml`), rezultatul rămâne mereu predicție (neaplicat) până confirmă omul.
 - StepTrace arată `sursa_locatie: text | clic | operator_simulat`; jurnalul „de ce" spune că poziția e simulată, cu precizia.

@@ -38,6 +38,7 @@ Valorile de mai jos sunt verificate cap-coadă pe API local cu extracția Claude
 4. **Trace tabletă.** „Generează traseu ultima oră" (`trace-1`), adresa „Strada Liviu Rebreanu, în dreptul curții", sursa tabletă. Se vede: pas `trace`, oprire ~22 min fără stâlp, 3 stâlpi verificați (verzi), stâlp prezis la oprire, scor 0,71.
 5. **Scenariu extrem.** „Încarcă rețeaua cu evenimente" (`?scenariu=extrem`), Play: 68 de evenimente, cu `eticheta` (ramură, demontat, val de apeluri), halou verde/galben; ținta: sub 45 s.
 6. **Demontat și val de apeluri** (opțional, din `docs/DEMO.md`): A-T-014 demontat apoi `scos_din_uz`; 3 apeluri pe A-T-030 scad scorul cu plafon.
+7. **Locația operatorului (simulată).** Cerere racordare fără coordonate, text „Cerere racordare: client nou, casă pe Strada Liviu Rebreanu", buton „Folosește locația operatorului (simulată)". Se vede: punct dummy pe stradă cu ±40 m și marcaj „simulată", indicii cu `gasit`, lanț punctat de 4 stâlpi, scor 0,48-0,57 (sub cel cu clic, 0,60-0,71), nivel predicție, „de ce" cu „poziția SIMULATĂ". Verifică și un text negăsit („strada Foo"): eroare 422 clară, fără punct. Încă fără buton în Lovable (prompt separat); până atunci se verifică pe API: `GET /locatie-operator-demo?text=...`.
 
 ### Riscuri cunoscute (abateri pe board)
 - Cererea de racordare pe sursa `racordari` (aceleași coordonate) iese `predictie` 0,738, nu `adaugat` ~0,84 cum scrie DEMO.md (extracție 0,7, sub prag 0,75). Nu promite „adaugat" decât cu raport structurat. @Victor aliniază DEMO.md/pragul.

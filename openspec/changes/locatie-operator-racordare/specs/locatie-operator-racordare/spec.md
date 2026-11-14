@@ -6,15 +6,31 @@ O cerere de racordare fără locație exactă poate folosi poziția simulată a 
 ## ADDED Requirements
 
 ### Requirement: Poziție simulată a operatorului
-The system SHALL generate, on explicit request, a deterministic dummy operator position on the street named in the address, with a small GPS noise, marked `simulata: true` and with its precision in meters.
+The system SHALL generate, on explicit request, a deterministic dummy operator position from the text written by the operator, inside the zone it describes (street, street corner, neighborhood or a combination), with a small GPS noise, marked `simulata: true`, with a precision in meters that reflects how vague the zone is, and with the hints it used (`indicii`) and the applied constraint (`zona`).
 
-#### Scenario: Stradă cunoscută
-- **WHEN** se cere `GET /locatie-operator-demo?adresa=Strada Liviu Rebreanu`
-- **THEN** răspunsul are `lat`, `lon`, `precizie_m`, `simulata: true`, `strada` și `motiv`, iar o a doua cerere identică dă același punct
+#### Scenario: Stradă singură
+- **WHEN** se cere `GET /locatie-operator-demo?text=casă pe Strada Liviu Rebreanu`
+- **THEN** răspunsul are `lat`, `lon`, `precizie_m`, `simulata: true`, `strada`, `motiv`, `indicii` cu strada `gasit: true` și `zona`, punctul e pe acea stradă, iar o a doua cerere identică dă același punct
 
-#### Scenario: Adresă necunoscută
-- **WHEN** adresa nu conține niciun nume de stradă OSM cunoscut
-- **THEN** răspunsul e o eroare clară („adresa nu se poate localiza, dă clic pe hartă") și nu se inventează niciun punct
+#### Scenario: Intersecție
+- **WHEN** textul e „strada Liviu Rebreanu colț cu strada Ion Luca Caragiale"
+- **THEN** punctul e lângă intersecția celor două străzi, `indicii` conține o `intersectie` cu `gasit: true`, iar `precizie_m` e mai mică decât la o stradă singură
+
+#### Scenario: Cartier
+- **WHEN** textul e „cartierul 1 Decembrie" (zonă OSM `is_in` existentă)
+- **THEN** punctul e doar în acea zonă, `strada` e null și `precizie_m` e cea mai mare
+
+#### Scenario: Combinație
+- **WHEN** textul e „Strada Viilor din cartierul 1 Decembrie"
+- **THEN** punctul respectă ambele constrângeri; dacă se contrazic, răspunsul e eroare, nu un punct
+
+#### Scenario: Indiciu negăsit
+- **WHEN** textul pomenește o stradă, un cartier sau un reper care nu există în datele locale, alături de un indiciu găsit
+- **THEN** indiciul negăsit apare cu `gasit: false` în `indicii` și în `motiv`, nu e ignorat în tăcere
+
+#### Scenario: Niciun indiciu găsit
+- **WHEN** niciun indiciu din text nu se găsește în datele locale
+- **THEN** răspunsul e o eroare 422 clară („dă clic pe hartă") cu indiciile căutate, și nu se inventează niciun punct
 
 ### Requirement: Folosirea poziției în cererea de racordare
 The system SHALL use `detalii.locatie_operator` for a `cerere_racordare` only when the text has no coordinates and no map click was given, and SHALL report the location source as `sursa_locatie` (`text`, `clic` or `operator_simulat`).

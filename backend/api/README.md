@@ -6,6 +6,7 @@ API FastAPI pentru prototip (etapa 7). Implementează `contracts/api.openapi.yam
 - `sources.py`: de unde vin datele (motorul lui B → fișierele lui B → eșantionul `data/model/sample/`), ales automat.
 - `pipeline.py`: `POST /rapoarte` (extracție → potrivire → predicție → scor); folosește `extract_event` (A) și `apply_event` (B) când există, altfel stub + `match_event` real.
 - `POST /predictii/{id}/decizie`: Event `om_teren` dat lui `apply_event`; 404 necunoscută, 409 deja decisă, 400 invalidă. `?scenariu=extrem`: `engine.model_scenariu("extrem")` (404 dacă lipsește fișierul). `API_EXTRACTIE=stub` forțează extracția regex. Detalii: `docs/etapa-7b-api-sesiunea-2.md`.
+- `GET /locatie-operator-demo?text=` (alias `adresa`): poziție GPS dummy a operatorului din textul lui (`simulata: true`, `indicii`, `zona`, `precizie_m`; 422 cu `detail.mesaj` dacă nu se găsește niciun indiciu); `POST /rapoarte` acceptă `locatie_operator`. Detalii: `docs/etapa-17-locatie-operator-racordare.md`.
 - `smoke_api.py`: test pe toate endpoint-urile.
 
 ```bash
