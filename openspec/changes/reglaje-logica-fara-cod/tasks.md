@@ -21,4 +21,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-23-reglaje.md` (ghid pentru Claudiu: ce poate schimba, cum verifică, ce face când nu poate), README-uri, board
+- [x] 5.1 `docs/etapa-23-reglaje.md` (ghid pentru Claudiu: ce poate schimba, cum verifică, ce face când nu poate), README-uri, board

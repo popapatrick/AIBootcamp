@@ -83,3 +83,6 @@ Diferențe rămase și cauze:
 - `r-07-fara-locatie`: tip `racord_nou` (regex), așteptat `cerere_racordare`. Extracție (Patrick).
 `om-01/02` (dummy): fără predicție `NOU-EV-012` în model la rulare izolată, regex nu extrage ținta; extracție/model.
 Teste: smoke_api (și stub), smoke_engine 36, `scripts/verifica_tot.sh` = TOT VERDE.
+
+## Stare finală
+Banca pe golden: 19/20 (`python3 -m backend.api.banc_logica --cu-ai`). Singura diferență: `g-06-ortografie`: cu ai_cache iese `neaplicat`, golden cere predicție (la Patrick). Smoke API OK; `bash scripts/verifica_tot.sh` = TOT VERDE.

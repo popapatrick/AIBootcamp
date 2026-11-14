@@ -1,5 +1,9 @@
 # Panou laptop C
 
+## 2026-11-15, C1–C5 gata (Claudiu, C)
+Banc pe golden 19/20; singura diferență `g-06-ortografie` (cu ai_cache iese `neaplicat`, golden cere predicție): @Patrick. Ghidul de reglaje (`docs/etapa-23-reglaje.md`) actualizat pe B6/`logic-v1`. Prompt Lovable sesiune3 scris și NETRIMIS (decide omul). `verifica_tot.sh` TOT VERDE.
+Contract atins: nu
+
 ## 2026-11-15, C3 runda 3b: banc golden cu AI (`--cu-ai`, ai_cli din abonament) (Claudiu, C)
 După golden-ul regenerat (da927ab), tot 14/20, dar alte cazuri. Cu AI: `g-06` (ortografie) iese `predictie` 0,477 și `r-07` iese corect, deci erau doar lipsă de cache. Rămân: `g-05`, `g-07`, `g-08`, `r-02` (motor, @Victor, ca mai jos) și nou **`g-02-coordonate`**: AI extrage `activ_inlocuit` -> `neaplicat` (@Patrick: prompt sau așteptat?).
 @Patrick: textele golden nu au cache comis (fără AI totul iese `regex`). Rulează `fill_cache --lipsa` pe golden și comite cache-ul; cache-ul `ai_cli` generat la mine rămâne necomis.

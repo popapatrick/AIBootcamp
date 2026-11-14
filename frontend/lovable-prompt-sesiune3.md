@@ -1,6 +1,6 @@
 # Prompt Lovable sesiunea 3 (grupat): origine, predicție slabă, eronat în prototip, zonă, trace simulat, geocodare
 
-> **NU SE TRIMITE până decide omul.** Se trimite doar după ce backend-ul sesiunii 3 întoarce câmpurile de mai jos (motor + A6 + `GET /retea` cu `zona`).
+> **TRIMIS 2026-11-15, la cererea omului** (după `logic-v1`). Textul trimis are 3 corecturi față de cel de mai jos, aflate în C3: (6) câmpurile sunt `trace_params: {zgomot_m, durata_oprire_min, acoperire, decalaj_m, dezactivat}`, iar sursa traseului e în `pasi[pas=trace].rezultat.sursa`, nu în `detalii.trace_sursa`; (7) geocodarea vine ca pas separat `pas = geocodare` în `pasi`, după `extractie`; (8) eticheta pentru `ai_cli` e „AI (live)".
 
 - **Dependențe:** contract `3517dfa` (sesiunea 3) pe main; API care întoarce `origine`, `predictie.slaba/treapta`, `eronat_prototip`, `zona`, `detalii.geocodare`, `detalii.trace_params/trace_sursa`.
 - **Cost estimat:** ~3-5 credite (un singur mesaj; dacă Lovable se încurcă, împarte pe punctele 1-3 / 4-7).
