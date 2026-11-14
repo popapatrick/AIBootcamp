@@ -1,0 +1,28 @@
+{
+  "event_id": "EV-017",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": "6925190",
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-18",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nRaport de teren – verificare rețea JT, 18 august 2026\nAm verificat tronsonul de pe strada cu curbă dinspre stația PTAB 7812. În GIS, între nodurile 6513200 și 7824201 există doar o linie dreaptă. Pe teren cablul face o curbă, iar în curbă există un nod de derivație, 6925190, de unde pornesc două tronsoane către stâlp: A-T-054 și A-T-057. Nodul și cele două tronsoane lipsesc din model.\nRecomand actualizarea GIS și verificarea secțiunii cablului. Lucrarea a fost făcută fără întreruperi.\nIng. fictiv (date fictive)\n",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "noduri_vecine": [
+      "6513200",
+      "7824201"
+    ],
+    "observatii": "nod de derivatie in curba strazii, din care pornesc tronsoanele A-T-054 si A-T-057, lipsesc din model; lucrare fara intreruperi"
+  }
+}

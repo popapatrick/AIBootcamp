@@ -1,5 +1,6 @@
 """Test offline etapa 3: python -m backend.extract.test_extract (fără API, fără rețea)."""
 import json
+import os
 import tempfile
 from datetime import date
 from pathlib import Path
@@ -18,6 +19,21 @@ GOOD = {
 
 
 def main() -> None:
+    os.environ.pop("EXTRACT_ALLOW_API", None)
+    with tempfile.TemporaryDirectory() as tmp:  # implicit: cache miss -> CacheMiss, fără apel API
+        ex.CACHE_DIR = Path(tmp)
+        ex._call_api = lambda *a: (_ for _ in ()).throw(AssertionError("apel API fără EXTRACT_ALLOW_API"))
+        try:
+            ex.extract_event(TEXT, "mentenanta", "2026-09-14")
+            raise AssertionError("trebuia CacheMiss")
+        except ex.CacheMiss:
+            pass
+    assert ex.cache_key("t", "s", "d") == ex.hashlib.sha256(f"{ex.CACHE_TAG}{ex.SYSTEM}sdt".encode()).hexdigest()
+    m = ex.MODEL
+    ex.MODEL = "altul"
+    assert ex.cache_key("t", "s", "d") == ex.hashlib.sha256(f"agent-haiku{ex.SYSTEM}sdt".encode()).hexdigest()  # fără MODEL
+    ex.MODEL = m
+    os.environ["EXTRACT_ALLOW_API"] = "1"  # restul testelor: calea de producție cu API mock
     calls = []
     ex._call_api = lambda text, sursa, data: (calls.append(1), json.loads(json.dumps(GOOD)))[1]
     with tempfile.TemporaryDirectory() as tmp:
@@ -89,7 +105,7 @@ def main() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         ex.CACHE_DIR = Path(tmp)
         t = "Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al."
-        key = ex.hashlib.sha256(f"{ex.MODEL}{ex.SYSTEM}racordari2026-09-01{t}".encode("utf-8")).hexdigest()
+        key = ex.cache_key(t, "racordari", "2026-09-01")
         cached = dict(GOOD, event_id="EV-X", echipa_sursa="racordari", text_original=t, data="2026-09-01",
                       campuri_lipsa=["sectiune_cablu"], detalii={})
         (Path(tmp) / f"{key}.json").write_text(json.dumps(cached), encoding="utf-8")
@@ -129,6 +145,22 @@ def main() -> None:
             raise AssertionError("trebuia ValueError")
         except ValueError:
             pass
+    # fill_cache --import: dus-întors în cache temporar, apoi extract_event fără API
+    from backend.extract import fill_cache as fc
+    os.environ.pop("EXTRACT_ALLOW_API", None)
+    with tempfile.TemporaryDirectory() as tmp:
+        ex.CACHE_DIR = Path(tmp)
+        items = [{"text": TEXT, "sursa": "mentenanta", "data": "2026-09-14", "event": json.loads(json.dumps(GOOD))},
+                 {"text": "rău", "sursa": "mentenanta", "data": "2026-09-14", "event": dict(GOOD, tip="inventat")}]
+        assert fc.importa(items) == (1, 1)
+        ev = ex.extract_event(TEXT, "mentenanta", "2026-09-14")  # din cache, fără API
+        assert ev["text_original"] == TEXT and ev["event_id"].startswith("EV-")
+        try:
+            ex.extract_event("rău", "mentenanta", "2026-09-14")
+            raise AssertionError("trebuia CacheMiss")
+        except ex.CacheMiss:
+            pass
+        assert "Sursa: mentenanta" in ex.user_message(TEXT, "mentenanta", None) and ex.tool_schema()["type"] == "object"
     # forma exemple-dummy.json
     dummy = json.loads((ex.ROOT / "data" / "reports" / "exemple-dummy.json").read_text(encoding="utf-8"))
     assert {"mentenanta", "investitii", "racordari", "apel_client", "om_teren"} <= set(dummy)

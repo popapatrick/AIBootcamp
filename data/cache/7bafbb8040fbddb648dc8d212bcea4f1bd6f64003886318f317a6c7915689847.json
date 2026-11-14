@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-011",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.27652,
+      "lon": 26.06331
+    },
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": "CL-42011"
+  },
+  "status": "semnalat",
+  "data": "2026-11-09",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-11-09 ora 07:15\nID client: CL-42011\nLocație: coordonate 44.27652, 26.06331 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu am curent de azi-noapte, lumina a plecat și nu mai revine.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "incredere_extractie": 0.85,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "fără curent de azi-noapte, nu revine; apel ora 07:15"
+  }
+}

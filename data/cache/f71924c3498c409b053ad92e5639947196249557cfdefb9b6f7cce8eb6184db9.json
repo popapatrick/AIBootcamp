@@ -1,0 +1,22 @@
+{
+  "event_id": "EV-004",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "element_id": "R-T-012",
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-10-27",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nPropunere buget 2027, 27 octombrie 2026.\nÎnlocuirea ramurii R-T-012, între nodurile 6834468 și 6628781, secțiune veche. Propun includerea în planul de investiții. Status planificat.\n",
+  "incredere_extractie": 0.85,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "înlocuire ramură între nodurile 6834468 și 6628781, secțiune veche; propus în planul de investiții buget 2027"
+  }
+}

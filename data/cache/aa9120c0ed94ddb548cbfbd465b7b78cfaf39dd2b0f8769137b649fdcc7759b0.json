@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-007",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": "CL-51003"
+  },
+  "status": "semnalat",
+  "data": "2026-11-13",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "Client: nu merge curentu... nu stiu adresa exacta, undeva spre Primaverii. CL-51003",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "adresa",
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "fara curent; adresa nu e exacta, undeva spre Primaverii"
+  }
+}

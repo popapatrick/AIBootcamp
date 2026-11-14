@@ -9,12 +9,24 @@ Din rădăcina repo-ului:
 .venv/bin/python -m backend.extract.test_extract     # test offline, fără API
 ```
 
-## Chei și model
-- `ANTHROPIC_API_KEY` în `.env` (sau mediu). Cheie `sk-or-...` = OpenRouter: se folosește automat `openrouter.ai/api`.
-- `EXTRACT_MODEL` suprascrie modelul (implicit `claude-haiku-5-5`, sau `anthropic/claude-haiku-5.5` pe OpenRouter).
+## Flux fără cheie API (decis 14 nov.)
+- La rulare: `extract_event` = **cache hit** (din `data/cache/`) sau **`CacheMiss`** (exportat din `backend.extract`). `backend/api/pipeline.py` prinde `Exception` și cade pe stub regex.
+- Producție cu API: `EXTRACT_ALLOW_API=1` + `ANTHROPIC_API_KEY` (`sk-or-...` = OpenRouter); `EXTRACT_MODEL` suprascrie modelul. Implicit oprit.
+- Cheia de cache: `cache_key(text, sursa, data)` = sha256(`CACHE_TAG` ("agent-haiku") + `SYSTEM` + sursa + data + text); nu depinde de model. Schimbarea promptului `SYSTEM` invalidează cache-ul.
 
-## Cache
-Rezultatele se scriu în `data/cache/` (cheie sha256 din model, sursă, dată, text și prompt). Cache hit = fără apel API. După o modificare de prompt cheia se schimbă automat; șterge `data/cache/` doar dacă vrei refacere completă.
+## Umplerea cache-ului cu subagenți Haiku (`fill_cache`)
+```bash
+.venv/bin/python -m backend.extract.fill_cache --lipsa --out lipsa.json   # texte fără cache: [{text, sursa, data, user_message}]
+.venv/bin/python -m backend.extract.fill_cache --prompt                   # SYSTEM + schema uneltei, pentru agenți
+.venv/bin/python -m backend.extract.fill_cache --import rezultate.json    # [{text, sursa, data, event}] -> validare -> cache
+```
+Agentul Haiku primește `system` + `user_message` și întoarce JSON-ul evenimentului. Importul aplică același post-proces ca API-ul (`_finalizeaza`: event_id, data, `_normalizeaza`, `_sectiune`, schema). Sunt acoperite `exemple-dummy.json` (cu `om_teren`) și rapoartele din `data/reports/index.json`; nu `trasee-dummy.json` (fără texte) și nu textele din `DEMO.md` (fără dată fixă).
+
+## Rulare
+```bash
+.venv/bin/python -m backend.extract.run_all          # toate rapoartele -> data/events/events.json (din cache)
+.venv/bin/python -m backend.extract.test_extract     # test offline, fără API
+```
 
 ## Sesiunea 2: tipuri noi
-Promptul acoperă și `apel_client` (call center), `mutare_fire` (`detalii.centru/raza_m/motiv_mutare`), `cerere_racordare` (locația în `referinta.coordonate`) și decizia omului (`verificare`, sursa `om_teren`, `detalii.decizie`). `extract_event` acceptă sursa `om_teren`. Atenție: schimbarea promptului schimbă cheile din `data/cache/`: rapoartele deja extrase dau cache miss (apel API nou) până la reextragere. Vezi `docs/etapa-13-mutare-fire.md`.
+Promptul acoperă și `apel_client` (call center), `mutare_fire` (`detalii.centru/raza_m/motiv_mutare`), `cerere_racordare` (locația în `referinta.coordonate`) și decizia omului (`verificare`, sursa `om_teren`, `detalii.decizie`). `extract_event` acceptă sursa `om_teren`. Atenție: schimbarea promptului schimbă cheile din `data/cache/`: rapoartele deja extrase dau cache miss (`CacheMiss`) până la reumplere cu `fill_cache`. Vezi `docs/etapa-13-mutare-fire.md`.

@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Extracție fără cheie API: CacheMiss, fill_cache, cache regenerat 70/70 (Patrick, A)
+@Victor: cererile (a)-(f) sunt făcute. (a) `extract_event`: la cache hit întoarce evenimentul, la cache miss ridică `CacheMiss` (exportat din `backend.extract`); API-ul se apelează doar cu `EXTRACT_ALLOW_API=1` (păstrat pentru producție). (b) Cheia de cache folosește `CACHE_TAG = "agent-haiku"` în loc de MODEL (`cache_key(text, sursa, data)`). (c) `python -m backend.extract.fill_cache --lipsa [--out f.json]`, `--import f.json`, `--prompt`. (d)+(e) Cache-ul e regenerat cu 5 subagenți Haiku: 70 de texte (exemple-dummy.json + rapoartele din index.json), 70 OK la import, `--lipsa` = 0. (f) Doc-urile etapa-3 și README sunt actualizate.
+Prompt: regula „stâlp necartat = nod_lipsa" nu mai bate racordul. Un racord la client rămâne `racord_nou` chiar dacă stâlpul nu e în GIS. Pe exemple-dummy.json ies 28/29 tipuri; singura diferență e `inv-05` (stâlp nou fără coordonate, iese `linie_planificata`), un text ambiguu.
+Limite: textele din docs/DEMO.md nu au dată fixă, deci cheia lor se schimbă zilnic și nu sunt în `--lipsa` (shortcut în fill_cache.py). Cele ~91 de fișiere vechi din data/cache/ (cheie cu MODEL) nu mai sunt citite. Nu le-am șters, pentru că unele sunt ale lui Claudiu; spuneți dacă le scot.
+@Claudiu: `CacheMiss` e prins de `except Exception` din pipeline.py:187, deci cade pe stub. Marcajul „text nou, fără cache" rămâne la tine. Fă `git pull` și refă testul cap-coadă: textele din /exemple trebuie să iasă din cache.
+Contract atins: nu
+
 ## Cache complet pentru exemple-dummy.json: 29/29 (Patrick, A)
 Cele 16 texte rămase (căzute cu 402) au fost extrase de un subagent Claude Haiku din Claude Code, cu exact SYSTEM-ul și schema uneltei emit_event din extract.py. Ieșirea a trecut prin `extract_event`, deci prin aceeași validare, `_data_valida` și `_sectiune` ca la API, și e salvată în cache cu cheile de producție. Toate cele 29 de texte din `/exemple` au acum cache, deci nu se face niciun apel API în demo.
 Rezultat: 27/29 tipuri ca în `asteptat`. Diferențe: `inv-05` („stâlp nou pe Strada Viilor, fără coordonate") iese `linie_planificata`, așteptat `nod_lipsa`; `rac-04` („racord la stâlpul 9999002, nu-l găsesc în GIS") iese `nod_lipsa`, așteptat `racord_nou`. Regula „stâlp necartat = nod_lipsa" bate aici racordul. Nu repar promptul acum: orice schimbare invalidează tot cache-ul, iar contul API e fără credite.

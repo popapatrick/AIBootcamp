@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-015",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.2830448,
+      "lon": 26.0636533
+    },
+    "adresa": "intersecția Regina Maria cu Primaverii",
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-11-06",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nRaport de teren, 6 noiembrie 2026.\nLa sensul giratoriu nou de la intersecția Regina Maria cu Primaverii, centru 44.2830448, 26.0636533, s-au mutat firele aeriene. Pe teren traseul nu mai corespunde cu harta GIS din zonă. Recomand verificarea elementelor din jurul giratoriului.\nIng. fictiv (date fictive)\n",
+  "incredere_extractie": 0.75,
+  "campuri_lipsa": [
+    "raza_m"
+  ],
+  "detalii": {
+    "centru": {
+      "lat": 44.2830448,
+      "lon": 26.0636533
+    },
+    "raza_m": null,
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "traseul firelor nu mai corespunde cu harta GIS; de verificat elementele din jurul giratoriului"
+  }
+}

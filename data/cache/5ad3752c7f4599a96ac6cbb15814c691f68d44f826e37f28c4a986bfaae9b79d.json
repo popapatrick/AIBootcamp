@@ -1,0 +1,24 @@
+{
+  "event_id": "EV-008",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "str. Fictivă nr. 9",
+    "nr_cadastral": "CF-fictiv 418902"
+  },
+  "status": "semnalat",
+  "data": "2026-09-15",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0455\nData: 2026-09-15\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 9 (adresă fictivă)\nNr. cadastral: CF-fictiv 418902\nConstatare: branșament ars, fără alimentare la imobil\nStatus: semnalat\n",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "branșament ars, fără alimentare la imobil; fișa M-2026-0455"
+  }
+}

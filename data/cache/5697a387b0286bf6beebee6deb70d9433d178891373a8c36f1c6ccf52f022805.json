@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-018",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 4428190,
+      "lon": 2606480
+    },
+    "adresa": "str Primaverii 3",
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-11-08",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "racord nou, coord 4428190 2606480, str Primaverii 3, executat",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "coordonate_de_verificat"
+  ],
+  "detalii": {
+    "observatii": "coordonatele par fara zecimale: de verificat"
+  }
+}

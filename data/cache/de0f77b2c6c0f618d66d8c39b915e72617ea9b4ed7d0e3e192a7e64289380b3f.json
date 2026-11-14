@@ -1,0 +1,22 @@
+{
+  "event_id": "EV-003",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": "A-T-021",
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-29",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nProces-verbal racordare, 29 august 2026.\nÎn zona tronsonului A-T-021 am racordat un client nou. Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al, cablu înlocuit cu două zile înainte.\nConductorul nu este deteriorat, am verificat la fața locului. Racord executat.\n",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [],
+  "detalii": {
+    "sectiune_noua": "TYIR 3x50+54,6 OL-Al",
+    "observatii": "conductorul nu e deteriorat (verificat la fața locului); cablu înlocuit cu două zile înainte; raportul din 2026-08-26 indica TYIR 3x70+54,6 OL-Al pe A-T-021 - de verificat"
+  }
+}

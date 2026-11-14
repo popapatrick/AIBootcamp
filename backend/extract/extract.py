@@ -4,7 +4,8 @@ Folosire:
     from backend.extract import extract_event
     ev = extract_event(text, "mentenanta", "2026-09-14")
 
-Necesită ANTHROPIC_API_KEY (în .env sau în mediu). Date FICTIVE.
+Implicit fără API: cache hit sau CacheMiss (API-ul pică pe stub). Apel API doar cu EXTRACT_ALLOW_API=1
+și ANTHROPIC_API_KEY. Cache-ul se umple cu `python -m backend.extract.fill_cache` (subagenți Haiku). Date FICTIVE.
 """
 from __future__ import annotations
 
@@ -31,6 +32,11 @@ _OR = _KEY.startswith("sk-or-")  # cheie OpenRouter (Messages API compatibil Ant
 # shortcut: slug-ul OpenRouter 'anthropic/claude-haiku-5.5' neverificat (fără rețea spre openrouter.ai din container); suprascrie cu EXTRACT_MODEL
 MODEL = os.environ.get("EXTRACT_MODEL", "anthropic/claude-haiku-5.5" if _OR else "claude-haiku-5-5")
 TOOL = "emit_event"
+CACHE_TAG = "agent-haiku"  # fix: cheia de cache nu depinde de MODEL (cache umplut de agenți sau de API)
+
+
+class CacheMiss(Exception):
+    """Text fără intrare în cache și EXTRACT_ALLOW_API != 1: apelantul cade pe stub."""
 
 _schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
 _schema.pop("$schema", None)
@@ -46,7 +52,7 @@ numele câmpului în campuri_lipsa.
 - verificare = inspecție, verificare, termografie sau control fără defecte și fără modificări. \
 Nu folosi avarie_semnalata sau nod_lipsa pentru o verificare care n-a găsit nimic.
 - nod_lipsa doar dacă textul spune că elementul există pe teren, dar lipsește din GIS/hartă.
-- Stâlp/nod care există pe teren dar lipsește din GIS („necartat", „nu apare în GIS/hartă", „lipsește din hartă") = nod_lipsa, chiar dacă e numit „nou". racord_nou = doar branșament/racord nou al unui client (casă, consumator).
+- Stâlp/nod care există pe teren dar lipsește din GIS („necartat", „nu apare în GIS/hartă", „lipsește din hartă") = nod_lipsa, chiar dacă e numit „nou". racord_nou = doar branșament/racord nou al unui client (casă, consumator); dacă textul descrie un racord la client, tipul rămâne racord_nou chiar dacă stâlpul de racord nu apare în GIS (ID-ul lui în referinta.element_id).
 - element_id: copiază exact codul din text. Cod nod numeric (păstrează zerourile de început, ex. 0287329) \
 sau tronson cu prefix (A-T-002, R-T-001, S-T-001). Nu ghici și nu adăuga prefix. Cod de tronson fără prefix \
 (ex. T-054, T-002): element_id null, codul brut în detalii.id_partial, și element_id în campuri_lipsa.
@@ -158,6 +164,21 @@ def _data_valida(ev: dict, text: str | None = None) -> None:
         ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"data"})
 
 
+def user_message(text: str, sursa: str, data: str | None) -> str:
+    """Mesajul exact trimis modelului (și dat subagenților Haiku)."""
+    return f"Sursa: {sursa}\nData: {data or 'necunoscută; caut-o în text (YYYY-MM-DD), altfel null'}\n\nTEXT:\n{text}"
+
+
+def cache_key(text: str, sursa: str, data: str | None) -> str:
+    """Cheia sha256 a intrării din data/cache/ (independentă de MODEL)."""
+    return hashlib.sha256(f"{CACHE_TAG}{SYSTEM}{sursa}{data}{text}".encode("utf-8")).hexdigest()
+
+
+def tool_schema() -> dict:
+    """Schema uneltei emit_event (schema evenimentului)."""
+    return _schema
+
+
 def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
     """Un apel Claude cu unealta emit_event forțată. Întoarce inputul uneltei sau None."""
     import anthropic  # importat aici: modulul e util și fără SDK (teste offline)
@@ -166,7 +187,6 @@ def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
         client = anthropic.Anthropic(base_url="https://openrouter.ai/api", auth_token=_KEY, api_key=None)
     else:
         client = anthropic.Anthropic()  # ANTHROPIC_API_KEY din mediu
-    msg = f"Sursa: {sursa}\nData: {data or 'necunoscută; caut-o în text (YYYY-MM-DD), altfel null'}\n\nTEXT:\n{text}"
     resp = client.messages.create(
         model=MODEL,
         max_tokens=2048,
@@ -174,7 +194,7 @@ def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
         tools=[{"name": TOOL, "description": "Înregistrează evenimentul extras din text.",
                 "input_schema": _schema}],
         tool_choice={"type": "tool", "name": TOOL},
-        messages=[{"role": "user", "content": msg}],
+        messages=[{"role": "user", "content": user_message(text, sursa, data)}],
     )
     for block in resp.content:
         if block.type == "tool_use" and block.name == TOOL:
@@ -182,14 +202,34 @@ def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
     return None
 
 
+def _finalizeaza(raw: dict | None, text: str, sursa: str, data: str | None, key: str) -> tuple[dict, list[str]]:
+    """Post-procesează ieșirea brută a uneltei (API sau agent). Întoarce (event, erori de schemă)."""
+    ev = dict(raw or {})
+    ev.update(text_original=text, echipa_sursa=sursa)
+    if data:
+        ev["data"] = data
+    if not ev.get("event_id"):
+        ev["event_id"] = "EV-" + key[:8]  # run_all îl înlocuiește cu EV-001..
+    _data_valida(ev, text if data is None else None)
+    _normalizeaza(ev)
+    _sectiune(ev, text)
+    return ev, [e.message for e in _validator.iter_errors(ev)]
+
+
+def write_cache(key: str, ev: dict) -> None:
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    (CACHE_DIR / f"{key}.json").write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
     """Transformă un raport/apel în Event conform contracts/event.schema.json.
 
     sursa: una din echipa_sursa (mentenanta, investitii, racordari, apel_client, om_teren).
-    Nu inventează: ce lipsește intră în campuri_lipsa. Folosește cache din data/cache/.
-    Ridică ValueError dacă ieșirea nu e validă după o reîncercare.
+    Nu inventează: ce lipsește intră în campuri_lipsa. Cache din data/cache/.
+    Cache miss: CacheMiss, dacă EXTRACT_ALLOW_API != "1"; cu "1" apelează API-ul (producție).
+    Ridică ValueError dacă ieșirea API nu e validă după o reîncercare.
     """
-    key = hashlib.sha256(f"{MODEL}{SYSTEM}{sursa}{data}{text}".encode("utf-8")).hexdigest()
+    key = cache_key(text, sursa, data)
     path = CACHE_DIR / f"{key}.json"
     if path.exists():
         ev = json.loads(path.read_text(encoding="utf-8"))
@@ -200,20 +240,13 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
             path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")  # disc == returnat
         return ev
 
+    if os.environ.get("EXTRACT_ALLOW_API") != "1":
+        raise CacheMiss(f"fără intrare în cache pentru textul ({sursa}, {data}): {text[:60]!r}; "
+                        "rulează fill_cache sau setează EXTRACT_ALLOW_API=1")
     errors: list[str] = []
     for _ in range(2):  # o reîncercare la eroare de validare
-        ev = _call_api(text, sursa, data) or {}
-        ev.update(text_original=text, echipa_sursa=sursa)
-        if data:
-            ev["data"] = data
-        if not ev.get("event_id"):
-            ev["event_id"] = "EV-" + key[:8]  # run_all îl înlocuiește cu EV-001..
-        _data_valida(ev, text if data is None else None)
-        _normalizeaza(ev)
-        _sectiune(ev, text)
-        errors = [e.message for e in _validator.iter_errors(ev)]
+        ev, errors = _finalizeaza(_call_api(text, sursa, data), text, sursa, data, key)
         if not errors:
-            CACHE_DIR.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")
+            write_cache(key, ev)
             return ev
     raise ValueError(f"extract_event: ieșire invalidă după reîncercare: {errors}")

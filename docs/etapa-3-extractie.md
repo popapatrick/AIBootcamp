@@ -48,3 +48,11 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 - Cheia de cache include promptul de sistem: o schimbare de prompt invalidează cache-ul automat.
 
 Dată: când apelantul nu dă `data`, data întoarsă de model se păstrează doar dacă apare efectiv în text (ISO, DD.MM.YYYY, DD/MM/YYYY, „14 septembrie 2026"); altfel data de azi și „data" în `campuri_lipsa`. Verificarea se aplică și pe intrările din cache (reparat de C la cererea omului).
+
+## Fără cheie API: cache + stub (14 nov.)
+- `extract_event`: cache hit întoarce evenimentul; cache miss ridică `CacheMiss` (exportat), dacă nu e `EXTRACT_ALLOW_API=1`. `backend/api/pipeline.py` prinde `Exception` și folosește stub-ul regex (`metoda_extractie` = `stub_regex (rezervă: CacheMiss)`). Cu `EXTRACT_ALLOW_API=1` (producție) apelul API, validarea și reîncercarea merg ca înainte.
+- Cheia de cache nu mai depinde de `MODEL`: `cache_key` = sha256(`CACHE_TAG`="agent-haiku" + `SYSTEM` + sursa + data + text). Vechiul cache (cu MODEL în hash) nu mai e găsit; cele 91 de fișiere existente trebuie regenerate (nu le-am șters).
+- Unealta `python -m backend.extract.fill_cache`: `--lipsa [--out]` listează textele fără cache (exemple-dummy cu `om_teren`, rapoartele din `index.json`; acum 70 de texte), `--prompt` dă `SYSTEM` + schema, `--import fisier.json` ia `[{text, sursa, data, event}]` de la subagenții Haiku, aplică `_finalizeaza` (event_id, `_data_valida`, `_normalizeaza`, `_sectiune`, schema) și scrie în cache; tipărește OK/ERR per element.
+- Flux: `--lipsa --out` -> loturi către agenți Haiku (primesc `system` + `user_message`, întorc JSON) -> `--import`.
+- Neacoperit: `trasee-dummy.json` (fără texte de raport) și textele din `docs/DEMO.md` (fără dată fixă, deci cheie variabilă).
+- Verificare: `.venv/bin/python -m backend.extract.test_extract` (CacheMiss implicit, calea `EXTRACT_ALLOW_API=1`, cheie fără MODEL, round-trip `--import`). **Atenție:** regulile din prompt (ex. stâlp necartat = `nod_lipsa`, `mutare_fire`, decizie om) sunt verificate doar cu mock; trebuie verificate cu un agent Haiku real înainte de a considera cache-ul bun.
