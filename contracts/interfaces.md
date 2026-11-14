@@ -106,6 +106,26 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dic
 ```
 Până la `osm.strazi()`, A poate lucra cu `data/model/osm/streets_raw.json`.
 
+## Sesiunea 3: extinderi de contract (commit `contract:`, B, aditiv)
+- `referinta.adresa_structurata {strada, numar, localitate, reper}` (extracție, A). `detalii.geocodare {lat, lon, precizie_m, metoda, acuratete, motiv}`; `metoda` = osm_cache | ai_estimare | trace | necunoscut | in_afara_zonei. `detalii.trace_params`, `detalii.trace_sursa` (simulat | real).
+- Elemente: `origine` = `retea_start` | `generat_model` (separat de `confirmat_de`); `predictie.origine` = `generat_model`; `predictie.slaba`; `predictie.treapta` (1-4, racordare). UI: „Predicție AI" dispare; AI = doar standardizarea (`metoda_cod`).
+- StepTrace: `eronat_prototip: true` + semnal `in_afara_zonei_prototip` când un punct e la peste `zona.raza_max_m` de centroidul rețelei de start (decizie `neaplicat`, fără excepții pe sursă). `GET /retea` întoarce `zona {centru:{lat,lon}, raza_m}`.
+- Racordare: `neaplicat` doar fără locație deductibilă sau în afara zonei; altfel predicție, eventual slabă (`racordare.prag_afisare`).
+- `weights.yaml`: `zona`, `geocodare`, `standardizare`, `trace_generat`, `scor.initial_retea_start`, `racordare.{raza_extinsa_m, prag_afisare, factor_*}`. Valorile se pot schimba prin commit `reglaj:` (vezi CLAUDE.md).
+```python
+# backend/geo/ (A)
+def geocodeaza(referinta: dict, strazi: list[dict], cfg: dict) -> dict:
+    """Din referinta.adresa_structurata/adresa: {status: gasit|necunoscut|in_afara_zonei, lat, lon, precizie_m,
+    metoda: osm_cache|ai_estimare, acuratete 0-1 (din cfg.geocodare), motiv}. Doar cache OSM local; AI (cli_ai) alege doar dintre străzile din cache."""
+# backend/trace/ (A)
+def genereaza_traseu(punct: dict, strazi: list[dict], params: dict, seed: str) -> list[dict]:
+    """Traseu simulat de 60 min lângă punct: [{t, lat, lon}], determinist pe seed; params = cfg.trace_generat suprascris."""
+# backend/engine/zona.py (B)
+def zona_ok(lat: float, lon: float, net: dict, cfg: dict) -> dict:
+    """{ok: bool, distanta_m, raza_m, centru}; centru = centroidul nodurilor rețelei de start."""
+```
+`prezice_lant` întoarce și `treapta` (1-4); `cfg.racordare.raza_extinsa_m` activează treapta 2.
+
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
 

@@ -44,7 +44,7 @@ paths:
         "422": {description: "textul lipsește sau niciun indiciu nu se găsește în datele locale; `detail` = {mesaj, indicii: [{tip, valoare, gasit: false}]}. UI-ul cere clic pe hartă"}
   /retea:
     get:
-      summary: Starea rețelei la o dată (GeoJSON, properties = ElementState)
+      summary: Starea rețelei la o dată (GeoJSON, properties = ElementState; Sesiunea 3 - cheia `zona` {centru:{lat,lon}, raza_m} în răspuns, `origine` pe elemente)
       parameters:
         - {name: data, in: query, required: false, schema: {type: string, format: date}}
         - {name: scenariu, in: query, required: false, schema: {type: string, enum: [extrem]}, description: "starea rețelei în scenariul extrem (404 dacă lipsește fișierul)"}

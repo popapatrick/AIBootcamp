@@ -9,7 +9,8 @@ fiabilitate_sursa:        # intră în scorul oricărei propuneri și multiplic�
   om_teren: 0.95          # decizia unui om dupa verificarea in teren (accepta/respinge o predictie)
 
 scor:
-  initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0
+  initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0 (păstrat pentru compatibilitate)
+  initial_retea_start: 0.90       # rețeaua de start (KMZ + puncte simulate hardcodate) e considerată reală; Sesiunea 3
   confirmare_teren: 0.25          # raport executat care confirmă elementul (înmulțit cu fiabilitate × calitatea potrivirii)
   factor_semnalat_teren: 0.5      # raport de teren doar „semnalat” (ex. defect găsit): tot dovedește că elementul există, la jumătate
   contradictie: -0.20             # input care contrazice elementul (înmulțit la fel)
@@ -65,6 +66,11 @@ racordare:               # eveniment tip cerere_racordare
   factor_fara_strada: 0.6   # scorul propunerii când nu există stradă OSM (linie dreaptă)
   # Locația operatorului (simulată, din textul lui): indiciu, nu măsurătoare. Scorul se înmulțește cu factorul;
   # rezultatul nu trece niciodată de „predicție" fără decizia omului.
+  raza_extinsa_m: 400             # treapta 2: nod în raza extinsă
+  prag_afisare: 0.15              # sub praguri.predictie dar peste asta: „predicție slabă” (nu neaplicat)
+  factor_raza_extinsa: 0.7
+  factor_linie_dreapta_lunga: 0.5 # treapta 3
+  factor_doar_casa: 0.3           # treapta 4
   factor_locatie_operator: 0.8
   operator_distanta_min_m: 20     # punctul simulat e la cel puțin atât de cel mai apropiat nod (altfel nu e ce prezice)
   precizie_intersectie_m: 10      # precizia (± m) raportată după cât de vagă e zona descrisă
@@ -84,3 +90,44 @@ trace:                   # locația din traseul tabletei (backend/trace, proprie
 demontat:                # eveniment tip activ_demontat
   rapoarte_min: 2        # echipe diferite necesare ca elementul să fie scos din uz
   fereastra_zile: 45     # rapoartele de demontare se combină (1 - produs(1 - scor)) în fereastra asta
+
+# --- Sesiunea 3 (valori de pornire, necalibrate; proprietar B; zona reglabilă prin commit `reglaj:`) ---
+zona:                    # safeguard: nimic nu iese din zona prototipului
+  raza_max_m: 3000       # față de centroidul rețelei de start; în afară = eronat în cadrul prototipului
+
+geocodare:               # backend.geo: acuratețea locației după cât de standardizat e textul
+  acuratete:
+    id_existent: 1.0
+    coordonate: 0.7
+    strada_numar: 0.55
+    intersectie: 0.60
+    strada: 0.40
+    reper: 0.20
+  factor_ai_fuzzy: 0.8   # decizia a luat-o AI (ortografie diferită/vag), nu potrivirea exactă
+  precizie_strada_min_m: 25
+  precizie_strada_max_m: 150
+  precizie_numar_m: 25
+  precizie_intersectie_m: 15
+  precizie_reper_m: 120
+
+standardizare:           # plafon pentru incredere_extractie după cel mai bun localizator din text
+  plafon_dupa_localizator:
+    id: 1.0
+    coordonate: 0.9
+    strada_numar: 0.7
+    strada: 0.5
+    reper: 0.3
+
+trace_generat:           # traseu simulat generat la raport (backend.trace.genereaza_traseu); suprascriibil per raport
+  puncte: 60
+  zgomot_m: 5
+  durata_oprire_min: 12
+  acoperire: 0.9         # fracția de puncte păstrate
+  decalaj_m: 0           # oprirea față de punctul din raport (0 = consistent)
+  bonus_max: 0.15        # cât poate crește acuratețea locației
+  durata_bonus_min: 5    # peste durata_min_min, atâtea minute dau bonusul maxim
+  zgomot_max_bonus_m: 15 # peste, nu mai există bonus
+  acoperire_min: 0.6     # sub, penalizare
+  penalizare_acoperire: 0.1
+  toleranta_adresa_m: 40 # oprire–adresă geocodată; peste = contradicție
+  penalizare_contradictie: 0.25

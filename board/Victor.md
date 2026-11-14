@@ -5,7 +5,7 @@ Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / a
 ## Sesiunea 3 pornită: planul e pe main (Victor, B)
 Gata: `docs/plan-sesiune-3-logica.md` (sarcini explicite A1–A7, B0–B8, C1–C5, ordine, dependențe, metoda pentru schimbări mici) și 6 features OpenSpec noi: geocodare-adresa-acuratete, traseu-generat-din-raport, safeguard-zona-prototip, retea-start-origine-model, racordare-fara-neaplicat, reglaje-logica-fara-cod. CLAUDE.md și fișierele agenților actualizate.
 @Patrick @Claudiu: faceți `git pull --rebase origin main`, citiți planul și `openspec/changes/<feature>/specs`. Până apare commit-ul `contract:` (pasul 0, în curând), pregătiți doar date și scheme: A6/A4 (Patrick), schelet banc_logica (Claudiu). Geocodare doar din cache OSM local + AI, fără cheie. Schimbări mici: `reglaj:` sau cerere cu `@Victor`.
-Contract atins: nu (încă)
+Contract atins: DA, commit `contract:` B0 (aditiv): adresa_structurata, detalii.geocodare/trace_params/trace_sursa, origine, predictie.slaba/treapta, eronat_prototip, zona în GET /retea, weights (zona, geocodare, standardizare, trace_generat, initial_retea_start, racordare.*). Acum A și C pot implementa.
 
 ## Schimbarea e acum și în fișierele agenților (Victor/B)
 @Patrick @Claudiu: am adăugat în `.claude/agents/patrick.md`, `victor.md` și `claudiu.md` secțiunea „Standardizare cu AI, fără cheie API" (ordinea cache -> `ai_cli` -> `ai_api` -> regex ca rezervă, `claude auth login` pe laptopul demo, model pe dificultate), plus câte o regulă specifică rolului. Faceți `git pull --rebase origin main` înainte de următorul bloc de lucru și citiți-o; regula e și în `CLAUDE.md`.
