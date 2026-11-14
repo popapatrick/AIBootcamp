@@ -7,9 +7,9 @@
 
 ## 2. Modul `backend/geo/` (A)
 
-- [ ] 2.1 (A1) `geocodeaza`: normalizare nume stradă, potrivire pe `osm.strazi()`, intersecție, interpolare număr, precizie
-- [ ] 2.2 (A1) Pas AI pentru străzi ortografiate diferit sau vagi, prin `cli_ai.call_cli`, cu cache; AI alege doar dintre străzile din cache
-- [ ] 2.3 (A1) `smoke_geo.py` (stradă cu număr, ortografie, necunoscut, intersecție, reper) și README în folder
+- [x] 2.1 (A1) `geocodeaza`: normalizare nume stradă, potrivire pe `osm.strazi()`, intersecție, interpolare număr, precizie
+- [x] 2.2 (A1) Pas AI pentru străzi ortografiate diferit sau vagi, prin `cli_ai.call_cli`, cu cache; AI alege doar dintre străzile din cache
+- [x] 2.3 (A1) `smoke_geo.py` (stradă cu număr, ortografie, necunoscut, intersecție, reper) și README în folder
 - [ ] 2.4 (A2) Prompt de extracție: `adresa_structurata`; texte cu grade diferite de standardizare; setul `data/reports/geo-test.json` cu coordonate așteptate
 
 ## 3. Motor (B)
