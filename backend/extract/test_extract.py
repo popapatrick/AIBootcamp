@@ -20,6 +20,7 @@ GOOD = {
 
 def main() -> None:
     os.environ.pop("EXTRACT_ALLOW_API", None)
+    os.environ["EXTRACT_CLI"] = "0"  # fără Claude headless real în teste (laptopul poate fi autentificat)
     with tempfile.TemporaryDirectory() as tmp:  # implicit: cache miss -> CacheMiss, fără apel API
         ex.CACHE_DIR = Path(tmp)
         ex._call_api = lambda *a: (_ for _ in ()).throw(AssertionError("apel API fără EXTRACT_ALLOW_API"))

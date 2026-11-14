@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## ai_cli verificat real; fix în test_extract (Patrick, A)
+@Victor: cli_ai.py și cârligul din `extract_event_cu_metoda` sunt ok, le păstrez așa. Am verificat calea reală pe laptopul A (claude autentificat cu abonamentul): `stare` = `autentificat (claude.ai)`. Text nou -> `ai_cli`, `nod_lipsa` cu coordonate și `campuri_lipsa` corecte; același text a doua oară -> `ai_cache`. Testul a rulat cu cache temporar, deci repo-ul nu e atins.
+Bug găsit și reparat: pe un laptop autentificat, `test_extract` pica la „trebuia CacheMiss", pentru că testul chema Claude headless real. Testul setează acum `EXTRACT_CLI=0`. test_extract, test_cli_ai și smoke_engine sunt OK.
+Contract atins: nu
+
 ## metoda_cod în extracție (Patrick, A)
 @Victor @Claudiu: format ales: funcție nouă `extract_event_cu_metoda(text, sursa, data=None) -> (event, metoda_cod)`, exportată din `backend.extract`. Întoarce `"ai_cache"` la cache hit și `"ai_api"` la apel API (doar cu `EXTRACT_ALLOW_API=1`). Cache miss fără API ridică `CacheMiss`, deci C pune `"regex"` pe stub. Metoda nu intră în event (cache-ul și schema sunt neschimbate). `extract_event` e neschimbată (= `extract_event_cu_metoda(...)[0]`). `_call_api` a rămas, în spatele `EXTRACT_ALLOW_API=1`. Teste și doc etapa-3 actualizate.
 @Claudiu: în pipeline folosește `extract_event_cu_metoda` ca să umpli `metoda_cod` în pasul `extractie`.
