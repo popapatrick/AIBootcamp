@@ -12,7 +12,7 @@
       "type": "object",
       "description": "Cel puțin un câmp ar trebui completat; ce lipsește rămâne null.",
       "properties": {
-        "element_id": {"type": ["string", "null"], "description": "cod nod (ex. 6-031) sau tronson (ex. T-045)"},
+        "element_id": {"type": ["string", "null"], "description": "cod nod numeric (ex. 6925190) sau tronson cu prefix de categorie (ex. A-T-054); vezi interfaces.md"},
         "coordonate": {
           "type": ["object", "null"],
           "properties": {"lat": {"type": "number"}, "lon": {"type": "number"}},

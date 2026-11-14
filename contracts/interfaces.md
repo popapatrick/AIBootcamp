@@ -43,5 +43,6 @@ Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) p
 
 ## Convenții comune
 - Date: ISO `YYYY-MM-DD`. Coordonate: WGS84, `lat`, `lon` (în GeoJSON ordinea e `[lon, lat]`).
-- Cod nod/tronson exact ca în KMZ (ex. `T-001`).
+- ID-uri: nod = codul numeric din KMZ (ex. `6925190`); post = `DX10-2-099812`; tronson = prefix categorie + cod KMZ, pentru că `T-001` se repetă în cele 3 categorii: `A-T-001` (aerian), `R-T-001` (ramuri aeriene), `S-T-001` (subteran). Un raport care zice doar `T-054` e ambiguu și se potrivește cu scor mai mic.
+- `data/model/defects.json` conține defectele introduse în model (nod lipsă, cablu înlocuit); rapoartele dummy ale lui A le referă cu aceste ID-uri.
 - Tot ce e demo e marcat „date fictive".
