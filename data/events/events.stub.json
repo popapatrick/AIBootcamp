@@ -97,6 +97,6 @@
     "text_original": "Date fictive. Formular mentenanță: lucrare planificată pe ramura aeriană R-T-001. Înlocuire conductor, programată pentru 7 octombrie 2026.",
     "incredere_extractie": 0.7,
     "campuri_lipsa": ["nr_cadastral", "adresa"],
-    "detalii": {"observatii": "lucrare planificată, neexecutată"}
+    "detalii": {"observatii": "lucrare planificată, neexecutată", "noduri": ["6819943", "6132582"]}
   }
 ]
