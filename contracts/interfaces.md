@@ -73,6 +73,9 @@ Un refuz al deciziei omului (a doua decizie, predicție necunoscută, decizie in
 - Motorul: `engine.aplica_decizie(event)` (ridică KeyError/ValueError) și `engine.model_scenariu("extrem")`.
 - ID-uri generate: `MUT-<event>-<n>` (traseu propus după mutare), `NOU-<event>-S<n>`, `NOU-<event>-casa`, `NOU-<event>-L<n>` (lanț de racordare).
 
+### Metoda de extracție, anunțată în UI (aditiv)
+Pasul `extractie` din StepTrace și `/health` poartă `metoda_cod`: `ai_api` (apel Claude cu cheia demo, doar în ziua demo-ului, `EXTRACT_ALLOW_API=1`), `ai_cache` (rezultat AI generat anterior de un agent Haiku sau de API și păstrat în `data/cache/`) sau `regex` (stub, text nou fără cache). UI-ul afișează câte un semn: „AI (API)", „AI (cache)", „Regex (simplificat)". Pe hartă, elementele cu `nivel: predictie` sunt marcate „Predicție AI" cu metoda din `predictie.metoda` (traseu_strada_osm, lant_racordare, zona_mutata, pozitie_din_trace, propunere_proprietate); tooltip: scorul și factorii. Atenție la onestitate: extracția folosește AI; predicțiile vin din scor plus străzi OSM, nu dintr-un model de limbaj; UI-ul le numește „Predicție AI" ca să se deosebească de elementele aplicate din rapoarte.
+
 ### `clasa` (ElementState)
 Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele fără serie/categorie KMZ (adăugate sau prezise din rapoarte): nod = `casa`, tronson = `aerian` (simplificare pentru prototip).
 
