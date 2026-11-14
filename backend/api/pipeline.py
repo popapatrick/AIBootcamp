@@ -295,23 +295,36 @@ def live_element(element_id: str) -> dict | None:
     return None
 
 
-def decizie(tinta_id: str, decizie: str, motiv: str | None, data: str | None) -> dict:
-    """Decizia omului asupra unei predicții (Event `verificare`, `om_teren`, contracts/interfaces.md).
+_dec_counter = [0]
 
-    Cere funcția `aplica_decizie(event)` a motorului (B4; KeyError = predicție necunoscută,
-    ValueError = deja decisă). Fără ea ridică NotImplementedError (API: 501); nu simulează.
+
+class DecizieEroare(Exception):
+    """Motorul a refuzat decizia; `cod` = trace.eroare.cod (deja_decis | necunoscut | decizie_invalida)."""
+
+    def __init__(self, cod: str, mesaj: str):
+        super().__init__(mesaj)
+        self.cod = cod
+
+
+def decizie(tinta_id: str, decizie: str, motiv: str | None, data: str | None) -> dict:
+    """Decizia omului asupra unei predicții: Event `verificare`/`om_teren` dat lui `apply_event` (B4).
+
+    Întoarce StepTrace-ul (cu `schimbari`). Ridică DecizieEroare dacă motorul pune `trace.eroare`;
+    NotImplementedError dacă motorul nu e disponibil (stub).
     """
-    f = sources.engine_func("aplica_decizie")
-    if not f:
-        raise NotImplementedError("motorul nu are încă aplica_decizie (sarcina B4 a lui Victor)")
-    _counter[0] += 1
-    ev = {"event_id": f"EV-LIVE-{_counter[0]:03d}", "echipa_sursa": "om_teren", "tip": "verificare",
-          "referinta": {"element_id": tinta_id, "coordonate": None, "adresa": None, "nr_cadastral": None,
-                        "id_client": None},
-          "status": "executat", "data": data or date.today().isoformat(), "forma_sursa": "campuri",
-          "tip_sursa_pondere": "om_teren", "text_original": motiv or "", "incredere_extractie": 1.0,
-          "campuri_lipsa": [], "detalii": {"decizie": {"tinta_id": tinta_id, "decizie": decizie,
-                                                       "motiv": motiv}}}
-    out = f(ev)
+    apply = sources.engine_func("apply_event")
+    if not apply:
+        raise NotImplementedError("decizia cere motorul real (apply_event)")
+    _dec_counter[0] += 1
+    ev = {"event_id": f"EV-DEC-{_dec_counter[0]:03d}", "echipa_sursa": "om_teren", "tip": "verificare",
+          "referinta": {}, "status": "executat", "data": data or date.today().isoformat(),
+          "forma_sursa": "campuri", "tip_sursa_pondere": "om_teren",
+          "text_original": f"Decizie om: {decizie} {tinta_id}", "incredere_extractie": 1.0,
+          "campuri_lipsa": [], "detalii": {"decizie": {"tinta_id": tinta_id, "decizie": decizie, "motiv": motiv}}}
+    out = apply(ev)
+    err = out.get("eroare")
+    if err:
+        raise DecizieEroare(err["cod"], err.get("mesaj", ""))
+    out["mod"] = sources.mod()
     out.setdefault("schimbari", [])
     return out

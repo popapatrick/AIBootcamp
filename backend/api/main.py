@@ -119,16 +119,14 @@ def trasee_demo() -> list[dict]:
 
 @app.post("/predictii/{pred_id}/decizie")
 def decizie(pred_id: str, d: Decizie) -> dict:
-    """Decizia omului (accepta/respinge) asupra unei predicții. 501 până are motorul `aplica_decizie` (B4);
-    404 predicție necunoscută; 409 deja decisă."""
+    """Decizia omului (accepta/respinge) asupra unei predicții, prin `apply_event` (B4). Întoarce StepTrace.
+    404 necunoscută; 409 deja decisă; 400 decizie invalidă; 501 fără motor real."""
     try:
         return pipeline.decizie(pred_id, d.decizie, d.motiv, d.data.isoformat() if d.data else None)
     except NotImplementedError as e:
         raise HTTPException(501, str(e))
-    except KeyError:
-        raise HTTPException(404, f"predicție necunoscută: {pred_id}")
-    except ValueError as e:
-        raise HTTPException(409, f"predicția are deja o decizie: {e}")
+    except pipeline.DecizieEroare as e:
+        raise HTTPException({"necunoscut": 404, "deja_decis": 409}.get(e.cod, 400), f"{e.cod}: {e}")
 
 
 @app.get("/date")

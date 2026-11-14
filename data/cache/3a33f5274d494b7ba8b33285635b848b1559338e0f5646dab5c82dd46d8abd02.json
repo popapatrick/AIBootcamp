@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": null,
+    "coordonate": {
+      "lat": 44.2851,
+      "lon": 26.0612
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-22",
+  "text_original": "Se pare că lipsește un stâlp la coordonatele 44.2851, 26.0612.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "id_client",
+    "adresa",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "Clientul sugerează că lipsește un stâlp la coordonatele indicate; nu este confirmat pe teren."
+  }
+}

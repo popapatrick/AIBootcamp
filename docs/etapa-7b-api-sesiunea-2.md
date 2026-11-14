@@ -7,10 +7,10 @@ Date FICTIVE. Cod în `backend/api/`. Verificare: `.venv/bin/python -m backend.a
 - `ultima_actualizare` (din `statistici(data)` al motorului, din B3 (ea24eeb); `null` doar dacă motorul nu o dă): apare în `GET /health`, `GET /retea` (nivel superior al FeatureCollection) și `POST /rapoarte`.
 - `GET /exemple?sursa=`: din `data/reports/exemple-dummy.json` (listă cu `sursa` per element sau `{sursa: [...]}`); `[]` dacă lipsește.
 - `GET /trasee-demo`: din `data/reports/trasee-dummy.json`; `[]` dacă lipsește.
-- `POST /predictii/{id}/decizie` `{decizie: accepta|respinge, motiv, data}`: construiește Event `verificare`/`om_teren` și cheamă `aplica_decizie(event)` din motor. 501 dacă funcția lipsește; KeyError -> 404, ValueError -> 409.
+- `POST /predictii/{id}/decizie` `{decizie: accepta|respinge, motiv, data}`: construiește Event `verificare`/`om_teren` (`EV-DEC-NNN`, `detalii.decizie`) și îl dă lui `apply_event` (B4). Întoarce StepTrace cu `schimbari`. `trace.eroare.cod`: `deja_decis` -> 409, `necunoscut` -> 404, `decizie_invalida` -> 400; 501 doar fără motor real.
 - `?scenariu=extrem` pe `/retea` și `/evenimente`: model separat (evenimente de bază + `data/events/events.extreme.json`); 404 clar dacă fișierul lipsește. Rapoartele live nu se amestecă în scenariu.
 
 ## Limite
-- Decizia: nu simulează; 501 până la B4. Numele `aplica_decizie(event)` e presupunerea mea, de confirmat de Victor.
-- Scenariul extrem e construit în `sources.model_extrem()` (folosește `GridModel` direct) până engine acceptă sursa `extreme` (B 3.3). Netestat cu fișier real.
+- Decizia: verificată real (200, apoi 409, 404). Id exemplu: `NOU-EV-LIVE-004` (nod prezis după un apel_client cu coordonate).
+- Scenariul extrem rămâne construit în `sources.model_extrem()`: `engine.get_model()` nu are sursa `extreme`. Testat cu `events.extreme.json` real (A6): 68 evenimente vs 29 în bază. `/exemple` și `/trasee-demo` citesc formatul real (dict pe sursă, inclusiv cheia `om_teren`, neexpusă în `/exemple`).
 - `/element/{id}` nu acceptă `scenariu`.

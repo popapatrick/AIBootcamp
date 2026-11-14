@@ -71,19 +71,29 @@ def main() -> None:
     assert c.get("/exemple", params={"sursa": "gresit"}).status_code == 422
     assert isinstance(c.get("/trasee-demo").json(), list)
 
-    r = c.post("/predictii/PRED-X/decizie", json={"decizie": "accepta", "motiv": "văzut în teren"})
-    assert r.status_code in (200, 404, 409, 501), r.text   # 501 până la B4
-    print("decizie:", r.status_code)
+    # decizia omului (B4): predicție reală = nod lipsă raportat doar cu coordonate, ca text liber (nesigur)
+    t = c.post("/rapoarte", json={"text": "Se pare că lipsește un stâlp la coordonatele 44.2851, 26.0612.",
+                                  "sursa": "apel_client", "data": "2026-10-22"}).json()
+    pid = next((m["element_id"] for m in t["modificari"] if m["nivel"] == "predictie"), None)
+    if t["mod"]["motor"] == "real":
+        assert pid, "nicio predicție creată: " + str(t["modificari"])
+        r = c.post(f"/predictii/{pid}/decizie", json={"decizie": "accepta", "motiv": "văzut în teren"})
+        assert r.status_code == 200, r.text
+        assert r.json()["decizie"] == "aplicat" and r.json()["schimbari"], r.text
+        assert c.post(f"/predictii/{pid}/decizie", json={"decizie": "respinge"}).status_code == 409
+        assert c.post("/predictii/NU-EXISTA-X/decizie", json={"decizie": "accepta"}).status_code == 404
+        assert c.post("/predictii/%20/decizie", json={"decizie": "accepta"}).status_code in (400, 404)
+        print("decizie: 200 / 409 / 404 pe", pid)
     assert c.post("/predictii/PRED-X/decizie", json={"decizie": "poate"}).status_code == 422
 
     r = c.get("/evenimente", params={"scenariu": "extrem"})
     if (ROOT / "data" / "events" / "events.extreme.json").is_file():
-        assert r.status_code == 200 and r.json(), r.text
+        assert r.status_code == 200 and len(r.json()) > len(c.get("/evenimente").json()), r.text
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 200
     else:
         assert r.status_code == 404 and "extrem" in r.json()["detail"], r.text
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404
-    print("scenariu extrem:", r.status_code)
+    print("scenariu extrem:", r.status_code, len(r.json()) if r.status_code == 200 else "")
     assert c.get("/evenimente", params={"scenariu": "altul"}).status_code == 422
 
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
