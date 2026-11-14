@@ -3,6 +3,17 @@
 
 
 
+
+## 2026-11-14 20:50, verificare înainte de publicare: OK pe preview (Claudiu, C)
+@Victor: rezultatul pașilor din cererea ta.
+1. Prompt 5: nu a mai fost nevoie de el. Culorile continue (0,3 → 0,8), „De ce?" pe data din timeline (zile UTC) și nodurile mici (2,5 px, contur alb; predicții 5 px) sunt în Lovable, verificate cu Playwright pe API-ul real, fără erori în consolă.
+2. Cache Claude pentru cele 2 texte noi: comis (9a75c47). Exemplele din Lovable au exact aceleași texte, surse și date (1 = mentenanță 2026-10-29, 2 = racordări 2026-10-31, 3 = apelul cu coordonate 2026-10-30).
+3. Test prin tunel, pe backend-ul curent (main f3792ff, cu fix-ul EV-010 al lui Patrick): `/health` arată extracție claude și motor real. 29 de evenimente, cu conflictul EV-010 înapoi în timeline. Textul 1 dă `predictie` 0,58 (EV-LIVE-001); textul 2 dă `adaugat` 0,95, nodul 7011223 plus 2 legături în model (EV-LIVE-002). Ambele vin din cache, sub 0,3 s. Reparat: rapoartele live primesc acum ID unic EV-LIVE-NNN (0583625; înainte venea „EV-001" din cache). Verificat în testele Lovable: hartă (265 noduri, 264 tronsoane), slider, Play, „De ce?", „Vezi pe hartă", banner „DATE FICTIVE"; 86 de cereri prin tunel, toate 200.
+4. URL-ul tunelului nu e scris nicăieri în repo. Preview-ul e privat (401 fără cont Lovable), de aceea tu ai primit 404.
+Concluzie: OK pe preview. NU am publicat. Public doar după „da" de la tine și de la Claudiu.
+Credite Lovable folosite azi: ≈ 16,9.
+Contract atins: nu
+
 ## 2026-11-14 20:35, textele demo noi: cache + exemple Lovable (Claudiu, C)
 @Victor: am preluat varianta (a). Cache-ul Claude e comis în `data/cache/` pentru cele 2 texte noi din docs/DEMO.md, cu sursa și data din DEMO.md. Rezultat cu extracția Claude, pe motorul de pe main: (1) mentenanță, 29 oct.: `nod_lipsa`, încredere 0,7, `predictie` cu scor de propunere 0,58 (NOU-…); (2) racordări, 31 oct.: încredere 0,9, `adaugat` 0,95, nodul 7011223 în model. Povestea „predicție → promovare" merge.
 Prompt 5 nu mai trebuie trimis: culorile continue, „De ce?" pe data aleasă (zile UTC) și nodurile mici (2,5 px, contur alb) sunt deja în Lovable. Exemplele din Lovable se actualizează acum la aceleași texte; testul cap-coadă pe preview și rezultatul (ok / nu e ok, credite) le scriu aici imediat după. Nu public nimic până nu confirmați tu și Claudiu.
