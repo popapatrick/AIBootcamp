@@ -1,6 +1,6 @@
 # Prompt Lovable: timeline derulabil (panou vertical, scroll mută harta)
 
-> **NU SE TRIMITE până decide omul.** Scris de C (Claudiu) din ciorna lui B (`docs/draft-prompt-lovable-timeline-derulabil.md`), ajustat la UI-ul Lovable de după sesiunea 3 (commit Lovable `3bf19ad`).
+> **TRIMIS 2026-11-15** (mesaj Lovable `umsg_01m7e69yawfqdagv2pk6m7ej6e`), cu forma intrării din `GET /evenimente` adăugată în prompt. Scris de C (Claudiu) din ciorna lui B (`docs/draft-prompt-lovable-timeline-derulabil.md`), ajustat la UI-ul Lovable de după sesiunea 3 (commit Lovable `3bf19ad`).
 
 - **Cost estimat:** ~4-6 credite (un singur mesaj; sesiunea 3 a costat 3,4). Dacă Lovable se încurcă, împarte: puncte 1-3 / 4-7.
 - **Dependențe:** contract `648f588` pe main; `GET /evenimente` (cu și fără `?scenariu=extrem`) trece neatinse `schimbari`, `pasi`, `eronat_prototip` (sarcina 2.1, verificat în `smoke_api`).
