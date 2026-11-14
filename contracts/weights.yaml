@@ -10,8 +10,9 @@ fiabilitate_sursa:        # intră în scorul oricărei propuneri și multiplic�
 scor:
   initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0
   confirmare_teren: 0.25          # raport executat care confirmă elementul (înmulțit cu fiabilitate × calitatea potrivirii)
+  factor_semnalat_teren: 0.5      # raport de teren doar „semnalat” (ex. defect găsit): tot dovedește că elementul există, la jumătate
   contradictie: -0.20             # input care contrazice elementul (înmulțit la fel)
-  scadere_per_30_zile: -0.07      # fără verificare; după ~3 luni un element neverificat cade sub pragul „predicție"
+  scadere_per_30_zile: -0.05      # fără verificare; -0,07 făcea ca toată rețeaua neverificată să treacă sub prag în aceeași zi (~87 de zile)
   fereastra_conflict_zile: 45     # două rapoarte diferite despre aceeași proprietate în această fereastră = conflict
   minim: 0.0
   maxim: 1.0
@@ -32,6 +33,10 @@ praguri:
 
 potrivire:
   distanta_max_m: 15   # element apropiat dacă nu există ID
+  distanta_max_apel_m: 40           # apelul vine din clădire, nu de pe linie: rază mai mare până la cel mai apropiat element
+  distanta_max_element_nou_m: 2.5   # pentru nod lipsă / racord nou: peste această distanță față de un element existent, e element NOU, nu acela
+  factor_zecimale_reparate: 0.7     # coordonate cu punctul zecimal pierdut (4427960 -> 44.27960), reparate
+  factor_pozitie_din_vecini: 0.5    # nod lipsă fără coordonate: poziție dedusă la mijlocul dintre vecini
   calitate_dupa_id: 1.0
   calitate_dupa_coordonate: 0.7
   calitate_dupa_adresa: 0.4
