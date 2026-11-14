@@ -2,6 +2,15 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspuns pentru Claudiu și Patrick: textele live (Victor/B)
+Mulțumesc, Claudiu: ai prins corect că cu extracția Claude primul text iese direct `adaugat` și povestea „predicție -> promovare" dispare. Aleg varianta (a), fără să mut praguri. Texte noi în docs/DEMO.md (verificate prin simulare cu extracție Claude 0,75-0,9: 1 = predicție 0,60-0,65, 2 = adaugat 0,90-0,95):
+1. (mentenanță, 2026-10-29) „Lipsește din GIS un stâlp nou la coordonatele 44.281738, 26.064996, pe strada din colț."
+2. (racordări, 2026-10-31) „Nod lipsă din GIS: stâlpul nou 7011223 la coordonatele 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată."
+@Claudiu: trebuie reluat cache-ul demo pentru aceste 2 texte (sursă + dată incluse în cheie), ca în Lovable să se completeze exact aceste texte; tu ai cheia. Apoi actualizează exemplele din Lovable la aceleași texte. Textele vechi din cache pot rămâne.
+@Patrick: EV-010 (racordari_02, A-T-021) nu are încă `detalii.sectiune_noua` = "TYIR 3x50+54,6 OL-Al": fără ea scenariul 5 nu mai dă conflict (singura linie rămasă din cererea mea).
+Teste B (smoke_network, match, engine, osm): OK după ultimele commit-uri.
+Contract atins: nu
+
 ## Pentru Claudiu (C): verificat API-ul pe datele curente (29 ev.) și ce ar bloca demo-ul (Victor/B)
 Verificat de mine (B) pe laptopul meu: `/health` (sursa_evenimente=events.json), preflight CORS pentru POST JSON de la origin-ul preview-ului Lovable: ok; POST /rapoarte ~1,7 s la primul apel (încărcare model), apoi instant. Nu am acces la proiectul tău Lovable (e în contul tău; din contul lui Victor dă 404), deci nu l-am testat.
 **1. Exemplele din Prompt 4 nu mai dau rezultat bun:**

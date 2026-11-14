@@ -17,14 +17,14 @@ Date FICTIVE: rețea demonstrativă PTAB 7812. Spune asta la început.
 | 16–20 s | 29 aug.: un element roșu | „Două echipe spun lucruri diferite despre aceeași secțiune: conflict. Nu aplicăm nimic, îl marcăm «de verificat»." (necesită `detalii.sectiune_noua` la EV-010, vezi board) |
 | 20–23 s | 10 sept.: aplicat | „Investiții a înlocuit cablul. Formular cu scor 0,90: se aplică." |
 | 23–29 s | 23 oct.: punctul violet devine solid | „Un raport cu coordonate confirmă nodul: predicția intră în model, cu legăturile către vecini. Apelurile din octombrie scad puțin încrederea; ce nu e verificat se estompează." |
-| 29–45 s | Pauză. **Proces raport**, lipește primul text de mai jos | „Un raport nou, scris liber, trece prin pași vizibili." |
-| 45–60 s | Rezultat: punct violet nou; lipește al doilea raport; „Vezi pe hartă" | „Un singur raport = predicție (0,72, sub pragul 0,75). Al doilea, de la altă echipă, o promovează în model." |
+| 29–45 s | Pauză. **Proces raport**, lipește primul text (vag) de mai jos | „Un raport nou, scris liber, trece prin pași vizibili." |
+| 45–60 s | Rezultat: punct violet nou; lipește al doilea raport; „Vezi pe hartă" | „Un raport vag, doar cu coordonate = predicție (~0,65, sub pragul 0,75). Al doilea, de la altă echipă, cu ID și vecini, o promovează în model." |
 
-Texte de lipit (data 2026-10-29, apoi 2026-10-31):
-> (mentenanță) Nod lipsă din GIS: stâlpul nou 7011223 la coordonatele 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată.
-> (racordări) Racordare: confirm stâlpul nou lipsă 7011223 la 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată.
+Texte de lipit (primul: sursa mentenanță, data 2026-10-29; al doilea: sursa racordări, data 2026-10-31):
+> (1, mentenanță) Lipsește din GIS un stâlp nou la coordonatele 44.281738, 26.064996, pe strada din colț.
+> (2, racordări) Nod lipsă din GIS: stâlpul nou 7011223 la coordonatele 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată.
 
-Rezultat verificat (extracție stub): primul = `predictie` 0,72; al doilea = `adaugat` 0,85, nodul și legăturile în model. Cu extracția Claude (încredere mai mare) primul poate trece direct de prag. Punctul 44.281738, 26.064996 e la ~34 m de orice element (nod nou real, nu o potrivire cu un vecin).
+Rezultat verificat (simulat cu extracția Claude, încredere 0,75–0,9, text liber): primul = `predictie` 0,60–0,65 (fără ID și fără vecini în text, poziția e cunoscută, vecinii sunt deduși); al doilea = `adaugat` 0,90–0,95, nodul `7011223` și legăturile în model, predicția veche retrasă. Punctul 44.281738, 26.064996 e la ~34 m de orice element (nod nou real, nu o potrivire cu un vecin). Cu extracția stub (încredere 0,45–0,6) primul iese tot predicție.
 
 ## Verificat la repetiție (14 nov.)
 - Play de la 4 aug. la 27 oct. durează ~29 s; slider-ul și lista de evenimente se actualizează; consola fără erori.
