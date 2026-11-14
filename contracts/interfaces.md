@@ -30,6 +30,12 @@ def apply_event(event: dict) -> dict:
   "modificari": [ /* ElementState (contracts/state.schema.json) atinse */ ]
 }
 
+def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
+    """Etapa 4. Potrivește evenimentul pe un element. Rezultatul e pasul „potrivire" din StepTrace:
+    {status: potrivit|ambiguu|absent_din_model|nepotrivit, element_id, metoda: id|coordonate|adresa|None,
+     calitate 0-1, candidati [{element_id, distanta_m}], coordonate_folosite, semnale [...], motiv}.
+    `absent_din_model` nu e eroare: așa apar elementele lipsă (nod lipsă, racord nou)."""
+
 def snapshot(data: str) -> dict:
     """GeoJSON FeatureCollection cu starea rețelei la acea dată; properties = ElementState."""
 
