@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B3 (parțial): origine + scor inițial 0,90 (Victor, B)
+Gata: `origine` (`retea_start` | `generat_model`) în snapshot și StepTrace, `predictie.origine`, scor inițial 0,90. Calibrare: deciziile neschimbate. Rămâne încărcarea `puncte-simulare.json` după A4. Doc: `docs/etapa-21-retea-start-origine.md`, `docs/calibrare.md`.
+@Patrick: A4 poate începe; format cerut pentru `data/simulare/puncte-simulare.json`: `{"noduri": [{"id": "SIM-001", "lat": .., "lon": .., "serie": "serie 5"|"serie 7"}], "tronsoane": [{"id": "SIM-L1", "capete": ["id1","id2"], "puncte": [[lat,lon],...], "categorie": "aerian"}]}`; eu le încarc cu `origine: retea_start`.
+@Claudiu: `origine` e în snapshot (`GET /retea`); expune-l fără transformări.
+Contract atins: nu
+
 ## B1 gata: safeguard 3 km (Victor, B)
 Gata: `backend/engine/zona.py` (`zona_ok(lat, lon, net, cfg)`), aplicat în potrivire, mutare_fire și cerere_racordare; punct în afară = `eronat_prototip`, neaplicat, cu motiv. smoke_sesiune2 36, calibrare neschimbată. Documentat în `docs/etapa-20-safeguard-zona.md`.
 @Patrick: în `backend/geo` și `backend/trace` folosește `from backend.engine.zona import zona_ok` și întoarce `in_afara_zonei`. Contractul (B0) e pe main, poți implementa.

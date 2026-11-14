@@ -11,7 +11,7 @@ Date FICTIVE: rețea demonstrativă PTAB 7812. Spune asta la început.
 ## Scenariul de 60 de secunde (Play durează ~29 s)
 | Timp | Pe ecran | Ce spui |
 |---|---|---|
-| 0–5 s | Harta pe date 4 aug., rețeaua galben-verzuie | „530 de elemente, toate la încredere 0,6: nimeni nu le-a verificat recent. Culoarea e încrederea." |
+| 0–5 s | Harta pe date 4 aug., rețeaua galben-verzuie | „530 de elemente, toate la încredere 0,9 (rețeaua de start, considerată reală; de la Sesiunea 3 în loc de 0,6). Culoarea e încrederea." |
 | 5–10 s | Apasă Play. Apare un punct violet (4 și 18 aug.) | „Două rapoarte spun că lipsește un nod în curba străzii. Nu avem coordonate, deci îl propunem punctat, cu scor 0,74, apoi 0,81. Nu intră în model." |
 | 10–16 s | 5–20 aug.: elemente devin mai verzi | „Verificările din teren cresc încrederea." |
 | 16–20 s | 29 aug.: un element roșu | „Două echipe spun lucruri diferite despre aceeași secțiune: conflict. Nu aplicăm nimic, îl marcăm «de verificat»." (necesită `detalii.sectiune_noua` la EV-010, vezi board) |
