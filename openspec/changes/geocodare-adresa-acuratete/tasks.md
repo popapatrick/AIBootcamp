@@ -2,8 +2,8 @@
 
 ## 1. Contract (B, commit `contract:`, pasul 0)
 
-- [ ] 1.1 `referinta.adresa_structurata` în `event.schema.json`; `detalii.geocodare {lat, lon, precizie_m, metoda, acuratete, motiv}` în `interfaces.md`
-- [ ] 1.2 Secțiunile `geocodare` (tabel acuratețe, `factor_ai_fuzzy`, precizii min/max) și `standardizare.plafon_dupa_localizator` în `weights.yaml`; semnătura `backend.geo.geocodeaza(referinta, strazi, cfg)` în `interfaces.md`
+- [x] 1.1 `referinta.adresa_structurata` în `event.schema.json`; `detalii.geocodare {lat, lon, precizie_m, metoda, acuratete, motiv}` în `interfaces.md`
+- [x] 1.2 Secțiunile `geocodare` (tabel acuratețe, `factor_ai_fuzzy`, precizii min/max) și `standardizare.plafon_dupa_localizator` în `weights.yaml`; semnătura `backend.geo.geocodeaza(referinta, strazi, cfg)` în `interfaces.md`
 
 ## 2. Modul `backend/geo/` (A)
 
@@ -14,13 +14,13 @@
 
 ## 3. Motor (B)
 
-- [ ] 3.1 (B2) `match.py` pasul 3: apelează `backend.geo`, folosește rezultatul ca coordonate din adresă, calitate = acuratețe, semnal în jurnal
-- [ ] 3.2 (B2) Plafon `incredere_extractie` după localizator; teste în `smoke_match.py` și `smoke_engine.py`
+- [x] 3.1 (B2) `match.py` pasul 3: apelează `backend.geo`, folosește rezultatul ca coordonate din adresă, calitate = acuratețe, semnal în jurnal
+- [x] 3.2 (B2) Plafon `incredere_extractie` după localizator; teste în `smoke_match.py` și `smoke_engine.py`
 - [ ] 3.3 (B7) Calibrare pe `geo-test.json`: eroare în metri vs. acuratețe, rezultat în `docs/calibrare.md`
 
 ## 4. API (C)
 
-- [ ] 4.1 (C1) `detalii.geocodare` în răspuns și pasul „geocodare" în `trace` (Show pipeline); `GET /geocodeaza?adresa=` de depanare; teste în `smoke_api.py`
+- [x] 4.1 (C1) `detalii.geocodare` în răspuns și pasul „geocodare" în `trace` (Show pipeline); `GET /geocodeaza?adresa=` de depanare; teste în `smoke_api.py` (API pass-through; complet după B2/A1)
 
 ## 5. Documentație
 

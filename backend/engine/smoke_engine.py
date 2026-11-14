@@ -45,7 +45,7 @@ def main() -> None:
     t = mn.apply_event(ev(40, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
                           referinta={"coordonate": c}))
     verifica("nod lipsă lângă un vecin -> element nou, nu confirmare", t["decizie"] in ("predictie", "adaugat")
-             and "element_nou_langa_existent" in t["pasi"][1]["rezultat"]["semnale"], t["decizie"])
+             and "element_nou_langa_existent" in next(p_ for p_ in t["pasi"] if p_["nume"] == "potrivire")["rezultat"]["semnale"], t["decizie"])
     # fără coordonate, cu doi vecini în text: poziție dedusă, doar predicție
     t = GridModel().apply_event({**ev(41, "2026-08-09", "mentenanta", "nod_lipsa", "executat", incredere=0.95,
                                        sursa="tableta_coordonate", referinta={"element_id": LIPSA["nod_lipsa"]}),
@@ -63,8 +63,8 @@ def main() -> None:
     mr = GridModel()
     t = mr.apply_event(ev(44, "2026-09-03", "racordari", "racord_nou", "executat",
                           referinta={"coordonate": {"lat": 4427960, "lon": 2606510}}))
-    verifica("coordonate fără punct zecimal: reparate", "coordonate_zecimale_reparate" in t["pasi"][1]["rezultat"]["semnale"],
-             str(t["pasi"][1]["rezultat"]["semnale"]))
+    verifica("coordonate fără punct zecimal: reparate", "coordonate_zecimale_reparate" in next(p_ for p_ in t["pasi"] if p_["nume"] == "potrivire")["rezultat"]["semnale"],
+             str(next(p_ for p_ in t["pasi"] if p_["nume"] == "potrivire")["rezultat"]["semnale"]))
 
     # Scenariul 1b: același tip de raport, dar text liber, fără ID, vecini deduși -> doar predicție
     m2 = GridModel()

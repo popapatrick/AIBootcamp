@@ -51,6 +51,15 @@ class LocatieOperator(BaseModel):
     zona: str | None = None
 
 
+class TraceParams(BaseModel):
+    """Parametri de generare a traseului simulat (contracts: detalii.trace_params); suprascriu weights.trace_generat."""
+    puncte: float | None = None
+    zgomot_m: float | None = None
+    durata_oprire_min: float | None = None
+    acoperire: float | None = None
+    decalaj_m: float | None = None
+
+
 class Raport(BaseModel):
     text: str
     sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]
@@ -58,6 +67,7 @@ class Raport(BaseModel):
     locatie: Coord | None = None          # clic pe hartă (cerere_racordare, mutare_fire)
     trace: list[dict] | None = None       # traseul tabletei: [{t, lat, lon}]
     locatie_operator: LocatieOperator | None = None   # cerere_racordare fără coordonate și fără clic
+    trace_params: TraceParams | None = None           # reglaje traseu simulat; intră în detalii.trace_params
 
 
 class Decizie(BaseModel):
@@ -84,7 +94,8 @@ def rapoarte(r: Raport) -> dict:
         raise HTTPException(422, "text gol")
     return pipeline.proceseaza(r.text, r.sursa, r.data.isoformat() if r.data else None,
                               r.locatie.model_dump() if r.locatie else None, r.trace,
-                              r.locatie_operator.model_dump(exclude_none=True) if r.locatie_operator else None)
+                              r.locatie_operator.model_dump(exclude_none=True) if r.locatie_operator else None,
+                              r.trace_params.model_dump(exclude_none=True) if r.trace_params else None)
 
 
 @app.get("/locatie-operator-demo")
@@ -116,7 +127,27 @@ def retea(data: _date | None = Query(None), scenariu: Scenariu = Query(None)) ->
         fc = pipeline.live_overlay(fc, d)
     fc["ultima_actualizare"] = _sc(lambda: sources.ultima_actualizare(d or fc.get("data_instantaneu"), scenariu))
     fc["nota"] = NOTA
+    z = sources.zona()
+    if z:
+        fc["zona"] = z   # safeguard prototip: {centru:{lat,lon}, raza_m}
     return fc
+
+
+@app.get("/geocodeaza")
+def geocodeaza(adresa: str = Query(..., description="adresă text, ex. „Strada Liviu Rebreanu 12”")) -> dict:
+    """Depanare: geocodarea motorului (backend.geo, A1/B2) pe o adresă. 501 dacă funcția nu există încă;
+    întoarce {status, lat, lon, precizie_m, metoda, acuratete, motiv} cum o dă funcția."""
+    f = sources.geocodeaza_func()
+    if f is None:
+        raise HTTPException(501, "geocodarea nu e încă în motor (B2/A1)")
+    from backend.engine import osm
+    return f({"adresa": adresa, "adresa_structurata": None}, osm.strazi(), pipeline._weights())
+
+
+@app.get("/reguli")
+def reguli() -> dict:
+    """Read-only: conținutul contracts/weights.yaml (ponderi, praguri, zona, geocodare etc.) ca JSON."""
+    return pipeline._weights()
 
 
 @app.get("/evenimente")

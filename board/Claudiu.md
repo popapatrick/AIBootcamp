@@ -1,5 +1,13 @@
 # Panou laptop C
 
+## 2026-11-15, sesiunea 3: C1, C2 schelet, C4 scris (Claudiu, C)
+Gata: C1 (API pass-through): `trace_params` în `POST /rapoarte`, pas `geocodare`, `zona` în `GET /retea`, `GET /geocodeaza` (501 până la A1/B2), `GET /reguli`; C2 schelet: `python3 -m backend.api.banc_logica` (fallback pe `exemple-dummy.json`: 29 cazuri, 22 ok, 7 diferite, 0 erori, cauza necercetată, `asteptat` e orientativ); C4: `frontend/lovable-prompt-sesiune3.md` scris. Docs: `docs/etapa-18-api-sesiune3.md`, `docs/etapa-23-reglaje.md`. Smoke-uri OK: API (și cu `API_EXTRACTIE=stub`), engine 36. Bifate în OpenSpec: geocodare 4.1, racordare 4.1, retea-start 4.1+4.2, safeguard 4.1, traseu 4.1, reglaje 3.2 (nu 3.1: banca e schelet până la `data/golden`).
+Degradat: `/geocodeaza` 501 până la `backend.geo` (A1/B2); `zona` din centroid + weights până la `engine.zona` (B1); `origine`, `slaba`, `treapta`, `eronat_prototip` apar doar când motorul le produce.
+@Victor: `api.openapi.yaml` nu descrie `trace_params` în `POST /rapoarte`, nici `GET /geocodeaza`, `GET /reguli`; `zona` doar în summary `/retea`; contractul zice „/stare", endpoint-ul real e `/retea` (zona e acolo). Banca citește `modificari[0].origine`, `predictie.slaba/treapta`, `out.eronat_prototip`; spune dacă le pui altundeva.
+@Patrick: format `data/golden` propus de banc: listă JSON `{id, sursa, text, data?, asteptat?}`; chei comparate din `asteptat`: `tip, decizie, nivel, origine, slaba, treapta, eronat_prototip, element_id`. Banca citește `data/golden/*.json` fără `calibrare-referinta.json`.
+Lovable: prompt netrimis.
+Contract atins: nu
+
 ## 2026-11-15, locația operatorului (simulată) pentru cerere de racordare (Claudiu, C)
 Gata, făcut de C la cererea omului („fă tu totul"): schimbarea OpenSpec `locatie-operator-racordare` + `docs/etapa-17-locatie-operator-racordare.md`. `GET /locatie-operator-demo?text=` (alias `adresa`) generează determinist o poziție GPS dummy din textul operatorului (stradă, colț, cartier `is_in`, combinații; `indicii` cu `gasit`, `zona`, `precizie_m`, `simulata: true`; 422 clar dacă nu se găsește nimic, fără punct inventat). `POST /rapoarte` acceptă `locatie_operator`; pașii au `sursa_locatie` (text | clic | operator_simulat). Scor: x`racordare.factor_locatie_operator` 0,8, mereu predicție (ex. 0,57 vs 0,713 cu clic). Smoke-uri OK (racordare 20, sesiune2 30, engine 36, API cu și fără `API_EXTRACTIE=stub`).
 @Patrick: am atins `backend/racordare/` (fișier nou `operator_demo.py`, export în `__init__.py`, teste în `smoke_racordare.py`, README), la cererea omului; `prezice_lant` neschimbat. Fișierele `data/cache/*.json` neurmărite de pe laptopul meu nu le-am comis; unul (tableta „lucrare finalizată") schimbă tipul și pică o aserțiune veche din `smoke_api`.

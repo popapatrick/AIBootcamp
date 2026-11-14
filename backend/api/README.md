@@ -7,6 +7,7 @@ API FastAPI pentru prototip (etapa 7). Implementează `contracts/api.openapi.yam
 - `pipeline.py`: `POST /rapoarte` (extracție → potrivire → predicție → scor); folosește `extract_event` (A) și `apply_event` (B) când există, altfel stub + `match_event` real.
 - `POST /predictii/{id}/decizie`: Event `om_teren` dat lui `apply_event`; 404 necunoscută, 409 deja decisă, 400 invalidă. `?scenariu=extrem`: `engine.model_scenariu("extrem")` (404 dacă lipsește fișierul). `API_EXTRACTIE=stub` forțează extracția regex. Detalii: `docs/etapa-7b-api-sesiunea-2.md`.
 - `GET /locatie-operator-demo?text=` (alias `adresa`): poziție GPS dummy a operatorului din textul lui (`simulata: true`, `indicii`, `zona`, `precizie_m`; 422 cu `detail.mesaj` dacă nu se găsește niciun indiciu); `POST /rapoarte` acceptă `locatie_operator`. Detalii: `docs/etapa-17-locatie-operator-racordare.md`.
+- Sesiunea 3 (C1): `POST /rapoarte` acceptă `trace_params` (-> `detalii.trace_params`, validat numeric); câmpurile motorului (`detalii.geocodare`, `trace_sursa`, `origine`, `predictie.slaba/treapta`, `eronat_prototip`, `adresa_structurata`) trec neatinse; pas „geocodare" în `pasi` doar dacă Event-ul are `detalii.geocodare`. `GET /retea` adaugă `zona {centru, raza_m}` (din `engine.zona.zona_ok` dacă există, altfel centroid + `weights.zona`). `GET /geocodeaza?adresa=` (501 „geocodarea nu e încă în motor (B2/A1)" până există `geocodeaza`). `GET /reguli` = `weights.yaml` ca JSON, read-only.
 - `smoke_api.py`: test pe toate endpoint-urile.
 
 ```bash

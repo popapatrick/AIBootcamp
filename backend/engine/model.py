@@ -112,7 +112,25 @@ class GridModel(Sesiune2):
             # extracția a lăsat codul brut (ex. T-002, fără prefix de categorie); potrivirea îl dezambiguizează
             event = {**event, "referinta": {**ref0, "element_id": det0["id_partial"]}}
         event = self._foloseste_trace(event, trace)      # locația din traseul tabletei, dacă lipsesc ID și coordonate
+        event = self._plafon_standardizare(event, trace)  # încredere extracție plafonată după localizatorul din text
+        event = self._foloseste_geocodare(event, trace)  # adresă -> coordonate aproximative (cache OSM + AI), cu acuratețe
+        event = self._trace_generat(event, trace)        # traseu simulat lângă punct: crește/scade acuratețea locației
+        geo = (event.get("detalii") or {}).get("geocodare")
+        tf = (event.get("detalii") or {}).get("trace_factor")
         m = match_event(event, self.net, w)
+        if geo and m["status"] in ("potrivit", "absent_din_model") and m["metoda"] == "coordonate":
+            m = {**m, "calitate": round(min(m["calitate"], geo["acuratete"]) if m["status"] == "potrivit" else geo["acuratete"], 3),
+                 "metoda": "adresa", "semnale": m["semnale"] + ["coordonate_din_adresa"],
+                 "geocodare": geo, "motiv": m["motiv"] + f" (locație din adresă, ±{geo['precizie_m']} m, acuratețe {geo['acuratete']})"}
+        if tf and m["status"] == "potrivit" and m["metoda"] in ("coordonate", "adresa"):
+            m = {**m, "calitate": round(min(1.0, m["calitate"] * tf), 3), "semnale": m["semnale"] + ["trace_simulat"]}
+        if event.get("_eronat"):
+            trace["pasi"].append({"nume": "potrivire", "rezultat": {"status": "nepotrivit", "element_id": None, "metoda": "adresa", "calitate": 0.0,
+                                  "candidati": [], "coordonate_folosite": None, "semnale": ["in_afara_zonei_prototip"],
+                                  "motiv": "Adresa geocodată e în afara zonei prototipului."}, "incredere": 0.0})
+            m = trace["pasi"][-1]["rezultat"]
+            self._eronat(event, trace, m, *event["_eronat"])
+            return self._inchide(event, event["tip"], trace, m, inainte)
         rez_trace = (event.get("detalii") or {}).get("trace_rezumat") or {}
         if rez_trace.get("alegere") and m["status"] == "potrivit" and m["metoda"] == "coordonate":
             m = {**m, "calitate": round(m["calitate"] * rez_trace.get("calitate", 1.0), 3),
@@ -212,7 +230,7 @@ class GridModel(Sesiune2):
         """Un nod lipsă nu se potrivește cu un nod vecin aflat la câțiva metri: peste
         `distanta_max_element_nou_m` față de elementul cel mai apropiat, e un element NOU."""
         lim = self.w["potrivire"]["distanta_max_element_nou_m"]
-        if (event["tip"] == "nod_lipsa" and m["status"] == "potrivit" and m["metoda"] == "coordonate"
+        if (event["tip"] == "nod_lipsa" and m["status"] == "potrivit" and m["metoda"] in ("coordonate", "adresa")
                 and m["candidati"] and m["candidati"][0]["distanta_m"] > lim):
             m = {**m, "status": "absent_din_model", "element_id": None, "calitate": 0.0,
                  "semnale": m["semnale"] + ["element_nou_langa_existent"],
@@ -385,6 +403,10 @@ class GridModel(Sesiune2):
         q = w["potrivire"]["calitate_dupa_id"] if ref.get("element_id") else w["potrivire"]["calitate_dupa_coordonate"]
         if dedusi:
             q *= w["propunere"]["factor_vecini_dedusi"]
+        if det.get("geocodare") and not ref.get("element_id"):
+            q = min(q, det["geocodare"]["acuratete"])    # locația vine din adresă: acuratețea geocodării
+        if det.get("trace_factor"):
+            q = min(1.0, q * det["trace_factor"])        # traseu simulat: bonus/penalizare
         rt = det.get("trace_rezumat") or {}
         if rt.get("alegere"):
             q *= rt.get("calitate", 1.0)            # poziția vine din traseul tabletei (opriri), cu calitatea calculată acolo

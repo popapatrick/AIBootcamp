@@ -13,7 +13,7 @@
 ## 3. Banc și API (C)
 
 - [ ] 3.1 (C2) `backend/api/banc_logica.py`: rulează textele din `data/golden/` prin pipeline, tabel + sumar
-- [ ] 3.2 (C2) `GET /reguli` read-only în API, teste în `smoke_api.py`
+- [x] 3.2 (C2) `GET /reguli` read-only în API, teste în `smoke_api.py`
 
 ## 4. Reguli de lucru
 

@@ -16,7 +16,7 @@
 
 ## 4. API (C)
 
-- [ ] 4.1 (C1) `slaba` și `treapta` în răspuns; teste în `smoke_api.py`; caz de demo „racord fără date"
+- [x] 4.1 (C1) `slaba` și `treapta` în răspuns; teste în `smoke_api.py`; caz de demo „racord fără date" (API pass-through; complet după B5)
 
 ## 5. Documentație
 

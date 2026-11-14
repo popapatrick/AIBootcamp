@@ -16,7 +16,7 @@
 
 ## 4. API (C)
 
-- [ ] 4.1 (C1) `zona` în `/stare`, `eronat_prototip` în răspuns, teste în `smoke_api.py`
+- [x] 4.1 (C1) `zona` în `/stare`, `eronat_prototip` în răspuns, teste în `smoke_api.py` (API pass-through; complet după B1)
 
 ## 5. Documentație
 
