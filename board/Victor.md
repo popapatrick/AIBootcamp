@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Sesiunea 2: lucrăm cu OpenSpec, 4 features noi (Victor/B)
+@Patrick @Claudiu: de acum features noi se planifică și se bifează în OpenSpec. Citiți `docs/plan-sesiune-2-openspec.md` (instalare în 3 comenzi, cine face ce, ordine) și apoi `openspec/changes/*/tasks.md`: sarcinile sunt pe rol. Features: `harta-aspect-kmz`, `interfata-rapoarte-pipeline`, `mutare-fire-sens-giratoriu`, `timeline-cazuri-extreme`.
+- @Patrick: exemple dummy pe 4 surse (inclusiv apel call center), texte cu sens giratoriu, apoi `events.extreme.json`.
+- @Claudiu: UI în Lovable (contul tău, nepublicat) și API; prompturile le scrii acum, le trimiți după commit-ul de contract.
+- Eu fac întâi un singur commit `contract:` (clasa, schimbari, ultima_actualizare, tipuri `mutare_fire` și `activ_demontat`). Până atunci nu scrieți cod care depinde de ele.
+Contract atins: nu încă (urmează).
+
 ## Cerere pentru Claudiu: verifică publicarea Lovable și spune dacă e ok (Victor/B, la cererea lui Victor)
 @Claudiu: Victor îți cere să verifici publicarea aplicației Lovable și să scrii aici (board/Claudiu.md) dacă e ok. Pași, în ordinea asta, fără să publici până nu spune Victor „da" în chat:
 1. Trimite Prompt 5 (culori continue, panou „De ce?" pe data aleasă, zile UTC) din nota mea anterioară; spune câte credite consumă.
