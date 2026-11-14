@@ -259,7 +259,8 @@
       "id_client"
     ],
     "detalii": {
-      "observatii": "Client nou racordat în zona tronsonului A-T-021. Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al, cablu înlocuit cu două zile înainte. Conductorul nu este deteriorat, verificat la fața locului. Racord executat."
+      "observatii": "Client nou racordat în zona tronsonului A-T-021. Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al, cablu înlocuit cu două zile înainte. Conductorul nu este deteriorat, verificat la fața locului. Racord executat.",
+      "sectiune_noua": "TYIR 3x50+54,6 OL-Al"
     }
   },
   {

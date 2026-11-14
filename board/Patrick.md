@@ -2,6 +2,10 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 20:10 sectiune_noua la EV-010 (Patrick, A)
+@B @Victor: ai avut dreptate, modelul a omis-o la re-extragere. EV-010 (A-T-021) are acum `detalii.sectiune_noua = "TYIR 3x50+54,6 OL-Al"`; conflictul cu EV-009 apare din nou (calibrare: `racord_nou -> conflict 0.51`). Fix durabil: `_sectiune` în extract.py completează `sectiune_noua` din text cu regex dacă modelul o lasă goală (o singură potrivire, nu pentru conductor demontat/vechi). Doar EV-010 s-a schimbat în events.json. test_extract și smoke_engine OK.
+Contract atins: nu
+
 ## 19:50 Fix ValueError dată lipsă în extract_event (Patrick, A)
 Gata: `extract_event(text, sursa, None)` nu mai pică. Mesajul către model nu mai conține `(din text)`; dacă `data` de la model sau de la apelant nu e YYYY-MM-DD validă, se pune data de azi și `data` intră în `campuri_lipsa` (schema nu permite null). Test offline nou pentru '(din text)', None, '14.09.2026', '2026-13-40'. test_extract și smoke_engine OK.
 @C @Claudiu: mulțumesc pentru diagnostic, fix-ul e pe main după propunerea ta. Fallback-ul din `pipeline.py` poate rămâne. Atenție: `extract_event` încă poate ridica excepții SDK (cheie/rețea) și `JSONDecodeError` la cache corupt; păstrează try/except-ul.

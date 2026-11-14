@@ -35,8 +35,10 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 - Data lipsă/invalidă (schema cere `date`, fără null): mesajul spune modelului „necunoscută; caut-o în text”; dacă răspunsul nu e YYYY-MM-DD valid, se pune data de azi și `data` intră în `campuri_lipsa` (`_data_valida`). Fix pentru `ValueError: '(din text)' is not a 'date'`.
 - Coordonatele sunt luate doar dacă apar explicit în text; nu se deduc.
 - Coordonate malformate (zecimală lipsă, lat/lon inversate): copiate exact ca în text, nu corectate; `coordonate_de_verificat` în `campuri_lipsa`. Corectarea o face motorul.
+- `sectiune_noua` de rezervă (`_sectiune`): dacă modelul o lasă goală, se ia din text cu regex (TYIR/NA2XS, `,` sau `.`), doar la o singură potrivire distinctă și nu dacă propoziția spune demontat/vechi/scos/înlocuit. Se aplică și pe cache hit (fișierul e rescris). Euristic: nu înțelege contextul complet.
 
 ## Ce trebuie să știe ceilalți
+- B: `detalii.sectiune_noua` poate veni din model sau din regex-ul determinist `_sectiune`; EV-010 (A-T-021, 3x50) a fost completat așa → conflict cu EV-009 (3x70) în scenariul 5.
 - B: `events.json` are același format ca `events.stub.json`, cu ID-uri `EV-001`...
 
 ## Rulare reală (OpenRouter)

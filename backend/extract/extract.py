@@ -76,6 +76,34 @@ def _normalizeaza(ev: dict) -> None:
         ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"element_id"})
 
 
+# shortcut: pipeline.py:96 are regexul propriu inline (folder C, neatins); aici varianta mai largă, de unificat ulterior
+CONDUCTOR = re.compile(
+    r"(?:TYIR|NA2XS\w*)\s*\d+\s*x\s*\d+(?:[.,]\d+)?(?:\s*\+\s*\d+(?:[.,]\d+)?)?(?:\s+OL-Al)?",
+    re.IGNORECASE)
+_VECHI = re.compile(r"demontat|vechi|scos|înlocuit|inlocuit", re.IGNORECASE)
+_NOU = re.compile(r"\bmontat\b|\bnou\b", re.IGNORECASE)
+
+
+def _sectiune(ev: dict, text: str) -> dict:
+    """Completează detalii.sectiune_noua dacă lipsește și textul are exact un tip de conductor (altfel nu atinge).
+
+    Ignoră potrivirile precedate în aceeași propoziție de vechi/demontat/scos/înlocuit (fără montat/nou).
+    """
+    det = ev.get("detalii")
+    if not isinstance(det, dict) or det.get("sectiune_noua"):
+        return ev
+    gasite = set()
+    for m in CONDUCTOR.finditer(text):
+        pre = re.split(r"[.!?;\n]\s|\n", text[:m.start()])[-1]
+        if _VECHI.search(pre) and not _NOU.search(pre):
+            continue
+        gasite.add(" ".join(m.group().split()))
+    if len(gasite) == 1:
+        ev["detalii"] = {**det, "sectiune_noua": gasite.pop()}
+        ev["campuri_lipsa"] = [c for c in ev.get("campuri_lipsa") or [] if "sectiune" not in str(c)]
+    return ev
+
+
 def _data_valida(ev: dict) -> None:
     """Schema cere data YYYY-MM-DD (fără null). Invalidă/lipsă -> data de azi + 'data' în campuri_lipsa."""
     d = ev.get("data")
@@ -122,7 +150,11 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
     key = hashlib.sha256(f"{MODEL}{SYSTEM}{sursa}{data}{text}".encode("utf-8")).hexdigest()
     path = CACHE_DIR / f"{key}.json"
     if path.exists():
-        return json.loads(path.read_text(encoding="utf-8"))
+        ev = json.loads(path.read_text(encoding="utf-8"))
+        before = json.dumps(ev, sort_keys=True)
+        if json.dumps(_sectiune(ev, text), sort_keys=True) != before and not any(_validator.iter_errors(ev)):
+            path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")  # disc == returnat
+        return ev
 
     errors: list[str] = []
     for _ in range(2):  # o reîncercare la eroare de validare
@@ -134,6 +166,7 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
             ev["event_id"] = "EV-" + key[:8]  # run_all îl înlocuiește cu EV-001..
         _data_valida(ev)
         _normalizeaza(ev)
+        _sectiune(ev, text)
         errors = [e.message for e in _validator.iter_errors(ev)]
         if not errors:
             CACHE_DIR.mkdir(parents=True, exist_ok=True)
