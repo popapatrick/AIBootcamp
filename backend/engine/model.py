@@ -42,6 +42,7 @@ class GridModel(Sesiune2):
         self.decizii: dict[str, dict] = {}         # tinta_id -> decizia omului (o singură decizie pe predicție)
         self.demontari: dict[str, list] = {}       # element_id -> rapoarte de demontare (activ_demontat)
         self.apeluri: dict[str, list] = {}         # element_id -> [(data, efect)] apeluri recente (val de apeluri)
+        self._val_flag = False
         self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         init = self.w["scor"]["initial_element_kmz"]
@@ -87,6 +88,7 @@ class GridModel(Sesiune2):
         w = self.w
         ajustata = None
         inainte = {k: v[-1]["scor"] for k, v in self.istoric.items() if v}   # scorurile dinainte de eveniment
+        self._val_flag = False
         if event["data"] < self.ultima_data:       # evenimentele se aplică în ordine cronologică
             ajustata = event["data"]
             event = {**event, "data": self.ultima_data}
@@ -150,10 +152,19 @@ class GridModel(Sesiune2):
         """Jurnal + schimbari pentru un eveniment procesat."""
         self.jurnal.append({"event_id": event["event_id"], "data": event["data"], "echipa_sursa": event["echipa_sursa"],
                             "tip": tip, "decizie": trace["decizie"],
+                            "eticheta": self._eticheta(event, tip, trace),
                             "elemente": [s["element_id"] for s in trace["modificari"]],
                             "motiv": trace["pasi"][-1].get("motive", [""])[0] if trace["pasi"][-1].get("motive") else ""})
         trace["schimbari"] = self._schimbari(trace, m, inainte)
         return trace
+
+    def _eticheta(self, event: dict, tip: str, trace: dict) -> str:
+        """Etichetă pentru timeline-ul din UI: mutare_fire | demontat | val_apeluri | racordare | decizie_om | tipul evenimentului."""
+        if event["echipa_sursa"] == "om_teren":
+            return "decizie_om"
+        if self._val_flag:
+            return "val_apeluri"
+        return {"mutare_fire": "mutare_fire", "activ_demontat": "demontat", "cerere_racordare": "racordare"}.get(tip, tip)
 
     def _schimbari(self, trace: dict, m: dict, inainte: dict) -> list[dict]:
         """Lista structurată a schimbărilor produse de eveniment (contracts/interfaces.md, `schimbari`).
@@ -685,6 +696,7 @@ class GridModel(Sesiune2):
         out = []
         for j in self.jurnal:
             out.append({"data": j["data"], "event_id": j["event_id"], "decizie": j["decizie"],
+                        "tip": j["tip"], "eticheta": j.get("eticheta", j["tip"]),
                         "rezumat": f"{j['echipa_sursa']}: {j['tip']} -> {j['decizie']}",
                         "elemente_atinse": j["elemente"]})
         return out

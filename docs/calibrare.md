@@ -41,3 +41,12 @@ Rapoartele lui A sunt în `data/reports/` cu adevărul în `index.json`. `events
 - Adresa nu e geocodată (scenariul 7), apelurile la > 40 m de orice element nu produc propuneri.
 - Pozițiile deduse din vecini nu sunt la „curba" reală; punctul e doar un ghid.
 - Nu am verificat vizual pe hartă.
+
+## Sesiunea 2 (B9): scenariul extrem și reguli noi
+Rulat `engine.model_scenariu("extrem")` (29 evenimente de bază + EV-X01..X10 ale lui A, `data/events/events.extreme.json`):
+- Ramura pe etape: EV-X01 planificat -> `predictie` 0,8 (nu se aplică); EV-X02 `adaugat` 0,75; EV-X03 `adaugat` 0,93.
+- Demontat: EV-X04 (investitii) -> `scor_actualizat` cu semnal („1 din 2 echipe necesare", scor combinat 0,85); EV-X05 (mentenanta) -> `aplicat`, `scos_din_uz`, scor combinat 0,97.
+- Val de apeluri: EV-X07, X08 -> ~−0,035 fiecare; X09 -> −0,068; X10 -> −0,082 (agregare de la al 3-lea apel, plafon 0,40 cumulat).
+- Lipsește din scenariu un caz `mutare_fire` (sens giratoriu); cerut lui A în board.
+Pragurile noi (`mutare_fire`, `demontat`, `val_apeluri`, `racordare`, `trace`) sunt valori de pornire, necalibrate pe date reale; rezultatele de mai sus sunt doar pe date fictive.
+Pe cele 29 de evenimente de bază rezultatul e neschimbat: 13 scor_actualizat, 8 neaplicat, 3 predicție, 2 fără efect, 1 conflict, 1 aplicat, 1 adăugat.

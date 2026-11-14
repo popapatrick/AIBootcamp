@@ -280,6 +280,7 @@ class Sesiune2:
         lista = [x for x in self.apeluri.setdefault(eid, []) if S.zile(x[0], data) <= cfg["fereastra_zile"]]
         n = len(lista) + 1
         if n >= cfg["numar_min"]:
+            self._val_flag = True
             delta = delta * (1 + 0.5 * (n - 1))
             motive.append(f"Val de apeluri: {n} apeluri în {cfg['fereastra_zile']} zile pe același element, semnal mai puternic "
                           f"(plafon {cfg['plafon_semnal']}).")

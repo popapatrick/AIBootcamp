@@ -83,6 +83,11 @@ def main() -> None:
     verifica("val de apeluri: al 3-lea apel pesează mai mult decât unul singur", ds[2] < d1 - 1e-6, f"{d1:.3f} vs {ds[2]:.3f}")
     verifica("val de apeluri: plafon", sum(ds) >= -mv.w["val_apeluri"]["plafon_semnal"] - 1e-6, f"suma {sum(ds):.3f}")
 
+    verifica("timeline: etichete pentru val de apeluri, demontat, mutare_fire",
+             any(x["eticheta"] == "val_apeluri" for x in mv.timeline()) and any(x["eticheta"] == "demontat" for x in md.timeline())
+             and any(x["eticheta"] == "mutare_fire" and x["tip"] == "mutare_fire" for x in m.timeline())
+             and any(x["eticheta"] == "decizie_om" for x in m.timeline()))
+
     # --- cerere_racordare
     mr = mk()
     nn = mr.net["noduri"]["6513200"]
