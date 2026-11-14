@@ -38,3 +38,10 @@ Fără tunel: planul B `http://localhost:8000/ui/`.
 
 **Unire C5-C7 + corectură** (draft `drft_01m7dyj7a0fx99y360qeaz4hz2`): `merged` în main (commit Lovable `dae4bce`, peste C4+C8 `9d9fb83`). Grep pe main: prezente împreună „Verificare în teren" + POST `/predictii/{id}/decizie`, `scenariu=extrem`, cele 3 butoane C5-C7, `trasee-demo`, `locatie`, `trace`; fără markeri de conflict. Corectură (mesaj `main:user#00000000000047#usr:E6SS75PD`, commit Lovable `3debf5b`, 2,7 credite): cele 3 butoane + panourile se dezactivează în extrem cu „Disponibil doar în scenariul normal" (aceeași condiție `scrierePermisa` ca Trimite raport / Acceptă-Respinge, prin `poateScrie`); la schimbarea scenariului se anulează modul clic și se șterg traseul/zona; la focus pe stâlpul prezis `fitBounds` include și traseul (fără zoom minim 15 când există traseu); teste noi `actiuni-scenariu.test.tsx`, `traseu-focus.test.tsx`; exemplele de tunel din teste înlocuite cu `api.example.test`. Lovable raportează: build OK, 56 teste trecute, verificare în browser cu API simulat fără erori în consolă. Credite sesiunea 2: 5,2 + 5,3 + 11,6 + 2,7 = 24,8.
 Rămâne: test cu API-ul real (tunel), nepublicat (cere confirmarea omului).
+
+### Sesiunea 2: etichete de extracție și predicție (cerere Victor, contract 93d21f4 + beeb918)
+- Prompt: `frontend/lovable-prompt-sesiune2-etichete-ai.md`, plus o completare pentru `ai_cli`. Ambele pe main, verificate în diff.
+- Semn în pasul Extracție și în colțul de stare: `ai_cli`/`ai_api` = „AI (live)", `ai_cache` = „AI (cache)", `regex` = „Regex (simplificat)" (ultima rezervă). Lipsă = „—".
+- Pe elemente (tooltip și „De ce?"): „Confirmat de om" > „Predicție AI · <metodă lizibilă> · scor" > „Din raport", cu notă onestă: extracția folosește AI, poziția prezisă vine din scor plus străzi OSM.
+- Limită: „Din raport" apare doar dacă elementul are `din_raport`/`sursa: raport`. API-ul nu trimite încă aceste câmpuri, deci eticheta nu apare (nu blochează demo-ul).
+- Nepublicat.
