@@ -1,4 +1,4 @@
-# Etapa 18: API sesiunea 3 (C1), bancul de logică și `/reguli` (C2), prompt Lovable netrimis (C4)
+# Etapa 24: API sesiunea 3 (C1), bancul de logică și `/reguli` (C2), prompt Lovable netrimis (C4)
 
 Rol C. Cod în `backend/api/` (`main.py`, `pipeline.py`, `sources.py`, `smoke_api.py`, `banc_logica.py`), prompt în `frontend/lovable-prompt-sesiune3.md`. Contract: commit `3517dfa`. Datele sunt FICTIVE.
 
@@ -60,3 +60,14 @@ Cauzele celor 7:
 - `inv-05`: **extracție/cache**: „stâlp nou pe Strada Viilor, lângă școală, fără coordonate" -> `linie_planificata` (încredere 0,4), așteptat `nod_lipsa`. Neatins (A2/A6).
 `GET /geocodeaza` (TestClient, cu `backend.geo`): „Strada Liviu Rebreanu" -> gasit, osm_cache, 150 m, 0,4; „Strada Regina Maria 5" -> gasit, interpolat, 25 m, 0,55; „strada" și „Strada Inexistenta 99" -> necunoscut; „Rebreanu" -> ai_estimare 0,32; „Calea Victoriei 10 Bucuresti" -> gasit pe „Strada București" (fals pozitiv, 150 m). Semnătura din main.py e corectă; niciun caz in_afara_zonei obținut din text (geo marchează doar coordonate din afara zonei).
 Pasul `geocodare` din pipeline: apare doar dacă Event-ul are `detalii.geocodare`; motorul nu cheamă încă `geocodeaza` (doar `match.py` pomenește geocodarea), deci nu apare la niciun caz. Doar raportat.
+
+## C3 runda 2 (2026-11-15): geocodare și traseu generat pe motorul real (B2, B4)
+
+Verificat prin `TestClient` pe `POST /rapoarte` (EXTRACT_CLI=0, cache + regex), motor real.
+
+- **(a) Geocodare.** Motorul pune pasul `geocodare` direct în `pasi` (`sesiune2._foloseste_geocodare`), imediat după `extractie`; `pipeline._pas_geocodare` vede că există și nu dublează (a rămas ca rezervă pentru motoare care pun doar `detalii.geocodare`). Nu a trebuit reparat. Exemplu: „Raport: stalp nou pe Strada Regina Maria 5, executat" -> pași `extractie, geocodare, trace, potrivire, predictie, scor`; `geocodare.rezultat` = `{status: gasit, lat 44.280451, lon 26.054963, precizie_m 25, metoda osm_cache, acuratete 0.55}`. `detalii.geocodare` NU apare în Event-ul din pasul `extractie` (motorul îl pune pe o copie internă), doar în pasul `geocodare`.
+- **(b) trace_params.** Ajung la motor și produc pasul `trace` cu `rezultat.sursa = "simulat"`, `opriri`, `factor_trace`, `params`. `trace_sursa` nu e câmp la nivel superior în răspuns: se citește din `pasi[trace].rezultat.sursa`. Reparat: modelul `TraceParams` din API nu avea `dezactivat`, deci `{"dezactivat": true}` era aruncat (422 nu, ci ignorat) și traseul se genera oricum; acum trece. Efect pe `factor_trace` (coordonate 44.2849717, 26.0601908, acoperire 1,0): zgomot 2 m -> 1,13; implicit (5 m) -> 1,10; zgomot 40 m -> 0,75 (nicio oprire detectată); acoperire 0,2 -> 0,65. Sensul e cel așteptat. `scor` final nu e monoton în aceste apeluri deoarece modelul e stateful: același punct repetat se potrivește cu nodul creat de apelul anterior (scor 1,0).
+- **(c) Plafon standardizare.** Cu cache AI: `mnt-03` și `rac-02` (stradă + număr) -> `incredere_extractie` 0,7; `mnt-07` (doar stradă) 0,5; `inv-05` (stradă + reper) 0,4. Pe regex (text nou fără cache) nu există `adresa_structurata`, încrederea rămâne 0,45: plafonul nu se vede acolo.
+- **Observație (B/A):** traseul generat e determinist pe `event_id`; cu `API_EXTRACTIE=stub` (alte id-uri) același punct și `acoperire 1.0` a dat `status fara_opriri` (factor 0,75). Smoke-ul caută automat o coordonată care dă oprire.
+- **Smoke:** `smoke_api.py` are acum asertări independente de ai_cli: pas `geocodare` o dată, imediat după `extractie`; `trace_params` -> factor zgomot mic > implicit > zgomot mare, acoperire mică scade, `dezactivat` elimină pasul `trace`.
+- **Bancă:** rândurile (în `--json`, nu în tabel) au `geocodare_status`, `precizie_m`, `trace_sursa`. Pe exemple-dummy: 29 cazuri, 28 ok, 1 diferit (`inv-05`, `tip`, extracție). Geocodare apare la 9 cazuri (ex. `mnt-03` gasit 25 m, `mnt-06/07` și `inv-05` 150 m, `mut-03` necunoscut), `trace_sursa=simulat` la 5. `data/golden/` tot lipsește.

@@ -60,7 +60,11 @@ def ruleaza_caz(caz: dict) -> dict:
          "eronat": out.get("eronat_prototip"),
          # element referit (potrivire, apoi ID din text); `modificari[0].element_id` e doar elementul creat de motor (ex. NOU-...)
          "element_id": _g(pasi.get("potrivire"), "rezultat", "element_id") or _g(ev, "referinta", "element_id") or mod.get("element_id"),
-         "element_modificat": mod.get("element_id")}
+         "element_modificat": mod.get("element_id"),
+         # doar în --json (nu în tabel): pasul geocodare (B2) și traseul generat (B4)
+         "geocodare_status": _g(pasi.get("geocodare"), "rezultat", "status"),
+         "precizie_m": _g(pasi.get("geocodare"), "rezultat", "precizie_m"),
+         "trace_sursa": _g(pasi.get("trace"), "rezultat", "sursa")}
     ast = caz.get("asteptat")
     if ast:
         gresit = [k for k, v in ast.items()

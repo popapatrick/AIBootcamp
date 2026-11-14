@@ -31,4 +31,4 @@ grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' /tmp/claude-1000/cloudflared.lo
 - Link: `https://id-preview--fd19026a-1ce3-4de6-8f4d-355c351e028a.lovable.app/?api=<URL tunel trycloudflare>`; URL-ul tunelului e în `/tmp/claude-1000/tunnel.url` și se schimbă la fiecare repornire a tunelului.
 - Plan B: `http://localhost:8000/ui/` (UI Leaflet servit de FastAPI).
 - Checklist demo: `docs/demo-checklist-C.md`.
-- Prompt Lovable sesiunea 3 (origine, predicție slabă/treaptă, eronat în prototip, cerc de zonă, parametri trace, pas „Geocodare"): scris în `frontend/lovable-prompt-sesiune3.md`, **netrimis** până decide omul și backend-ul întoarce câmpurile. API nou pentru el: `zona` în `GET /retea`, `trace_params` în `POST /rapoarte`; vezi `docs/etapa-18-api-sesiune3.md`.
+- Prompt Lovable sesiunea 3 (origine, predicție slabă/treaptă, eronat în prototip, cerc de zonă, parametri trace, pas „Geocodare"): scris în `frontend/lovable-prompt-sesiune3.md`, **netrimis** până decide omul și backend-ul întoarce câmpurile. API nou pentru el: `zona` în `GET /retea`, `trace_params` în `POST /rapoarte`; vezi `docs/etapa-24-api-sesiune3.md`.

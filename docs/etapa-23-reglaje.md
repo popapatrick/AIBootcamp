@@ -22,5 +22,5 @@ B6 e gata: `backend/engine/verifica_reglaje.py`, `contracts/weights.limits.yaml`
 - După tag `logic-v1` (B7), schimbările de cod în motor trec prin cerere aprobată; reglajele de valori rămân permise.
 
 ## Limite
-- Bancul nu are încă `data/golden/` (A6): efectul unui reglaj se vede doar pe cele 29 de cazuri din `exemple-dummy.json`, dintre care 7 diferă deja de `asteptat` (vezi `docs/etapa-18-api-sesiune3.md`).
+- Bancul nu are încă `data/golden/` (A6): efectul unui reglaj se vede doar pe cele 29 de cazuri din `exemple-dummy.json`, dintre care 7 diferă deja de `asteptat` (vezi `docs/etapa-24-api-sesiune3.md`).
 - `GET /reguli` arată valorile din fișier pe disc la fiecare apel; motorul poate ține valorile vechi în memorie până la repornirea serverului.

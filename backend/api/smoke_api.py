@@ -128,6 +128,33 @@ def main() -> None:
     assert c.get("/exemple", params={"sursa": "gresit"}).status_code == 422
     assert isinstance(c.get("/trasee-demo").json(), list)
 
+    # motor real: geocodare din adresă (B2) și trace_params -> traseu simulat (B4), independent de ai_cli
+    if apply:
+        from backend.engine import osm
+        strada = next((x["nume"] for x in osm.strazi() if x.get("nume")), None)
+        tg = c.post("/rapoarte", json={"text": f"Raport: stâlp nou pe {strada} 5, executat.", "sursa": "mentenanta",
+                                       "data": "2026-11-10"}).json()
+        nm = [p["nume"] for p in tg["pasi"]]
+        assert "geocodare" in nm and nm.index("geocodare") == nm.index("extractie") + 1, nm   # Show pipeline: după extracție
+        assert nm.count("geocodare") == 1, nm
+        assert next(p for p in tg["pasi"] if p["nume"] == "geocodare")["rezultat"]["status"] in ("gasit", "necunoscut", "in_afara_zonei"), tg["pasi"]
+
+        def fct(i, tp):   # coordonate noi la fiecare apel: să nu se potrivească cu un nod creat de apelul anterior
+            b = {"text": f"Stâlp nou care nu apare în GIS, coordonate {round(44.2849717 + i * 0.0004, 7)}, 26.0601908.",
+                 "sursa": "mentenanta", "data": "2026-10-20", "trace_params": tp}
+            pt_ = next((p for p in c.post("/rapoarte", json=b).json()["pasi"] if p["nume"] == "trace"), None)
+            return pt_ and pt_["rezultat"]
+        pb = {"acoperire": 1.0}
+        # traseul e determinist pe event_id: pe unele id-uri nu iese nicio oprire (observat cu API_EXTRACTIE=stub); încercăm până iese una
+        i0, base = next((i, r) for i in range(0, 40, 5) if (r := fct(i, pb)) and r["alegere"])
+        assert base["sursa"] == "simulat" and base["factor_trace"] > 1.0, base
+        zg_mic, zg_mare, acop, off = (fct(i0 + 1 + k, tp) for k, tp in enumerate(
+            ({**pb, "zgomot_m": 2}, {**pb, "zgomot_m": 40}, {"acoperire": 0.2}, {"dezactivat": True})))
+        assert zg_mic["params"]["zgomot_m"] == 2 and zg_mic["factor_trace"] > base["factor_trace"] > zg_mare["factor_trace"], (zg_mic, zg_mare)
+        assert acop["factor_trace"] < base["factor_trace"], acop
+        assert off is None, "trace_params.dezactivat nu oprește traseul generat"
+        print("motor: geocodare + trace_params ok (factor", zg_mic["factor_trace"], ">", base["factor_trace"], ">", zg_mare["factor_trace"], ")")
+
     # decizia omului (B4): predicția se pregătește direct în motor (Event nod_lipsa), independent de extracție
     if apply:
         pe = {"event_id": "EV-SMOKE-PRED", "echipa_sursa": "apel_client", "tip": "nod_lipsa", "status": "semnalat",

@@ -58,6 +58,7 @@ class TraceParams(BaseModel):
     durata_oprire_min: float | None = None
     acoperire: float | None = None
     decalaj_m: float | None = None
+    dezactivat: bool | None = None       # fără traseu generat pentru acest raport (motorul îl respectă)
 
 
 class Raport(BaseModel):
