@@ -97,6 +97,7 @@ def main() -> None:
         ev = ex.extract_event(t, "racordari", "2026-09-01")
         assert ev["detalii"]["sectiune_noua"] == "TYIR 3x50+54,6 OL-Al" and ev["campuri_lipsa"] == []
         assert json.loads((Path(tmp) / f"{key}.json").read_text(encoding="utf-8")) == ev
+    assert "necartat" in ex.SYSTEM and "racord_nou = doar" in ex.SYSTEM  # regula nod_lipsa vs racord_nou
     # tipuri sesiunea 2: ieșiri schema-valide trec; invalide (decizie/enum) cad
     NOU = dict(GOOD, detalii={}, campuri_lipsa=[])
     cazuri = {

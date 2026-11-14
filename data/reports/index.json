@@ -310,5 +310,21 @@
     "scenariu": null,
     "element_id_asteptat": null,
     "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-11-06_mentenanta_15.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-06",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "mutare_fire"
+  },
+  {
+    "fisier": "2026-11-08_mentenanta_16.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-08",
+    "scenariu": null,
+    "element_id_asteptat": "6513200",
+    "tip_asteptat": "verificare"
   }
 ]

@@ -1045,5 +1045,64 @@
     "detalii": {
       "observatii": "A plecat din nou lumina, e a patra zi când se întâmplă. Ora apelului: 20:05. Operatorul a înregistrat apelul, echipa verifică."
     }
+  },
+  {
+    "event_id": "EV-X11",
+    "echipa_sursa": "mentenanta",
+    "tip": "mutare_fire",
+    "referinta": {
+      "adresa": null,
+      "coordonate": {
+        "lat": 44.2830448,
+        "lon": 26.0636533
+      },
+      "element_id": null,
+      "id_client": null,
+      "nr_cadastral": null
+    },
+    "status": "semnalat",
+    "data": "2026-11-06",
+    "text_original": "DATE FICTIVE\nRaport de teren, 6 noiembrie 2026.\nLa sensul giratoriu nou de la intersecția Regina Maria cu Primaverii, centru 44.2830448, 26.0636533, s-au mutat firele aeriene. Pe teren traseul nu mai corespunde cu harta GIS din zonă. Recomand verificarea elementelor din jurul giratoriului.\nIng. fictiv (date fictive)\n",
+    "tip_sursa_pondere": "text_liber",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.85,
+    "campuri_lipsa": [
+      "raza_m"
+    ],
+    "detalii": {
+      "centru": {
+        "lat": 44.2830448,
+        "lon": 26.0636533
+      },
+      "motiv_mutare": "sens_giratoriu",
+      "observatii": "Fire aeriene mutate la sensul giratoriu nou (centru 44.2830448, 26.0636533); raza nespecificată. Recomandare: verificarea elementelor din jur."
+    }
+  },
+  {
+    "event_id": "EV-X12",
+    "echipa_sursa": "mentenanta",
+    "tip": "verificare",
+    "referinta": {
+      "adresa": "str. Fictivă, zona stației PTAB 7812 (adresă fictivă)",
+      "coordonate": {
+        "lat": 44.2830311,
+        "lon": 26.063942
+      },
+      "element_id": "6513200",
+      "id_client": null,
+      "nr_cadastral": null
+    },
+    "status": "executat",
+    "data": "2026-11-08",
+    "text_original": "DATE FICTIVE\nFIȘĂ DE VERIFICARE – MENTENANȚĂ\nNr. fișă: M-2026-0521\nData: 2026-11-08\nEchipa: mentenanta\nCod element: nod 6513200\nCoordonate: 44.2830311, 26.063942\nAdresa: str. Fictivă, zona stației PTAB 7812 (adresă fictivă)\nNr. cadastral: -\nConstatare: Nodul 6513200 verificat după mutarea firelor de la sensul giratoriu. Montaj corect, fără defecte.\nStatus: executat\n",
+    "tip_sursa_pondere": "tableta_coordonate",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.9,
+    "campuri_lipsa": [
+      "nr_cadastral"
+    ],
+    "detalii": {
+      "observatii": "Nod 6513200 verificat după mutarea firelor: montaj corect, fără defecte. Nr. fișă M-2026-0521."
+    }
   }
 ]

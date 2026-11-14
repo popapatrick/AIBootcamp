@@ -3,13 +3,14 @@
 DATE FICTIVE. Proprietar: A (Patrick). Spec: `openspec/changes/timeline-cazuri-extreme/`.
 
 ## Ce face
-`data/events/events.extreme.json` = cele 29 evenimente din `events.json` (neatinse) + 10 evenimente noi `EV-X01..EV-X10` (39 în total), cu 10 rapoarte text noi în `data/reports/` și 10 intrări în `data/reports/index.json` (`scenariu: null`, ca în README-ul folderului).
+`data/events/events.extreme.json` = cele 29 evenimente din `events.json` (neatinse) + 12 evenimente noi `EV-X01..EV-X12` (41 în total), cu 12 rapoarte text noi în `data/reports/` și 12 intrări în `data/reports/index.json` (`scenariu: null`, ca în README-ul folderului).
 
 | Caz | Evenimente | Date | Elemente reale folosite |
 |---|---|---|---|
 | Ramură pe etape | X01 `linie_planificata` (investitii), X02 `racord_nou` (racordari), X03 `nod_lipsa` (mentenanta, tabletă), X06 `verificare` (mentenanta) | 07.09, 30.09, 14.10, 05.11 | ancore noduri `7261864` și `7363515`; nod nou `7900101` (ID fictiv, inexistent în model) |
 | Segment demontat | X04 `activ_demontat` (investitii, formular), X05 `activ_demontat` (mentenanta, text liber) | 19.10, 04.11 | tronson `A-T-012` (6166490-6240749) |
 | Val de apeluri | X07..X10 `avarie_semnalata` (apel_client), 4 apeluri în 4 zile | 09-12.11 | coordonate în jur de 44.2765, 26.0633 (lângă `A-T-004`/`A-T-005`), 4 clienți diferiți |
+| Mutare fire + revenire | X11 `mutare_fire` (mentenanta, semnalat, 06.11, centru 44.2830448, 26.0636533, motiv `sens_giratoriu`, fără rază: `raza_m` în `campuri_lipsa`, motorul folosește 40 m), X12 `verificare` (mentenanta, tabletă `tableta_coordonate`, 08.11) | 06.11, 08.11 | nod `6513200`, în zona marcată |
 
 Câmpurile `tip_sursa_pondere`, `forma_sursa`, `incredere_extractie`, `campuri_lipsa` sunt completate ca la evenimentele existente; ce nu apare în text e în `campuri_lipsa` (ex. `lungime_m`, `element_id`, `coordonate`). Evenimentele X au fost scrise de mână din rapoartele noi (fără apel Claude), deci `incredere_extractie` e estimată.
 
@@ -32,6 +33,8 @@ Rulare pe motor (fără endpoint încă): `GridModel()` + `apply_event` pe eveni
 - X06: `verificare` pe `7900101`, scor 1,0 (verde).
 - X04/X05: tratate acum ca "confirmare din teren": `A-T-012` urcă 0,656 apoi 0,767. NU e comportamentul dorit (trebuie semnal de demontare, scos din uz doar peste prag): așteaptă `activ_demontat` din `model.py` (task 3.1 B).
 - X07..X10: fiecare apel scade `A-T-005` (de verificat) cu ~0,034, fără agregare: 0,399 -> 0,293. Valul agregat cu plafon 0,40 (`val_apeluri`) așteaptă task 3.2 (B).
+- X11: `mutare_fire` marchează 19 elemente din raza de 40 m `de_verificat` (scor plafonat 0,35) și propune 4 traseuri `MUT-EV-X11-*` (neaplicate).
+- X12: `verificare` pe `6513200`, +0,225 -> `in_model`, scor 0,543, `verificat_recent` true (halou verde).
 
 ## Decizii
 - Fișier separat, `events.json` și `exemple-dummy.json` neatinse (demo-ul de 60 s rămâne la fel).

@@ -46,6 +46,7 @@ numele câmpului în campuri_lipsa.
 - verificare = inspecție, verificare, termografie sau control fără defecte și fără modificări. \
 Nu folosi avarie_semnalata sau nod_lipsa pentru o verificare care n-a găsit nimic.
 - nod_lipsa doar dacă textul spune că elementul există pe teren, dar lipsește din GIS/hartă.
+- Stâlp/nod care există pe teren dar lipsește din GIS („necartat", „nu apare în GIS/hartă", „lipsește din hartă") = nod_lipsa, chiar dacă e numit „nou". racord_nou = doar branșament/racord nou al unui client (casă, consumator).
 - element_id: copiază exact codul din text. Cod nod numeric (păstrează zerourile de început, ex. 0287329) \
 sau tronson cu prefix (A-T-002, R-T-001, S-T-001). Nu ghici și nu adăuga prefix. Cod de tronson fără prefix \
 (ex. T-054, T-002): element_id null, codul brut în detalii.id_partial, și element_id în campuri_lipsa.

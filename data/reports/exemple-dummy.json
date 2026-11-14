@@ -80,12 +80,12 @@
   {
    "id": "mut-01",
    "titlu": "Sens giratoriu 1",
-   "text": "Sens giratoriu nou la intersectia Regina Maria cu Primaverii, centru 44.2799, 26.0594. S-au mutat firele aeriene, raza cca 60 m. Executat 10.11.2026",
+   "text": "Sens giratoriu nou la intersectia Regina Maria cu Primaverii, centru 44.2830448, 26.0636533. S-au mutat firele aeriene, raza cca 60 m. Executat 10.11.2026",
    "data": "2026-11-10",
    "asteptat": {
     "tip": "mutare_fire",
     "element_id": null,
-    "nota": "detalii.centru {44.2799, 26.0594}, raza_m 60, motiv sens_giratoriu"
+    "nota": "detalii.centru {44.2830448, 26.0636533}, raza_m 60, motiv sens_giratoriu"
    }
   },
   {

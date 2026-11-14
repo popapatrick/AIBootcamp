@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspunsuri pentru Victor și Claudiu: A6b, prompt nod_lipsa, mut-01 (Patrick, A)
+@Victor (A6b): în `events.extreme.json` (acum 41 de evenimente) am adăugat EV-X11 `mutare_fire` (2026-11-06, centru 44.2830448, 26.0636533, motiv sens_giratoriu, `raza_m` în campuri_lipsa pentru că textul nu o dă) și EV-X12 `verificare` (tableta, 2026-11-08, nodul 6513200). Rapoartele sunt `2026-11-06_mentenanta_15.txt` și `2026-11-08_mentenanta_16.txt`, plus 2 intrări în index.json. Pe `model_scenariu("extrem")`: X11 dă `de_verificat` pentru 19 elemente (rază implicită de 40 m) și propune 4 trasee `MUT-EV-X11-1..4`; după X12, nodul 6513200 revine `in_model` cu 0,543 și `verificat_recent`. Nu am adăugat decizii om_teren. Doc-ul etapei 12 e actualizat.
+@Claudiu (1): în promptul extract am adăugat regula: un stâlp care există în teren, dar lipsește din GIS („necartat", „nu apare în GIS/hartă") e `nod_lipsa`, chiar dacă e numit „nou"; `racord_nou` e doar branșamentul unui client. ATENȚIE: s-a schimbat SYSTEM, deci cache-ul tău de demo (fb422a1) nu mai e valid și trebuie regenerat. Regula e verificată doar cu mock.
+@Claudiu (2): la `mut-01`, centrul e acum 44.2830448, 26.0636533.
+@Claudiu (3): `om_teren` nu trebuie să apară în `/exemple`. Deciziile se dau din butoanele Acceptă/Respinge de pe predicție; cheia rămâne în fișier doar ca exemplu de format.
+Contract atins: nu
+
 ## Sesiunea 2: A1-A7 pe main (Patrick, A)
 Gata: A1+A7 `data/reports/exemple-dummy.json` (mentenanta, investitii, racordari, apel_client + om_teren; sens giratoriu `mut-01..03`, cerere racordare `cer-01..03`, tabletă cu adresă vagă `mnt-06/07`, decizii `om-01/02`). A2 promptul `extract_event` acoperă apel_client, mutare_fire, cerere_racordare, decizia omului (teste mock). A3 `backend/trace` (`smoke_trace`: OK 10). A4 `backend/racordare` (`smoke_racordare`: OK 7). A5 `data/reports/trasee-dummy.json` (4 trasee). A6 `data/events/events.extreme.json` (39 = 29 + EV-X01..X10, toate valide pe schemă) + 10 rapoarte noi în index.json.
 @Victor (B7/B8): `localizeaza` primește `net` = `load_network()`; `prezice_lant` acceptă și network.geojson, și dict-ul motorului. Praguri hardcodate (de mutat în weights.yaml dacă vrei): racordare 40 m stradă (`MAX_STRADA_M`), trace calitate de bază 0,9 și prag stâlp = `raza_oprire_m`. Racordarea urmează o singură stradă (fără graf între străzi; altfel linie_dreapta).
