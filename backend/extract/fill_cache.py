@@ -27,6 +27,9 @@ def texte() -> list[tuple[str, str, str | None]]:
     geo = REPORTS / "geo-test.json"
     if geo.exists():
         out += [(x["text"], x["sursa"], x["data"]) for x in json.loads(geo.read_text(encoding="utf-8"))["adrese"]]
+    # setul golden (data/golden/*.json, doar nivelul de sus, nu detaliu/)
+    for f in sorted((ex.ROOT / "data" / "golden").glob("*.json")):
+        out += [(x["text"], x["sursa"], x.get("data")) for x in json.loads(f.read_text(encoding="utf-8"))]
     # shortcut: trasee-dummy.json n-are texte de raport (doar descriere/puncte) și textele din docs/DEMO.md n-au dată fixă
     # (cheia depinde de data zilei la rulare live), deci nu sunt listate; de adăugat dacă apar câmpuri `text` / date fixe.
     return out

@@ -17,11 +17,14 @@
         "status": "gasit",
         "lat": 44.283031,
         "lon": 26.063942,
+        "status_geo": "necunoscut",
         "toleranta_m": 5,
         "acuratete_tinta": "id_existent"
       },
       "plafon_incredere": 1.0,
-      "nota": "cod existent: geocodarea nu se apelează"
+      "geo_apelat": false,
+      "ai_strada": null,
+      "nota": "cod existent: geocodarea nu se apelează (geo = necunoscut; motorul potrivește pe ID)"
     },
     {
       "id": "gt-02",
@@ -39,11 +42,14 @@
         "status": "gasit",
         "lat": 44.280555,
         "lon": 26.067705,
+        "status_geo": "necunoscut",
         "toleranta_m": 5,
         "acuratete_tinta": "coordonate"
       },
       "plafon_incredere": 0.9,
-      "nota": "coordonate explicite: geocodarea nu se apelează"
+      "geo_apelat": false,
+      "ai_strada": null,
+      "nota": "coordonate explicite: geocodarea nu se apelează (geo = necunoscut; motorul potrivește pe coordonate)"
     },
     {
       "id": "gt-03",
@@ -59,13 +65,16 @@
       },
       "asteptat": {
         "status": "gasit",
-        "lat": 44.284841,
-        "lon": 26.056659,
-        "toleranta_m": 150,
+        "lat": 44.285004,
+        "lon": 26.059122,
+        "status_geo": "gasit",
+        "toleranta_m": 30,
         "acuratete_tinta": "strada_numar"
       },
       "plafon_incredere": 0.7,
-      "nota": "mijlocul străzii; numărul nu e interpolat în această referință"
+      "geo_apelat": true,
+      "ai_strada": null,
+      "nota": "interpolat la N/100 pe cea mai lungă cale"
     },
     {
       "id": "gt-04",
@@ -81,13 +90,16 @@
       },
       "asteptat": {
         "status": "gasit",
-        "lat": 44.287291,
-        "lon": 26.068509,
-        "toleranta_m": 150,
+        "lat": 44.285759,
+        "lon": 26.070718,
+        "status_geo": "gasit",
+        "toleranta_m": 30,
         "acuratete_tinta": "strada_numar"
       },
       "plafon_incredere": 0.7,
-      "nota": "mijlocul străzii"
+      "geo_apelat": true,
+      "ai_strada": null,
+      "nota": "interpolat (N=7 -> fracția 0.1)"
     },
     {
       "id": "gt-05",
@@ -103,13 +115,16 @@
       },
       "asteptat": {
         "status": "gasit",
-        "lat": 44.281001,
-        "lon": 26.064167,
-        "toleranta_m": 150,
+        "lat": 44.281864,
+        "lon": 26.062834,
+        "status_geo": "gasit",
+        "toleranta_m": 30,
         "acuratete_tinta": "strada_numar"
       },
       "plafon_incredere": 0.7,
-      "nota": "mijlocul străzii"
+      "geo_apelat": true,
+      "ai_strada": null,
+      "nota": "interpolat la 0.18"
     },
     {
       "id": "gt-06",
@@ -118,20 +133,23 @@
       "data": "2026-10-06",
       "text": "Nu avem curent la intersecția Strada Liviu Rebreanu cu Strada Crinului.",
       "adresa_structurata_asteptata": {
-        "strada": "Strada Liviu Rebreanu / Strada Crinului",
+        "strada": "Strada Liviu Rebreanu",
         "numar": null,
         "localitate": null,
-        "reper": null
+        "reper": "intersecția cu Strada Crinului"
       },
       "asteptat": {
         "status": "gasit",
         "lat": 44.283675,
         "lon": 26.062802,
+        "status_geo": "gasit",
         "toleranta_m": 30,
         "acuratete_tinta": "intersectie"
       },
       "plafon_incredere": 0.5,
-      "nota": "nod comun; strada = ambele nume separate prin ' / '; plafonul 0.5 (intersecția nu e în tabelul de plafoane)"
+      "geo_apelat": true,
+      "ai_strada": null,
+      "nota": "nod comun; a doua stradă în reper; plafonul 0.5 (intersecția nu e în tabelul de plafoane)"
     },
     {
       "id": "gt-07",
@@ -140,19 +158,22 @@
       "data": "2026-10-07",
       "text": "Inspecție la colțul dintre Strada Viilor și Strada Carpati, cablu vizibil uzat.",
       "adresa_structurata_asteptata": {
-        "strada": "Strada Viilor / Strada Carpati",
+        "strada": "Strada Viilor",
         "numar": null,
         "localitate": null,
-        "reper": null
+        "reper": "colțul cu Strada Carpati"
       },
       "asteptat": {
         "status": "gasit",
         "lat": 44.283402,
         "lon": 26.067556,
+        "status_geo": "gasit",
         "toleranta_m": 30,
         "acuratete_tinta": "intersectie"
       },
       "plafon_incredere": 0.5,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "nod comun"
     },
     {
@@ -171,10 +192,13 @@
         "status": "gasit",
         "lat": 44.27837,
         "lon": 26.071461,
+        "status_geo": "gasit",
         "toleranta_m": 150,
         "acuratete_tinta": "strada"
       },
       "plafon_incredere": 0.5,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "mijlocul străzii"
     },
     {
@@ -193,10 +217,13 @@
         "status": "gasit",
         "lat": 44.282148,
         "lon": 26.061722,
+        "status_geo": "gasit",
         "toleranta_m": 150,
         "acuratete_tinta": "strada"
       },
       "plafon_incredere": 0.5,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "mijlocul străzii"
     },
     {
@@ -213,13 +240,16 @@
       },
       "asteptat": {
         "status": "gasit",
-        "lat": 44.284841,
-        "lon": 26.056659,
-        "toleranta_m": 150,
+        "lat": 44.285013,
+        "lon": 26.059252,
+        "status_geo": "gasit",
+        "toleranta_m": 30,
         "acuratete_tinta": "strada_numar"
       },
       "plafon_incredere": 0.45,
-      "nota": "ortografie greșită: AI alege din cache, acuratețe x factor_ai_fuzzy"
+      "geo_apelat": true,
+      "ai_strada": "Strada Liviu Rebreanu",
+      "nota": "ortografie greșită: AI alege din cache, acuratețe x factor_ai_fuzzy; fără CLI = necunoscut"
     },
     {
       "id": "gt-11",
@@ -237,11 +267,14 @@
         "status": "gasit",
         "lat": 44.288186,
         "lon": 26.062116,
+        "status_geo": "gasit",
         "toleranta_m": 150,
         "acuratete_tinta": "strada"
       },
       "plafon_incredere": 0.4,
-      "nota": "abreviere: AI alege din cache"
+      "geo_apelat": true,
+      "ai_strada": "Strada Ion Luca Caragiale",
+      "nota": "abreviere: AI alege din cache; fără CLI = necunoscut"
     },
     {
       "id": "gt-12",
@@ -259,11 +292,14 @@
         "status": "gasit",
         "lat": 44.281858,
         "lon": 26.065753,
-        "toleranta_m": 150,
-        "acuratete_tinta": "strada"
+        "status_geo": "gasit",
+        "toleranta_m": 30,
+        "acuratete_tinta": "intersectie"
       },
       "plafon_incredere": 0.4,
-      "nota": "stradă fără diacritice + reper = stradă din cache; ținta aproximată la intersecția cu Carpati"
+      "geo_apelat": true,
+      "ai_strada": null,
+      "nota": "stradă fără diacritice + reper cu a doua stradă = intersecție"
     },
     {
       "id": "gt-13",
@@ -281,10 +317,13 @@
         "status": "necunoscut",
         "lat": null,
         "lon": null,
+        "status_geo": "necunoscut",
         "toleranta_m": null,
         "acuratete_tinta": "reper"
       },
       "plafon_incredere": 0.3,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "reper vag fără locație în cache: necunoscut, predicție, nu se aplică"
     },
     {
@@ -303,10 +342,13 @@
         "status": "necunoscut",
         "lat": null,
         "lon": null,
+        "status_geo": "necunoscut",
         "toleranta_m": null,
         "acuratete_tinta": "strada_numar"
       },
       "plafon_incredere": 0.7,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "stradă inexistentă în zonă: necunoscut sau in_afara_zonei, fără coordonate inventate"
     },
     {
@@ -320,10 +362,13 @@
         "status": "necunoscut",
         "lat": null,
         "lon": null,
+        "status_geo": "necunoscut",
         "toleranta_m": null,
         "acuratete_tinta": null
       },
       "plafon_incredere": 0.2,
+      "geo_apelat": true,
+      "ai_strada": null,
       "nota": "fără localizator: adresa_structurata null"
     }
   ]

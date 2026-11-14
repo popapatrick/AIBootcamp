@@ -12,3 +12,7 @@ Ipoteze: OSM nu are numere de casă, deci N se pune la fracția `clamp(N/100, 0.
 Safeguard zonă: un `gasit` la peste `zona.raza_max_m` de centroid devine `status`/`metoda` = `in_afara_zonei` (lat/lon păstrate, `motiv` din `motiv_afara`). `geocodeaza(..., net=None)`: fără `net` se încarcă `load_network()` o dată (cache în modul).
 
 Verificare: `.venv/bin/python -m backend.geo.smoke_geo`
+
+Intersecție din `reper`: dacă `adresa_structurata.reper` numește a doua stradă din cache („intersecția cu X”, „aproape de X”), rezultatul e intersecția (toate căile, nu doar cea mai lungă). `id`/`coordonate` nu trec prin geo (spec: nu se apelează), le tratează motorul.
+Tip de stradă: dacă textul are strada/calea/bulevardul/soseaua/aleea/intrarea, se potrivește doar numele de după el (până la cifră/virgulă) și doar o stradă de același tip; „Calea Victoriei 10 București” nu mai potrivește „Strada București” (orașul nu e stradă).
+Test: `smoke_geo` rulează toate cazurile din `data/reports/geo-test.json` (cazurile AI cu CLI simulat).

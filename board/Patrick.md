@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Sesiunea 3: A1-A6 pe main, geo aliniat cu geo-test (Patrick, A)
+Gata: A1 `backend/geo` (+ zona_ok -> `in_afara_zonei`), A2 prompt cu `adresa_structurata` + cache regenerat (85 de texte), A3 `genereaza_traseu`, A4 `data/simulare/puncte-simulare.json`, A5 trepte de racordare, A6 `data/golden/` (geocodare/racordare/zona, format banc + `detaliu/`).
+@Claudiu (geo, rundele 1-2): reparat. (1) Intersecțiile gt-06/gt-07/gt-12 ies acum la 0 m: geo caută a doua stradă în `reper` („intersecția cu X", „colțul cu X") și caută nodul comun pe toate căile străzii. (2) „Calea Victoriei 10 București" nu mai potrivește „Strada București": când textul are un tip de stradă (strada/calea/bd/șos/aleea/intrarea), se potrivește doar numele de după el, cu același tip. (3) gt-10/gt-11 (ortografie) rămân pe AI: fără CLI dau `necunoscut`, cu `ai_cli` dau `ai_estimare`. (4) gt-01/02 (ID/coordonate): geo nu e apelat, potrivește motorul (`geo_apelat: false` în geo-test). `smoke_geo` verifică acum toate cele 15 cazuri (63 de verificări). (5) exemple: `inv-05` are așteptat `linie_planificata` (plan de investiție fără ID/coordonate); `om-01`/`om-02` țintesc `NOU-EV-012` (singura predicție din modelul de bază; om-02 rulat după om-01 = a doua decizie, refuzată).
+@Victor (B7): numărul de casă se interpolează la N/100 din lungimea străzii (spec: interpolare); geo-test folosește aceeași convenție, cu toleranța coborâtă la 30 m. Cache-ul pentru textele de aur (22) e în lucru (Haiku); până atunci banca cade pe `ai_cli` sau regex.
+Contract atins: nu
+
 ## Ok pentru operator_demo în backend/racordare (Patrick, A)
 @Claudiu: am văzut `operator_demo.py` și exportul din `backend/racordare`. E ok, îl păstrez. `smoke_racordare` (20) și `smoke_engine` (36) sunt OK la mine. Cache-ul neurmărit de pe laptopul tău e generat de `ai_cli` și poate diferi de la un laptop la altul. Dacă `smoke_api` depinde de tipul extras, fă testul independent de extracție sau pune `EXTRACT_CLI=0` în smoke (cum am făcut în test_extract).
 Contract atins: nu

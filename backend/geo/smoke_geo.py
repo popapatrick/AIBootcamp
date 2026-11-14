@@ -55,4 +55,41 @@ ok(geocodeaza({}, S, cfg)["status"] == "necunoscut" and geocodeaza({"adresa": "x
 ofz = geocodeaza({"adresa_structurata": {"strada": "Strada Liviu Rebreanu"}}, S, {**cfg, "zona": {"raza_max_m": 1}}, net=load_network())
 ok(ofz["status"] == "in_afara_zonei" and ofz["metoda"] == "in_afara_zonei" and ofz["lat"] and "peste limita" in ofz["motiv"], ofz)
 ok(r["status"] == "gasit", "în zonă rămâne gasit")
+
+# fals pozitiv: „București” e orașul, nu strada; „Calea” nu potrivește „Strada”
+for ad in ({"adresa": "Calea Victoriei 10 Bucuresti"}, {"adresa_structurata": {"strada": "Calea Victoriei", "numar": "10", "localitate": "București"}}):
+    _AI_CACHE.clear()
+    rv = geocodeaza(ad, S, cfg)
+    ok(rv["status"] == "necunoscut", rv)
+ok(g(strada="Strada București")["status"] == "gasit", "stradă reală București rămâne potrivită")
+
+# toate cazurile din data/reports/geo-test.json (referinta din adresa_structurata_asteptata; cazurile cu AI: fără CLI = necunoscut, apoi CLI simulat)
+import json
+from pathlib import Path
+
+from backend.engine.network import dist_m
+
+TAB = []
+for c in json.loads((Path(__file__).resolve().parents[2] / "data/reports/geo-test.json").read_text(encoding="utf-8"))["adrese"]:
+    ref, a = {"adresa_structurata": c["adresa_structurata_asteptata"]}, c["asteptat"]
+
+    def rul():
+        _AI_CACHE.clear()
+        return geocodeaza(ref, S, cfg)
+
+    if c["ai_strada"]:
+        ok(rul()["status"] == "necunoscut", (c["id"], "fără CLI = necunoscut"))
+        with mock.patch.object(cli_ai, "call_cli", return_value={"strada": c["ai_strada"]}):
+            res = rul()
+        ok(res["metoda"] == "ai_estimare", (c["id"], res))
+    else:
+        res = rul()
+    d = dist_m((res["lat"], res["lon"]), (a["lat"], a["lon"])) if res["lat"] and a["lat"] and c["geo_apelat"] else None
+    ok(res["status"] == a["status_geo"], (c["id"], res))
+    ok(d is None or d <= a["toleranta_m"], (c["id"], d, a["toleranta_m"]))
+    if res["status"] == "gasit":  # acuratețea = cheia din tabel x factor_ai_fuzzy dacă a ales AI
+        ok(res["acuratete"] == round(A[a["acuratete_tinta"]] * (cfg["geocodare"]["factor_ai_fuzzy"] if c["ai_strada"] else 1), 3), (c["id"], res))
+    TAB.append((c["id"], res["status"], res["metoda"], None if d is None else round(d)))
+for t in TAB:
+    print(*t)
 print(f"OK: {N} verificări")

@@ -65,7 +65,7 @@
     "lat": 44.281001,
     "lon": 26.064167,
     "nivel": "strada_numar",
-    "acuratete": 0.55,
+    "acuratete": 0.45,
     "precizie_m_max": 150
    },
    "toleranta": {
@@ -92,7 +92,7 @@
     "lat": 44.284841,
     "lon": 26.056659,
     "nivel": "strada_numar",
-    "acuratete": 0.55,
+    "acuratete": 0.45,
     "precizie_m_max": 150
    },
    "toleranta": {

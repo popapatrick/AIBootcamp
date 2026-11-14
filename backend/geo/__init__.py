@@ -7,6 +7,7 @@ rețelei de start devine `in_afara_zonei` (`engine.zona.zona_ok`; lat/lon păstr
 """
 import json
 import re
+import unicodedata
 
 from backend.engine.network import dist_m, load_network
 from backend.engine.zona import motiv_afara, zona_ok
@@ -40,13 +41,14 @@ def _la(pct, frac: float) -> tuple[float, float]:
 
 
 def _grupe(strazi) -> dict:
-    """{nume_normalizat: {"nume", "pct" (calea cea mai lungă), "lung" (total m)}}; fără străzile fără nume."""
+    """{nume_normalizat: {"nume", "pct" (calea cea mai lungă), "lung" (total m), "cai" (toate căile)}}; fără străzile fără nume."""
     g: dict = {}
     for s in strazi:
         k = _norm(s.get("nume"))
         if not k or len(s["puncte"]) < 2:
             continue
-        e = g.setdefault(k, {"nume": s["nume"], "pct": s["puncte"], "lung": 0.0})
+        e = g.setdefault(k, {"nume": s["nume"], "pct": s["puncte"], "lung": 0.0, "cai": []})
+        e["cai"].append(s["puncte"])
         l = _lung(s["puncte"])
         if l > _lung(e["pct"]):
             e["pct"] = s["puncte"]
@@ -54,10 +56,42 @@ def _grupe(strazi) -> dict:
     return g
 
 
+_TIP = re.compile(r"\b(strada|str|calea|bulevardul|bd|bdul|soseaua|sos|aleea|intrarea)\b\.?\s*", re.I)
+_TIPN = {"str": "strada", "bd": "bulevardul", "bdul": "bulevardul", "sos": "soseaua"}
+
+
+def _tip(nume: str | None) -> str | None:
+    m = _TIP.match(_fara_diac(nume or "").strip()) or _TIP.search(_fara_diac(nume or ""))
+    return _TIPN.get(m.group(1).lower(), m.group(1).lower()) if m else None
+
+
+def _fara_diac(s: str) -> str:
+    return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+
+
+def _segment(text: str) -> tuple[str, str | None]:
+    """Dacă textul are un cuvânt de tip stradă (strada/calea/...), doar numele de după el, până la prima cifră/virgulă,
+    poate fi potrivit (un oraș după număr, ex. „București”, nu e stradă). Fără tip: textul întreg."""
+    t = _fara_diac(text)
+    m = _TIP.search(t)
+    if not m:
+        return text, None
+    return re.split(r"[,\d]", t[m.end():], 1)[0], _TIPN.get(m.group(1).lower(), m.group(1).lower())
+
+
 def _potrivire(text: str, g: dict) -> str | None:
-    """Cheia străzii al cărei nume (toate cuvintele) apare în text; la mai multe, cea mai lungă."""
+    """Cheia străzii al cărei nume (toate cuvintele) apare în text; la mai multe, cea mai lungă.
+    Cu tip de stradă în text: doar numele de după el și doar străzi de același tip („Calea X” nu potrivește „Strada Y”)."""
+    seg, tip = _segment(text)
+    tok = set(_norm(seg).split())
+    c = [k for k in g if set(k.split()) <= tok and (not tip or _tip(g[k]["nume"]) in (None, tip))]
+    return max(c, key=lambda k: len(k.split())) if c else None
+
+
+def _alta(text: str, g: dict, exclus: str) -> str | None:
+    """Altă stradă din cache (diferită de `exclus`) numită determinist în text; None dacă nu e niciuna."""
     tok = set(_norm(text).split())
-    c = [k for k in g if set(k.split()) <= tok]
+    c = [k for k in g if k != exclus and set(k.split()) <= tok]
     return max(c, key=lambda k: len(k.split())) if c else None
 
 
@@ -94,6 +128,8 @@ def geocodeaza(referinta: dict, strazi: list[dict], cfg: dict, net: dict | None 
 
     Întoarce {status: gasit|necunoscut|in_afara_zonei, lat, lon, precizie_m, metoda: osm_cache|ai_estimare|in_afara_zonei, acuratete 0-1, motiv}.
     Acuratețe = cfg.geocodare.acuratete[intersectie|strada_numar|strada|reper] (x factor_ai_fuzzy dacă a ales AI).
+    Dacă `reper` numește o a doua stradă din cache, rezultatul e intersecția celor două (spec: „intersecție = punctul comun").
+    `id`/`coordonate` explicite nu trec pe aici (spec: geocodarea nu se apelează; le tratează motorul), deci `necunoscut`.
     Ipoteză (fără numere reale în OSM): numărul N se pune la fracția clamp(N/100, 0.1, 0.9) din cea mai lungă cale
     a străzii (fără par/impar); strada singură = mijlocul căii, precizie = lungime/2 în [min, max] din cfg.
     `net` = rețeaua de start pentru safeguardul de zonă; None = `load_network()` (reținută în modul)."""
@@ -129,13 +165,17 @@ def _geocodeaza(referinta: dict, strazi: list[dict], cfg: dict) -> dict:
     gasite = [_gaseste(p, g, cfg) for p in parti]
     if any(k is None for k, _ in gasite):
         return _rez("necunoscut", f"nicio stradă din cache nu se potrivește cu „{strada}”")
+    if len(gasite) == 1 and loc == "strada":  # a doua stradă numită în reper („intersecția cu X”, „aproape de X”)
+        k2 = _alta(reper, g, gasite[0][0])
+        if k2:
+            gasite.append((k2, False))
     ai = any(a for _, a in gasite)
     metoda, f = ("ai_estimare", c["factor_ai_fuzzy"]) if ai else ("osm_cache", 1.0)
     how = "ales de AI dintre străzile din cache" if ai else "potrivire exactă a numelui"
     e1 = g[gasite[0][0]]
     if len(gasite) == 2 and gasite[0][0] != gasite[1][0]:
         e2 = g[gasite[1][0]]
-        d, a, b = min((_ax(a, b), a, b) for a in e1["pct"] for b in e2["pct"])
+        d, a, b = min((_ax(a, b), a, b) for c1 in e1["cai"] for c2 in e2["cai"] for a in c1 for b in c2)
         if d <= 2 * c["precizie_intersectie_m"] + 30:  # vârfurile cele mai apropiate; mai departe = nu se intersectează
             return _rez("gasit", f"intersecția {e1['nume']} cu {e2['nume']} ({how}); capete la {d:.0f} m",
                         round((a[0] + b[0]) / 2, 6), round((a[1] + b[1]) / 2, 6), c["precizie_intersectie_m"],
