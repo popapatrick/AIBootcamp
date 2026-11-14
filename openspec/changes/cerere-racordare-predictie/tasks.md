@@ -2,8 +2,8 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 Tip `cerere_racordare` în `event.schema.json` și `interfaces.md`
-- [ ] 1.2 `potrivire.raza_racordare_m` și plafonul de stâlpi prezisi în `weights.yaml`
+- [x] 1.1 Tip `cerere_racordare` în `event.schema.json` și `interfaces.md`
+- [x] 1.2 `potrivire.raza_racordare_m` și plafonul de stâlpi prezisi în `weights.yaml`
 
 ## 2. Modul `backend/racordare/` (A)
 
@@ -12,8 +12,8 @@
 
 ## 2b. Integrare în motor (B)
 
-- [ ] 2b.1 (B8) Regula `cerere_racordare`: actualizare directă sau apelul `prezice_lant`, predicții individuale pe stâlp (`model.py`)
-- [ ] 2b.2 (B8) Teste în `smoke_engine.py`
+- [x] 2b.1 (B8) Regula `cerere_racordare`: actualizare directă sau apelul `prezice_lant`, predicții individuale pe stâlp (`model.py`)
+- [x] 2b.2 (B8) Teste în `smoke_engine.py`
 
 ## 3. Extragere (A)
 

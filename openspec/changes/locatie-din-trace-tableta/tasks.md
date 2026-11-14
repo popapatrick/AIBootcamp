@@ -2,8 +2,8 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 `detalii.trace` și `detalii.trace_rezumat` în `event.schema.json` și `interfaces.md`
-- [ ] 1.2 Secțiune `trace` în `weights.yaml` (fereastra 60 min, rază oprire 12 m, durată minimă 3 min, distanța la stradă 40 m, prag ambiguitate)
+- [x] 1.1 `detalii.trace` și `detalii.trace_rezumat` în `event.schema.json` și `interfaces.md`
+- [x] 1.2 Secțiune `trace` în `weights.yaml` (fereastra 60 min, rază oprire 12 m, durată minimă 3 min, distanța la stradă 40 m, prag ambiguitate)
 
 ## 2. Modul `backend/trace/` (A)
 
@@ -12,8 +12,8 @@
 
 ## 2b. Integrare în motor (B)
 
-- [ ] 2b.1 (B7) Apelează `backend/trace` din potrivire ca „coordonate din trace", semnal în jurnal
-- [ ] 2b.2 (B7) Confirmări pentru opririle de lângă stâlpi existenți; completare `smoke_engine.py`
+- [x] 2b.1 (B7) Apelează `backend/trace` din potrivire ca „coordonate din trace", semnal în jurnal
+- [x] 2b.2 (B7) Confirmări pentru opririle de lângă stâlpi existenți; completare `smoke_engine.py`
 
 ## 3. Date (A, A5)
 

@@ -22,13 +22,14 @@ from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m
+from backend.engine.sesiune2 import Sesiune2
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițială
 MAX_MOTIVE = 8
 
 
-class GridModel:
+class GridModel(Sesiune2):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
         self.net = net if net is not None else build()["model"]
@@ -39,6 +40,8 @@ class GridModel:
         self.retrase: dict[str, dict] = {}         # predicții înlocuite de un element cu ID real (pentru istoric)
         self.jurnal: list[dict] = []
         self.decizii: dict[str, dict] = {}         # tinta_id -> decizia omului (o singură decizie pe predicție)
+        self.demontari: dict[str, list] = {}       # element_id -> rapoarte de demontare (activ_demontat)
+        self.apeluri: dict[str, list] = {}         # element_id -> [(data, efect)] apeluri recente (val de apeluri)
         self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         init = self.w["scor"]["initial_element_kmz"]
@@ -103,7 +106,12 @@ class GridModel:
         if not ref0.get("element_id") and det0.get("id_partial"):
             # extracția a lăsat codul brut (ex. T-002, fără prefix de categorie); potrivirea îl dezambiguizează
             event = {**event, "referinta": {**ref0, "element_id": det0["id_partial"]}}
+        event = self._foloseste_trace(event, trace)      # locația din traseul tabletei, dacă lipsesc ID și coordonate
         m = match_event(event, self.net, w)
+        rez_trace = (event.get("detalii") or {}).get("trace_rezumat") or {}
+        if rez_trace.get("alegere") and m["status"] == "potrivit" and m["metoda"] == "coordonate":
+            m = {**m, "calitate": round(m["calitate"] * rez_trace.get("calitate", 1.0), 3),
+                 "semnale": m["semnale"] + ["coordonate_din_trace"]}
         trace["pasi"].append({"nume": "potrivire", "rezultat": m, "incredere": m["calitate"]})
 
         tip = event["tip"]
@@ -111,6 +119,7 @@ class GridModel:
         # un nod lipsă, oricum ar fi etichetat tipul (extracția poate zice „avarie" sau „verificare")
         eid0 = ((event.get("referinta") or {}).get("element_id") or "").strip()
         if (m["status"] == "absent_din_model" and tip not in ("nod_lipsa", "racord_nou", "linie_planificata")
+                and tip not in ("mutare_fire", "cerere_racordare", "activ_demontat")
                 and event["echipa_sursa"] in S.ECHIPE_TEREN and eid0.isdigit() and len(eid0) >= 5
                 and m.get("coordonate_folosite")):
             tip = "nod_lipsa"
@@ -118,7 +127,13 @@ class GridModel:
             trace["pasi"][0]["rezultat"]["tip_tratat_ca"] = "nod_lipsa"
             trace["pasi"][0]["rezultat"]["nota"] = f"Nodul {eid0} nu există în model: raportul e tratat ca nod lipsă."
         m = self._ajusteaza_element_nou(event, m, trace)
-        if tip == "linie_planificata" and m["status"] == "potrivit":
+        if tip == "mutare_fire":
+            self._mutare_fire(event, trace)
+        elif tip == "cerere_racordare":
+            self._cerere_racordare(event, m, trace)
+        elif tip == "activ_demontat":
+            self._demontat(event, m, trace)
+        elif tip == "linie_planificata" and m["status"] == "potrivit":
             self._efect_pe_element(event, m, trace)      # planificat pe un element existent: doar notă, fără schimbare
         elif tip == "linie_planificata":
             self._planificata(event, m, trace)
@@ -128,6 +143,7 @@ class GridModel:
             self._efect_pe_element(event, m, trace)
         else:
             self._neaplicat(event, trace, f"Potrivire {m['status']}: {m['motiv']}")
+        self._confirma_vizitate(event, trace)
         return self._inchide(event, tip, trace, m, inainte)
 
     def _inchide(self, event: dict, tip: str, trace: dict, m: dict, inainte: dict) -> dict:
@@ -154,6 +170,8 @@ class GridModel:
                 ce = trace["_ce"][eid]
             elif st.get("retras"):
                 ce = "retras"
+            elif st["nivel"] == "scos_din_uz":
+                ce = "scos_din_uz"
             elif st["nivel"] == "predictie":
                 ce = "predictie"
             elif trace["decizie"] == "conflict":
@@ -278,6 +296,8 @@ class GridModel:
 
         # b) confirmare / semnal negativ / fără efect
         delta, efect = S.efect_input(event, q, w)
+        if efect == "semnal_negativ":
+            delta = self._val_apeluri(eid, data, delta, motive)
         if "inconsecventa_id_coordonate" in m["semnale"]:
             extra = w["scor"]["contradictie"] * f * 0.5
             delta += extra
@@ -336,6 +356,9 @@ class GridModel:
         q = w["potrivire"]["calitate_dupa_id"] if ref.get("element_id") else w["potrivire"]["calitate_dupa_coordonate"]
         if dedusi:
             q *= w["propunere"]["factor_vecini_dedusi"]
+        rt = det.get("trace_rezumat") or {}
+        if rt.get("alegere"):
+            q *= rt.get("calitate", 1.0)            # poziția vine din traseul tabletei (opriri), cu calitatea calculată acolo
         if "coordonate_corectate" in m["semnale"]:
             q *= 0.8
         if "coordonate_zecimale_reparate" in m["semnale"]:
@@ -502,6 +525,11 @@ class GridModel:
             grup += [sid for sid, s in self.predictii.items() if "capete" in s and tinta in s["capete"]]
         elif "capete" in s0:
             grup += [c for c in s0["capete"] if c in self.predictii and "punct" in self.predictii[c]]
+        if alege == "accepta":
+            # la acceptare, o legătură intră doar dacă ambele capete există în model sau sunt în grup (nu lăsăm legături în aer)
+            noduri_ok = {c for c in grup if "punct" in self.predictii[c]} | set(self.net["noduri"])
+            grup = [g for g in grup if "punct" in self.predictii[g] or g == tinta
+                    or all(c in noduri_ok for c in self.predictii[g]["capete"])]
         metoda = (cur or {}).get("predictie", {}).get("metoda") if cur else None
         if alege == "respinge":
             pen = w["decizie_om"]["penalizare_metoda_la_respingere"]
@@ -647,6 +675,8 @@ class GridModel:
             if eid not in self._elemente():      # predicție sau element neaplicat: clasa după tip
                 props["clasa"] = clasa_element({"tip_element": st["tip_element"]})
             props.setdefault("confirmat_de", st.get("confirmat_de"))
+            props["verificat_recent"] = bool(st["ultima_verificare"] and S.zile(st["ultima_verificare"], data)
+                                             <= self.w["scor"]["verificat_recent_zile"])
             feats.append({"type": "Feature", "geometry": g, "properties": props})
         return {"type": "FeatureCollection", "name": f"Rețea JT PTAB 7812 la {data} (date fictive)",
                 "features": feats}
@@ -673,7 +703,7 @@ class GridModel:
                 "procent": {k: round(100 * v / n, 1) for k, v in niv.items()},
                 "scor_mediu": round(sum(f["properties"]["scor"] for f in fs) / n, 3),
                 "verificat_recent_pct": round(100 * sum(1 for f in fs if f["properties"]["ultima_verificare"]
-                                                       and S.zile(f["properties"]["ultima_verificare"], data) <= 30) / n, 1)}
+                                                       and S.zile(f["properties"]["ultima_verificare"], data) <= self.w["scor"]["verificat_recent_zile"]) / n, 1)}
 
     def export(self, out_dir: Path | None = None) -> None:
         out = Path(out_dir or ROOT / "data" / "model")

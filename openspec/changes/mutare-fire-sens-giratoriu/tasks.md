@@ -2,9 +2,9 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 Adaugă `mutare_fire` în `tip` și `detalii` (`centru`, `raza_m`, `motiv`) în `contracts/event.schema.json` și `interfaces.md`
-- [ ] 1.2 Adaugă `potrivire.raza_mutare_m` și plafonul de elemente în `contracts/weights.yaml`
-- [ ] 1.3 Anunță în `board/Victor.md`
+- [x] 1.1 Adaugă `mutare_fire` în `tip` și `detalii` (`centru`, `raza_m`, `motiv`) în `contracts/event.schema.json` și `interfaces.md`
+- [x] 1.2 Adaugă `potrivire.raza_mutare_m` și plafonul de elemente în `contracts/weights.yaml`
+- [x] 1.3 Anunță în `board/Victor.md`
 
 ## 2. Extragere (A)
 
@@ -14,9 +14,9 @@
 
 ## 3. Motor (B)
 
-- [ ] 3.1 Regula de zonă în `model.py`: semnal negativ pe elementele din rază, plafon, jurnal
-- [ ] 3.2 Propunere de traseu pe străzi pentru legăturile afectate (`osm.py`)
-- [ ] 3.3 Teste în `smoke_engine.py` și `smoke_osm.py`
+- [x] 3.1 Regula de zonă în `model.py`: semnal negativ pe elementele din rază, plafon, jurnal
+- [x] 3.2 Propunere de traseu pe străzi pentru legăturile afectate (`osm.py`)
+- [x] 3.3 Teste în `smoke_engine.py` și `smoke_osm.py`
 
 ## 4. API și UI (C)
 

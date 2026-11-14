@@ -53,6 +53,7 @@ def reset() -> None:
     """Șterge modelul din memorie; următorul apel îl reconstruiește din evenimente."""
     global _model
     _model = None
+    _scenarii.clear()
 
 
 def apply_event(event: dict) -> dict:
@@ -70,6 +71,39 @@ def timeline() -> list[dict]:
 
 def statistici(data: str) -> dict:
     return get_model().statistici(data)
+
+
+def aplica_decizie(event: dict) -> dict:
+    """Decizia omului asupra unei predicții (B4). `event` = Event `verificare` cu `echipa_sursa: om_teren` și
+    `detalii.decizie {tinta_id, decizie}`. Întoarce StepTrace; ridică KeyError (predicție necunoscută),
+    ValueError (deja decisă sau decizie invalidă), cum așteaptă `backend/api/pipeline.py`."""
+    trace = get_model().apply_event(event)
+    err = trace.get("eroare")
+    if err:
+        if err["cod"] == "necunoscut":
+            raise KeyError(err["mesaj"])
+        raise ValueError(err["mesaj"])
+    return trace
+
+
+EXTREME = EVENTS / "events.extreme.json"
+_scenarii: dict[str, GridModel] = {}
+
+
+def model_scenariu(nume: str = "extrem") -> GridModel:
+    """Un model separat: evenimentele de bază plus scenariul `data/events/events.<nume>.json` (de ex. `extrem`),
+    în ordinea datelor. Nu atinge modelul de bază. Ridică FileNotFoundError dacă fișierul scenariului lipsește."""
+    if nume not in _scenarii:
+        cale = EVENTS / f"events.{'extreme' if nume == 'extrem' else nume}.json"
+        if not cale.is_file():
+            raise FileNotFoundError(f"scenariul {nume} nu există: lipsește {cale.relative_to(ROOT)}")
+        m = GridModel()
+        m.traseu_fn = osm.traseu_fn()
+        evs = _incarca_evenimente() + json.loads(cale.read_text(encoding="utf-8"))
+        for ev in sorted(evs, key=lambda e: (e["data"], e["event_id"])):
+            m.apply_event(ev)
+        _scenarii[nume] = m
+    return _scenarii[nume]
 
 
 def jurnal() -> list[dict]:

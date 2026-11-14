@@ -2,9 +2,9 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 Adaugă `activ_demontat` în `tip` din `contracts/event.schema.json` și în `interfaces.md`
-- [ ] 1.2 Adaugă în `contracts/weights.yaml` pragurile pentru valul de apeluri (număr, fereastră, plafon)
-- [ ] 1.3 Anunță în `board/Victor.md`
+- [x] 1.1 Adaugă `activ_demontat` în `tip` din `contracts/event.schema.json` și în `interfaces.md`
+- [x] 1.2 Adaugă în `contracts/weights.yaml` pragurile pentru valul de apeluri (număr, fereastră, plafon)
+- [x] 1.3 Anunță în `board/Victor.md`
 
 ## 2. Date (A)
 
@@ -15,9 +15,9 @@
 
 ## 3. Motor (B)
 
-- [ ] 3.1 Regula `activ_demontat` în `model.py` (neaplicat sub prag, jurnal cu „de ce")
-- [ ] 3.2 Semnal agregat pentru val de apeluri
-- [ ] 3.3 Încărcare scenariu: `engine.get_model()` acceptă sursa `extreme`; teste în `smoke_engine.py`
+- [x] 3.1 Regula `activ_demontat` în `model.py` (neaplicat sub prag, jurnal cu „de ce")
+- [x] 3.2 Semnal agregat pentru val de apeluri
+- [x] 3.3 Încărcare scenariu: `engine.get_model()` acceptă sursa `extreme`; teste în `smoke_engine.py`
 - [ ] 3.4 Recalibrare și rezultat în `docs/calibrare.md`
 
 ## 4. API și UI (C)

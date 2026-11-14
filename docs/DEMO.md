@@ -37,3 +37,13 @@ Rezultat verificat (simulat cu extracția Claude, încredere 0,75–0,9, text li
 - **Scenariul 1 se închide acum în timeline** (EV-028 al lui A, 23 oct.), deci partea live folosește alt nod, `7011223`. Nu mai folosi textul vechi cu `6925190`: nodul e deja în model și raportul ar doar confirma.
 - **Apelurile:** 3 din 5 nu s-au putut potrivi (unul fără coordonate, două la peste 40 m de orice element); în timeline scad doar două elemente.
 - **Proiectul Lovable** al lui C e netestat și nepublicat; demo-ul de mai sus rulează pe UI-ul plan B (Leaflet servit de FastAPI).
+
+## Sesiunea 2: cazuri live noi (motorul real, verificate de B)
+Toate cu motorul de pe `main`; sursa se alege din butoanele noi. Date FICTIVE.
+1. **Cerere racordare, apel de client** (sursa `apel_client`, locația la 44.2850305, 26.0595998, Strada Liviu Rebreanu): lanț prezis de 2 stâlpi plus casa, punctat, scor ~0,64 (predicție). Apoi **cerere racordare de la racordări** (formular) la aceleași coordonate: `adaugat` ~0,84, în timp real. Mesaj: „fără date în GIS, rețeaua încearcă să prezică; cu date, se actualizează".
+2. **Acceptă/Respinge:** pe un stâlp prezis de la pasul 1, „Acceptă": devine plin, halou verde, marcaj „om", scor ~0,98. Poți accepta doar primul stâlp și respinge restul.
+3. **Fire mutate (sens giratoriu):** centrul la nodul 6513200 (44.2830448, 26.0636533), motiv „sens giratoriu", rază implicită 40 m: ~16 elemente trec „de verificat" (galben) și apar ~4 traseuri propuse punctat pe străzi. Un raport de verificare pe unul dintre ele îl readuce verde.
+4. **Trace tabletă:** traseul `trace-1` din „Generează traseu ultima oră" (adresa „Strada Liviu Rebreanu, în dreptul curții", sursa tabletă, raport `nod_lipsa` executat): operatorul a verificat 3 stâlpi (devin verzi) și a stat ~22 min fără stâlp: apare un stâlp prezis la oprirea aceea (scor ~0,71).
+5. **Demontat:** raport de la mentenanță că A-T-014 e demontat: rămâne, cu semnal; al doilea raport de la investiții: `scos_din_uz`.
+6. **Val de apeluri:** 3 apeluri în 7 zile pe același element (ex. A-T-030): al 3-lea scade scorul dublu față de un apel singur, cu plafon.
+Scenariul cu Play pe `?scenariu=extrem` depinde de `data/events/events.extreme.json` (A6).
