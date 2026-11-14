@@ -48,7 +48,10 @@ def engine_func(name: str):
 
 
 def extract_func():
-    """`extract_event` al lui A sau None."""
+    """`extract_event` al lui A sau None; `API_EXTRACTIE=stub` forțează extracția regex (teste, demo fără cheie)."""
+    import os
+    if os.environ.get("API_EXTRACTIE") == "stub":
+        return None
     return _find("extract_event", _EXTRACT_MODULES)
 
 
@@ -185,32 +188,17 @@ def model_net() -> dict | None:
 
 
 # ---------------------------------------------------------------- scenariul extrem (sesiunea 2)
-EXTREME = ROOT / "data" / "events" / "events.extreme.json"
-_extrem: list = []   # [GridModel] cache; rămâne în memorie până la repornire
-
-
 class ScenariuLipsa(Exception):
     """Fișierul scenariului nu există (se traduce în 404)."""
 
 
 def model_extrem():
-    """GridModel separat: evenimentele de bază + `data/events/events.extreme.json`, reluate în ordinea datelor.
-
-    Nu atinge modelul de bază al motorului. Ridică ScenariuLipsa dacă fișierul lipsește.
-    shortcut: construit aici, nu în engine.get_model() (B 3.3 nu e gata); de înlocuit când engine primește sursa `extreme`.
-    """
-    if not _extrem:
-        if not EXTREME.is_file():
-            raise ScenariuLipsa("scenariul extrem nu există încă: lipsește data/events/events.extreme.json")
-        from backend.engine import engine as eng, osm
-        from backend.engine.model import GridModel
-        m = GridModel()
-        m.traseu_fn = osm.traseu_fn()
-        evs = eng._incarca_evenimente() + _load(EXTREME)
-        for ev in sorted(evs, key=lambda e: (e["data"], e["event_id"])):
-            m.apply_event(ev)
-        _extrem.append(m)
-    return _extrem[0]
+    """GridModel al scenariului extrem, din `engine.model_scenariu("extrem")` (B). Ridică ScenariuLipsa dacă fișierul lipsește."""
+    from backend.engine import engine as eng
+    try:
+        return eng.model_scenariu("extrem")
+    except FileNotFoundError as e:
+        raise ScenariuLipsa(f"scenariul extrem nu există încă: {e}")
 
 
 def ultima_actualizare(data: str | None, scenariu: str | None = None) -> str | None:

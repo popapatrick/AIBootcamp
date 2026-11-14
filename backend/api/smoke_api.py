@@ -5,11 +5,13 @@ Verifică fiecare endpoint pe date FICTIVE, în modul în care se află (stub / 
 from fastapi.testclient import TestClient
 
 from backend.api.main import app
+from backend.api import sources
 from backend.api.sources import ROOT
 
 
 def main() -> None:
     c = TestClient(app)
+    apply = sources.engine_func("apply_event")
     h = c.get("/health").json()
     assert h["status"] == "ok", h
     assert "ultima_actualizare" in h, h
@@ -65,18 +67,29 @@ def main() -> None:
     assert det["locatie"] == loc and det["centru"] == loc and det["trace"] == tr, det
     assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta", "locatie": {"lat": "a"}}).status_code == 422
 
+    # mutare_fire -> potrivire.status == "zona" (Event direct: extracția stub nu știe tipul mutare_fire)
+    if apply:
+        tz = apply({"event_id": "EV-SMOKE-MF", "echipa_sursa": "mentenanta", "tip": "mutare_fire", "status": "semnalat",
+                    "data": "2026-10-23", "forma_sursa": "text_liber", "incredere_extractie": 0.9,
+                    "text_original": "smoke mutare fire", "campuri_lipsa": [], "referinta": {},
+                    "detalii": {"centru": {"lat": 44.2830448, "lon": 26.0636533}, "motiv_mutare": "sens_giratoriu"}})
+        assert next(p for p in tz["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "zona", tz["pasi"]
+
     for s_ in ("mentenanta", "investitii", "racordari", "apel_client"):
         r = c.get("/exemple", params={"sursa": s_})
         assert r.status_code == 200 and isinstance(r.json(), list), r.text
     assert c.get("/exemple", params={"sursa": "gresit"}).status_code == 422
     assert isinstance(c.get("/trasee-demo").json(), list)
 
-    # decizia omului (B4): predicție reală = nod lipsă raportat doar cu coordonate, ca text liber (nesigur)
-    t = c.post("/rapoarte", json={"text": "Se pare că lipsește un stâlp la coordonatele 44.2851, 26.0612.",
-                                  "sursa": "apel_client", "data": "2026-10-22"}).json()
-    pid = next((m["element_id"] for m in t["modificari"] if m["nivel"] == "predictie"), None)
-    if t["mod"]["motor"] == "real":
-        assert pid, "nicio predicție creată: " + str(t["modificari"])
+    # decizia omului (B4): predicția se pregătește direct în motor (Event nod_lipsa), independent de extracție
+    if apply:
+        pe = {"event_id": "EV-SMOKE-PRED", "echipa_sursa": "apel_client", "tip": "nod_lipsa", "status": "semnalat",
+              "data": "2026-10-22", "forma_sursa": "text_liber", "tip_sursa_pondere": "apel_client",
+              "incredere_extractie": 0.6, "text_original": "smoke: lipsește un stâlp", "campuri_lipsa": [],
+              "referinta": {"coordonate": {"lat": 44.2851, "lon": 26.0612}}, "detalii": {}}
+        pt = apply(pe)
+        pid = next((m["element_id"] for m in pt["modificari"] if m["nivel"] == "predictie"), None)
+        assert pid, "nicio predicție creată: " + str(pt["modificari"])
         r = c.post(f"/predictii/{pid}/decizie", json={"decizie": "accepta", "motiv": "văzut în teren"})
         assert r.status_code == 200, r.text
         assert r.json()["decizie"] == "aplicat" and r.json()["schimbari"], r.text
@@ -90,6 +103,12 @@ def main() -> None:
     if (ROOT / "data" / "events" / "events.extreme.json").is_file():
         assert r.status_code == 200 and len(r.json()) > len(c.get("/evenimente").json()), r.text
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 200
+        if apply:   # B6: eticheta pe timeline, verificat_recent / scos_din_uz în snapshot
+            et = {e.get("eticheta") for e in r.json()}
+            assert {"val_apeluri", "demontat"} <= et and all("tip" in e for e in r.json()), et
+            fe = c.get("/retea", params={"scenariu": "extrem"}).json()["features"]
+            assert all("verificat_recent" in f["properties"] for f in fe)
+            assert any(f["properties"]["nivel"] == "scos_din_uz" for f in fe), "niciun scos_din_uz în extrem"
     else:
         assert r.status_code == 404 and "extrem" in r.json()["detail"], r.text
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404

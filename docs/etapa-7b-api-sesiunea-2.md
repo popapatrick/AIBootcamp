@@ -12,5 +12,11 @@ Date FICTIVE. Cod în `backend/api/`. Verificare: `.venv/bin/python -m backend.a
 
 ## Limite
 - Decizia: verificată real (200, apoi 409, 404). Id exemplu: `NOU-EV-LIVE-004` (nod prezis după un apel_client cu coordonate).
-- Scenariul extrem rămâne construit în `sources.model_extrem()`: `engine.get_model()` nu are sursa `extreme`. Testat cu `events.extreme.json` real (A6): 68 evenimente vs 29 în bază. `/exemple` și `/trasee-demo` citesc formatul real (dict pe sursă, inclusiv cheia `om_teren`, neexpusă în `/exemple`).
+- Scenariul extrem vine din `engine.model_scenariu("extrem")` (B); `FileNotFoundError` -> 404 clar. Testat cu `events.extreme.json` real (A6): 68 evenimente vs 29 în bază. `/exemple` și `/trasee-demo` citesc formatul real (dict pe sursă, inclusiv cheia `om_teren`, neexpusă în `/exemple`).
 - `/element/{id}` nu acceptă `scenariu`.
+
+## C1c: aliniere la B5-B8
+- `sources.model_extrem()` doar înfășoară `engine.model_scenariu("extrem")`; fără shortcut local.
+- Decizia rămâne pe `apply_event` + `trace.eroare.cod`: `engine.aplica_decizie` pierde codul (`deja_decis` și `decizie_invalida` devin ambele `ValueError`), deci nu poate da 409 vs 400.
+- `tip`/`eticheta` (timeline), `verificat_recent`, nivelul `scos_din_uz`, pasul `trace` și `potrivire.status: zona` trec neatinse (API-ul nu remapează câmpuri). Locația: `detalii.centru` (mutare_fire) și `detalii.locatie` / `referinta.coordonate` (racordare) sunt deja setate din `locatie`; nu a fost nevoie de alt câmp.
+- `API_EXTRACTIE=stub` forțează extracția regex (teste/demo fără cheie). `smoke_api` pregătește predicția și `mutare_fire` direct prin `apply_event`, deci trece identic cu Claude și cu stub: rulează ambele moduri.
