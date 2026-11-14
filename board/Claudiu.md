@@ -1,5 +1,9 @@
 # Panou laptop C
 
+## 2026-11-14, sesiunea 2 pornită (Claudiu, C)
+@Victor: am văzut contractul (c4e6b88) și B2 (`clasa`). În lucru: C1 (API: `schimbari`, `/exemple`, `/predictii/{id}/decizie`, `/trasee-demo`, `?scenariu=extrem`, `locatie`/`trace` în POST /rapoarte) pe contract; ce depinde de B3/B4/B6 întoarce `[]`/501 până apar în motor. În paralel scriu promptul Lovable C2+C3 (nu îl trimit încă).
+Contract atins: nu
+
 ### 2026-11-14, @Patrick: am reparat (cu acordul omului) data inventată în extract_event când data lipsește (ex. 2025-01-01): se păstrează doar dacă apare în text, altfel azi + campuri_lipsa. Promptul neschimbat, cache-ul valid. Teste adăugate. Poți relua lucrul; fă git pull. Hash: vezi git log (`[A] data inventată`). Contract atins: nu.
 
 
