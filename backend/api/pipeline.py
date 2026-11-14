@@ -25,7 +25,7 @@ RE_NOD = re.compile(r"(?<![\d.,])(\d{7})(?![\d]|[.,]\d)")  # nu prinde cifre din
 RE_COORD = re.compile(r"(-?\d{1,2}[.,]\d{3,})\s*[,;/ ]\s*(-?\d{1,2}[.,]\d{3,})")
 RE_DATA = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b|\b(\d{1,2})[./](\d{1,2})[./](\d{4})\b")
 RE_CADASTRAL = re.compile(r"(?:nr\.?\s*)?cadastral\w*\s*[:\-]?\s*(\d{3,})", re.I)
-RE_ADRESA = re.compile(r"\b((?:str\.|strada|șos\.|sos\.|bd\.|aleea)\s+[^,.;\n]+(?:\s*,?\s*nr\.?\s*\d+\w?)?)",
+RE_ADRESA = re.compile(r"\b((?:str\.|strada|șos\.|sos\.|bd\.|aleea)\s+(?:(?!\bnr\b|\bnum[ăa]rul\b)[^,.;\n])+(?:(?:nr\.?|num[ăa]rul)\s*\d+[A-Za-z]?)?)",
                        re.I)
 RE_CLIENT = re.compile(r"\b(?:client|cod client|id client)\s*[:\-]?\s*([A-Z0-9-]{4,})", re.I)
 

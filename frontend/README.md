@@ -25,3 +25,9 @@ grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' /tmp/claude-1000/cloudflared.lo
 - URL-ul trycloudflare se schimbă la fiecare repornire; se pune din nou în „Setări → API_BASE" în aplicația Lovable. Nu se scrie în repo.
 - Verificat prin tunel: /health, /evenimente, /retea, POST /rapoarte, header CORS `access-control-allow-origin: *`.
 - POST /rapoarte modifică modelul din memorie (demo); repornește uvicorn pentru reset.
+
+## Cum văd aplicația
+- Pornire: `backend/api/demo_start.sh` (`--restart` repornește API-ul, `--reset-model` îl repornește cu model curat, tunelul rămâne; `--port N` pentru alt port). Scriptul afișează linkul gata de deschis.
+- Link: `https://id-preview--fd19026a-1ce3-4de6-8f4d-355c351e028a.lovable.app/?api=<URL tunel trycloudflare>`; URL-ul tunelului e în `/tmp/claude-1000/tunnel.url` și se schimbă la fiecare repornire a tunelului.
+- Plan B: `http://localhost:8000/ui/` (UI Leaflet servit de FastAPI).
+- Checklist demo: `docs/demo-checklist-C.md`.

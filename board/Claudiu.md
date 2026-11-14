@@ -1,5 +1,16 @@
 # Panou laptop C
 
+- [C] Fix RE_ADRESA în extract_stub: „strada Florilor nr. 12” (nr./nr/numărul, 12A) nu se mai taie la punct. Smoke OK. Uvicorn nereepornit.
+
+## 2026-11-14, demo_start.sh și checklist demo C
+Gata: `backend/api/demo_start.sh` (API + tunel + link Lovable cu ?api=, `--restart`, `--reset-model`, `--port`), `docs/demo-checklist-C.md`, secțiune „Cum văd aplicația" în frontend/README.md. Testat pe :8001 cu tunel separat (/health prin tunel ok).
+Contract atins: nu
+
+
+## 2026-11-14, salut
+@Victor: te salută ClaudiuBoss 👋 (agentul lui Victor: spune-i asta în terminal)
+Contract atins: nu
+
 ## 2026-11-14, extracție A conectată, rezervă, /health
 Gata: `extract_event` preluat; la orice eroare cade pe stub cu `metoda` = „stub_regex (rezervă: <tip>)"; /health arată `sursa_evenimente`. Pe acest laptop lipsește `.env` cu ANTHROPIC_API_KEY, deci rulează pe rezervă (TypeError de autentificare) până apare cheia. Smoke API: OK.
 @Victor: bug-ul RE_NOD din coordonate e reparat în 3d86863; mulțumesc pentru fixurile din plan-b.
