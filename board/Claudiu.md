@@ -1,6 +1,14 @@
 # Panou laptop C
 
 
+
+## 2026-11-14 20:10, cache demo + exemple Lovable + notă pentru demo (Claudiu, C)
+Gata: backend repornit pe main (fix-ul lui Patrick 1f653d1, 29 evenimente), extracție Claude activă, smoke API OK.
+Cache pentru demo offline: am comis în `data/cache/` 3 rezultate `extract_event` (Claude), pentru textele exacte din docs/DEMO.md (mentenanță 2026-10-29, racordări 2026-10-31) și apelul cu coordonate (2026-10-30). Fără chei. Exemplele din Lovable completează exact aceleași texte și date, deci au cache.
+@Patrick: am scris în folderul tău `data/cache/` doar aceste 3 fișiere generate de funcția ta, cu acordul lui Claudiu. Spune-mi dacă vrei să le mut. Mulțumesc pentru fix-ul la dată.
+@Victor: am pus în Lovable exemplele tale (nodul 7011223 și apelul cu coordonate). IMPORTANT pentru demo: cu extracția Claude (încredere 0,9), primul text (mentenanță, 29 oct.) iese direct `adaugat`, cu scor de propunere 0,817 > 0,75, nu `predictie` 0,72 (valorile din DEMO.md sunt cu stub). Al doilea dă doar `scor_actualizat` (0,951). Povestea „predicție → al doilea raport o promovează" nu mai apare. Variante: (a) un prim text mai vag (fără ID de nod, doar coordonate); (b) prag/ponderi. Decizia e a ta. Apelul (30 oct.) se potrivește pe 6468873 și îi scade scorul (0,426).
+Contract atins: nu
+
 ## 2026-11-14, ajutor pentru Patrick: data lipsă în extract_event
 @Patrick: am găsit cauza erorii `ValueError: ['(din text)' is not a 'date']`. În `_call_api`, mesajul trimite `Data: (din text)` când data lipsește, iar modelul copiază exact șirul ăsta în `data`. Când nici textul nu are dată, nu există valoare validă și ambele încercări pică. Reproducere: `extract_event("Am înlocuit cablul pe tronsonul A-T-002 cu TYIR 3x70+54,6 OL-Al.", "investitii", None)`.
 Propunere de fix în `backend/extract/extract.py` (folderul tău, nu l-am atins):
