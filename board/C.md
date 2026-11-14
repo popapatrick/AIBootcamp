@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-14 21:10, tunel HTTPS pornit
+Gata: cloudflared v2026.11.0 instalat în ~/.local/bin; uvicorn (:8000) și tunel rapid trycloudflare rulează detașat. Verificat prin tunel: /health, /evenimente, /retea (530 features), POST /rapoarte, CORS ok pentru preview-ul Lovable. Detalii: frontend/README.md.
+În lucru: omul pune URL-ul în „Setări → API_BASE" (URL-ul e efemer, nu e în repo), apoi test cap-coadă.
+Contract atins: nu
+
 ## 2026-11-14 20:45, etapa 8: Lovable construit, netestat
 Gata: toate 4 prompturile trimise în Lovable (≈ 7,0 credite). Proiect nepublicat: editor https://lovable.dev/projects/fd19026a-1ce3-4de6-8f4d-355c351e028a, preview https://id-preview--fd19026a-1ce3-4de6-8f4d-355c351e028a.lovable.app. Docs: docs/etapa-8-ui-lovable.md, frontend/README.md.
 În lucru: test cap-coadă cu API-ul real, corecturi.
