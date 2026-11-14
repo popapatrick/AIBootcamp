@@ -36,6 +36,7 @@ TIPURI = [  # (cuvinte cheie, tip, status implicit)
     (("planificat", "se va", "proiect", "urmează", "urmeaza"), "linie_planificata", "planificat"),
     (("lipsă", "lipsa", "nu apare", "nu e în gis", "nu este in gis", "stâlp nou", "stalp nou"),
      "nod_lipsa", "executat"),
+    (("verificat", "inspecție", "inspectie", "conform cu", "corespunde"), "verificare", "executat"),  # ultimul
 ]
 
 
