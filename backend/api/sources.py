@@ -65,12 +65,18 @@ def cache_hit(text: str, sursa: str, data: str | None) -> bool:
 
 
 def extractie_cod() -> str:
-    """Modul curent de extracție: `ai_api` | `ai_cache` | `regex` (contracts/interfaces.md, metoda_cod)."""
+    """Modul curent de extracție: `ai_cli` | `ai_api` | `ai_cache` | `regex` (contracts/interfaces.md, metoda_cod)."""
     import os
     if not extract_func():
         return "regex"
     if os.environ.get("EXTRACT_ALLOW_API") == "1" and _are_cheie():
         return "ai_api"
+    try:   # Claude Code headless, din abonament: texte noi standardizate cu AI, fără cheie
+        from backend.extract import cli_ai
+        if cli_ai.stare()["ok"]:
+            return "ai_cli"
+    except Exception:
+        pass
     return "ai_cache"
 
 

@@ -59,3 +59,12 @@ Dată: când apelantul nu dă `data`, data întoarsă de model se păstrează do
 
 ## Metoda de extracție (contract: `metoda_cod`)
 `extract_event_cu_metoda(text, sursa, data=None) -> (event, metoda_cod)` (exportat din `backend.extract`): `ai_cache` la cache hit, `ai_api` la apel API; `CacheMiss` rămâne neschimbat (apelantul folosește `regex`). `extract_event` = `extract_event_cu_metoda(...)[0]`, semnătura neschimbată; metoda nu e în event.
+
+## Standardizare cu AI fără cheie: backend Claude Code headless (`ai_cli`) (adăugat de B, la cererea lui Victor)
+Regex nu mai e calea normală a demo-ului: un text nou, fără cache, se standardizează cu AI. `extract_event_cu_metoda` încearcă, în ordine: cache (`ai_cache`), **Claude Haiku prin Claude Code headless** (`ai_cli`, din abonament, fără cheie API), API-ul (`ai_api`, doar cu `EXTRACT_ALLOW_API=1`, cheia demo), apoi `CacheMiss` (API-ul cade pe regex, ultima rezervă, marcată „Regex (simplificat)"). Rezultatul `ai_cli` se scrie în `data/cache/`, deci a doua oară e `ai_cache`.
+- Cod: `backend/extract/cli_ai.py` (`gaseste_claude`, `stare`, `call_cli`), cârlig în `extract_event_cu_metoda` (cache miss, înaintea gate-ului API).
+- Cerință, o singură dată pe laptopul demo: autentificare în abonament, fără cheie: `claude auth login` (se deschide browserul). Verificare: `claude auth status` -> `"loggedIn": true`. Binarul se caută în `CLAUDE_BIN`, PATH sau aplicația Claude pentru Mac.
+- Variabile: `EXTRACT_CLI=0` dezactivează; `EXTRACT_CLI_MODEL` (implicit `haiku`); `EXTRACT_CLI_TIMEOUT` (90 s). Procesul rulează într-un director temporar (nu încarcă CLAUDE.md al proiectului) și fără chei API în mediu.
+- Latență: câteva secunde per text nou (UI-ul arată „standardizare AI în curs"); cache-ul face textele de demo instantanee.
+- Verificare: `.venv/bin/python -m backend.extract.test_cli_ai` (binar fals: neautentificat -> CacheMiss; autentificat -> `ai_cli` și apoi `ai_cache`). Testat cu binar fals; apelul real depinde de autentificare și nu a putut fi rulat până acum (binarul din aplicația Claude era neautentificat).
+- Limită: pe laptopurile fără login rămâne cache + regex (ultima rezervă).

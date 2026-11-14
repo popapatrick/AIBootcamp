@@ -33,6 +33,7 @@ Rezultat verificat (simulat cu extracția Claude, încredere 0,75–0,9, text li
 
 ## Riscuri la demo
 - **Harta de bază cere internet** (plăci OpenStreetMap). La repetiție, într-un moment plăcile nu s-au încărcat și fundalul a fost gri; liniile rămân vizibile. Plan B: înregistrare video a unei rulări reușite.
+- **Standardizare AI fără cheie (`ai_cli`):** pe laptopul demo rulează o dată `claude auth login` (abonament). Apoi orice text nou e standardizat de Haiku (câteva secunde) și intră în cache. Verifică `/health` -> `extractie_cod: ai_cli`. Fără login, regex e ultima rezervă și UI-ul o arată.
 - **Cheie demo:** Victor alocă o cheie doar în ziua demo-ului; până atunci, nicio cheie. Cu cheia (`EXTRACT_ALLOW_API=1`) un text nou iese `ai_api`; fără ea, din cache `ai_cache` sau `regex`. UI-ul arată oricare dintre ele.
 - **Fără cheie API (decis 14 nov.):** extracția live = cache din `data/cache/` (generat de subagenți Haiku) sau stub regex; un text nou care nu e în cache iese cu stub. Folosește doar textele pregătite.
 - **Extracția live depinde de laptop:** cu `stub regex` unele texte primesc alt tip (aici raportul de mai sus iese «avarie»), dar motorul îl tratează tot ca nod lipsă pentru că ID-ul numeric nu există în model. Cu Claude iese `nod_lipsa`.

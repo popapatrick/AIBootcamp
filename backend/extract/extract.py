@@ -250,6 +250,13 @@ def extract_event_cu_metoda(text: str, sursa: str, data: str | None = None) -> t
             path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")  # disc == returnat
         return ev, "ai_cache"
 
+    from backend.extract import cli_ai  # Claude Code headless, din abonament (fără cheie API); vezi cli_ai.py
+    if cli_ai.stare()["ok"]:
+        for _ in range(2):  # o reîncercare la eroare de validare
+            ev, errors = _finalizeaza(cli_ai.call_cli(SYSTEM, _schema, user_message(text, sursa, data)), text, sursa, data, key)
+            if not errors:
+                write_cache(key, ev)
+                return ev, "ai_cli"
     if os.environ.get("EXTRACT_ALLOW_API") != "1":
         raise CacheMiss(f"fără intrare în cache pentru textul ({sursa}, {data}): {text[:60]!r}; "
                         "rulează fill_cache sau setează EXTRACT_ALLOW_API=1")

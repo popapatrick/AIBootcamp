@@ -195,9 +195,14 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
                 else:  # extract_event cere dată: folosim data primirii raportului
                     data_ext = date.today().isoformat()
                     data_primirii = True
-            hit = sources.cache_hit(text, sursa, data_ext)
-            ev = dict(ext(text, sursa, data_ext))  # copie: nu atingem cache-ul din memorie
-            cod = "ai_cache" if hit else "ai_api"
+            try:   # metoda_cod vine de la extracție: ai_cache | ai_cli (Claude Code din abonament) | ai_api
+                from backend.extract import extract_event_cu_metoda
+                ev, cod = extract_event_cu_metoda(text, sursa, data_ext)
+                ev = dict(ev)  # copie: nu atingem cache-ul din memorie
+            except ImportError:
+                hit = sources.cache_hit(text, sursa, data_ext)
+                ev = dict(ext(text, sursa, data_ext))
+                cod = "ai_cache" if hit else "ai_api"
             _counter[0] += 1
             if ev.get("event_id") != f"EV-LIVE-{_counter[0]:03d}":
                 ev["event_id_extractie"] = ev.get("event_id")
