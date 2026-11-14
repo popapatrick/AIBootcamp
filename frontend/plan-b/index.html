@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model rețea JT care se actualizează singur (prototip, date fictive)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1d2330; --mut:#667085; --line:#e4e7ec;
+          --ok:#16a34a; --mid:#eab308; --bad:#dc2626; --pred:#7c3aed; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.4 system-ui, sans-serif; color:var(--ink); background:var(--bg);
+         display:grid; grid-template-rows:auto 1fr auto; height:100vh; }
+  header { display:flex; align-items:center; gap:12px; padding:8px 14px; background:var(--card);
+           border-bottom:1px solid var(--line); }
+  header h1 { font-size:16px; margin:0; }
+  .fictiv { background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:6px; font-weight:600; font-size:12px; }
+  .mod { margin-left:auto; color:var(--mut); font-size:12px; }
+  nav button { border:1px solid var(--line); background:#fff; padding:6px 12px; border-radius:6px; cursor:pointer; }
+  nav button.on { background:var(--ink); color:#fff; }
+  main { display:grid; grid-template-columns:1fr 380px; min-height:0; }
+  #map { min-height:0; }
+  aside { overflow:auto; background:var(--card); border-left:1px solid var(--line); padding:12px; }
+  aside h2 { font-size:14px; margin:4px 0 8px; }
+  .legend span { display:inline-block; margin-right:10px; font-size:12px; }
+  .sw { display:inline-block; width:18px; height:4px; vertical-align:middle; margin-right:4px; }
+  footer { background:var(--card); border-top:1px solid var(--line); padding:8px 14px;
+           display:flex; gap:10px; align-items:center; }
+  footer input[type=range] { flex:1; }
+  #dataCur { font-weight:600; min-width:96px; }
+  .ev { font-size:12px; color:var(--mut); border-left:3px solid var(--line); padding:2px 8px; margin:4px 0; }
+  .ev.cur { border-color:var(--pred); color:var(--ink); }
+  .motiv { border-bottom:1px solid var(--line); padding:6px 0; font-size:13px; }
+  .efect.p { color:var(--ok); } .efect.n { color:var(--bad); }
+  .badge { padding:2px 6px; border-radius:4px; font-size:12px; color:#fff; }
+  .b-in_model { background:var(--ok);} .b-predictie { background:var(--pred);} .b-de_verificat { background:var(--bad);}
+  textarea, select, input[type=date] { width:100%; font:inherit; padding:6px; border:1px solid var(--line); border-radius:6px; }
+  textarea { min-height:110px; }
+  .btn { background:var(--ink); color:#fff; border:0; padding:8px 14px; border-radius:6px; cursor:pointer; }
+  .pas { border:1px solid var(--line); border-radius:8px; padding:8px; margin:8px 0; }
+  .pas h3 { margin:0 0 4px; font-size:13px; display:flex; justify-content:space-between; }
+  .pas pre { margin:0; font-size:11px; white-space:pre-wrap; max-height:180px; overflow:auto; background:var(--bg); padding:6px; border-radius:4px; }
+  .arrow { text-align:center; color:var(--mut); }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Model rețea JT care se actualizează singur</h1>
+  <span class="fictiv">DATE FICTIVE · rețea demonstrativă</span>
+  <nav><button id="tabHarta" class="on">Hartă</button> <button id="tabProces">Proces raport</button></nav>
+  <span class="mod" id="mod">…</span>
+</header>
+<main>
+  <div id="map"></div>
+  <aside>
+    <div id="panouHarta">
+      <div class="legend">
+        <span><i class="sw" style="background:var(--ok)"></i>scor ≥ 0,75</span>
+        <span><i class="sw" style="background:var(--mid)"></i>0,4–0,75</span>
+        <span><i class="sw" style="background:var(--bad)"></i>&lt; 0,4 / de verificat</span>
+        <span><i class="sw" style="border-top:3px dashed var(--pred);height:0"></i>predicție</span>
+      </div>
+      <h2>De ce?</h2>
+      <div id="deCe" style="color:var(--mut)">Apasă pe un element de pe hartă.</div>
+      <h2>Evenimente</h2>
+      <div id="lista"></div>
+    </div>
+    <div id="panouProces" class="hidden">
+      <h2>Adaugă raport nou</h2>
+      <label>Sursă</label>
+      <select id="sursa">
+        <option value="mentenanta">mentenanță</option><option value="investitii">investiții</option>
+        <option value="racordari">racordări</option><option value="apel_client">apel client</option>
+      </select>
+      <label>Data</label><input type="date" id="dataRap">
+      <label>Text raport</label>
+      <textarea id="text" placeholder="ex. Am înlocuit cablul pe tronsonul A-T-002 cu TYIR 3x70+54,6 OL-Al."></textarea>
+      <p><button class="btn" id="trimite">Procesează</button> <span id="stare"></span></p>
+      <div id="pasi"></div>
+    </div>
+  </aside>
+</main>
+<footer>
+  <button class="btn" id="play">▶ Play</button>
+  <span id="dataCur">–</span>
+  <input type="range" id="slider" min="0" max="0" value="0">
+  <span id="evCur" style="color:var(--mut);font-size:12px;max-width:40%"></span>
+</footer>
+<script>
+const API = new URLSearchParams(location.search).get("api") || "";
+const $ = id => document.getElementById(id);
+const map = L.map("map").setView([44.284, 26.063], 16);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom: 20, attribution: "© OpenStreetMap"}).addTo(map);
+let layer = null, evs = [], zile = [], idx = 0, timer = null, fitted = false;
+
+const culoare = p => p.nivel === "predictie" ? "var(--pred)" : p.nivel === "de_verificat" ? "#dc2626"
+  : p.scor >= 0.75 ? "#16a34a" : p.scor >= 0.4 ? "#eab308" : "#dc2626";
+const fmt = x => (x > 0 ? "+" : "") + Number(x).toFixed(2);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function get(p, opt) { const r = await fetch(API + p, opt); if (!r.ok) throw new Error(r.status); return r.json(); }
+
+async function deseneaza(data) {
+  const fc = await get("/retea" + (data ? "?data=" + data : ""));
+  if (layer) map.removeLayer(layer);
+  layer = L.geoJSON(fc, {
+    style: f => ({color: culoare(f.properties).replace("var(--pred)", "#7c3aed"), weight: f.properties.nivel === "predictie" ? 4 : 3,
+                  dashArray: f.properties.nivel === "predictie" ? "6 6" : null}),
+    pointToLayer: (f, ll) => L.circleMarker(ll, {radius: f.properties.nivel === "in_model" ? 3 : 7,
+      color: culoare(f.properties).replace("var(--pred)", "#7c3aed"), fillOpacity: .8,
+      dashArray: f.properties.nivel === "predictie" ? "3 3" : null}),
+    onEachFeature: (f, l) => l.on("click", () => deCe(f.properties.element_id || f.properties.id)),
+  }).addTo(map);
+  if (!fitted && layer.getBounds().isValid()) { map.fitBounds(layer.getBounds()); fitted = true; }
+}
+
+async function deCe(id) {
+  const el = await get("/element/" + encodeURIComponent(id));
+  const ist = (el.istoric || []).map(h => `<div class="ev">${h.data}: ${h.nivel}, scor ${h.scor}</div>`).join("");
+  $("deCe").innerHTML = `<b>${esc(el.element_id)}</b> (${esc(el.tip_element)})
+    <span class="badge b-${el.nivel}">${esc(el.nivel)}</span> scor <b>${el.scor}</b>
+    <div style="color:var(--mut);font-size:12px">valid de la ${esc(el.valid_de_la)} · ultima verificare ${esc(el.ultima_verificare || "niciodată")}</div>
+    ${(el.motive || []).map(m => `<div class="motiv"><span class="efect ${m.efect > 0 ? "p" : m.efect < 0 ? "n" : ""}">${fmt(m.efect)}</span>
+      ${esc(m.text)} <span style="color:var(--mut);font-size:11px">${esc(m.eveniment || "")} ${esc(m.data || "")}</span></div>`).join("")}
+    ${el.predictie ? `<div class="motiv">Predicție: ${esc(el.predictie.metoda)}${el.predictie.urmeaza_strada != null ? ", urmează strada " + el.predictie.urmeaza_strada : ""}</div>` : ""}
+    <h2>Istoric</h2>${ist}`;
+}
+
+function zileDin(ev) {  // zi cu zi între primul și ultimul eveniment, ca timeline-ul să curgă uniform
+  if (!ev.length) return [];
+  const a = new Date(ev[0].data), b = new Date(ev[ev.length - 1].data), out = [];
+  for (let d = a; d <= b; d.setDate(d.getDate() + 1)) out.push(d.toISOString().slice(0, 10));
+  return out;
+}
+
+async function incarcaTimeline() {
+  evs = await get("/evenimente");
+  zile = zileDin(evs);
+  $("slider").max = Math.max(0, zile.length - 1);
+  idx = zile.length - 1; $("slider").value = idx;
+  await laZi(idx);
+}
+
+async function laZi(i) {
+  idx = i; const d = zile[i]; $("dataCur").textContent = d || "–";
+  const trecute = evs.filter(e => e.data <= d);
+  const ultim = trecute[trecute.length - 1];
+  $("evCur").textContent = ultim ? `${ultim.data} · ${ultim.rezumat}` : "";
+  $("lista").innerHTML = evs.map(e => `<div class="ev ${e.data <= d ? "cur" : ""}">${esc(e.data)} · ${esc(e.event_id)} · ${esc(e.rezumat)}</div>`).join("");
+  await deseneaza(d);
+}
+
+$("slider").oninput = e => laZi(+e.target.value);
+$("play").onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; $("play").textContent = "▶ Play"; return; }
+  if (idx >= zile.length - 1) idx = 0;
+  $("play").textContent = "⏸ Pauză";
+  const pas = Math.max(1, Math.ceil(zile.length / 120));   // ~40 s pentru tot intervalul
+  let ocupat = false;
+  timer = setInterval(async () => {
+    if (ocupat) return; ocupat = true;
+    const n = Math.min(zile.length - 1, idx + pas); $("slider").value = n; await laZi(n); ocupat = false;
+    if (n >= zile.length - 1) $("play").click();
+  }, 330);
+};
+
+function tab(h) {
+  $("tabHarta").classList.toggle("on", h); $("tabProces").classList.toggle("on", !h);
+  $("panouHarta").classList.toggle("hidden", !h); $("panouProces").classList.toggle("hidden", h);
+}
+$("tabHarta").onclick = () => tab(true); $("tabProces").onclick = () => tab(false);
+
+const TITLU = {extractie: "1. Text → structură", potrivire: "2. Potrivire pe rețea", predictie: "3. Predicție", scor: "4. Scor și decizie"};
+$("trimite").onclick = async () => {
+  const text = $("text").value.trim(); if (!text) return;
+  $("stare").textContent = "se procesează…"; $("pasi").innerHTML = "";
+  try {
+    const body = {text, sursa: $("sursa").value}; if ($("dataRap").value) body.data = $("dataRap").value;
+    const t = await get("/rapoarte", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    $("stare").textContent = t.event_id;
+    const m = t.modificari && t.modificari[0];
+    $("pasi").innerHTML = `<div class="pas"><h3>0. Text original</h3><pre>${esc(text)}</pre></div>` +
+      t.pasi.map(p => `<div class="arrow">↓</div><div class="pas"><h3>${TITLU[p.nume] || p.nume}
+        <span>${p.incredere != null ? "încredere " + Number(p.incredere).toFixed(2) : ""}</span></h3>
+        ${p.motive ? p.motive.map(x => `<div class="motiv">${esc(x)}</div>`).join("") : ""}
+        <pre>${esc(JSON.stringify(p.rezultat, null, 2))}</pre></div>`).join("") +
+      (m ? `<div class="arrow">↓</div><div class="pas"><h3>Propunere: ${esc(m.element_id)}
+        <span class="badge b-${m.nivel}">${esc(m.nivel)} · ${m.scor}</span></h3>
+        <button class="btn" id="vezi">Vezi pe hartă</button></div>` : "");
+    await incarcaTimeline();
+    if (m) $("vezi").onclick = async () => { tab(true); await deCe(m.element_id);
+      layer.eachLayer(l => { const p = l.feature.properties;
+        if ((p.element_id || p.id) === m.element_id) map.setView(l.getLatLng ? l.getLatLng() : l.getBounds().getCenter(), 19); }); };
+  } catch (e) { $("stare").textContent = "eroare: " + e.message; }
+};
+
+get("/health").then(h => $("mod").textContent = "mod: " + Object.entries(h.mod).map(([k, v]) => k + "=" + v).join(", "));
+incarcaTimeline();
+</script>
+</body>
+</html>
