@@ -6,8 +6,8 @@
 
 ## 2. Puncte simulate (A)
 
-- [ ] 2.1 (A4) `data/simulare/genereaza_puncte.py`: stâlpi și case pe străzi OSM, seed fix, fără suprapuneri, în zonă; ieșire `data/simulare/puncte-simulare.json` hardcodată; README
-- [ ] 2.2 (A4) Test: toate punctele valide pe schemă, în zonă, la ≥ 2,5 m de existente
+- [x] 2.1 (A4) `data/simulare/genereaza_puncte.py`: stâlpi și case pe străzi OSM, seed fix, fără suprapuneri, în zonă; ieșire `data/simulare/puncte-simulare.json` hardcodată; README
+- [x] 2.2 (A4) Test: toate punctele valide pe schemă, în zonă, la ≥ 2,5 m de existente
 
 ## 3. Motor (B)
 
