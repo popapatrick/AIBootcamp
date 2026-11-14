@@ -38,6 +38,8 @@ class GridModel:
         self.predictii: dict[str, dict] = {}       # element_id -> {tip_element, geometrie, props} (neaplicate)
         self.retrase: dict[str, dict] = {}         # predicții înlocuite de un element cu ID real (pentru istoric)
         self.jurnal: list[dict] = []
+        self.decizii: dict[str, dict] = {}         # tinta_id -> decizia omului (o singură decizie pe predicție)
+        self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         init = self.w["scor"]["initial_element_kmz"]
         for eid, el in self._elemente().items():
@@ -95,6 +97,9 @@ class GridModel:
                                            "status": event["status"],
                                            "campuri_lipsa": event.get("campuri_lipsa", [])}})
         ref0, det0 = event.get("referinta") or {}, event.get("detalii") or {}
+        if event["echipa_sursa"] == "om_teren" and event["tip"] == "verificare" and det0.get("decizie"):
+            self._decizie_om(event, det0["decizie"], trace)          # decizia omului asupra unei predicții
+            return self._inchide(event, "verificare", trace, {"element_id": det0["decizie"].get("tinta_id"), "motiv": ""}, inainte)
         if not ref0.get("element_id") and det0.get("id_partial"):
             # extracția a lăsat codul brut (ex. T-002, fără prefix de categorie); potrivirea îl dezambiguizează
             event = {**event, "referinta": {**ref0, "element_id": det0["id_partial"]}}
@@ -123,6 +128,10 @@ class GridModel:
             self._efect_pe_element(event, m, trace)
         else:
             self._neaplicat(event, trace, f"Potrivire {m['status']}: {m['motiv']}")
+        return self._inchide(event, tip, trace, m, inainte)
+
+    def _inchide(self, event: dict, tip: str, trace: dict, m: dict, inainte: dict) -> dict:
+        """Jurnal + schimbari pentru un eveniment procesat."""
         self.jurnal.append({"event_id": event["event_id"], "data": event["data"], "echipa_sursa": event["echipa_sursa"],
                             "tip": tip, "decizie": trace["decizie"],
                             "elemente": [s["element_id"] for s in trace["modificari"]],
@@ -141,7 +150,9 @@ class GridModel:
                 continue
             vazute.add(eid)
             nou = eid not in inainte
-            if st.get("retras"):
+            if trace.get("_ce", {}).get(eid):
+                ce = trace["_ce"][eid]
+            elif st.get("retras"):
                 ce = "retras"
             elif st["nivel"] == "predictie":
                 ce = "predictie"
@@ -154,6 +165,7 @@ class GridModel:
             de_ce = st["motive"][0]["text"] if st.get("motive") else motiv_pas
             out.append({"element_id": eid, "ce": ce, "scor_inainte": None if inainte.get(eid) is None else round(inainte[eid], 3),
                         "scor_dupa": round(st["scor"], 3), "de_ce": de_ce})
+        trace.pop("_ce", None)
         if not out and trace["decizie"] in ("neaplicat", "fara_efect"):
             out.append({"element_id": m.get("element_id"), "ce": "neaplicat", "scor_inainte": inainte.get(m.get("element_id")),
                         "scor_dupa": inainte.get(m.get("element_id")), "de_ce": motiv_pas or m.get("motiv", "")})
@@ -359,7 +371,12 @@ class GridModel:
         pid = next((p for p, v in self.predictii.items() if "punct" in v and (
             p == eid or dist_m(pt, v["punct"]) <= w["potrivire"]["distanta_max_m"])), None)
         sp, factori = S.scor_propunere(event, q, w, urmeaza)
+        pen = self.penalizare_metoda.get(metoda, 0.0)
+        if pen:
+            sp = S.clamp(sp - pen, w)       # metoda a fost respinsă de un om în teren (decizie_om)
         motive = []
+        if pen:
+            motive.append(f"Metoda «{metoda}» a fost respinsă în teren: scor propunere −{round(pen, 3)}.")
         if pid:
             vechi = self._curent(pid)["predictie"]["scor_propunere"]
             sp = S.clamp(max(vechi, sp) + w["scor"]["confirmare_teren"] * S.fiabilitate(event, w) * q, w)
@@ -444,6 +461,108 @@ class GridModel:
             self._pune(sid, tip_el, data, nivel="in_model", scor=sp, motive=mot, predictie=None,
                        ultima_verificare=data if event["status"] == "executat" else None)
 
+    # ------------------------------------------------------------------ decizia omului (om_teren)
+    def _decizie_om(self, event: dict, dec: dict, trace: dict):
+        """Omul acceptă sau respinge o predicție după verificarea în teren. E un input ca oricare altul:
+        sursa `om_teren` (pondere din weights.yaml) trece prin același calcul de scor. O singură decizie pe predicție."""
+        w, data = self.w, event["data"]
+        tinta, alege = (dec.get("tinta_id") or "").strip(), dec.get("decizie")
+        trace["pasi"].append({"nume": "potrivire", "incredere": 1.0,
+                              "rezultat": {"status": "potrivit", "element_id": tinta, "metoda": "decizie_om",
+                                           "calitate": 1.0, "candidati": [], "semnale": [], "motiv": "Predicție aleasă de om."}})
+        trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
+
+        def refuz(cod: str, mesaj: str):
+            trace["eroare"] = {"cod": cod, "mesaj": mesaj}
+            self._scor_pas(trace, "neaplicat", {"nivel": None}, [mesaj])
+
+        if alege not in ("accepta", "respinge") or not tinta:
+            return refuz("decizie_invalida", "Decizia trebuie să aibă tinta_id și decizie = accepta | respinge.")
+        if tinta in self.decizii:
+            d = self.decizii[tinta]
+            return refuz("deja_decis", f"Predicția {tinta} are deja o decizie ({d['decizie']}, {d['data']}).")
+        cur = self.istoric.get(tinta, [None])[-1]
+        proprietate = bool(cur and cur.get("predictie") and (cur["predictie"].get("propunere") or {}).get("proprietate") == "sectiune"
+                           and tinta in self.net["tronsoane"])
+        if tinta not in self.predictii and not proprietate:
+            if tinta in self.retrase or tinta in self.net["noduri"] or tinta in self.net["tronsoane"]:
+                return refuz("deja_decis", f"{tinta} nu mai este o predicție (a fost deja aplicată sau retrasă).")
+            return refuz("necunoscut", f"Nu există nicio predicție cu ID-ul {tinta}.")
+        fiab = S.fiabilitate(event, w)
+        ev_txt = f"om_teren (fiabilitate {fiab}), eveniment {event['event_id']}"
+        self.decizii[tinta] = {"decizie": alege, "event_id": event["event_id"], "data": data}
+
+        if proprietate:
+            self._decizie_proprietate(event, tinta, cur, alege, fiab, ev_txt, trace)
+            return
+        # grupul: nodul prezis și legăturile lui, sau legătura și nodurile ei încă prezise
+        grup = [tinta]
+        s0 = self.predictii[tinta]
+        if "punct" in s0:
+            grup += [sid for sid, s in self.predictii.items() if "capete" in s and tinta in s["capete"]]
+        elif "capete" in s0:
+            grup += [c for c in s0["capete"] if c in self.predictii and "punct" in self.predictii[c]]
+        metoda = (cur or {}).get("predictie", {}).get("metoda") if cur else None
+        if alege == "respinge":
+            pen = w["decizie_om"]["penalizare_metoda_la_respingere"]
+            if metoda:
+                self.penalizare_metoda[metoda] = round(min(0.20, self.penalizare_metoda.get(metoda, 0.0) + pen), 3)
+            trace["_ce"] = {sid: "retras" for sid in grup}
+            for sid in grup:
+                c = self._curent(sid)
+                self._pune(sid, c["tip_element"], data, retras=True, nivel="predictie", confirmat_de=None,
+                           motive=[{"text": f"Respinsă de om în teren ({ev_txt}). Predicția e retrasă.",
+                                    "efect": 0.0, "eveniment": event["event_id"], "data": data}] + c["motive"])
+                self.retrase[sid] = self.predictii.pop(sid)
+                trace["modificari"].append(self._publica(sid, self._curent(sid)))
+            self._scor_pas(trace, "respins", {"nivel": None, "grup": grup},
+                           [f"Predicția {tinta} respinsă de om; încrederea în metoda «{metoda}» scade cu "
+                            f"{w['decizie_om']['penalizare_metoda_la_respingere']}."])
+            return
+        # acceptare: scorul vine din același calcul (fiabilitate om_teren, extracție 1, potrivire 1)
+        sp, factori = S.scor_propunere(event, 1.0, w)
+        specs = [(sid, "nod" if "punct" in self.predictii[sid] else "tronson", self.predictii[sid])
+                 for sid in sorted(grup, key=lambda x: "punct" not in self.predictii[x])]
+        txt = (f"Acceptată de om în teren ({ev_txt}): scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, "
+               f"extracție {factori['incredere_extractie']}, potrivire {factori['calitate_potrivire']}). "
+               f"Peste pragul {w['praguri']['aplicat']}: aplicată în model.")
+        self._adauga_in_model(specs, event, sp, [txt], None)
+        trace["_ce"] = {}
+        for sid, _, _ in specs:
+            c = self._curent(sid)
+            c["confirmat_de"] = "om"
+            trace["_ce"][sid] = "adaugat"
+            trace["modificari"].append(self._publica(sid, c))
+        self._scor_pas(trace, "aplicat", {"scor_nou": sp, "nivel": "in_model", "grup": grup}, [txt], sp)
+
+    def _decizie_proprietate(self, event: dict, eid: str, cur: dict, alege: str, fiab: float, ev_txt: str, trace: dict):
+        """Decizia omului asupra unei propuneri de secțiune pentru un tronson existent (predicție sau conflict)."""
+        w, data = self.w, event["data"]
+        prop = cur["predictie"]["propunere"]
+        el = self.net["tronsoane"][eid]
+        eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+        if alege == "respinge":
+            pen = w["decizie_om"]["penalizare_metoda_la_respingere"]
+            self.penalizare_metoda["propunere_proprietate"] = round(min(0.20, self.penalizare_metoda.get("propunere_proprietate", 0.0) + pen), 3)
+            nivel = "in_model" if cur["nivel"] == "predictie" else cur["nivel"]
+            st = self._pune(eid, "tronson", data, nivel=nivel, predictie=None, scor=eff,
+                            motive=self._motiv(eid, f"Propunerea «{prop['valoare']}» respinsă de om în teren ({ev_txt}).", 0.0, event))
+            trace["modificari"].append(self._publica(eid, st))
+            self._scor_pas(trace, "respins", {"nivel": nivel}, [f"Propunerea de secțiune pentru {eid} respinsă de om."])
+            return
+        sp, factori = S.scor_propunere(event, 1.0, w)
+        delta = w["scor"]["confirmare_teren"] * fiab
+        scor = S.clamp(eff + delta, w)
+        t = f"Secțiunea «{prop['valoare']}» acceptată de om în teren ({ev_txt}): aplicată (scor propunere {sp})."
+        st = self._pune(eid, "tronson", data, nivel="in_model", scor=scor, ultima_verificare=data, predictie=None,
+                        props={**cur["props"], "sectiune": prop["valoare"]}, confirmat_de="om",
+                        motive=self._motiv(eid, t, delta, event),
+                        ultimul_aplicat={"event_id": event["event_id"], "data": data, "echipa": "om_teren",
+                                         "proprietate": "sectiune", "valoare": prop["valoare"]})
+        trace["_ce"] = {eid: "actualizat"}
+        trace["modificari"].append(self._publica(eid, st))
+        self._scor_pas(trace, "aplicat", {"scor_nou": scor, "nivel": "in_model"}, [t], sp)
+
     # ------------------------------------------------------------------ linie planificată
     def _planificata(self, event: dict, m: dict, trace: dict):
         w, data = self.w, event["data"]
@@ -474,7 +593,7 @@ class GridModel:
     def _publica(self, eid: str, st: dict) -> dict:
         """ElementState (contracts/state.schema.json) pentru StepTrace."""
         return {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
-                                    "ultima_verificare", "motive", "predictie") if k in st}
+                                    "ultima_verificare", "motive", "predictie", "confirmat_de") if k in st}
 
     def _geometrie(self, eid: str) -> dict | None:
         el = self._elemente().get(eid)
