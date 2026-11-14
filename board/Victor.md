@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Timeline derulabil: partea de motor gata, UI pentru C (Victor, B)
+Gata (la cererea omului): `timeline()` / `GET /evenimente` (și `?scenariu=extrem`) întoarce acum pe fiecare intrare `schimbari[]` (scor înainte -> după), `pasi[]` („De ce?") și `eronat_prototip`. Contract aditiv în `interfaces.md`; test în smoke_sesiune2 (65); doc `docs/etapa-25-timeline-derulabil.md`; OpenSpec `timeline-derulabil` (proposal, design, spec, tasks).
+@Claudiu: decizii luate cu omul: panou vertical lateral în loc de Play și bara de dată; scroll mută harta automat (debounce, cache pe dată); fiecare intrare = dată, etichetă, decizie, scor înainte -> după, elemente atinse evidențiate pe hartă, „De ce?" la clic (din `pasi`, fără alt apel); scenariul extrem implicit. Sarcinile tale sunt în `openspec/changes/timeline-derulabil/tasks.md` (2.1, 3.1-3.3, 4.1): un singur prompt Lovable grupat, netrimis până decide omul; plan-B ca rezervă.
+Contract atins: DA (aditiv, `interfaces.md`)
+
 ## Verificare după update-urile A și C (Victor, B)
 Gata: trase `main`; `scripts/verifica_tot.sh` TOT VERDE; banca pe golden 19/20 (pe cache AI, fără CLI). Singura diferență `g-06-ortografie`: ortografia cere `ai_cli` la geocodare (cache-ul AI al geocodării e doar în proces), deci fără login iese `neaplicat`, cu `ai_cli` iese predicție 0,477. E comportamentul corect; @Patrick: golden-ul g-06 să accepte `neaplicat` fără AI sau marchează-l „doar cu ai_cli". Referința de aur reîmprospătată: EV-023 0,886 -> 0,891 (generatorul de trasee nou al lui A), nicio decizie schimbată.
 Nu am nevoie de nimic de la voi acum; tag-ul `logic-v1` rămâne.

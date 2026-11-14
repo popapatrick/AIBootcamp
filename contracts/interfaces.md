@@ -126,6 +126,9 @@ def zona_ok(lat: float, lon: float, net: dict, cfg: dict) -> dict:
 ```
 `prezice_lant` întoarce și `treapta` (1-4); `cfg.racordare.raza_extinsa_m` activează treapta 2.
 
+## Timeline derulabil (commit `contract:`, B, aditiv)
+Fiecare element din `timeline()` (și din `GET /evenimente`) are acum și `schimbari[]` (aceleași ca în StepTrace: `{element_id, ce, scor_inainte, scor_dupa, de_ce}`), `pasi[]` (pașii StepTrace: extracție, geocodare, trace, potrivire, predicție, scor, cu `rezultat` și `motive`) și `eronat_prototip`. UI-ul își construiește lista derulabilă din ele: data, `eticheta`, `decizie`, scor înainte -> după, elemente atinse (`elemente_atinse`) și „De ce?" (`pasi`) la clic; harta la data evenimentului vine din `GET /retea?data=` (sau `&scenariu=extrem`).
+
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
 

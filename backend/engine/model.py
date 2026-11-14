@@ -195,6 +195,10 @@ class GridModel(Sesiune2):
                             "elemente": [s["element_id"] for s in trace["modificari"]],
                             "motiv": trace["pasi"][-1].get("motive", [""])[0] if trace["pasi"][-1].get("motive") else ""})
         trace["schimbari"] = self._schimbari(trace, m, inainte)
+        # pentru timeline derulabil: aceleași schimbări și pași ca în StepTrace (scor înainte -> după, „De ce?”)
+        self.jurnal[-1]["schimbari"] = trace["schimbari"]
+        self.jurnal[-1]["pasi"] = trace["pasi"]
+        self.jurnal[-1]["eronat_prototip"] = bool(trace.get("eronat_prototip"))
         return trace
 
     def _eticheta(self, event: dict, tip: str, trace: dict) -> str:
@@ -754,7 +758,8 @@ class GridModel(Sesiune2):
             out.append({"data": j["data"], "event_id": j["event_id"], "decizie": j["decizie"],
                         "tip": j["tip"], "eticheta": j.get("eticheta", j["tip"]),
                         "rezumat": f"{j['echipa_sursa']}: {j['tip']} -> {j['decizie']}",
-                        "elemente_atinse": j["elemente"]})
+                        "elemente_atinse": j["elemente"], "schimbari": j.get("schimbari", []),
+                        "pasi": j.get("pasi", []), "eronat_prototip": j.get("eronat_prototip", False)})
         return out
 
     def statistici(self, data: str) -> dict:

@@ -273,6 +273,17 @@ def main() -> None:
     t_o, _ = racq("RQ-4", {"coordonate": {"lat": c0q[0] + 9000 / 111_320, "lon": c0q[1]}})
     verifica("racordare: în afara zonei = neaplicat eronat", t_o["decizie"] == "neaplicat" and t_o.get("eronat_prototip"))
 
+    # --- timeline derulabil: schimbari și pasi pe fiecare intrare
+    mt_ = mk()
+    mt_.apply_event(ev("TL-1", "2026-09-01", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(300)}, sursa="tableta_coordonate", forma="campuri"))
+    mt_.apply_event(ev("TL-2", "2026-09-02", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(60_000)}))
+    tl_ = mt_.timeline()
+    verifica("timeline: fiecare intrare are schimbari, pasi, eronat_prototip", len(tl_) == 2 and all(
+        isinstance(x["schimbari"], list) and x["pasi"] and "eronat_prototip" in x for x in tl_))
+    verifica("timeline: scor înainte -> după și „de ce” în schimbări", tl_[0]["schimbari"] and all(
+        {"element_id", "ce", "scor_dupa", "de_ce"} <= set(c_) for c_ in tl_[0]["schimbari"]))
+    verifica("timeline: evenimentul eronat e marcat", tl_[1]["eronat_prototip"] and not tl_[0]["eronat_prototip"])
+
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 
