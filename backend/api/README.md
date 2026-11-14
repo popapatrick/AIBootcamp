@@ -18,3 +18,6 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/api/requirements.txt
 
 ## metoda_cod și regex (sesiunea 3)
 `pasi[extractie].metoda_cod` = `ai_cache` | `ai_api` | `regex`; `/health.extractie_cod` la fel. Cache miss -> `CacheMiss` -> regex, cu `motiv`. Regex înțelege textele butoanelor Cerere racordare / Fire mutate / Raport tabletă. Detalii: `docs/etapa-7b-api-sesiunea-2.md`.
+
+## Banc de logică (C2/C3)
+`python3 -m backend.api.banc_logica [--fisier F] [--json] [--doar-diferente]`: rulează `data/golden/*.json` (sau exemple-dummy) prin `pipeline.proceseaza`; compară cheile din `asteptat` (tip, decizie, nivel, origine, slaba, treapta, eronat_prototip, element_id; `eronat_prototip` lipsă = false). Stare: golden 20 cazuri, 14 ok, 6 diferite (vezi `docs/etapa-24-api-sesiune3.md`, C3 runda 3).

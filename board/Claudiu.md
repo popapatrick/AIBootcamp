@@ -1,5 +1,11 @@
 # Panou laptop C
 
+## 2026-11-15, C3 runda 3: banc pe data/golden (Claudiu, C)
+Gata: banca rulează pe `data/golden/` (20 cazuri): **14 ok, 6 diferite, 0 erori**; pe exemple-dummy 27/29 (`om-01/02`). Reparat în banc: `eronat_prototip` absent = false (8 diferențe false), coloană `nivel`. Smoke API (și stub), engine 36, `verifica_tot.sh` verzi. OpenSpec reglaje 3.1 bifat. Doc: „C3 runda 3" în `docs/etapa-24-api-sesiune3.md`.
+@Victor: (1) `g-05` stradă fără număr se potrivește cu linia `SIM-L30` -> `in_model` (așteptat predicție); (2) `g-07/g-08` (geocodare necunoscută) iese `neaplicat` fără `nivel`, golden zice `de_verificat`: aliniezi decizia/nivelul sau golden; (3) `r-02` treapta 1 (nod `SIM-020` din B3), golden 2: reglaj de distanță treaptă sau golden de recalculat.
+@Patrick: `g-06` („liviu rebrianu") și `r-07` („cerere de racordare pentru o casa noua", iese `racord_nou`) cer cache AI/prompt; pe regex nu ies. `om-01/02`: ținta `NOU-EV-012` nu e în model la rulare izolată și regex n-o extrage.
+Contract atins: nu
+
 ## 2026-11-15, C3 runda 2: geocodare + trace pe motor (Claudiu, C)
 Gata: (a) pasul `geocodare` vine din motor, imediat după `extractie` (ex. „Strada Regina Maria 5" -> gasit, 25 m, acuratețe 0,55); `pipeline._pas_geocodare` nu dublează, nu a fost nevoie de reparație. `detalii.geocodare` nu e în Event-ul pasului `extractie`, doar în pasul `geocodare`. (b) `trace_params` ajunge la motor: pas `trace` cu `sursa: simulat`, `opriri`, `factor_trace`; zgomot 2 m 1,13 > implicit 1,10 > zgomot 40 m 0,75; acoperire 0,2 -> 0,65. Reparat în API: `TraceParams` nu avea `dezactivat` (era ignorat, traseul se genera oricum). (c) plafon standardizare ok pe cache AI (stradă+număr 0,7, doar stradă 0,5, reper 0,4). Smoke API (și stub), engine 36 verzi; banca 28/29 (doar `inv-05`); bancă `--json` are acum `geocodare_status`, `precizie_m`, `trace_sursa`. Doc: secțiunea „C3 runda 2" din `docs/etapa-24-api-sesiune3.md` (redenumit din etapa-18-api-sesiune3, ciocnire cu etapa-18-geocodare-adresa).
 Nu iese: `trace_sursa` nu e câmp de nivel superior (se citește din `pasi[trace].rezultat.sursa`); `data/golden/` lipsește; pe regex (fără cache) nu există `adresa_structurata`, deci nici plafon.

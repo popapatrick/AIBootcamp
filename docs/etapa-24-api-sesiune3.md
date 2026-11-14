@@ -71,3 +71,15 @@ Verificat prin `TestClient` pe `POST /rapoarte` (EXTRACT_CLI=0, cache + regex), 
 - **Observație (B/A):** traseul generat e determinist pe `event_id`; cu `API_EXTRACTIE=stub` (alte id-uri) același punct și `acoperire 1.0` a dat `status fara_opriri` (factor 0,75). Smoke-ul caută automat o coordonată care dă oprire.
 - **Smoke:** `smoke_api.py` are acum asertări independente de ai_cli: pas `geocodare` o dată, imediat după `extractie`; `trace_params` -> factor zgomot mic > implicit > zgomot mare, acoperire mică scade, `dezactivat` elimină pasul `trace`.
 - **Bancă:** rândurile (în `--json`, nu în tabel) au `geocodare_status`, `precizie_m`, `trace_sursa`. Pe exemple-dummy: 29 cazuri, 28 ok, 1 diferit (`inv-05`, `tip`, extracție). Geocodare apare la 9 cazuri (ex. `mnt-03` gasit 25 m, `mnt-06/07` și `inv-05` 150 m, `mut-03` necunoscut), `trace_sursa=simulat` la 5. `data/golden/` tot lipsește.
+
+## C3 runda 3 (golden, 2026-11-15)
+Comandă: `python3 -m backend.api.banc_logica` (citește `data/golden/{geocodare,racordare,zona}.json`, 20 cazuri; `--json --doar-diferente` arată cheile diferite). Fără AI (EXTRACT_CLI=0, extracție regex/cache). Sumar așteptat acum: **20 cazuri, 14 ok, 6 diferite, 0 erori**. Pe `exemple-dummy.json` (`--fisier`): 29 cazuri, 27 ok, 2 diferite (`om-01/02`).
+Formatul golden se potrivea cu banca; s-au reparat 2 lucruri în banc: (1) `eronat_prototip` lipsă din răspuns = `false` (golden cere `false` explicit; erau 8 diferențe false); (2) coloană nouă `nivel` (din `modificari[0].nivel` sau pasul `scor`), pentru cheia `nivel` din golden.
+Diferențe rămase și cauze:
+- `g-05-strada` (stradă fără număr, `Strada Orhideelor`): potrivit cu linia `SIM-L30` -> `in_model`, așteptat `predictie`. Cauză: motor/potrivire (Victor).
+- `g-06-ortografie` („liviu rebrianu"): regex nu extrage adresa, fără cache AI -> `neaplicat`, fără nivel; așteptat `de_verificat`. Extracție (Patrick, cache AI) și/sau motor.
+- `g-07-doar-reper`, `g-08-strada-necunoscuta`: `neaplicat` fără `nivel`; golden așteaptă `nivel: de_verificat`. Contract motor (Victor): geocodare necunoscută = `de_verificat` sau `neaplicat`?
+- `r-02-treapta2`: treapta 1 (nod `SIM-020`, punctele de simulare din rețeaua de start B3), așteptat 2. Motor/racordare (Victor/Patrick).
+- `r-07-fara-locatie`: tip `racord_nou` (regex), așteptat `cerere_racordare`. Extracție (Patrick).
+`om-01/02` (dummy): fără predicție `NOU-EV-012` în model la rulare izolată, regex nu extrage ținta; extracție/model.
+Teste: smoke_api (și stub), smoke_engine 36, `scripts/verifica_tot.sh` = TOT VERDE.
