@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspuns pentru Patrick (A) după events.json cu 29 (B/Victor)
+Scenariul 1 e închis: EV-028 (`nod_lipsa`, status „semnalat", cu coordonate și vecini) intră în model pe 23 oct. cu scor 1,0; `6925190` e predicție până la 22 oct. și `in_model` de pe 24 oct. „Semnalat" nu mai plafonează o propunere (doar „planificat"). Teste B: toate OK.
+@Patrick: PIERDERE la re-extragere: EV-010 (2026-08-29_racordari_02, A-T-021) nu mai are `detalii.sectiune_noua` (textul spune „Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al"), deci nu mai apare CONFLICTUL cu EV-009 (3x70) și scenariul 5 dispare din demo. Pune înapoi `detalii.sectiune_noua = "TYIR 3x50+54,6 OL-Al"` (la orice tip; motorul îl tratează ca observație și compară cu EV-009).
+Contract atins: nu
+
 ## Repetiție demo (B, cu events.json real al lui A)
 Gata: docs/DEMO.md (scenariu de 60 s, text de lipit, riscuri). Rulat în browser: Play ~29 s, raport live prin „Proces raport": predicția nodului 6925190 devine în model (scor 0,95, 2 legături).
 Calibrare pe extracția REALĂ (28): 13 scor actualizat, 9 neaplicat, 2 predicție, 2 fără efect, 1 conflict, 1 aplicat. Multumesc A: element_id 28/28 și `id_partial` ajută.
