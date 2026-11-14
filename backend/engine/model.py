@@ -21,7 +21,7 @@ from backend.engine import scoring as S
 from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
-from backend.engine.network import clasa_element, dist_m
+from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
 from backend.engine.sesiune2 import Sesiune2
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
@@ -33,7 +33,10 @@ MAX_MOTIVE = 8
 class GridModel(Sesiune2):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
-        self.net = net if net is not None else build()["model"]
+        if net is None:
+            net = build()["model"]
+            incarca_puncte_simulare(net)     # puncte simulate hardcodate = parte din rețeaua de start (origine retea_start)
+        self.net = net
         self.start = start
         self.ultima_data = start
         self.istoric: dict[str, list[dict]] = {}   # element_id -> versiuni de stare, cronologic

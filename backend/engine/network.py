@@ -113,6 +113,27 @@ def load_network() -> dict:
     return {"post": post, "noduri": noduri, "tronsoane": tronsoane}
 
 
+SIMULARE = ROOT / "data" / "simulare" / "puncte-simulare.json"
+
+
+def incarca_puncte_simulare(net: dict, cale: Path = SIMULARE) -> int:
+    """Adaugă în `net` punctele simulate hardcodate (data/simulare/puncte-simulare.json, A4): ele fac parte din rețeaua de
+    start considerată reală. Fișier lipsă = nimic adăugat. Întoarce numărul de noduri adăugate. Date FICTIVE."""
+    if not cale.exists():
+        return 0
+    d = json.loads(cale.read_text(encoding="utf-8"))
+    for n in d.get("noduri", []):
+        net["noduri"][n["id"]] = {"id": n["id"], "tip_element": "nod", "serie": n.get("serie", ""), "plecare": None,
+                                  "lat": n["lat"], "lon": n["lon"]}
+    for t in d.get("tronsoane", []):
+        pts = [tuple(p) for p in t["puncte"]]
+        net["tronsoane"][t["id"]] = {"id": t["id"], "cod_original": None, "tip_element": "tronson",
+                                     "categorie": t.get("categorie", "aerian"), "sectiune": None,
+                                     "lungime_m": round(sum(dist_m(a, b) for a, b in zip(pts, pts[1:])), 1),
+                                     "puncte": pts, "capete": tuple(t["capete"])}
+    return len(d.get("noduri", []))
+
+
 def clasa_element(el: dict) -> str:
     """Clasa vizuală din KMZ (contracts/state.schema.json, `clasa`).
     Noduri: serie 7 = casa, serie 5/6 = important, origine plecare JT = origine; post = post.

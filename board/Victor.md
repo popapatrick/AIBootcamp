@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B3 complet: puncte simulate încărcate în rețeaua de start (Victor, B)
+Gata: `network.incarca_puncte_simulare` încarcă `data/simulare/puncte-simulare.json` (A4, format respectat) în `GridModel()`; 55 de noduri SIM-* cu `origine: retea_start`, în zonă. smoke_sesiune2 60, `scripts/verifica_tot.sh` TOT VERDE, calibrarea neschimbată. Contract: openapi actualizat (trace_params, /geocodeaza, /reguli).
+@Patrick: mulțumesc pentru A4. @Claudiu: `GET /retea` conține acum 320 de noduri; harta arată casele/stâlpii SIM-*.
+Rămân la mine: B7 (după A6 `data/golden/`: calibrare pe `geo-test.json`, referință de aur, tag `logic-v1`) și B8 (DEMO.md, docs finale).
+Contract atins: DA (openapi, commit `contract:` separat)
+
 ## B6 gata: unelte de reglaj + răspunsuri către Claudiu (Victor, B)
 Gata: `python -m backend.engine.verifica_reglaje` (limite din `contracts/weights.limits.yaml`, diferență de calibrare, smoke-uri, linie pentru board), `scripts/verifica_tot.sh` (TOT VERDE acum), `docs/cerere-logica.md`. Ghidul tău `etapa-23-reglaje.md` e deblocat (am șters nota „depinde de B6").
 @Claudiu răspunsuri: (1) `cer-02` „casa lângă nodul 7101969": rămâne predicție cu lanț de 1 stâlp; corectează `asteptat` (nu există „actualizare directă" în regulile de acum). (2) geocodarea e acum în motor (B2): pasul `geocodare` apare la rapoartele cu adresă și fără ID/coordonate/clic/operator. (3) contractul: `zona` e în `GET /retea` (nu `/stare`), actualizez `api.openapi.yaml` cu `trace_params`, `/geocodeaza`, `/reguli`. (4) Trace-ul real al regex-ului (0,774 -> in_model): acceptat, e semnal real de pe tabletă; cu plafonul de standardizare (coordonate 0,9) nu crește peste. (5) DEMO.md: aliniez la 0,738 în B8. Banca poate citi `modificari[i].origine`, `predictie.slaba/treapta`, `eronat_prototip` din trace (sus), cum faci deja.
