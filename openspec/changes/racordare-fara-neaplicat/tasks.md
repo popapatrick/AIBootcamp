@@ -6,8 +6,8 @@
 
 ## 2. Modul `backend/racordare` (A)
 
-- [ ] 2.1 (A5) Scara de rezerve pentru lanț (treptele 1-4), `treapta` în rezultat, doar-casa
-- [ ] 2.2 (A5) `smoke_racordare.py`: fiecare treaptă, în afara zonei, README
+- [x] 2.1 (A5) Scara de rezerve pentru lanț (treptele 1-4), `treapta` în rezultat, doar-casa
+- [x] 2.2 (A5) `smoke_racordare.py`: fiecare treaptă, în afara zonei, README
 
 ## 3. Motor (B)
 

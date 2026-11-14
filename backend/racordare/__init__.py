@@ -60,24 +60,26 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dic
     """Lanț prezis de la cel mai apropiat nod până la casa `locatie` {lat, lon}.
 
     net: network.geojson sau dict-ul motorului. strazi: osm.strazi(). cfg: weights.yaml.
-    Întoarce {status: lant|linie_dreapta|fara_nod, nod_start, distanta_m, stalpi, cabluri,
-    urmeaza_strada, ambiguu, motiv}. Stâlpii la distanța mediană a tronsoanelor existente;
+    Întoarce {status: lant|linie_dreapta|fara_nod, treapta, nod_start, distanta_m, stalpi, cabluri,
+    urmeaza_strada, ambiguu, motiv}. Scara: 1 nod în raza_nod_m; 2 nod în raza_extinsa_m; 3 cel mai apropiat
+    nod, linie dreaptă; 4 niciun nod în rețea: doar casa (status fara_nod, fără lanț). Scorul îl calculează motorul
+    din `treapta` (factor_*), nu această funcție. Stâlpii la distanța mediană a tronsoanelor existente;
     peste cfg.racordare.max_stalpi_prezisi se taie și rezultatul e ambiguu. Pură."""
     r = cfg["racordare"]
     casa = (locatie["lat"], locatie["lon"])
-    out = {"status": "fara_nod", "nod_start": None, "distanta_m": None, "stalpi": [], "cabluri": [],
+    out = {"status": "fara_nod", "treapta": 4, "nod_start": None, "distanta_m": None, "stalpi": [], "cabluri": [],
            "urmeaza_strada": None, "ambiguu": False, "motiv": None}
     noduri, tr = _elemente(net)
     if not noduri:
-        out["motiv"] = "rețea fără noduri"
+        out["motiv"] = "rețea fără noduri: doar punctul casei"
         return out
     d0, (nid, npos) = min((dist_m(casa, p), (i, p)) for i, p in noduri)
-    if d0 > r["raza_nod_m"]:
-        out["motiv"] = f"cel mai apropiat nod e la {d0:.0f} m (raza {r['raza_nod_m']} m)"
-        return out
+    out["treapta"] = 1 if d0 <= r["raza_nod_m"] else 2 if d0 <= r["raza_extinsa_m"] else 3
+    if out["treapta"] > 1:
+        out["motiv"] = f"cel mai apropiat nod e la {d0:.0f} m (raza {r['raza_nod_m']} m, extinsă {r['raza_extinsa_m']} m)"
     out["nod_start"] = nid
     span = median(_lungime(t) for t in tr if len(t) > 1) if tr else 30.0
-    drum = _drum_strada(npos, casa, strazi)
+    drum = _drum_strada(npos, casa, strazi) if out["treapta"] < 3 else None  # treapta 3: linie dreaptă
     out["status"] = "lant" if drum else "linie_dreapta"
     out["urmeaza_strada"] = 1.0 if drum else None
     drum = drum or [npos, casa]
@@ -86,7 +88,7 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dic
     n = max(0, round(total / span) - 1)  # ultimul cablu spre casă ~ un span
     if n > r["max_stalpi_prezisi"]:
         n = r["max_stalpi_prezisi"]
-        out["ambiguu"], out["motiv"] = True, f"lanț mai lung decât {n} stâlpi; prezis doar începutul"
+        out["ambiguu"], out["motiv"] = True, f"lanț mai lung decât {n} stâlpi; prezis doar începutul" + (f"; {out['motiv']}" if out["motiv"] else "")
     # poziții pe drum: pct i = (punct, index segment); cablu = segmentele dintre două poziții
     poz = [(drum[0], 0)] + [_la_distanta(drum, k * span) for k in range(1, n + 1)] + [(drum[-1], len(drum) - 2)]
     ids = [nid] + [f"stalp-{k}" for k in range(1, n + 1)] + ["casa"]

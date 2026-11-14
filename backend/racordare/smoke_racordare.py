@@ -25,7 +25,7 @@ lon_pas = 1 / (111_320 * 0.7155)  # ~1 m în lon la lat ~44.28
 strada = [{"nume": "Test", "puncte": [[la + 5e-5, lo + k * 10 * lon_pas] for k in range(-1, 15)]}]
 casa = {"lat": la + 5e-5, "lon": lo + 4 * span * lon_pas}
 r = prezice_lant(casa, net, strada, cfg)
-ok(r["status"] == "lant" and r["urmeaza_strada"] == 1.0 and r["nod_start"] == nid, r)
+ok(r["treapta"] == 1 and r["status"] == "lant" and r["urmeaza_strada"] == 1.0 and r["nod_start"] == nid, r)
 ok(len(r["stalpi"]) >= 2 and len(r["cabluri"]) == len(r["stalpi"]) + 1, r)
 pts = [(s["lat"], s["lon"]) for s in r["stalpi"]]
 ok(len(pts) >= 2 and all(abs(dist_m(a, b) - span) < 0.1 * span + 1 for a, b in zip(pts, pts[1:])), "spațiere ~mediană")
@@ -34,8 +34,20 @@ ok(r["cabluri"][-1]["la"] == "casa", r)
 r = prezice_lant(casa, net, [], cfg)
 ok(r["status"] == "linie_dreapta" and r["urmeaza_strada"] is None, r)
 
+# treptele 2-4: casa spre est, la distanță mare de orice nod (nodul cel mai estic e cel mai apropiat)
+rz = cfg["racordare"]
+la_m = lambda m: {"lat": la, "lon": lo + m * lon_pas}
+r = prezice_lant(la_m(rz["raza_nod_m"] - 20), net, [], cfg)
+ok(r["treapta"] == 1 and r["status"] == "linie_dreapta" and r["motiv"] is None, r)
+r = prezice_lant(la_m(rz["raza_nod_m"] + 20), net, strada, cfg)
+ok(r["treapta"] == 2 and r["nod_start"] == nid and r["stalpi"] and "extinsă" in r["motiv"], r)
+r = prezice_lant(la_m(rz["raza_extinsa_m"] + 20), net, strada, cfg)  # strada există, dar treapta 3 e linie dreaptă
+ok(r["treapta"] == 3 and r["status"] == "linie_dreapta" and r["urmeaza_strada"] is None and r["nod_start"] == nid, r)
+ok(r["cabluri"] and r["cabluri"][-1]["la"] == "casa" and r["motiv"], r)
 r = prezice_lant({"lat": la + 0.1, "lon": lo}, net, strada, cfg)
-ok(r["status"] == "fara_nod" and r["stalpi"] == [], r)
+ok(r["treapta"] == 3 and r["ambiguu"] and len(r["stalpi"]) == rz["max_stalpi_prezisi"], r)
+r = prezice_lant(casa, {"type": "FeatureCollection", "features": []}, strada, cfg)
+ok(r["treapta"] == 4 and r["status"] == "fara_nod" and r["nod_start"] is None and r["stalpi"] == [] and r["cabluri"] == [] and r["motiv"], r)
 
 cfg2 = {**cfg, "racordare": {**cfg["racordare"], "max_stalpi_prezisi": 1}}
 r = prezice_lant(casa, net, strada, cfg2)
