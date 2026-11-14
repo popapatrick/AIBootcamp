@@ -2,7 +2,7 @@
  {
   "id": "r-01-treapta1",
   "sursa": "racordari",
-  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28198, 26.06139.",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28045, 26.05446.",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "cerere_racordare",
@@ -21,8 +21,8 @@
     ],
     "treapta": 1,
     "slaba": false,
-    "nod_start": "7902773",
-    "distanta_directa_nod_m": 46.3,
+    "nod_start": "SIM-020",
+    "distanta_directa_nod_m": 91.4,
     "in_zona": true,
     "neaplicat": false
    },
@@ -34,7 +34,7 @@
  {
   "id": "r-02-treapta2",
   "sursa": "racordari",
-  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28039, 26.05553.",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28109, 26.07127.",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "cerere_racordare",
@@ -52,8 +52,8 @@
     ],
     "treapta": 2,
     "slaba": null,
-    "nod_start": "6784406",
-    "distanta_directa_nod_m": 347.6,
+    "nod_start": "7816043",
+    "distanta_directa_nod_m": 213.4,
     "in_zona": true,
     "neaplicat": false
    },
@@ -65,7 +65,7 @@
  {
   "id": "r-03-treapta3",
   "sursa": "racordari",
-  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.26902, 26.05827.",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.26913, 26.05829.",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "cerere_racordare",
@@ -84,7 +84,7 @@
     "treapta": 3,
     "slaba": true,
     "nod_start": "7777615",
-    "distanta_directa_nod_m": 757.6,
+    "distanta_directa_nod_m": 745.6,
     "in_zona": true,
     "neaplicat": false
    },
@@ -96,7 +96,7 @@
  {
   "id": "r-04-treapta3-limita",
   "sursa": "racordari",
-  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28168, 26.10110.",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28179, 26.10112.",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "cerere_racordare",
@@ -114,8 +114,8 @@
     ],
     "treapta": 3,
     "slaba": true,
-    "nod_start": "5481763",
-    "distanta_directa_nod_m": 2537.7,
+    "nod_start": "SIM-039",
+    "distanta_directa_nod_m": 2429.5,
     "in_zona": true,
     "neaplicat": false
    },
@@ -127,7 +127,7 @@
  {
   "id": "r-06-in-afara-zonei",
   "sursa": "racordari",
-  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28168, 26.10361.",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28179, 26.10363.",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "cerere_racordare",
@@ -144,8 +144,8 @@
     ],
     "treapta": null,
     "slaba": null,
-    "nod_start": "5481763",
-    "distanta_directa_nod_m": 2736.9,
+    "nod_start": "SIM-039",
+    "distanta_directa_nod_m": 2625.1,
     "in_zona": false,
     "neaplicat": true
    },

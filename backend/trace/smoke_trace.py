@@ -81,4 +81,14 @@ from backend.engine.zona import centru_retea
 c0 = centru_retea(net)
 far = localizeaza(tr((c0[0] + 0.045, c0[1], 5)), "Strada X", net, S, cfg)
 ok(far["status"] == "in_afara_zonei" and far["alegere"] and "peste limita" in far["motiv"], far)
+# garanție: 100 seed-uri x mai multe puncte, acoperire 1.0, zgomot 5, oprire 12 min = mereu `gasit`, o singură oprire
+Gg = {**G, "acoperire": 1.0, "zgomot_m": 5, "durata_oprire_min": 12}
+pcte = [(44.2849717, 26.0601908), (mid[0], mid[1])] + [tuple(x["puncte"][len(x["puncte"]) // 2]) for x in S[:3]]
+for la, lo in pcte:
+    for i in range(100):
+        g = genereaza_traseu({"lat": la, "lon": lo}, S, Gg, f"EV-LIVE-{i:03d}")
+        op = gaseste_opriri(g, cfg)
+        r = localizeaza(g, None, net, S, cfg)
+        assert r["status"] == "gasit" and len(op) == 1 and op[0]["durata_min"] >= 11.9, (la, lo, i, r["status"], op)
+N += 1
 print(f"OK: {N} verificări")

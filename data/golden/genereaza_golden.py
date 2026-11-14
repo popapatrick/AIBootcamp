@@ -16,14 +16,16 @@ sys.path.insert(0, str(ROOT))
 from backend.engine import osm  # noqa: E402
 from backend.engine.config import load_weights  # noqa: E402
 from backend.engine.network import dist_m  # noqa: E402
+from backend.engine.model import GridModel  # noqa: E402
+from backend.racordare import prezice_lant  # noqa: E402
 
 AICI = Path(__file__).parent
 CFG = load_weights()
 G, Z, R = CFG["geocodare"], CFG["zona"], CFG["racordare"]
-NET = json.loads((ROOT / "data/model/network.geojson").read_text(encoding="utf-8"))
-NODURI = [(f["properties"]["id"], f["geometry"]["coordinates"][1], f["geometry"]["coordinates"][0])
-          for f in NET["features"] if f["geometry"]["type"] == "Point"]
-CENTRU = (sum(n[1] for n in NODURI) / len(NODURI), sum(n[2] for n in NODURI) / len(NODURI))
+# Rețeaua de start a motorului, exact ca în GridModel(): GIS + puncte simulate SIM-* (retea_start); centrul zonei = al ei.
+NET = GridModel().net
+NODURI = [(n["id"], n["lat"], n["lon"]) for n in NET["noduri"].values()]
+CENTRU = NET["_zona_centru"]
 STRAZI = [s for s in osm.strazi() if s["nume"]]
 R2 = lambda x: round(x, 6)  # noqa: E731
 
@@ -216,6 +218,8 @@ def racordare():
     p3 = deplasat(CENTRU, 1500, 200)  # ~1,5 km SV de centroid, în zonă, departe de orice nod
     p3b = deplasat(CENTRU, 2900, 90)
     assert nod_apropiat(p3)[1] > R["raza_extinsa_m"] and nod_apropiat(p3b)[1] > R["raza_extinsa_m"]
+    for pt, tr in ((p1, 1), (p2, 2), (p3, 3), (p3b, 3)):  # treapta intenționată, verificată pe rețeaua motorului
+        assert prezice_lant({"lat": pt[0], "lon": pt[1]}, NET, STRAZI, CFG)["treapta"] == tr, (pt, tr)
     r("rac-01-treapta1", p1, 1, "lant", False, f"Nod în raza normală ({R['raza_nod_m']} m): lanț pe stradă sau linie; predicție normală (scor peste prag_afisare).")
     r("rac-02-treapta2", p2, 2, "lant", None, f"Nod între {R['raza_nod_m']} și {R['raza_extinsa_m']} m: raza extinsă, factor_raza_extinsa; 'slaba' depinde de calibrare (None = nu se verifică).")
     r("rac-03-treapta3", p3, 3, "linie_dreapta", True, f"Niciun nod la < {R['raza_extinsa_m']} m: linie dreaptă la cel mai apropiat nod din zonă; predicție slabă.")
@@ -284,9 +288,9 @@ def lista_geocodare(det):
         _item("g-06-ortografie", "mentenanta", "stalp nou pe str liviu rebrianu, lipseste din GIS",
               {"tip": "nod_lipsa", "nivel": "de_verificat", "eronat_prototip": False}, f("geo-09-ortografie")),
         _item("g-07-doar-reper", "mentenanta", "stalp nou langa scoala, lipseste din GIS",
-              {"tip": "nod_lipsa", "nivel": "de_verificat"}, f("geo-11-doar-reper")),
+              {"tip": "nod_lipsa", "decizie": "neaplicat"}, f("geo-11-doar-reper")),
         _item("g-08-strada-necunoscuta", "mentenanta", "stalp nou la nr 5 pe Strada Inexistentei, lipseste din GIS",
-              {"tip": "nod_lipsa", "nivel": "de_verificat"}, f("geo-12-strada-necunoscuta")),
+              {"tip": "nod_lipsa", "decizie": "neaplicat"}, f("geo-12-strada-necunoscuta")),
     ]
 
 

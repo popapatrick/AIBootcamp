@@ -1,22 +1,22 @@
 {
  "_nota": "date FICTIVE; adrese de la foarte standardizat la vag; generat de genereaza_golden.py",
  "centru_zona": {
-  "lat": 44.281681,
-  "lon": 26.064707
+  "lat": 44.281791,
+  "lon": 26.064728
  },
  "raza_zona_m": 3000,
  "cazuri": [
   {
    "id": "geo-01-id",
    "intrare": {
-    "adresa": "stâlp 0287329 verificat",
+    "adresa": "stâlp 0119132 verificat",
     "adresa_structurata": null
    },
    "asteptat": {
     "status": "gasit",
     "metoda": "id_existent",
-    "lat": 44.280555,
-    "lon": 26.067705,
+    "lat": 44.280607,
+    "lon": 26.0677,
     "nivel": "id_existent",
     "acuratete": 1.0,
     "geocodare_apelata": false

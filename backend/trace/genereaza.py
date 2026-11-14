@@ -65,7 +65,11 @@ def genereaza_traseu(punct: dict, strazi: list[dict], params: dict, seed: str) -
 
     m = round(params["durata_oprire_min"] * 60 / dt) + 1  # puncte în oprire
     i0 = max(0, min(n - m, round(n * 0.4)))  # oprirea începe la ~40% din oră
-    pas = _VIT_M_S * dt
+    pas = _VIT_M_S * dt  # ~85 m/punct >> raza de oprire: mersul nu face grup; la capete _pe_linie continuă drept
+    # garanție: punctele din oprire la <= 0,4*rază de centru => la <= 0,8*rază de centroid (gaseste_opriri vede o singură oprire).
+    # Doar când zgomotul sigma încape în rază; peste, oprirea poate fi pierdută intenționat (zgomot mare).
+    raza = params.get("raza_oprire_m", 12)
+    cap = 0.4 * raza if params["zgomot_m"] <= raza else 0
     base = datetime.fromisoformat(punct.get("t") or _BAZA) - timedelta(seconds=3600)
     out = []
     for i in range(n):
@@ -75,8 +79,11 @@ def genereaza_traseu(punct: dict, strazi: list[dict], params: dict, seed: str) -
             x, y = cx, cy
         else:
             x, y = _pe_linie(xy, s0 + pas * (i - i0 - m + 1))
-        x += rng.gauss(0, params["zgomot_m"])
-        y += rng.gauss(0, params["zgomot_m"])
+        gx, gy = rng.gauss(0, params["zgomot_m"]), rng.gauss(0, params["zgomot_m"])
+        if i0 <= i < i0 + m and cap and math.hypot(gx, gy) > cap:  # în oprire zgomotul nu rupe grupul
+            gx, gy = gx * cap / math.hypot(gx, gy), gy * cap / math.hypot(gx, gy)
+        x += gx
+        y += gy
         if rng.random() < params["acoperire"]:  # rng consumat mereu: ieșirea rămâne stabilă
             out.append({"t": (base + timedelta(seconds=round(i * dt))).isoformat(timespec="seconds"),
                         "lat": round(lat0 + y / M, 7), "lon": round(lon0 + x / (M * k), 7)})

@@ -2,7 +2,7 @@
  {
   "id": "z-01-40km",
   "sursa": "mentenanta",
-  "text": "stalp nou montat la 44.53576, 26.41961, echipa 2",
+  "text": "stalp nou montat la 44.53587, 26.41963, echipa 2",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": true,
@@ -26,7 +26,7 @@
  {
   "id": "z-02-5km",
   "sursa": "investitii",
-  "text": "FISA INVESTITIE: stalp nou la 44.31344, 26.10907, executat",
+  "text": "FISA INVESTITIE: stalp nou la 44.31355, 26.10909, executat",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": true,
@@ -50,7 +50,7 @@
  {
   "id": "z-03-3100m",
   "sursa": "mentenanta",
-  "text": "Tableta GPS 44.30137, 26.09221: stalp nou montat",
+  "text": "Tableta GPS 44.30148, 26.09223: stalp nou montat",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": true,
@@ -74,7 +74,7 @@
  {
   "id": "z-04-2900m",
   "sursa": "mentenanta",
-  "text": "Tableta GPS 44.30010, 26.09044: stalp nou montat",
+  "text": "Tableta GPS 44.30021, 26.09046: stalp nou montat",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": false
@@ -97,7 +97,7 @@
  {
   "id": "z-06-apel-client-4km",
   "sursa": "apel_client",
-  "text": "Operator: Alo? Client (CL-52001): nu avem lumina. Coord tel 44.30709, 26.10020. status semnalat",
+  "text": "Operator: Alo? Client (CL-52001): nu avem lumina. Coord tel 44.30720, 26.10022. status semnalat",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": true,
@@ -121,7 +121,7 @@
  {
   "id": "z-07-centru",
   "sursa": "investitii",
-  "text": "FISA INVESTITIE: stalp nou la 44.28168, 26.06471, executat",
+  "text": "FISA INVESTITIE: stalp nou la 44.28179, 26.06473, executat",
   "data": "2026-11-14",
   "asteptat": {
    "eronat_prototip": false

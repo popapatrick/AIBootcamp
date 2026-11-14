@@ -1,8 +1,8 @@
 {
  "_nota": "date FICTIVE; puncte față de limita de 3 km; generat de genereaza_golden.py",
  "centru_zona": {
-  "lat": 44.281681,
-  "lon": 26.064707
+  "lat": 44.281791,
+  "lon": 26.064728
  },
  "raza_zona_m": 3000,
  "cazuri": [
@@ -10,8 +10,8 @@
    "id": "zona-01-40km",
    "intrare": {
     "sursa": "text_liber",
-    "lat": 44.535761,
-    "lon": 26.41961
+    "lat": 44.535872,
+    "lon": 26.419632
    },
    "asteptat": {
     "eronat_prototip": true,
@@ -29,8 +29,8 @@
    "id": "zona-02-5km",
    "intrare": {
     "sursa": "formular",
-    "lat": 44.313441,
-    "lon": 26.10907
+    "lat": 44.313552,
+    "lon": 26.109091
    },
    "asteptat": {
     "eronat_prototip": true,
@@ -48,8 +48,8 @@
    "id": "zona-03-3100m",
    "intrare": {
     "sursa": "tableta_coordonate",
-    "lat": 44.301372,
-    "lon": 26.092212
+    "lat": 44.301483,
+    "lon": 26.092233
    },
    "asteptat": {
     "eronat_prototip": true,
@@ -67,8 +67,8 @@
    "id": "zona-04-2900m",
    "intrare": {
     "sursa": "tableta_coordonate",
-    "lat": 44.300101,
-    "lon": 26.090438
+    "lat": 44.300212,
+    "lon": 26.090458
    },
    "asteptat": {
     "eronat_prototip": false,
@@ -86,8 +86,8 @@
    "id": "zona-05-om-teren-40km",
    "intrare": {
     "sursa": "om_teren",
-    "lat": 44.535761,
-    "lon": 26.41961
+    "lat": 44.535872,
+    "lon": 26.419632
    },
    "asteptat": {
     "eronat_prototip": true,
@@ -105,8 +105,8 @@
    "id": "zona-06-apel-client-4km",
    "intrare": {
     "sursa": "apel_client",
-    "lat": 44.307089,
-    "lon": 26.100198
+    "lat": 44.3072,
+    "lon": 26.100218
    },
    "asteptat": {
     "eronat_prototip": true,
@@ -124,8 +124,8 @@
    "id": "zona-07-centru",
    "intrare": {
     "sursa": "formular",
-    "lat": 44.281681,
-    "lon": 26.064707
+    "lat": 44.281791,
+    "lon": 26.064728
    },
    "asteptat": {
     "eronat_prototip": false,

@@ -1,8 +1,8 @@
 {
  "_nota": "date FICTIVE; case și treptele 1-4; generat de genereaza_golden.py",
  "centru_zona": {
-  "lat": 44.281681,
-  "lon": 26.064707
+  "lat": 44.281791,
+  "lon": 26.064728
  },
  "raza_zona_m": 3000,
  "cazuri": [
@@ -10,8 +10,8 @@
    "id": "rac-01-treapta1",
    "intrare": {
     "locatie": {
-     "lat": 44.281978,
-     "lon": 26.061393
+     "lat": 44.280452,
+     "lon": 26.054458
     },
     "net": "retea_start"
    },
@@ -23,8 +23,8 @@
     ],
     "treapta": 1,
     "slaba": false,
-    "nod_start": "7902773",
-    "distanta_directa_nod_m": 46.3,
+    "nod_start": "SIM-020",
+    "distanta_directa_nod_m": 91.4,
     "in_zona": true,
     "neaplicat": false
    },
@@ -37,8 +37,8 @@
    "id": "rac-02-treapta2",
    "intrare": {
     "locatie": {
-     "lat": 44.280394,
-     "lon": 26.055529
+     "lat": 44.281087,
+     "lon": 26.071269
     },
     "net": "retea_start"
    },
@@ -50,8 +50,8 @@
     ],
     "treapta": 2,
     "slaba": null,
-    "nod_start": "6784406",
-    "distanta_directa_nod_m": 347.6,
+    "nod_start": "7816043",
+    "distanta_directa_nod_m": 213.4,
     "in_zona": true,
     "neaplicat": false
    },
@@ -64,8 +64,8 @@
    "id": "rac-03-treapta3",
    "intrare": {
     "locatie": {
-     "lat": 44.269019,
-     "lon": 26.05827
+     "lat": 44.269129,
+     "lon": 26.058291
     },
     "net": "retea_start"
    },
@@ -77,7 +77,7 @@
     "treapta": 3,
     "slaba": true,
     "nod_start": "7777615",
-    "distanta_directa_nod_m": 757.6,
+    "distanta_directa_nod_m": 745.6,
     "in_zona": true,
     "neaplicat": false
    },
@@ -90,8 +90,8 @@
    "id": "rac-04-treapta3-limita-zonei",
    "intrare": {
     "locatie": {
-     "lat": 44.281681,
-     "lon": 26.101096
+     "lat": 44.281791,
+     "lon": 26.101116
     },
     "net": "retea_start"
    },
@@ -102,8 +102,8 @@
     ],
     "treapta": 3,
     "slaba": true,
-    "nod_start": "5481763",
-    "distanta_directa_nod_m": 2537.7,
+    "nod_start": "SIM-039",
+    "distanta_directa_nod_m": 2429.5,
     "in_zona": true,
     "neaplicat": false
    },
@@ -116,8 +116,8 @@
    "id": "rac-05-treapta4-doar-casa",
    "intrare": {
     "locatie": {
-     "lat": 44.281978,
-     "lon": 26.061393
+     "lat": 44.280452,
+     "lon": 26.054458
     },
     "net": "gol"
    },
@@ -142,8 +142,8 @@
    "id": "rac-06-in-afara-zonei",
    "intrare": {
     "locatie": {
-     "lat": 44.281681,
-     "lon": 26.103605
+     "lat": 44.281791,
+     "lon": 26.103626
     },
     "net": "retea_start"
    },
@@ -154,8 +154,8 @@
     ],
     "treapta": null,
     "slaba": null,
-    "nod_start": "5481763",
-    "distanta_directa_nod_m": 2736.9,
+    "nod_start": "SIM-039",
+    "distanta_directa_nod_m": 2625.1,
     "in_zona": false,
     "neaplicat": true
    },

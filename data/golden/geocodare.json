@@ -2,11 +2,11 @@
  {
   "id": "g-01-id",
   "sursa": "mentenanta",
-  "text": "verificat stalp 0287329, izolator ok, nimic de facut",
+  "text": "verificat stalp 0119132, izolator ok, nimic de facut",
   "data": "2026-11-14",
   "asteptat": {
    "tip": "verificare",
-   "element_id": "0287329"
+   "element_id": "0119132"
   },
   "asteptat_detaliu": {
    "fisier": "detaliu/geocodare.json",
@@ -14,8 +14,8 @@
    "asteptat": {
     "status": "gasit",
     "metoda": "id_existent",
-    "lat": 44.280555,
-    "lon": 26.067705,
+    "lat": 44.280607,
+    "lon": 26.0677,
     "nivel": "id_existent",
     "acuratete": 1.0,
     "geocodare_apelata": false
@@ -175,7 +175,7 @@
   "data": "2026-11-14",
   "asteptat": {
    "tip": "nod_lipsa",
-   "nivel": "de_verificat"
+   "decizie": "neaplicat"
   },
   "asteptat_detaliu": {
    "fisier": "detaliu/geocodare.json",
@@ -196,7 +196,7 @@
   "data": "2026-11-14",
   "asteptat": {
    "tip": "nod_lipsa",
-   "nivel": "de_verificat"
+   "decizie": "neaplicat"
   },
   "asteptat_detaliu": {
    "fisier": "detaliu/geocodare.json",

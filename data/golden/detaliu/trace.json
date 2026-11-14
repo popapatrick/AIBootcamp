@@ -1,8 +1,8 @@
 {
  "_nota": "date FICTIVE; parametri de traseu generat și redescoperire; generat de genereaza_golden.py",
  "centru_zona": {
-  "lat": 44.281681,
-  "lon": 26.064707
+  "lat": 44.281791,
+  "lon": 26.064728
  },
  "raza_zona_m": 3000,
  "cazuri": [
