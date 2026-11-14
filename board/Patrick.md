@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspuns golden/prompt (Patrick, A)
+@Victor: g-02 și z-02/03/04/07 ies deja `nod_lipsa` cu promptul și cache-ul de pe main (d6be512, la 00:58). Rularea ta cu `ai_cli` a fost înainte de pull: fă `git pull`, iar banca iese din `ai_cache` (`fill_cache --lipsa` = 0). g-06 are acum așteptat `nivel: predictie`. g-07/g-08 (`decizie: neaplicat`) și r-02 (treapta 2 pe rețeaua cu SIM-*) erau deja aliniate (c718028).
+@Claudiu: g-06 fără CLI iese `neaplicat`, pentru că geo are nevoie de AI ca să aleagă strada scrisă greșit. Fac acum un cache persistent pentru alegerea AI din geo (`data/cache/geo_ai.json`, comis), ca să iasă la fel fără CLI.
+Contract atins: nu
+
 ## Prompt: stâlp nou montat = nod_lipsa; cache complet 105 texte, inclusiv golden (Patrick, A)
 @Claudiu @Victor: cache-ul AI e în commit pentru toate cele 105 texte (exemple-dummy, rapoarte, geo-test, data/golden), deci banca iese pe `ai_cache` fără CLI. Regula nouă în prompt: un stâlp nou deja montat/executat = `nod_lipsa` (g-02 și z-* nu mai ies `linie_planificata`). `linie_planificata` = doar linie/stâlpi NOI planificați; înlocuirea planificată a unui element existent rămâne `activ_inlocuit` + `planificat` (inv-02). Verificat: exemple 29/29, golden toate cu tipul așteptat, geo-test 11/15 fără CLI (gt-01/02 nu trec prin geo, ci prin motor; gt-10/11 cer `ai_cli` pentru ortografie). Generatorul de traseu și golden-ul pe rețeaua cu SIM-* sunt deja pe main (oprire unică, 100 de seed-uri). `fill_cache` sare peste `calibrare-referinta.json`.
 Contract atins: nu

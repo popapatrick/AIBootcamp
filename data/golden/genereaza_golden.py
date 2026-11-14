@@ -286,7 +286,7 @@ def lista_geocodare(det):
         _item("g-05-strada", "mentenanta", "stalp nou pe Strada Orhideelor, in dreptul curtii, nu e in GIS",
               {"tip": "nod_lipsa", "nivel": "predictie", "eronat_prototip": False}, f("geo-07-strada")),
         _item("g-06-ortografie", "mentenanta", "stalp nou pe str liviu rebrianu, lipseste din GIS",
-              {"tip": "nod_lipsa", "nivel": "de_verificat", "eronat_prototip": False}, f("geo-09-ortografie")),
+              {"tip": "nod_lipsa", "nivel": "predictie", "eronat_prototip": False}, f("geo-09-ortografie")),
         _item("g-07-doar-reper", "mentenanta", "stalp nou langa scoala, lipseste din GIS",
               {"tip": "nod_lipsa", "decizie": "neaplicat"}, f("geo-11-doar-reper")),
         _item("g-08-strada-necunoscuta", "mentenanta", "stalp nou la nr 5 pe Strada Inexistentei, lipseste din GIS",
