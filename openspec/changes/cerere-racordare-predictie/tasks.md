@@ -21,7 +21,7 @@
 
 ## 4. API și UI (C)
 
-- [ ] 4.1 `POST /rapoarte` acceptă `locatie` din clic
+- [x] 4.1 `POST /rapoarte` acceptă `locatie` din clic
 - [ ] 4.2 Prompt Lovable: buton „Cerere racordare casă", clic pe hartă, lanț punctat
 
 ## 5. Documentație

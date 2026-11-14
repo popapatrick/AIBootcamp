@@ -22,3 +22,24 @@
 - Geocodarea adreselor nu e implementată: rapoartele fără coordonate nu se potrivesc pe hartă (apar ca „de verificat").
 - Extracția cu Claude cere `.env` cu cheia; fără ea se folosește rezerva stub regex, vizibilă în pas (`metoda` = „stub_regex (rezervă: ...)"), iar tipul poate diferi (ex. „avarie"), dar nodul tot e tratat ca lipsă.
 - Proiectul Lovable e nepublicat; se folosește preview-ul.
+
+## Sesiunea 2 (7 features, date FICTIVE)
+Valorile de mai jos sunt verificate cap-coadă pe API local cu extracția Claude (board/Claudiu.md, 2026-11-14). Detalii: `docs/DEMO.md` (Sesiunea 2), `docs/plan-sesiune-2-openspec.md`.
+
+### Pornire
+1. `backend/api/demo_start.sh --reset-model` (model curat, fără rapoartele repetițiilor).
+2. Deschide `<preview>/?api=<tunel>`; URL-ul tunelului îl afișează scriptul (nu se scrie în repo).
+3. Colțul `mod`: `motor=real`; pentru valorile de mai jos e nevoie de `extractie=claude` (cache în `data/cache/`).
+
+### Pași în ordine
+1. **Fire mutate (sens giratoriu).** Butonul „Fire mutate"; text de mutare, motiv „sens giratoriu"; clic pe hartă la nodul 6513200 (44.2830448, 26.0636533), rază 40 m. Se vede: zonă de 40 m, 19 elemente „de verificat" (galben), 4 trasee propuse punctat pe străzi.
+2. **Cerere racordare, fără date în GIS.** Sursa `apel_client`, buton „Cerere racordare casă", clic la 44.2850305, 26.0595998 (Strada Liviu Rebreanu). Se vede: lanț punctat de 2 stâlpi plus casa, scor 0,66-0,69 (predicție, neaplicată).
+3. **Acceptă/Respinge.** Pe un stâlp prezis de la pasul 2, „Acceptă": 200, stâlpul devine plin, halou verde, marcaj „om". A doua decizie pe aceeași predicție: 409, mesaj „deja decisă".
+4. **Trace tabletă.** „Generează traseu ultima oră" (`trace-1`), adresa „Strada Liviu Rebreanu, în dreptul curții", sursa tabletă. Se vede: pas `trace`, oprire ~22 min fără stâlp, 3 stâlpi verificați (verzi), stâlp prezis la oprire, scor 0,71.
+5. **Scenariu extrem.** „Încarcă rețeaua cu evenimente" (`?scenariu=extrem`), Play: 68 de evenimente, cu `eticheta` (ramură, demontat, val de apeluri), halou verde/galben; ținta: sub 45 s.
+6. **Demontat și val de apeluri** (opțional, din `docs/DEMO.md`): A-T-014 demontat apoi `scos_din_uz`; 3 apeluri pe A-T-030 scad scorul cu plafon.
+
+### Riscuri cunoscute (abateri pe board)
+- Cererea de racordare pe sursa `racordari` (aceleași coordonate) iese `predictie` 0,738, nu `adaugat` ~0,84 cum scrie DEMO.md (extracție 0,7, sub prag 0,75). Nu promite „adaugat" decât cu raport structurat. @Victor aliniază DEMO.md/pragul.
+- Textul tabletei „stâlp nou necartat pe Strada Liviu Rebreanu..." iese `racord_nou`, nu `nod_lipsa`, la extracția Claude (prompt A2). Folosește `trace-1` din „Generează traseu", nu textul liber.
+- `mut-01` din `exemple-dummy.json` are coordonate în afara rețelei (44.2799, 26.0594): iese `absent_din_model`. Pune clic/centrul la 44.2830448, 26.0636533.

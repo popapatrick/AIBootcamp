@@ -23,7 +23,7 @@
 
 ## 4. API și UI (C)
 
-- [ ] 4.1 `POST /rapoarte` acceptă `trace`; `GET /trasee-demo` returnează traseele gata făcute
+- [x] 4.1 `POST /rapoarte` acceptă `trace`; `GET /trasee-demo` returnează traseele gata făcute
 - [ ] 4.2 Prompt Lovable: buton „Generează traseu ultima oră", editare cu clic pe hartă, afișare opriri și traseu
 - [ ] 4.3 Verificare cap-coadă pe preview
 

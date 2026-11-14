@@ -19,8 +19,8 @@
 
 ## 4. API (C)
 
-- [ ] 4.1 `POST /rapoarte` returnează `schimbari`; `GET /exemple?sursa=` returnează textele dummy
-- [ ] 4.2 Test în `smoke_api.py`
+- [x] 4.1 `POST /rapoarte` returnează `schimbari`; `GET /exemple?sursa=` returnează textele dummy
+- [x] 4.2 Test în `smoke_api.py`
 
 ## 5. UI Lovable (C)
 

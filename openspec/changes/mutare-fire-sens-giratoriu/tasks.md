@@ -20,7 +20,7 @@
 
 ## 4. API și UI (C)
 
-- [ ] 4.1 API acceptă `centru` din clic pe hartă în `POST /rapoarte`
+- [x] 4.1 API acceptă `centru` din clic pe hartă în `POST /rapoarte`
 - [ ] 4.2 Prompt Lovable: buton „Fire mutate", text, clic pe hartă pentru locație, afișare zonă și traseu punctat
 - [ ] 4.3 Verificare pe preview
 

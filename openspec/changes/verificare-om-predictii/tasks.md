@@ -13,7 +13,7 @@
 
 ## 3. API și UI (C)
 
-- [ ] 3.1 Endpoint de decizie în `backend/api`, test în `smoke_api.py`
+- [x] 3.1 Endpoint de decizie în `backend/api`, test în `smoke_api.py`
 - [ ] 3.2 Prompt Lovable: butoane pe predicție, marcaj „om", mesaj la a doua decizie
 
 ## 4. Date (A)

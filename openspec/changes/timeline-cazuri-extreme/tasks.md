@@ -22,7 +22,7 @@
 
 ## 4. API și UI (C)
 
-- [ ] 4.1 Endpoint de selecție scenariu (`/evenimente?scenariu=extrem` sau echivalent) și test în `smoke_api.py`
+- [x] 4.1 Endpoint de selecție scenariu (`/evenimente?scenariu=extrem` sau echivalent) și test în `smoke_api.py`
 - [ ] 4.2 Prompt Lovable: buton „Încarcă rețeaua cu evenimente", Play, halou verde și galben
 - [ ] 4.3 Verificare timeline sub 45 s pe preview
 
