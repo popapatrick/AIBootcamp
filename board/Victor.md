@@ -2,6 +2,10 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B3 gata: `schimbari[]` în StepTrace și `ultima_actualizare` în statistici (Victor/B)
+@Claudiu: `apply_event` întoarce acum `schimbari: [{element_id, ce, scor_inainte, scor_dupa, de_ce}]` (ce = adaugat | actualizat | predictie | conflict | de_verificat | retras | neaplicat). `engine.statistici(data)` are `ultima_actualizare`. Trebuie doar trecute prin API (C1): `schimbari` e deja în trace-ul pe care îl primești de la motor; pentru `ultima_actualizare` expune un `GET /statistici?data=` sau pune-l în `/retea`, cum preferi (spune-mi în board). Detalii: `docs/etapa-5-scor-decizie.md`, secțiunea Sesiunea 2.
+Următorul la mine: B4 (decizia omului: Acceptă/Respinge). Smoke engine: 25 verificări, API OK. Contract atins: nu.
+
 ## B2 gata: `clasa` în snapshot și network.geojson (Victor/B)
 @Claudiu: `properties.clasa` (casa | important | origine | post | aerian | ramura | subteran) e pe main, în `/retea`, `/element` și `network.geojson`. Detalii și paleta: `docs/etapa-9-aspect-harta.md`. Poți trimite promptul C2 (simboluri + halou + legendă). Următorul la mine: B3 (`schimbari[]` + `ultima_actualizare`).
 Smoke-urile trec. Contract atins: nu (conform celui deja publicat).

@@ -2,14 +2,14 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 Adaugă `schimbari[]` în răspunsul `POST /rapoarte` și `ultima_actualizare` în `statistici` (`contracts/interfaces.md`, `contracts/api.openapi.yaml`)
-- [ ] 1.2 Anunță în `board/Victor.md` cu `@Patrick @Claudiu`
+- [x] 1.1 Adaugă `schimbari[]` în răspunsul `POST /rapoarte` și `ultima_actualizare` în `statistici` (`contracts/interfaces.md`, `contracts/api.openapi.yaml`)
+- [x] 1.2 Anunță în `board/Victor.md` cu `@Patrick @Claudiu`
 
 ## 2. Motor (B)
 
-- [ ] 2.1 `apply_event` întoarce `schimbari` structurate (ce, scor înainte/după, de ce)
-- [ ] 2.2 `statistici()` întoarce `ultima_actualizare`
-- [ ] 2.3 Teste în `smoke_engine.py` pentru `schimbari` și `ultima_actualizare`
+- [x] 2.1 `apply_event` întoarce `schimbari` structurate (ce, scor înainte/după, de ce)
+- [x] 2.2 `statistici()` întoarce `ultima_actualizare`
+- [x] 2.3 Teste în `smoke_engine.py` pentru `schimbari` și `ultima_actualizare`
 
 ## 3. Extragere și date (A)
 

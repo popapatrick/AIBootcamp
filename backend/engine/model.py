@@ -81,6 +81,7 @@ class GridModel:
         """Aplică un Event. Întoarce StepTrace (contracts/interfaces.md)."""
         w = self.w
         ajustata = None
+        inainte = {k: v[-1]["scor"] for k, v in self.istoric.items() if v}   # scorurile dinainte de eveniment
         if event["data"] < self.ultima_data:       # evenimentele se aplică în ordine cronologică
             ajustata = event["data"]
             event = {**event, "data": self.ultima_data}
@@ -126,7 +127,37 @@ class GridModel:
                             "tip": tip, "decizie": trace["decizie"],
                             "elemente": [s["element_id"] for s in trace["modificari"]],
                             "motiv": trace["pasi"][-1].get("motive", [""])[0] if trace["pasi"][-1].get("motive") else ""})
+        trace["schimbari"] = self._schimbari(trace, m, inainte)
         return trace
+
+    def _schimbari(self, trace: dict, m: dict, inainte: dict) -> list[dict]:
+        """Lista structurată a schimbărilor produse de eveniment (contracts/interfaces.md, `schimbari`).
+        ce: adaugat | actualizat | predictie | conflict | de_verificat | neaplicat | retras. Pentru „Show pipeline"."""
+        out, vazute = [], set()
+        motiv_pas = (trace["pasi"][-1].get("motive") or [""])[0]
+        for st in trace["modificari"]:
+            eid = st["element_id"]
+            if eid in vazute:
+                continue
+            vazute.add(eid)
+            nou = eid not in inainte
+            if st.get("retras"):
+                ce = "retras"
+            elif st["nivel"] == "predictie":
+                ce = "predictie"
+            elif trace["decizie"] == "conflict":
+                ce = "conflict"
+            elif st["nivel"] == "de_verificat":
+                ce = "de_verificat"
+            else:
+                ce = "adaugat" if nou else "actualizat"
+            de_ce = st["motive"][0]["text"] if st.get("motive") else motiv_pas
+            out.append({"element_id": eid, "ce": ce, "scor_inainte": None if inainte.get(eid) is None else round(inainte[eid], 3),
+                        "scor_dupa": round(st["scor"], 3), "de_ce": de_ce})
+        if not out and trace["decizie"] in ("neaplicat", "fara_efect"):
+            out.append({"element_id": m.get("element_id"), "ce": "neaplicat", "scor_inainte": inainte.get(m.get("element_id")),
+                        "scor_dupa": inainte.get(m.get("element_id")), "de_ce": motiv_pas or m.get("motiv", "")})
+        return out
 
     def _ajusteaza_element_nou(self, event: dict, m: dict, trace: dict) -> dict:
         """Un nod lipsă nu se potrivește cu un nod vecin aflat la câțiva metri: peste
@@ -516,7 +547,10 @@ class GridModel:
         niv: dict[str, int] = {}
         for f in fs:
             niv[f["properties"]["nivel"]] = niv.get(f["properties"]["nivel"], 0) + 1
+        efective = [j["data"] for j in self.jurnal
+                    if j["decizie"] not in ("neaplicat", "fara_efect") and j["data"] <= data]
         return {"data": data, "elemente": len(fs),
+                "ultima_actualizare": max(efective) if efective else None,
                 "procent": {k: round(100 * v / n, 1) for k, v in niv.items()},
                 "scor_mediu": round(sum(f["properties"]["scor"] for f in fs) / n, 3),
                 "verificat_recent_pct": round(100 * sum(1 for f in fs if f["properties"]["ultima_verificare"]

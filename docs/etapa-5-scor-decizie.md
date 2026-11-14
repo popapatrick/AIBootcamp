@@ -55,3 +55,8 @@ Fiecare stare are `motive` (cel mai recent primul), cu textul, efectul asupra sc
 ## Ce trebuie să știe ceilalți
 - C: importă din `backend.engine.engine`. Proprietățile feature-urilor din `snapshot` urmează `state.schema.json` plus atribute (`sectiune`, `categorie`, `capete`).
 - A: pentru ca extracția să ajungă bine în scor, completează `tip_sursa_pondere`, `forma_sursa`, `incredere_extractie` și, pentru înlocuiri, `detalii.sectiune_noua`; pentru nod lipsă `detalii.noduri_vecine` (altfel se deduc și scorul scade); pentru linii planificate `detalii.noduri` (două ID-uri).
+
+## Sesiunea 2: `schimbari[]` și `ultima_actualizare` (B3)
+`apply_event` adaugă în StepTrace `schimbari`: o listă structurată, câte o intrare pe element atins: `{element_id, ce, scor_inainte, scor_dupa, de_ce}`. `ce` = `adaugat | actualizat | predictie | conflict | de_verificat | retras | neaplicat`. Un eveniment fără efect (potrivire eșuată, doar adresă) produce o intrare `neaplicat` cu motivul. `scor_inainte` e `null` pentru elemente noi. UI-ul („Show pipeline") le afișează și le colorează pe hartă.
+`statistici(data)` primește `ultima_actualizare`: data ultimului eveniment cu efect (altul decât `neaplicat` și `fara_efect`) până la `data`, sau `null`.
+Verificare: `.venv/bin/python -m backend.engine.smoke_engine` (25 de verificări).

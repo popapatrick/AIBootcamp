@@ -140,6 +140,29 @@ def main() -> None:
 
     s = m.statistici("2026-09-10")
     verifica("statistici", s["elemente"] > 250 and "in_model" in s["procent"], str(s["procent"]))
+    verifica("statistici: ultima_actualizare = data ultimului eveniment aplicat sau actualizat",
+             s["ultima_actualizare"] == "2026-09-10" or (s["ultima_actualizare"] or "") >= "2026-08-10", str(s["ultima_actualizare"]))
+    verifica("ultima_actualizare nu depășește data cerută", m.statistici("2026-08-05")["ultima_actualizare"] is None
+             or m.statistici("2026-08-05")["ultima_actualizare"] <= "2026-08-05")
+
+    # schimbari[]: lista structurată pentru „Show pipeline"
+    ms = GridModel()
+    t1 = ms.apply_event(ev(60, "2026-08-10", "mentenanta", "nod_lipsa", "executat", sursa="tableta_coordonate",
+                           incredere=0.95, referinta={"element_id": LIPSA["nod_lipsa"], "coordonate": c},
+                           detalii={"noduri_vecine": LIPSA["noduri_vecine"]}))
+    sch = t1["schimbari"]
+    verifica("schimbari: nod lipsă adăugat + tronsoane noi", len(sch) >= 3 and all(
+        {"element_id", "ce", "scor_inainte", "scor_dupa", "de_ce"} <= set(x) for x in sch)
+        and any(x["ce"] == "adaugat" and x["scor_inainte"] is None for x in sch), str([x["ce"] for x in sch]))
+    t2 = ms.apply_event(ev(61, "2026-08-12", "mentenanta", "verificare", "executat", sursa="tableta_coordonate",
+                           referinta={"element_id": alt}))
+    verifica("schimbari: confirmare = actualizat cu scor mai mare", t2["schimbari"] and t2["schimbari"][0]["ce"] == "actualizat"
+             and t2["schimbari"][0]["scor_dupa"] > t2["schimbari"][0]["scor_inainte"],
+             str(t2["schimbari"][:1]))
+    t3 = ms.apply_event(ev(62, "2026-08-13", "apel_client", "avarie_semnalata", "semnalat", forma="text_liber", incredere=0.5,
+                           referinta={"adresa": "Strada Necunoscută 5"}))
+    verifica("schimbari: neaplicat are o intrare cu motiv", t3["schimbari"] and t3["schimbari"][0]["ce"] == "neaplicat"
+             and t3["schimbari"][0]["de_ce"], str(t3["schimbari"]))
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 
