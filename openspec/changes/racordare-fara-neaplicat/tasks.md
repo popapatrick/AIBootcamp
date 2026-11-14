@@ -20,4 +20,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-22-racordare-cu-rezerve.md`, README `backend/racordare`, `interfaces.md`, `DEMO.md`, board
+- [x] 5.1 `docs/etapa-22-racordare-cu-rezerve.md`, README `backend/racordare`, `interfaces.md`, `DEMO.md`, board

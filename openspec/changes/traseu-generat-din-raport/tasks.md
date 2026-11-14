@@ -21,4 +21,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-19-traseu-generat.md`, README `backend/trace`, `interfaces.md`, `DEMO.md`, board
+- [x] 5.1 `docs/etapa-19-traseu-generat.md`, README `backend/trace`, `interfaces.md`, `DEMO.md`, board

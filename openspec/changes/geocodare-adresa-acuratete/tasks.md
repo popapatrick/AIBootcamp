@@ -24,4 +24,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-18-geocodare-adresa.md`, README `backend/geo`, `interfaces.md`, `DEMO.md`, board
+- [x] 5.1 `docs/etapa-18-geocodare-adresa.md`, README `backend/geo`, `interfaces.md`, `DEMO.md`, board

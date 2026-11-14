@@ -12,7 +12,7 @@
 ## 3. Motor (B)
 
 - [x] 3.1 (B3) `network.py`: încarcă `puncte-simulare.json`, `origine: retea_start` (rămas, după A4); `model.py`: `origine: generat_model` pe tot ce adaugă sistemul; snapshot (făcut)
-- [ ] 3.2 (B7) Recalibrare cu scor inițial nou; diferența în `docs/calibrare.md`; teste în `smoke_network.py` și `smoke_engine.py`
+- [x] 3.2 (B7) Recalibrare cu scor inițial nou; diferența în `docs/calibrare.md`; teste în `smoke_network.py` și `smoke_engine.py`
 
 ## 4. API și UI (C)
 
@@ -21,4 +21,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-21-retea-start-origine.md`, `data/simulare/README.md`, `data/model/README.md`, `DEMO.md`, board
+- [x] 5.1 `docs/etapa-21-retea-start-origine.md`, `data/simulare/README.md`, `data/model/README.md`, `DEMO.md`, board

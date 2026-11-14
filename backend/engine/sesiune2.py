@@ -353,6 +353,13 @@ class Sesiune2:
                              "rezultat": {"metoda": "lant_racordare", "sursa_locatie": sursa_loc, **{k: r.get(k) for k in
                                           ("status", "nod_start", "distanta_m", "urmeaza_strada", "ambiguu", "motiv")},
                                           "stalpi": len(r.get("stalpi") or [])}}
+        # safeguard: stâlpii prezicși care ar ieși din zona prototipului se taie (lanțul se oprește la primul din afară)
+        taiat = False
+        for i_, st_ in enumerate(r.get("stalpi") or []):
+            if not zona_ok(st_["lat"], st_["lon"], self.net, w)["ok"]:
+                r = {**r, "stalpi": r["stalpi"][:i_], "cabluri": r["cabluri"][:i_]}
+                taiat = True
+                break
         treapta = int(r.get("treapta") or (4 if r["status"] == "fara_nod" or not r.get("nod_start") else 1))
         trace["pasi"][-1]["rezultat"]["treapta"] = treapta
         ev = event["event_id"]
@@ -388,6 +395,8 @@ class Sesiune2:
             prec = op.get("precizie_m")
             txt += (f" Locația e din poziția SIMULATĂ a operatorului" + (f", ±{prec:g} m" if prec is not None else "") +
                     f" (nu GPS real, nu coordonate exacte): scor × {cfg['factor_locatie_operator']}; rămâne predicție până confirmă omul.")
+        if taiat:
+            txt += " Lanțul a fost tăiat la limita zonei prototipului (stâlpi în afara razei de 3 km eliminați)."
         txt += f" Treapta {treapta} din 4 (1 nod în rază, 2 rază extinsă, 3 linie dreaptă, 4 doar casa)."
         slaba = False
         if niv == "de_verificat":
