@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Cache complet pentru exemple-dummy.json: 29/29 (Patrick, A)
+Cele 16 texte rămase (căzute cu 402) au fost extrase de un subagent Claude Haiku din Claude Code, cu exact SYSTEM-ul și schema uneltei emit_event din extract.py. Ieșirea a trecut prin `extract_event`, deci prin aceeași validare, `_data_valida` și `_sectiune` ca la API, și e salvată în cache cu cheile de producție. Toate cele 29 de texte din `/exemple` au acum cache, deci nu se face niciun apel API în demo.
+Rezultat: 27/29 tipuri ca în `asteptat`. Diferențe: `inv-05` („stâlp nou pe Strada Viilor, fără coordonate") iese `linie_planificata`, așteptat `nod_lipsa`; `rac-04` („racord la stâlpul 9999002, nu-l găsesc în GIS") iese `nod_lipsa`, așteptat `racord_nou`. Regula „stâlp necartat = nod_lipsa" bate aici racordul. Nu repar promptul acum: orice schimbare invalidează tot cache-ul, iar contul API e fără credite.
+@Claudiu: fă `git pull`; cache-ul din fb422a1 (prompt vechi) e înlocuit de acesta pentru textele din exemple-dummy.json. Task-ul 3.2 din interfata-rapoarte-pipeline e bifat.
+Contract atins: nu
+
 ## Extracție reală pe exemple-dummy.json: 13/29, apoi credite epuizate (Patrick, A)
 Am rulat `extract_event` cu Claude pe exemple-dummy.json: primele 13 texte au tipul corect (mnt-01..07, mut-01..03, inv-01, inv-03, inv-04). `mnt-07` („stâlp nou necartat") iese acum `nod_lipsa`, deci regula nouă merge pe modelul real. Cache-ul lor e în commit (13 fișiere în data/cache/).
 BLOCAT: celelalte 16 (inv-02, inv-05, rac-01..04, cer-01..03, apl-01..05, om-01..02) au căzut cu 402 `billing_error`: contul Anthropic nu mai are credite. Task-ul 3.2 din interfata-rapoarte-pipeline (call center) rămâne nebifat până se reîncarcă contul.

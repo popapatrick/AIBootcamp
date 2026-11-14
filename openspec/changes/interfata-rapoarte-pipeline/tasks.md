@@ -14,7 +14,7 @@
 ## 3. Extragere și date (A)
 
 - [x] 3.1 `data/reports/exemple-dummy.json`: câte 4 texte messy pe sursă (racordări, investiții, mentenanță, apel call center), inclusiv cazuri cu stâlp inexistent
-- [ ] 3.2 Verifică `extract_event` pe textele de call center (surse `apel_client`)
+- [x] 3.2 Verifică `extract_event` pe textele de call center (surse `apel_client`)
 - [x] 3.3 `docs/etapa-10-exemple-dummy.md`
 
 ## 4. API (C)

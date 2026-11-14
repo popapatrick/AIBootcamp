@@ -1,0 +1,27 @@
+{
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.281,
+      "lon": 26.0618
+    },
+    "adresa": "str Orhideelor 30",
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-11-12",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "CERERE RACORDARE: client nou, casa la coord 44.2810, 26.0618 (str Orhideelor 30), vrea racord monofazat. Cerere 2026-11-12",
+  "incredere_extractie": 0.85,
+  "campuri_lipsa": [
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "client nou; racord monofazat"
+  },
+  "event_id": "EV-e4fb891a"
+}
