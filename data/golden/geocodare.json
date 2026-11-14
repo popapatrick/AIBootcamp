@@ -1,0 +1,212 @@
+[
+ {
+  "id": "g-01-id",
+  "sursa": "mentenanta",
+  "text": "verificat stalp 0287329, izolator ok, nimic de facut",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "verificare",
+   "element_id": "0287329"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-01-id",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "id_existent",
+    "lat": 44.280555,
+    "lon": 26.067705,
+    "nivel": "id_existent",
+    "acuratete": 1.0,
+    "geocodare_apelata": false
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 1
+   }
+  }
+ },
+ {
+  "id": "g-02-coordonate",
+  "sursa": "mentenanta",
+  "text": "stalp nou montat la 44.28100, 26.06417 pe Strada Tineretului, echipa 2",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-02-coordonate",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "coordonate",
+    "lat": 44.281001,
+    "lon": 26.064167,
+    "nivel": "coordonate",
+    "acuratete": 0.7,
+    "geocodare_apelata": false
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 1
+   }
+  }
+ },
+ {
+  "id": "g-03-strada-numar",
+  "sursa": "mentenanta",
+  "text": "Avem un stalp nou la nr 12 pe Strada Tineretului, lipseste din GIS. echipa 3",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "predictie",
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-03-strada-numar",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.281001,
+    "lon": 26.064167,
+    "nivel": "strada_numar",
+    "acuratete": 0.55,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Tineretului",
+    "dist_max_m": 30
+   }
+  }
+ },
+ {
+  "id": "g-04-intersectie",
+  "sursa": "mentenanta",
+  "text": "stalp nou la coltul Strada Speranței colț cu Strada Bălții, nu e in GIS",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "predictie",
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-05-intersectie",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.277164,
+    "lon": 26.063876,
+    "nivel": "intersectie",
+    "acuratete": 0.6,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 30
+   }
+  }
+ },
+ {
+  "id": "g-05-strada",
+  "sursa": "mentenanta",
+  "text": "stalp nou pe Strada Orhideelor, in dreptul curtii, nu e in GIS",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "predictie",
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-07-strada",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.279634,
+    "lon": 26.061688,
+    "nivel": "strada",
+    "acuratete": 0.4,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Orhideelor",
+    "dist_max_m": 30
+   }
+  }
+ },
+ {
+  "id": "g-06-ortografie",
+  "sursa": "mentenanta",
+  "text": "stalp nou pe str liviu rebrianu, lipseste din GIS",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "de_verificat",
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-09-ortografie",
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "ai_estimare",
+    "lat": 44.284841,
+    "lon": 26.056659,
+    "nivel": "strada",
+    "acuratete": 0.32,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Liviu Rebreanu",
+    "dist_max_m": 30
+   }
+  }
+ },
+ {
+  "id": "g-07-doar-reper",
+  "sursa": "mentenanta",
+  "text": "stalp nou langa scoala, lipseste din GIS",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "de_verificat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-11-doar-reper",
+   "asteptat": {
+    "status": "necunoscut",
+    "metoda": null,
+    "acuratete": null,
+    "acuratete_tabel_reper": 0.2
+   },
+   "toleranta": {}
+  }
+ },
+ {
+  "id": "g-08-strada-necunoscuta",
+  "sursa": "mentenanta",
+  "text": "stalp nou la nr 5 pe Strada Inexistentei, lipseste din GIS",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "nod_lipsa",
+   "nivel": "de_verificat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/geocodare.json",
+   "caz": "geo-12-strada-necunoscuta",
+   "asteptat": {
+    "status": "necunoscut",
+    "metoda": null,
+    "acuratete": null
+   },
+   "toleranta": {}
+  }
+ }
+]

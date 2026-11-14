@@ -1,0 +1,144 @@
+[
+ {
+  "id": "z-01-40km",
+  "sursa": "mentenanta",
+  "text": "stalp nou montat la 44.53576, 26.41961, echipa 2",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": true,
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-01-40km",
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 39957,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ },
+ {
+  "id": "z-02-5km",
+  "sursa": "investitii",
+  "text": "FISA INVESTITIE: stalp nou la 44.31344, 26.10907, executat",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": true,
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-02-5km",
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 4999,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ },
+ {
+  "id": "z-03-3100m",
+  "sursa": "mentenanta",
+  "text": "Tableta GPS 44.30137, 26.09221: stalp nou montat",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": true,
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-03-3100m",
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 3100,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ },
+ {
+  "id": "z-04-2900m",
+  "sursa": "mentenanta",
+  "text": "Tableta GPS 44.30010, 26.09044: stalp nou montat",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-04-2900m",
+   "asteptat": {
+    "eronat_prototip": false,
+    "semnal": null,
+    "decizie": "normala",
+    "distanta_m": 2900,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ },
+ {
+  "id": "z-06-apel-client-4km",
+  "sursa": "apel_client",
+  "text": "Operator: Alo? Client (CL-52001): nu avem lumina. Coord tel 44.30709, 26.10020. status semnalat",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": true,
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-06-apel-client-4km",
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 4000,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ },
+ {
+  "id": "z-07-centru",
+  "sursa": "investitii",
+  "text": "FISA INVESTITIE: stalp nou la 44.28168, 26.06471, executat",
+  "data": "2026-11-14",
+  "asteptat": {
+   "eronat_prototip": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/zona.json",
+   "caz": "zona-07-centru",
+   "asteptat": {
+    "eronat_prototip": false,
+    "semnal": null,
+    "decizie": "normala",
+    "distanta_m": 0,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   }
+  }
+ }
+]

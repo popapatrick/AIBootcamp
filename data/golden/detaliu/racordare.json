@@ -1,0 +1,191 @@
+{
+ "_nota": "date FICTIVE; case și treptele 1-4; generat de genereaza_golden.py",
+ "centru_zona": {
+  "lat": 44.281681,
+  "lon": 26.064707
+ },
+ "raza_zona_m": 3000,
+ "cazuri": [
+  {
+   "id": "rac-01-treapta1",
+   "intrare": {
+    "locatie": {
+     "lat": 44.281978,
+     "lon": 26.061393
+    },
+    "net": "retea_start"
+   },
+   "asteptat": {
+    "status": "lant",
+    "status_in": [
+     "lant",
+     "linie_dreapta"
+    ],
+    "treapta": 1,
+    "slaba": false,
+    "nod_start": "7902773",
+    "distanta_directa_nod_m": 46.3,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "Nod în raza normală (150 m): lanț pe stradă sau linie; predicție normală (scor peste prag_afisare). Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-02-treapta2",
+   "intrare": {
+    "locatie": {
+     "lat": 44.280394,
+     "lon": 26.055529
+    },
+    "net": "retea_start"
+   },
+   "asteptat": {
+    "status": "lant",
+    "status_in": [
+     "lant",
+     "linie_dreapta"
+    ],
+    "treapta": 2,
+    "slaba": null,
+    "nod_start": "6784406",
+    "distanta_directa_nod_m": 347.6,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "Nod între 150 și 400 m: raza extinsă, factor_raza_extinsa; 'slaba' depinde de calibrare (None = nu se verifică). Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-03-treapta3",
+   "intrare": {
+    "locatie": {
+     "lat": 44.269019,
+     "lon": 26.05827
+    },
+    "net": "retea_start"
+   },
+   "asteptat": {
+    "status": "linie_dreapta",
+    "status_in": [
+     "linie_dreapta"
+    ],
+    "treapta": 3,
+    "slaba": true,
+    "nod_start": "7777615",
+    "distanta_directa_nod_m": 757.6,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "Niciun nod la < 400 m: linie dreaptă la cel mai apropiat nod din zonă; predicție slabă. Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-04-treapta3-limita-zonei",
+   "intrare": {
+    "locatie": {
+     "lat": 44.281681,
+     "lon": 26.101096
+    },
+    "net": "retea_start"
+   },
+   "asteptat": {
+    "status": "linie_dreapta",
+    "status_in": [
+     "linie_dreapta"
+    ],
+    "treapta": 3,
+    "slaba": true,
+    "nod_start": "5481763",
+    "distanta_directa_nod_m": 2537.7,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "La ~2,9 km de centroid (în zonă): tot predicție slabă, nu neaplicat. Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-05-treapta4-doar-casa",
+   "intrare": {
+    "locatie": {
+     "lat": 44.281978,
+     "lon": 26.061393
+    },
+    "net": "gol"
+   },
+   "asteptat": {
+    "status": "fara_nod",
+    "status_in": [
+     "fara_nod"
+    ],
+    "treapta": 4,
+    "slaba": true,
+    "nod_start": null,
+    "distanta_directa_nod_m": null,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "Rețea fără niciun nod utilizabil: casa rămâne pe hartă, predicție fără lanț, cu motiv; nu neaplicat. Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-06-in-afara-zonei",
+   "intrare": {
+    "locatie": {
+     "lat": 44.281681,
+     "lon": 26.103605
+    },
+    "net": "retea_start"
+   },
+   "asteptat": {
+    "status": "neaplicat",
+    "status_in": [
+     "neaplicat"
+    ],
+    "treapta": null,
+    "slaba": null,
+    "nod_start": "5481763",
+    "distanta_directa_nod_m": 2736.9,
+    "in_zona": false,
+    "neaplicat": true
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   },
+   "nota": "La ~3,1 km de centroid: în afara zonei, neaplicat (eronat_prototip). Decizia o ia motorul (zona_ok); prezice_lant singur ar întoarce treapta 3. Pe stradă (status lant) distanta_m din prezice_lant e lungimea traseului, >= distanța directă."
+  },
+  {
+   "id": "rac-07-fara-locatie",
+   "intrare": {
+    "locatie": null,
+    "net": "retea_start",
+    "surse": {
+     "coordonate": null,
+     "clic": null,
+     "adresa": null,
+     "trace": null,
+     "operator": null
+    }
+   },
+   "asteptat": {
+    "status": "neaplicat",
+    "treapta": null,
+    "slaba": null,
+    "motiv": "lipsește locația casei",
+    "surse_incercate": true
+   },
+   "toleranta": {},
+   "nota": "Niciun indiciu de locație: singurul caz neaplicat (alături de zonă), cu lista surselor încercate."
+  }
+ ]
+}

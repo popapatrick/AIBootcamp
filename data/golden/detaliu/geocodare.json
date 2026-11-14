@@ -1,0 +1,319 @@
+{
+ "_nota": "date FICTIVE; adrese de la foarte standardizat la vag; generat de genereaza_golden.py",
+ "centru_zona": {
+  "lat": 44.281681,
+  "lon": 26.064707
+ },
+ "raza_zona_m": 3000,
+ "cazuri": [
+  {
+   "id": "geo-01-id",
+   "intrare": {
+    "adresa": "stâlp 0287329 verificat",
+    "adresa_structurata": null
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "id_existent",
+    "lat": 44.280555,
+    "lon": 26.067705,
+    "nivel": "id_existent",
+    "acuratete": 1.0,
+    "geocodare_apelata": false
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 1
+   },
+   "nota": "ID existent în rețea: geocodarea nu se apelează; coordonatele sunt ale nodului."
+  },
+  {
+   "id": "geo-02-coordonate",
+   "intrare": {
+    "adresa": "stâlp nou la 44.281001, 26.064167",
+    "adresa_structurata": null
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "coordonate",
+    "lat": 44.281001,
+    "lon": 26.064167,
+    "nivel": "coordonate",
+    "acuratete": 0.7,
+    "geocodare_apelata": false
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 1
+   },
+   "nota": "Coordonate explicite în text: nu se apelează geocodarea."
+  },
+  {
+   "id": "geo-03-strada-numar",
+   "intrare": {
+    "adresa": "Strada Tineretului nr. 12, 1 Decembrie",
+    "adresa_structurata": {
+     "strada": "Strada Tineretului",
+     "numar": "12",
+     "localitate": "1 Decembrie",
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.281001,
+    "lon": 26.064167,
+    "nivel": "strada_numar",
+    "acuratete": 0.55,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Tineretului",
+    "dist_max_m": 30
+   },
+   "nota": "Număr de casă: OSM nu are numere, deci doar 'pe stradă' (nu poziția exactă a lui 12). Referința e mijlocul străzii."
+  },
+  {
+   "id": "geo-04-strada-numar-lunga",
+   "intrare": {
+    "adresa": "Strada Liviu Rebreanu 40",
+    "adresa_structurata": {
+     "strada": "Strada Liviu Rebreanu",
+     "numar": "40",
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.284841,
+    "lon": 26.056659,
+    "nivel": "strada_numar",
+    "acuratete": 0.55,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Liviu Rebreanu",
+    "dist_max_m": 30
+   },
+   "nota": "Două căi OSM cu același nume; orice punct pe oricare e acceptat."
+  },
+  {
+   "id": "geo-05-intersectie",
+   "intrare": {
+    "adresa": "Strada Speranței colț cu Strada Bălții",
+    "adresa_structurata": {
+     "strada": "Strada Speranței colț cu Strada Bălții",
+     "numar": null,
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.277164,
+    "lon": 26.063876,
+    "nivel": "intersectie",
+    "acuratete": 0.6,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 30
+   },
+   "nota": "Vârfurile cele mai apropiate ale celor două străzi (la 0.0 m între ele)."
+  },
+  {
+   "id": "geo-06-intersectie-2",
+   "intrare": {
+    "adresa": "Strada Viilor & Strada Soarelui",
+    "adresa_structurata": {
+     "strada": "Strada Viilor & Strada Soarelui",
+     "numar": null,
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.283907,
+    "lon": 26.066749,
+    "nivel": "intersectie",
+    "acuratete": 0.6,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "distanta",
+    "dist_max_m": 30
+   },
+   "nota": "Intersecție, vârfuri la 0.0 m."
+  },
+  {
+   "id": "geo-07-strada",
+   "intrare": {
+    "adresa": "pe Strada Orhideelor, în dreptul curții",
+    "adresa_structurata": {
+     "strada": "Strada Orhideelor",
+     "numar": null,
+     "localitate": null,
+     "reper": "în dreptul curții"
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.279634,
+    "lon": 26.061688,
+    "nivel": "strada",
+    "acuratete": 0.4,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Orhideelor",
+    "dist_max_m": 30
+   },
+   "nota": "Doar stradă; reperul 'în dreptul curții' nu e localizabil."
+  },
+  {
+   "id": "geo-08-fara-diacritice",
+   "intrare": {
+    "adresa": "str ulmului",
+    "adresa_structurata": {
+     "strada": "str ulmului",
+     "numar": null,
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.286428,
+    "lon": 26.067967,
+    "nivel": "strada",
+    "acuratete": 0.4,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Ulmului",
+    "dist_max_m": 30
+   },
+   "nota": "Fără diacritice și prefix prescurtat: normalizarea deterministă o găsește (nu AI)."
+  },
+  {
+   "id": "geo-09-ortografie",
+   "intrare": {
+    "adresa": "str liviu rebrianu",
+    "adresa_structurata": {
+     "strada": "str liviu rebrianu",
+     "numar": null,
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "ai_estimare",
+    "lat": 44.284841,
+    "lon": 26.056659,
+    "nivel": "strada",
+    "acuratete": 0.32,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Liviu Rebreanu",
+    "dist_max_m": 30
+   },
+   "nota": "Ortografie greșită: AI alege din cache; acuratețea se înmulțește cu factor_ai_fuzzy."
+  },
+  {
+   "id": "geo-10-vag-reper-strada",
+   "intrare": {
+    "adresa": "lângă școală, pe Strada Orhideelor",
+    "adresa_structurata": {
+     "strada": "Strada Orhideelor",
+     "numar": null,
+     "localitate": null,
+     "reper": "lângă școală"
+    }
+   },
+   "asteptat": {
+    "status": "gasit",
+    "metoda": "osm_cache",
+    "lat": 44.279634,
+    "lon": 26.061688,
+    "nivel": "strada",
+    "acuratete": 0.4,
+    "precizie_m_max": 150
+   },
+   "toleranta": {
+    "metrica": "pe_strada",
+    "strada": "Strada Orhideelor",
+    "dist_max_m": 30
+   },
+   "nota": "Stradă + reper: cel mai bun localizator e strada (0,40), nu reperul."
+  },
+  {
+   "id": "geo-11-doar-reper",
+   "intrare": {
+    "adresa": "lângă școală",
+    "adresa_structurata": {
+     "strada": null,
+     "numar": null,
+     "localitate": null,
+     "reper": "lângă școală"
+    }
+   },
+   "asteptat": {
+    "status": "necunoscut",
+    "metoda": null,
+    "acuratete": null,
+    "acuratete_tabel_reper": 0.2
+   },
+   "toleranta": {},
+   "nota": "Doar reper fără stradă: nu avem repere în cache, deci 'necunoscut' (nu inventăm coordonate); acuratețea de tabel ar fi cea mai mică (reper)."
+  },
+  {
+   "id": "geo-12-strada-necunoscuta",
+   "intrare": {
+    "adresa": "Strada Inexistentei 5",
+    "adresa_structurata": {
+     "strada": "Strada Inexistentei",
+     "numar": "5",
+     "localitate": null,
+     "reper": null
+    }
+   },
+   "asteptat": {
+    "status": "necunoscut",
+    "metoda": null,
+    "acuratete": null
+   },
+   "toleranta": {},
+   "nota": "Nicio stradă din cache: fără coordonate, cu motiv."
+  },
+  {
+   "id": "geo-13-gol",
+   "intrare": {
+    "adresa": "",
+    "adresa_structurata": null
+   },
+   "asteptat": {
+    "status": "necunoscut",
+    "metoda": null,
+    "acuratete": null
+   },
+   "toleranta": {},
+   "nota": "Fără text: necunoscut."
+  }
+ ]
+}

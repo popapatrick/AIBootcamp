@@ -1,0 +1,143 @@
+{
+ "_nota": "date FICTIVE; puncte față de limita de 3 km; generat de genereaza_golden.py",
+ "centru_zona": {
+  "lat": 44.281681,
+  "lon": 26.064707
+ },
+ "raza_zona_m": 3000,
+ "cazuri": [
+  {
+   "id": "zona-01-40km",
+   "intrare": {
+    "sursa": "text_liber",
+    "lat": 44.535761,
+    "lon": 26.41961
+   },
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 39957,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Coordonate la 40 km: eronat_prototip, nu intră în model."
+  },
+  {
+   "id": "zona-02-5km",
+   "intrare": {
+    "sursa": "formular",
+    "lat": 44.313441,
+    "lon": 26.10907
+   },
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 4999,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "La 5 km: în afară; o geocodare care ar da 5 km = in_afara_zonei."
+  },
+  {
+   "id": "zona-03-3100m",
+   "intrare": {
+    "sursa": "tableta_coordonate",
+    "lat": 44.301372,
+    "lon": 26.092212
+   },
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 3100,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Chiar peste limită (3000 m)."
+  },
+  {
+   "id": "zona-04-2900m",
+   "intrare": {
+    "sursa": "tableta_coordonate",
+    "lat": 44.300101,
+    "lon": 26.090438
+   },
+   "asteptat": {
+    "eronat_prototip": false,
+    "semnal": null,
+    "decizie": "normala",
+    "distanta_m": 2900,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Chiar sub limită: în zonă, se aplică regulile normale."
+  },
+  {
+   "id": "zona-05-om-teren-40km",
+   "intrare": {
+    "sursa": "om_teren",
+    "lat": 44.535761,
+    "lon": 26.41961
+   },
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 39957,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Fără excepții pe sursă: decizie om_teren la 40 km = eronat."
+  },
+  {
+   "id": "zona-06-apel-client-4km",
+   "intrare": {
+    "sursa": "apel_client",
+    "lat": 44.307089,
+    "lon": 26.100198
+   },
+   "asteptat": {
+    "eronat_prototip": true,
+    "semnal": "in_afara_zonei_prototip",
+    "decizie": "neaplicat",
+    "distanta_m": 4000,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Apel client la 4 km: eronat; fără excepții pe sursă."
+  },
+  {
+   "id": "zona-07-centru",
+   "intrare": {
+    "sursa": "formular",
+    "lat": 44.281681,
+    "lon": 26.064707
+   },
+   "asteptat": {
+    "eronat_prototip": false,
+    "semnal": null,
+    "decizie": "normala",
+    "distanta_m": 0,
+    "raza_m": 3000
+   },
+   "toleranta": {
+    "distanta_m": 20
+   },
+   "nota": "Exact centroidul: în zonă."
+  }
+ ]
+}

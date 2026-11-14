@@ -162,9 +162,9 @@
    "text": "Investitie: stalp nou pe Strada Viilor, langa scoala. fara coordonate inca",
    "data": "2026-11-04",
    "asteptat": {
-    "tip": "nod_lipsa",
+    "tip": "linie_planificata",
     "element_id": null,
-    "nota": "lipsesc element_id și coordonate"
+    "nota": "investiție: stâlp nou propus, fără coordonate și fără ID -> plan (linie_planificata), nu nod_lipsa; lipsesc element_id și coordonate"
    }
   }
  ],
@@ -308,23 +308,23 @@
   {
    "id": "om-01",
    "titlu": "Decizie: acceptă",
-   "text": "Verificat în teren: predicția NOU-0001 este corectă, stâlpul există. Accept. Motiv: stâlp văzut la fața locului.",
+   "text": "Verificat în teren: predicția NOU-EV-012 este corectă, stâlpul există. Accept. Motiv: stâlp văzut la fața locului.",
    "data": "2026-11-14",
    "asteptat": {
     "tip": "verificare",
-    "element_id": "NOU-0001",
-    "nota": "detalii.decizie {tinta_id NOU-0001, decizie accepta}; echipa om_teren (tinta_id exemplu, de înlocuit cu o predicție reală)"
+    "element_id": "NOU-EV-012",
+    "nota": "detalii.decizie {tinta_id NOU-EV-012, decizie accepta}; NOU-EV-012 e singura predicție din modelul de bază la 2026-11-14"
    }
   },
   {
    "id": "om-02",
    "titlu": "Decizie: respinge",
-   "text": "am fost la fata locului, NOU-0002 nu exista, acolo e doar un copac. Resping.",
+   "text": "am fost la fata locului, NOU-EV-012 nu exista, acolo e doar un copac. Resping.",
    "data": "2026-11-14",
    "asteptat": {
     "tip": "verificare",
-    "element_id": "NOU-0002",
-    "nota": "detalii.decizie {tinta_id NOU-0002, decizie respinge, motiv copac}; echipa om_teren"
+    "element_id": "NOU-EV-012",
+    "nota": "detalii.decizie {tinta_id NOU-EV-012, decizie respinge, motiv copac}; rulat după om-01 = a doua decizie pe aceeași predicție, motorul o refuză (deja_decis); rulat singur = respingere"
    }
   }
  ]

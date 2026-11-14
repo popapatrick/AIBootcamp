@@ -1,0 +1,179 @@
+[
+ {
+  "id": "r-01-treapta1",
+  "sursa": "racordari",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28198, 26.06139.",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "eronat_prototip": false,
+   "treapta": 1,
+   "slaba": false
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-01-treapta1",
+   "asteptat": {
+    "status": "lant",
+    "status_in": [
+     "lant",
+     "linie_dreapta"
+    ],
+    "treapta": 1,
+    "slaba": false,
+    "nod_start": "7902773",
+    "distanta_directa_nod_m": 46.3,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   }
+  }
+ },
+ {
+  "id": "r-02-treapta2",
+  "sursa": "racordari",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28039, 26.05553.",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "eronat_prototip": false,
+   "treapta": 2
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-02-treapta2",
+   "asteptat": {
+    "status": "lant",
+    "status_in": [
+     "lant",
+     "linie_dreapta"
+    ],
+    "treapta": 2,
+    "slaba": null,
+    "nod_start": "6784406",
+    "distanta_directa_nod_m": 347.6,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   }
+  }
+ },
+ {
+  "id": "r-03-treapta3",
+  "sursa": "racordari",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.26902, 26.05827.",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "eronat_prototip": false,
+   "treapta": 3,
+   "slaba": true
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-03-treapta3",
+   "asteptat": {
+    "status": "linie_dreapta",
+    "status_in": [
+     "linie_dreapta"
+    ],
+    "treapta": 3,
+    "slaba": true,
+    "nod_start": "7777615",
+    "distanta_directa_nod_m": 757.6,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   }
+  }
+ },
+ {
+  "id": "r-04-treapta3-limita",
+  "sursa": "racordari",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28168, 26.10110.",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "eronat_prototip": false,
+   "treapta": 3,
+   "slaba": true
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-04-treapta3-limita-zonei",
+   "asteptat": {
+    "status": "linie_dreapta",
+    "status_in": [
+     "linie_dreapta"
+    ],
+    "treapta": 3,
+    "slaba": true,
+    "nod_start": "5481763",
+    "distanta_directa_nod_m": 2537.7,
+    "in_zona": true,
+    "neaplicat": false
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   }
+  }
+ },
+ {
+  "id": "r-06-in-afara-zonei",
+  "sursa": "racordari",
+  "text": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28168, 26.10361.",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "eronat_prototip": true,
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-06-in-afara-zonei",
+   "asteptat": {
+    "status": "neaplicat",
+    "status_in": [
+     "neaplicat"
+    ],
+    "treapta": null,
+    "slaba": null,
+    "nod_start": "5481763",
+    "distanta_directa_nod_m": 2736.9,
+    "in_zona": false,
+    "neaplicat": true
+   },
+   "toleranta": {
+    "distanta_directa_nod_m": 5
+   }
+  }
+ },
+ {
+  "id": "r-07-fara-locatie",
+  "sursa": "racordari",
+  "text": "cerere de racordare pentru o casa noua, consum 5 kW. nu stiu adresa exacta",
+  "data": "2026-11-14",
+  "asteptat": {
+   "tip": "cerere_racordare",
+   "decizie": "neaplicat"
+  },
+  "asteptat_detaliu": {
+   "fisier": "detaliu/racordare.json",
+   "caz": "rac-07-fara-locatie",
+   "asteptat": {
+    "status": "neaplicat",
+    "treapta": null,
+    "slaba": null,
+    "motiv": "lipsește locația casei",
+    "surse_incercate": true
+   },
+   "toleranta": {}
+  }
+ }
+]

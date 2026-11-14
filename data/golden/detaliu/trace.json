@@ -1,0 +1,188 @@
+{
+ "_nota": "date FICTIVE; parametri de traseu generat și redescoperire; generat de genereaza_golden.py",
+ "centru_zona": {
+  "lat": 44.281681,
+  "lon": 26.064707
+ },
+ "raza_zona_m": 3000,
+ "cazuri": [
+  {
+   "id": "trace-01-implicit",
+   "intrare": {
+    "punct": {
+     "lat": 44.281001,
+     "lon": 26.064167
+    },
+    "adresa": "Strada Tineretului",
+    "params": {},
+    "seed": "t-01"
+   },
+   "asteptat": {
+    "oprire_gasita": true,
+    "durata_min_cel_putin": 3,
+    "oprire_la_punct_m_max": 15,
+    "contradictie": false,
+    "sens_acuratete": "creste"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Parametri impliciți (trace_generat): oprire generată 12 min, zgomot 5 m, acoperire 0,9, decalaj 0. Cu zgomot 5 m grupul de opriri se poate rupe (rază 12 m): se verifică doar durata >= durata_min_min."
+  },
+  {
+   "id": "trace-02-oprire-lunga-zgomot-mic",
+   "intrare": {
+    "punct": {
+     "lat": 44.277746,
+     "lon": 26.064438
+    },
+    "adresa": "Strada Bălții",
+    "params": {
+     "durata_oprire_min": 15,
+     "zgomot_m": 3
+    },
+    "seed": "t-02"
+   },
+   "asteptat": {
+    "oprire_gasita": true,
+    "durata_min_cel_putin": 12,
+    "oprire_la_punct_m_max": 12,
+    "contradictie": false,
+    "sens_acuratete": "creste"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Scenariul din spec: 15 min, 3 m zgomot, oprire consistentă cu adresa: bonus, fără a depăși bonus_max."
+  },
+  {
+   "id": "trace-03-zgomot-mare",
+   "intrare": {
+    "punct": {
+     "lat": 44.281001,
+     "lon": 26.064167
+    },
+    "adresa": "Strada Tineretului",
+    "params": {
+     "zgomot_m": 30
+    },
+    "seed": "t-03"
+   },
+   "asteptat": {
+    "oprire_gasita": null,
+    "oprire_la_punct_m_max": null,
+    "contradictie": false,
+    "sens_acuratete": "scade"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Zgomot 30 m (> trace.raza_oprire_m=12, > zgomot_max_bonus_m): oprirea poate să nu mai fie regăsită; fără bonus. None = nu se verifică."
+  },
+  {
+   "id": "trace-04-acoperire-mica",
+   "intrare": {
+    "punct": {
+     "lat": 44.281001,
+     "lon": 26.064167
+    },
+    "adresa": "Strada Tineretului",
+    "params": {
+     "acoperire": 0.3
+    },
+    "seed": "t-04"
+   },
+   "asteptat": {
+    "oprire_gasita": null,
+    "oprire_la_punct_m_max": null,
+    "contradictie": false,
+    "sens_acuratete": "scade"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Acoperire 0,3 (< acoperire_min): penalizare; oprirea poate fi ratată (puncte puține)."
+  },
+  {
+   "id": "trace-05-decalaj-contradictie",
+   "intrare": {
+    "punct": {
+     "lat": 44.284841,
+     "lon": 26.056659
+    },
+    "adresa": "Strada Liviu Rebreanu",
+    "params": {
+     "decalaj_m": 80,
+     "zgomot_m": 3
+    },
+    "seed": "t-05"
+   },
+   "asteptat": {
+    "oprire_gasita": true,
+    "oprire_la_punct_m": 80,
+    "contradictie": true,
+    "sens_acuratete": "scade"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Oprirea la 80 m de adresă (> toleranta_adresa_m=40): contradicție; 'De ce?' o arată."
+  },
+  {
+   "id": "trace-06-oprire-scurta",
+   "intrare": {
+    "punct": {
+     "lat": 44.281001,
+     "lon": 26.064167
+    },
+    "adresa": "Strada Tineretului",
+    "params": {
+     "durata_oprire_min": 2
+    },
+    "seed": "t-06"
+   },
+   "asteptat": {
+    "oprire_gasita": false,
+    "contradictie": false,
+    "sens_acuratete": "fara_bonus"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Oprire de 2 min < trace.durata_min_min=3: nu e oprire, deci fără bonus și fără contradicție."
+  },
+  {
+   "id": "trace-07-determinism",
+   "intrare": {
+    "punct": {
+     "lat": 44.281001,
+     "lon": 26.064167
+    },
+    "adresa": "Strada Tineretului",
+    "params": {},
+    "seed": "t-01"
+   },
+   "asteptat": {
+    "identic_cu": "trace-01-implicit"
+   },
+   "toleranta": {
+    "oprire_la_m": 15,
+    "durata_min": 2,
+    "decalaj_m": 15
+   },
+   "nota": "Același seed și aceiași parametri = același traseu (octet cu octet)."
+  }
+ ]
+}

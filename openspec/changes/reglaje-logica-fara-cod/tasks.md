@@ -8,7 +8,7 @@
 
 ## 2. Date de aur (A)
 
-- [ ] 2.1 (A6) `data/golden/`: texte cu adresă/stradă/reper, coordonate așteptate, tipuri așteptate, cazuri de trace și de racordare
+- [x] 2.1 (A6) `data/golden/`: texte cu adresă/stradă/reper, coordonate așteptate, tipuri așteptate, cazuri de trace și de racordare
 
 ## 3. Banc și API (C)
 
