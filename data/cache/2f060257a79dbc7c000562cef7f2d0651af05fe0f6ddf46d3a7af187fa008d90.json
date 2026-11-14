@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-002",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": "DX10-2-099812",
+    "coordonate": {
+      "lat": 44.2806944,
+      "lon": 26.0676334
+    },
+    "adresa": "stație fictivă (adresă fictivă)",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "stație fictivă"
+    }
+  },
+  "status": "executat",
+  "data": "2026-08-20",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0402\nData: 2026-08-20\nCod element: DX10-2-099812 (PTAB 7812)\nCoordonate: 44.2806944, 26.0676334\nAdresa: stație fictivă (adresă fictivă)\nNr. cadastral: -\nConstatare: post verificat, fără defecte, ulei în parametri\nStatus: executat\n",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "PTAB 7812; post verificat, fara defecte, ulei in parametri"
+  }
+}

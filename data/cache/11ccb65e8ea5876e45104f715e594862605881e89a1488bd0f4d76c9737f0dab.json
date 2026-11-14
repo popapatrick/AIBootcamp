@@ -1,0 +1,28 @@
+{
+  "event_id": "EV-005",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "str. Fictivă nr. 40 (adresă fictivă)",
+    "nr_cadastral": "CF-fictiv 419120",
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "str. Fictivă",
+      "numar": "40",
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "executat",
+  "data": "2026-10-21",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0102\nData: 2026-10-21\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 40 (adresă fictivă)\nNr. cadastral: CF-fictiv 419120\nStatus: executat\n",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {}
+}

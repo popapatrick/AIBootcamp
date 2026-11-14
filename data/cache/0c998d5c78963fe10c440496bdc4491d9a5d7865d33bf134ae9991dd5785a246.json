@@ -1,0 +1,22 @@
+{
+  "event_id": "EV-014",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": "A-T-030",
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "adresa_structurata": null
+  },
+  "status": "executat",
+  "data": "2026-08-05",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ VERIFICARE – MENTENANȚĂ\nNr. fișă: M-2026-0391\nData: 2026-08-05\nCod element: A-T-030 (între 6149155 și 6940335)\nCoordonate: -\nAdresa: -\nNr. cadastral: -\nVerificare vizuală a conductoarelor și a izolatorilor: fără defecte.\nStatus: executat\nUrmătoarea verificare: nestabilită\n",
+  "incredere_extractie": 1.0,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "fișa M-2026-0391; între 6149155 și 6940335; fără defecte; următoarea verificare nestabilită"
+  }
+}

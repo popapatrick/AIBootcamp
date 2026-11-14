@@ -23,6 +23,10 @@ def texte() -> list[tuple[str, str, str | None]]:
         out += [(x["text"], sursa, x["data"]) for x in lista]
     for e in json.loads((REPORTS / "index.json").read_text(encoding="utf-8")):
         out.append(((REPORTS / e["fisier"]).read_text(encoding="utf-8"), e["sursa"], e["data"]))
+    # setul de calibrare geocodare (sesiunea 3): texte cu grade diferite de standardizare
+    geo = REPORTS / "geo-test.json"
+    if geo.exists():
+        out += [(x["text"], x["sursa"], x["data"]) for x in json.loads(geo.read_text(encoding="utf-8"))["adrese"]]
     # shortcut: trasee-dummy.json n-are texte de raport (doar descriere/puncte) și textele din docs/DEMO.md n-au dată fixă
     # (cheia depinde de data zilei la rulare live), deci nu sunt listate; de adăugat dacă apar câmpuri `text` / date fixe.
     return out

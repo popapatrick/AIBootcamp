@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-007",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "Strada Tineretului 18",
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": "18",
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "semnalat",
+  "data": "2026-10-05",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "Scântei la Strada Tineretului 18.",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [],
+  "detalii": {}
+}

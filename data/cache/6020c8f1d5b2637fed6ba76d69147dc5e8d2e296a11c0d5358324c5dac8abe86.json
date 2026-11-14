@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-017",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.27655,
+      "lon": 26.06329
+    },
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": "CL-42044",
+    "adresa_structurata": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-12",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-11-12 ora 20:05\nID client: CL-42044\nLocație: coordonate 44.27655, 26.06329 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: A plecat din nou lumina, e a patra zi când se întâmplă.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "Lumina a plecat din nou; a patra zi când se întâmplă."
+  }
+}

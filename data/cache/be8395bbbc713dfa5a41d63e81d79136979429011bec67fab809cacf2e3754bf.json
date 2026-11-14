@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-013",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.28232,
+      "lon": 26.0621
+    },
+    "adresa": "Strada fictivă, lângă blocul 5",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": "Strada fictivă",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă blocul 5"
+    },
+    "id_client": "CL-40117"
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 07:40\nID client: CL-40117\nLocație: coordonate 44.28232, 26.06210 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu am curent din noaptea asta, e toată strada fără lumină.\nOperator: Vă rog adresa.\nClient: Strada fictivă, lângă blocul 5.\n",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "Fara curent din noapte, toata strada fara lumina (apel ora 07:40)."
+  }
+}

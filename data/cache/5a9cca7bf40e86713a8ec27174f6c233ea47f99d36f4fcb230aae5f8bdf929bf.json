@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-013",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "str. I. L. Caragiale",
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "str. I. L. Caragiale",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "semnalat",
+  "data": "2026-10-20",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "Fără curent pe str. I. L. Caragiale.",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [],
+  "detalii": {}
+}

@@ -1,0 +1,330 @@
+{
+  "_nota": "DATE FICTIVE. Coordonatele așteptate sunt calculate din geometria OSM (genereaza_geo_test.py), nu ghicite.",
+  "adrese": [
+    {
+      "id": "gt-01",
+      "grad": "id",
+      "sursa": "mentenanta",
+      "data": "2026-09-14",
+      "text": "Verificare nod 6925190, fără defecte.",
+      "adresa_structurata_asteptata": {
+        "strada": null,
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.283031,
+        "lon": 26.063942,
+        "toleranta_m": 5,
+        "acuratete_tinta": "id_existent"
+      },
+      "plafon_incredere": 1.0,
+      "nota": "cod existent: geocodarea nu se apelează"
+    },
+    {
+      "id": "gt-02",
+      "grad": "coordonate",
+      "sursa": "mentenanta",
+      "data": "2026-09-14",
+      "text": "Control în teren la coordonatele 44.280555, 26.067705: stâlp înclinat.",
+      "adresa_structurata_asteptata": {
+        "strada": null,
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.280555,
+        "lon": 26.067705,
+        "toleranta_m": 5,
+        "acuratete_tinta": "coordonate"
+      },
+      "plafon_incredere": 0.9,
+      "nota": "coordonate explicite: geocodarea nu se apelează"
+    },
+    {
+      "id": "gt-03",
+      "grad": "strada_numar",
+      "sursa": "apel_client",
+      "data": "2026-10-02",
+      "text": "Fără curent la Strada Liviu Rebreanu nr. 12, Popești.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Liviu Rebreanu",
+        "numar": "12",
+        "localitate": "Popești",
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.284841,
+        "lon": 26.056659,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada_numar"
+      },
+      "plafon_incredere": 0.7,
+      "nota": "mijlocul străzii; numărul nu e interpolat în această referință"
+    },
+    {
+      "id": "gt-04",
+      "grad": "strada_numar",
+      "sursa": "racordari",
+      "data": "2026-10-03",
+      "text": "Cerere racordare casă, Strada Fagului nr. 7.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Fagului",
+        "numar": "7",
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.287291,
+        "lon": 26.068509,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada_numar"
+      },
+      "plafon_incredere": 0.7,
+      "nota": "mijlocul străzii"
+    },
+    {
+      "id": "gt-05",
+      "grad": "strada_numar",
+      "sursa": "apel_client",
+      "data": "2026-10-05",
+      "text": "Scântei la Strada Tineretului 18.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Tineretului",
+        "numar": "18",
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.281001,
+        "lon": 26.064167,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada_numar"
+      },
+      "plafon_incredere": 0.7,
+      "nota": "mijlocul străzii"
+    },
+    {
+      "id": "gt-06",
+      "grad": "intersectie",
+      "sursa": "apel_client",
+      "data": "2026-10-06",
+      "text": "Nu avem curent la intersecția Strada Liviu Rebreanu cu Strada Crinului.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Liviu Rebreanu / Strada Crinului",
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.283675,
+        "lon": 26.062802,
+        "toleranta_m": 30,
+        "acuratete_tinta": "intersectie"
+      },
+      "plafon_incredere": 0.5,
+      "nota": "nod comun; strada = ambele nume separate prin ' / '; plafonul 0.5 (intersecția nu e în tabelul de plafoane)"
+    },
+    {
+      "id": "gt-07",
+      "grad": "intersectie",
+      "sursa": "mentenanta",
+      "data": "2026-10-07",
+      "text": "Inspecție la colțul dintre Strada Viilor și Strada Carpati, cablu vizibil uzat.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Viilor / Strada Carpati",
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.283402,
+        "lon": 26.067556,
+        "toleranta_m": 30,
+        "acuratete_tinta": "intersectie"
+      },
+      "plafon_incredere": 0.5,
+      "nota": "nod comun"
+    },
+    {
+      "id": "gt-08",
+      "grad": "strada",
+      "sursa": "apel_client",
+      "data": "2026-10-12",
+      "text": "Lumina pâlpâie pe Strada Liliacului.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Liliacului",
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.27837,
+        "lon": 26.071461,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada"
+      },
+      "plafon_incredere": 0.5,
+      "nota": "mijlocul străzii"
+    },
+    {
+      "id": "gt-09",
+      "grad": "strada",
+      "sursa": "apel_client",
+      "data": "2026-10-14",
+      "text": "Stâlp căzut pe Strada Crinului.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Crinului",
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.282148,
+        "lon": 26.061722,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada"
+      },
+      "plafon_incredere": 0.5,
+      "nota": "mijlocul străzii"
+    },
+    {
+      "id": "gt-10",
+      "grad": "strada_ortografie",
+      "sursa": "apel_client",
+      "data": "2026-10-19",
+      "text": "Defect cablu pe str liviu rebrianu nr 5.",
+      "adresa_structurata_asteptata": {
+        "strada": "str liviu rebrianu",
+        "numar": "5",
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.284841,
+        "lon": 26.056659,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada_numar"
+      },
+      "plafon_incredere": 0.45,
+      "nota": "ortografie greșită: AI alege din cache, acuratețe x factor_ai_fuzzy"
+    },
+    {
+      "id": "gt-11",
+      "grad": "strada_ortografie",
+      "sursa": "apel_client",
+      "data": "2026-10-20",
+      "text": "Fără curent pe str. I. L. Caragiale.",
+      "adresa_structurata_asteptata": {
+        "strada": "str. I. L. Caragiale",
+        "numar": null,
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.288186,
+        "lon": 26.062116,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada"
+      },
+      "plafon_incredere": 0.4,
+      "nota": "abreviere: AI alege din cache"
+    },
+    {
+      "id": "gt-12",
+      "grad": "strada_ortografie",
+      "sursa": "apel_client",
+      "data": "2026-10-21",
+      "text": "Scântei pe sos principala, aproape de Carpati.",
+      "adresa_structurata_asteptata": {
+        "strada": "sos principala",
+        "numar": null,
+        "localitate": null,
+        "reper": "aproape de Carpati"
+      },
+      "asteptat": {
+        "status": "gasit",
+        "lat": 44.281858,
+        "lon": 26.065753,
+        "toleranta_m": 150,
+        "acuratete_tinta": "strada"
+      },
+      "plafon_incredere": 0.4,
+      "nota": "stradă fără diacritice + reper = stradă din cache; ținta aproximată la intersecția cu Carpati"
+    },
+    {
+      "id": "gt-13",
+      "grad": "reper",
+      "sursa": "apel_client",
+      "data": "2026-10-27",
+      "text": "Nu e curent lângă școală.",
+      "adresa_structurata_asteptata": {
+        "strada": null,
+        "numar": null,
+        "localitate": null,
+        "reper": "lângă școală"
+      },
+      "asteptat": {
+        "status": "necunoscut",
+        "lat": null,
+        "lon": null,
+        "toleranta_m": null,
+        "acuratete_tinta": "reper"
+      },
+      "plafon_incredere": 0.3,
+      "nota": "reper vag fără locație în cache: necunoscut, predicție, nu se aplică"
+    },
+    {
+      "id": "gt-14",
+      "grad": "necunoscut",
+      "sursa": "apel_client",
+      "data": "2026-11-04",
+      "text": "Fără curent pe Strada Mihai Eminescu nr. 3.",
+      "adresa_structurata_asteptata": {
+        "strada": "Strada Mihai Eminescu",
+        "numar": "3",
+        "localitate": null,
+        "reper": null
+      },
+      "asteptat": {
+        "status": "necunoscut",
+        "lat": null,
+        "lon": null,
+        "toleranta_m": null,
+        "acuratete_tinta": "strada_numar"
+      },
+      "plafon_incredere": 0.7,
+      "nota": "stradă inexistentă în zonă: necunoscut sau in_afara_zonei, fără coordonate inventate"
+    },
+    {
+      "id": "gt-15",
+      "grad": "lipsa",
+      "sursa": "apel_client",
+      "data": "2026-11-05",
+      "text": "Nu avem curent, vă rog trimiteți pe cineva.",
+      "adresa_structurata_asteptata": null,
+      "asteptat": {
+        "status": "necunoscut",
+        "lat": null,
+        "lon": null,
+        "toleranta_m": null,
+        "acuratete_tinta": null
+      },
+      "plafon_incredere": 0.2,
+      "nota": "fără localizator: adresa_structurata null"
+    }
+  ]
+}

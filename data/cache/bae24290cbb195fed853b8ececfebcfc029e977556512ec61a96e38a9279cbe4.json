@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-010",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "adresa_structurata": null
+  },
+  "status": "executat",
+  "data": "2026-09-15",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0455\nData: 2026-09-15\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 9 (adresă fictivă)\nNr. cadastral: CF-fictiv 418902\nConstatare: branșament ars, fără alimentare la imobil\nStatus: semnalat\n",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "id_partial": "T-002",
+    "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
+    "lungime_m": 38,
+    "observatii": "Cablu vechi TYIR 3x35+54,6 OL-Al; intre stalpii 6168883 si 6580180. Lucrarea nu e trecuta in GIS: de refacut sectiunea in model. Executat si receptionat 2026-09-22."
+  }
+}

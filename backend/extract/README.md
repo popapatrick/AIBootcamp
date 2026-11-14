@@ -35,3 +35,6 @@ Promptul acoperă și `apel_client` (call center), `mutare_fire` (`detalii.centr
 
 ## Standardizare AI fără cheie: `cli_ai.py` (`ai_cli`)
 La cache miss, înainte de API, `extract_event_cu_metoda` apelează Claude Haiku prin Claude Code headless (`claude -p`), din abonament, fără cheie. Cerință: `claude auth login` o dată pe laptop. Rezultatul intră în cache (a doua oară `ai_cache`). `EXTRACT_CLI=0` dezactivează. Test: `.venv/bin/python -m backend.extract.test_cli_ai`. Detalii: `docs/etapa-3-extractie.md`.
+
+## Sesiunea 3: adresa structurată
+Promptul completează `referinta.adresa_structurata {strada, numar, localitate, reper}` și plafonează `incredere_extractie` după localizator (cod 1.0, coordonate 0.9, stradă+număr 0.7, stradă 0.5, reper 0.3). Promptul nou schimbă toate cheile de cache: re-umple cu `fill_cache --lipsa --out` + agenți Haiku + `--import` (85 de texte, inclusiv cele 15 din `data/reports/geo-test.json`). Detalii: `docs/etapa-3-extractie.md`.

@@ -1,0 +1,23 @@
+{
+  "event_id": "EV-002",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": "6628781",
+    "coordonate": null,
+    "adresa": null,
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": null
+  },
+  "status": "executat",
+  "data": "2026-10-12",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nRacord nou executat la nodul 6628781. Client nou, monofazat 6 kW. Status executat.\n",
+  "incredere_extractie": 1.0,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "Client nou, monofazat 6 kW."
+  }
+}

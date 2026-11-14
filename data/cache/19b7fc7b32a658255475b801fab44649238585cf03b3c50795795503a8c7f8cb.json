@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-004",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": "9999001",
+    "adresa": "str Orhideelor",
+    "adresa_structurata": {
+      "strada": "Orhideelor",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "semnalat",
+  "data": "2026-11-09",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "avarie izolator crapat pe nod 9999001 (nu stiu sigur nr), str Orhideelor. de reparat",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "numar"
+  ],
+  "detalii": {
+    "observatii": "izolator crapat, de reparat; numar necunoscut"
+  }
+}

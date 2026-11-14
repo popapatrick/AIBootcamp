@@ -167,6 +167,17 @@ def main() -> None:
         except ex.CacheMiss:
             pass
         assert "Sursa: mentenanta" in ex.user_message(TEXT, "mentenanta", None) and ex.tool_schema()["type"] == "object"
+    # adresa_structurata: schema o acceptă (tool schema) și respinge chei de alt tip
+    assert "adresa_structurata" in ex.tool_schema()["properties"]["referinta"]["properties"]
+    ev_a = json.loads(json.dumps(GOOD))
+    ev_a["referinta"].update(element_id=None, adresa="Strada Liviu Rebreanu nr. 12",
+                             adresa_structurata={"strada": "Strada Liviu Rebreanu", "numar": "12", "localitate": None, "reper": None})
+    assert not list(ex._validator.iter_errors(ev_a))
+    ev_a["referinta"]["adresa_structurata"]["numar"] = 12
+    assert list(ex._validator.iter_errors(ev_a))
+    assert "adresa_structurata" in ex.SYSTEM and "incredere_extractie după" in ex.SYSTEM
+    geo = json.loads((ex.ROOT / "data" / "reports" / "geo-test.json").read_text(encoding="utf-8"))["adrese"]
+    assert len(geo) >= 10 and all({"id", "text", "sursa", "data", "asteptat"} <= set(x) for x in geo)
     # forma exemple-dummy.json
     dummy = json.loads((ex.ROOT / "data" / "reports" / "exemple-dummy.json").read_text(encoding="utf-8"))
     assert {"mentenanta", "investitii", "racordari", "apel_client", "om_teren"} <= set(dummy)
