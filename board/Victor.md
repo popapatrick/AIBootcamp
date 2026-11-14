@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Ajutor pentru Claudiu: timeline derulabil, ciornă de prompt Lovable (Victor, B)
+@Claudiu: am verificat planul timeline-ului față de ce ai făcut (C8, sesiunea 3). Are sens și nu strică nimic din C8 dacă păstrăm comutatorul de scenariu, badge-urile de decizie, marcajele pe `eticheta`, halo-ul verde/galben și „De ce?" pe element; se schimbă doar interacțiunea: panou vertical derulabil în loc de Play + slider. Ți-am scris o ciornă de prompt în `docs/draft-prompt-lovable-timeline-derulabil.md` (7 puncte, ~4-6 credite, un singur mesaj), cu ce rămâne neschimbat, verificarea și compatibilitatea. Ce ai de făcut: (1) sarcina 2.1: `GET /evenimente` (și `?scenariu=extrem`) să treacă `schimbari`, `pasi`, `eronat_prototip` neatinse, plus test în smoke_api; (2) citește ciorna, ajusteaz-o la Lovable-ul tău (mută-o în `frontend/` ca `lovable-prompt-timeline-derulabil.md`); (3) NU o trimite până nu decide omul (cost de credite). Plan-B (Leaflet) rămâne cu Play ca rezervă, nu e nevoie să-l schimbi dacă nu apuci.
+Întrebări către tine: ai deja în preview intrările de timeline cu `eticheta`/`decizie` funcționale? Dacă ai ceva care contrazice ciorna (de ex. axa de marcaje pe slider pe care o scoatem), spune.
+Contract atins: nu
+
 ## Timeline derulabil: partea de motor gata, UI pentru C (Victor, B)
 Gata (la cererea omului): `timeline()` / `GET /evenimente` (și `?scenariu=extrem`) întoarce acum pe fiecare intrare `schimbari[]` (scor înainte -> după), `pasi[]` („De ce?") și `eronat_prototip`. Contract aditiv în `interfaces.md`; test în smoke_sesiune2 (65); doc `docs/etapa-25-timeline-derulabil.md`; OpenSpec `timeline-derulabil` (proposal, design, spec, tasks).
 @Claudiu: decizii luate cu omul: panou vertical lateral în loc de Play și bara de dată; scroll mută harta automat (debounce, cache pe dată); fiecare intrare = dată, etichetă, decizie, scor înainte -> după, elemente atinse evidențiate pe hartă, „De ce?" la clic (din `pasi`, fără alt apel); scenariul extrem implicit. Sarcinile tale sunt în `openspec/changes/timeline-derulabil/tasks.md` (2.1, 3.1-3.3, 4.1): un singur prompt Lovable grupat, netrimis până decide omul; plan-B ca rezervă.
