@@ -24,6 +24,7 @@ paths:
                 data: {type: string, format: date}
                 locatie: {type: object, description: "lat/lon dintr-un clic pe hartă (cerere_racordare, mutare_fire)", properties: {lat: {type: number}, lon: {type: number}}}
                 locatie_operator: {type: object, description: "poziția SIMULATĂ a operatorului (din GET /locatie-operator-demo), pentru cerere_racordare fără coordonate și fără clic; `simulata` trebuie să fie true (altfel 422)", required: [lat, lon], properties: {lat: {type: number}, lon: {type: number}, precizie_m: {type: number}, simulata: {type: boolean, enum: [true]}, zona: {type: string}}}
+                trace_params: {type: object, description: "Sesiunea 3: parametri ai traseului simulat generat la raport (suprascriu weights.trace_generat); `dezactivat: true` oprește generarea", properties: {puncte: {type: number}, zgomot_m: {type: number}, durata_oprire_min: {type: number}, acoperire: {type: number}, decalaj_m: {type: number}, dezactivat: {type: boolean}}}
                 trace: {type: array, description: "traseul tabletei din ultima oră", items: {type: object, properties: {t: {type: string}, lat: {type: number}, lon: {type: number}}}}
       responses:
         "200":
@@ -42,6 +43,18 @@ paths:
           description: "{lat, lon, precizie_m, simulata: true, strada, motiv, indicii: [{tip: strada|intersectie|cartier|reper, valoare, gasit}], zona}"
           content: {application/json: {schema: {type: object, properties: {lat: {type: number}, lon: {type: number}, precizie_m: {type: number}, simulata: {type: boolean, enum: [true]}, strada: {type: string, nullable: true}, motiv: {type: string}, zona: {type: string}, indicii: {type: array, items: {type: object, properties: {tip: {type: string, enum: [strada, intersectie, cartier, reper]}, valoare: {type: string}, gasit: {type: boolean}}}}}}}}
         "422": {description: "textul lipsește sau niciun indiciu nu se găsește în datele locale; `detail` = {mesaj, indicii: [{tip, valoare, gasit: false}]}. UI-ul cere clic pe hartă"}
+  /geocodeaza:
+    get:
+      summary: "Sesiunea 3: coordonate aproximative din adresă/stradă (backend.geo, doar cache OSM local + AI); depanare"
+      parameters:
+        - {name: adresa, in: query, required: true, schema: {type: string}}
+      responses:
+        "200": {description: "{status: gasit|necunoscut, lat, lon, precizie_m, metoda: osm_cache|ai_estimare, acuratete, motiv}", content: {application/json: {schema: {type: object}}}}
+  /reguli:
+    get:
+      summary: "Sesiunea 3: valorile curente din contracts/weights.yaml, read-only (nu există scriere prin API)"
+      responses:
+        "200": {description: weights.yaml ca JSON, content: {application/json: {schema: {type: object}}}}
   /retea:
     get:
       summary: Starea rețelei la o dată (GeoJSON, properties = ElementState; Sesiunea 3 - cheia `zona` {centru:{lat,lon}, raza_m} în răspuns, `origine` pe elemente)
