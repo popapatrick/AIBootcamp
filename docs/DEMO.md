@@ -14,16 +14,17 @@ Date FICTIVE: rețea demonstrativă PTAB 7812. Spune asta la început.
 | 0–5 s | Harta pe date 4 aug., rețeaua galben-verzuie | „530 de elemente, toate la încredere 0,6: nimeni nu le-a verificat recent. Culoarea e încrederea." |
 | 5–10 s | Apasă Play. Apare un punct violet (4 și 18 aug.) | „Două rapoarte spun că lipsește un nod în curba străzii. Nu avem coordonate, deci îl propunem punctat, cu scor 0,74, apoi 0,81. Nu intră în model." |
 | 10–16 s | 5–20 aug.: elemente devin mai verzi | „Verificările din teren cresc încrederea." |
-| 16–20 s | 29 aug.: un element roșu | „Două echipe spun lucruri diferite despre aceeași secțiune: conflict. Nu aplicăm nimic, îl marcăm «de verificat»." |
+| 16–20 s | 29 aug.: un element roșu | „Două echipe spun lucruri diferite despre aceeași secțiune: conflict. Nu aplicăm nimic, îl marcăm «de verificat»." (necesită `detalii.sectiune_noua` la EV-010, vezi board) |
 | 20–23 s | 10 sept.: aplicat | „Investiții a înlocuit cablul. Formular cu scor 0,90: se aplică." |
-| 23–29 s | Octombrie: rețeaua se închide la portocaliu; apeluri | „Apelurile clienților scad puțin încrederea, nu șterg nimic. Ce nu e verificat se estompează în timp." |
-| 29–45 s | Pauză. **Proces raport**, lipește textul de mai jos | „Un raport nou, scris liber, trece prin pași vizibili." |
-| 45–60 s | „Vezi pe hartă": punctul violet devine solid | „Raportul cu coordonate confirmă nodul: predicția intră în model, cu legăturile către vecini." |
+| 23–29 s | 23 oct.: punctul violet devine solid | „Un raport cu coordonate confirmă nodul: predicția intră în model, cu legăturile către vecini. Apelurile din octombrie scad puțin încrederea; ce nu e verificat se estompează." |
+| 29–45 s | Pauză. **Proces raport**, lipește primul text de mai jos | „Un raport nou, scris liber, trece prin pași vizibili." |
+| 45–60 s | Rezultat: punct violet nou; lipește al doilea raport; „Vezi pe hartă" | „Un singur raport = predicție (0,72, sub pragul 0,75). Al doilea, de la altă echipă, o promovează în model." |
 
-Text de lipit (sursă: mentenanță, data 2026-10-28):
-> Confirm în teren nodul 6925190 din curba străzii, la coordonatele 44.2830311, 26.063942, între nodurile 6513200 și 7824201.
+Texte de lipit (data 2026-10-29, apoi 2026-10-31):
+> (mentenanță) Nod lipsă din GIS: stâlpul nou 7011223 la coordonatele 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată.
+> (racordări) Racordare: confirm stâlpul nou lipsă 7011223 la 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată.
 
-Rezultat verificat: `adaugat`, scor 0,95, predicțiile rămase 0, nodul și 2 legături în model.
+Rezultat verificat (extracție stub): primul = `predictie` 0,72; al doilea = `adaugat` 0,85, nodul și legăturile în model. Cu extracția Claude (încredere mai mare) primul poate trece direct de prag. Punctul 44.281738, 26.064996 e la ~34 m de orice element (nod nou real, nu o potrivire cu un vecin).
 
 ## Verificat la repetiție (14 nov.)
 - Play de la 4 aug. la 27 oct. durează ~29 s; slider-ul și lista de evenimente se actualizează; consola fără erori.
@@ -33,6 +34,6 @@ Rezultat verificat: `adaugat`, scor 0,95, predicțiile rămase 0, nodul și 2 le
 ## Riscuri la demo
 - **Harta de bază cere internet** (plăci OpenStreetMap). La repetiție, într-un moment plăcile nu s-au încărcat și fundalul a fost gri; liniile rămân vizibile. Plan B: înregistrare video a unei rulări reușite.
 - **Extracția live depinde de laptop:** cu `stub regex` unele texte primesc alt tip (aici raportul de mai sus iese «avarie»), dar motorul îl tratează tot ca nod lipsă pentru că ID-ul numeric nu există în model. Cu Claude iese `nod_lipsa`.
-- **Scenariul 1 nu se închide singur** în datele lui A: rapoartele lui nu au coordonate pentru nod, de aceea partea „live" finalizează povestea. Dacă A adaugă un raport cu coordonate (44.2830311, 26.063942) într-o dată din toamnă, punctul devine solid chiar în timeline.
+- **Scenariul 1 se închide acum în timeline** (EV-028 al lui A, 23 oct.), deci partea live folosește alt nod, `7011223`. Nu mai folosi textul vechi cu `6925190`: nodul e deja în model și raportul ar doar confirma.
 - **Apelurile:** 3 din 5 nu s-au putut potrivi (unul fără coordonate, două la peste 40 m de orice element); în timeline scad doar două elemente.
 - **Proiectul Lovable** al lui C e netestat și nepublicat; demo-ul de mai sus rulează pe UI-ul plan B (Leaflet servit de FastAPI).

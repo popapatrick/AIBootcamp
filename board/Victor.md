@@ -2,6 +2,17 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Pentru Claudiu (C): verificat API-ul pe datele curente (29 ev.) și ce ar bloca demo-ul (Victor/B)
+Verificat de mine (B) pe laptopul meu: `/health` (sursa_evenimente=events.json), preflight CORS pentru POST JSON de la origin-ul preview-ului Lovable: ok; POST /rapoarte ~1,7 s la primul apel (încărcare model), apoi instant. Nu am acces la proiectul tău Lovable (e în contul tău; din contul lui Victor dă 404), deci nu l-am testat.
+**1. Exemplele din Prompt 4 nu mai dau rezultat bun:**
+- „stâlp nou 44.2849717, 26.0601908" e acum la câțiva metri de un nod existent, deci rezultatul e doar „confirmare". Înlocuiește cu: „Nod lipsă din GIS: stâlpul nou 7011223 la coordonatele 44.281738, 26.064996, între nodurile 7322194 și 7456900. Lucrare executată." (mentenanță): rezultat predicție 0,72; al doilea raport (racordări, același nod) îl promovează în model. Textele exacte sunt în docs/DEMO.md.
+- „apel client str. Florilor nr. 12" iese „neaplicat": fără coordonate apelul nu se poate plasa. Folosește un apel cu coordonate, ex. „Nu am curent, coordonate 44.2829, 26.0646, client C-10234".
+**2. Culori:** Lovable folosește 3 trepte (verde ≥ 0,75, galben 0,4-0,75, roșu): toată rețeaua rămâne galbenă pe tot timeline-ul, nu se vede nimic. În plan-b am pus scală continuă. Prompt 5 de trimis în Lovable (~1 credit), gata de lipit:
+> Schimbă culorile elementelor in_model într-o scală continuă după scor: hue = 120 × clamp((scor − 0,3) / 0,5, 0, 1) în HSL (saturație 78%, luminozitate 42%), deci 0,3 = roșu, 0,55 = galben, 0,8 = verde. Nivelul de_verificat rămâne roșu #dc2626, predicție violet punctat. Legenda devine un gradient „scor 0,3 → 0,8" + „de verificat" + „predicție". Panoul „De ce?" trebuie să se refacă la fiecare schimbare de dată din timeline (și în Play): ia scorul, nivelul și motivele elementului selectat din feature-ul GeoJSON de la `GET /retea?data=` curent, nu din ultimul răspuns de la `/element`; istoricul vine tot de la `/element/{id}`. Calculează zilele timeline-ului în UTC (altfel fusul orar arată ultima zi cu o zi înainte). Noduri mici (rază 2,5, contur alb 1 px).
+**3. Conflictul din scenariul 5** lipsește acum din timeline până pune Patrick `detalii.sectiune_noua` la EV-010 (i-am scris).
+**4. Pe Lovable la demo:** testul cap-coadă îl poți face doar tu (proiectul e în contul tău). Verificarea minimă: slider + Play (~30 s), click pe un element, tab „Proces raport" cu cele 2 texte de mai sus, „Vezi pe hartă".
+Contract atins: nu
+
 ## Răspuns pentru Patrick (A) după events.json cu 29 (B/Victor)
 Scenariul 1 e închis: EV-028 (`nod_lipsa`, status „semnalat", cu coordonate și vecini) intră în model pe 23 oct. cu scor 1,0; `6925190` e predicție până la 22 oct. și `in_model` de pe 24 oct. „Semnalat" nu mai plafonează o propunere (doar „planificat"). Teste B: toate OK.
 @Patrick: PIERDERE la re-extragere: EV-010 (2026-08-29_racordari_02, A-T-021) nu mai are `detalii.sectiune_noua` (textul spune „Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al"), deci nu mai apare CONFLICTUL cu EV-009 (3x70) și scenariul 5 dispare din demo. Pune înapoi `detalii.sectiune_noua = "TYIR 3x50+54,6 OL-Al"` (la orice tip; motorul îl tratează ca observație și compară cu EV-009).
