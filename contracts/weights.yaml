@@ -1,0 +1,32 @@
+# Tabelul unic de ponderi. Proprietar: laptop B. Valorile sunt puncte de plecare, se ajustează în etapa 5.
+# Se aplică ÎNTREGULUI sistem: inputuri și predicții trec prin aceleași reguli. Apelul clientului e doar un alt input.
+
+fiabilitate_sursa:        # multiplică efectul unui input asupra scorului
+  tableta_coordonate: 0.90
+  formular: 0.75
+  text_liber: 0.55
+  apel_client: 0.25       # „nu am curent/net" poate însemna cădere, nu lipsă de rețea
+
+scor:
+  initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0
+  confirmare_teren: 0.25          # raport executat care confirmă elementul
+  contradictie: -0.20             # input care contrazice elementul
+  scadere_per_30_zile: -0.05      # fără verificare
+  minim: 0.0
+  maxim: 1.0
+
+predictie:                         # pentru elemente prezise (nod lipsă, traseu, tip activ)
+  pondere_incredere_extractie: 0.30
+  pondere_calitate_potrivire: 0.30
+  pondere_urmeaza_strada: 0.40     # doar când există traseu OSM
+
+praguri:
+  aplicat: 0.75        # peste: se aplică în model
+  predictie: 0.40      # între predictie și aplicat: apare ca predicție neaplicată
+  # sub predictie: de_verificat, nu se desenează ca element nou
+
+potrivire:
+  distanta_max_m: 15   # element apropiat dacă nu există ID
+  calitate_dupa_id: 1.0
+  calitate_dupa_coordonate: 0.7
+  calitate_dupa_adresa: 0.4

@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: Grid model API (prototip, date fictive)
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      summary: Verificare
+      responses:
+        "200": {description: ok, content: {application/json: {schema: {type: object, properties: {status: {type: string}}}}}}
+  /rapoarte:
+    post:
+      summary: Procesează un raport nou (extracție, potrivire, scor); întoarce pașii intermediari
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text, sursa]
+              properties:
+                text: {type: string}
+                sursa: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}
+                data: {type: string, format: date}
+      responses:
+        "200":
+          description: StepTrace (vezi contracts/interfaces.md)
+          content: {application/json: {schema: {type: object}}}
+  /retea:
+    get:
+      summary: Starea rețelei la o dată (GeoJSON, properties = ElementState)
+      parameters:
+        - {name: data, in: query, required: false, schema: {type: string, format: date}}
+      responses:
+        "200": {description: GeoJSON FeatureCollection, content: {application/json: {schema: {type: object}}}}
+  /evenimente:
+    get:
+      summary: Lista pentru timeline
+      responses:
+        "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}
+  /element/{id}:
+    get:
+      summary: Istoricul unui element și „de ce"
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string}}
+      responses:
+        "200": {description: ElementState + istoric, content: {application/json: {schema: {type: object}}}}
+        "404": {description: necunoscut}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Event",
+  "description": "Eveniment standardizat extras dintr-un raport sau apel. Produs de A (extract_event), consumat de B (apply_event). Date fictive.",
+  "type": "object",
+  "required": ["event_id", "echipa_sursa", "tip", "referinta", "status", "data", "text_original"],
+  "properties": {
+    "event_id": {"type": "string", "description": "ex. EV-001"},
+    "echipa_sursa": {"enum": ["mentenanta", "investitii", "racordari", "apel_client"]},
+    "tip": {"enum": ["racord_nou", "activ_inlocuit", "linie_planificata", "nod_lipsa", "avarie_semnalata"]},
+    "referinta": {
+      "type": "object",
+      "description": "Cel puțin un câmp ar trebui completat; ce lipsește rămâne null.",
+      "properties": {
+        "element_id": {"type": ["string", "null"], "description": "cod nod (ex. 6-031) sau tronson (ex. T-045)"},
+        "coordonate": {
+          "type": ["object", "null"],
+          "properties": {"lat": {"type": "number"}, "lon": {"type": "number"}},
+          "required": ["lat", "lon"]
+        },
+        "adresa": {"type": ["string", "null"]},
+        "nr_cadastral": {"type": ["string", "null"]},
+        "id_client": {"type": ["string", "null"], "description": "doar pentru apel_client"}
+      }
+    },
+    "status": {"enum": ["executat", "planificat", "semnalat"]},
+    "data": {"type": "string", "format": "date"},
+    "forma_sursa": {"enum": ["campuri", "text_liber"]},
+    "tip_sursa_pondere": {
+      "enum": ["tableta_coordonate", "formular", "text_liber", "apel_client"],
+      "description": "cheia folosită în contracts/weights.yaml"
+    },
+    "text_original": {"type": "string"},
+    "incredere_extractie": {"type": "number", "minimum": 0, "maximum": 1},
+    "campuri_lipsa": {"type": "array", "items": {"type": "string"}},
+    "detalii": {"type": "object", "description": "ex. sectiune_noua, lungime_m, observatii"}
+  }
+}
