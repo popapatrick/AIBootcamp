@@ -1,0 +1,205 @@
+[
+ {
+  "event_id": "EV-001",
+  "data": "2026-08-04",
+  "tip": "nod_lipsa",
+  "decizie": "predictie",
+  "scor": 0.744
+ },
+ {
+  "event_id": "EV-002",
+  "data": "2026-08-05",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-003",
+  "data": "2026-08-12",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-004",
+  "data": "2026-08-12",
+  "tip": "racord_nou",
+  "decizie": "scor_actualizat",
+  "scor": 0.997
+ },
+ {
+  "event_id": "EV-005",
+  "data": "2026-08-14",
+  "tip": "activ_inlocuit",
+  "decizie": "fara_efect",
+  "scor": 0.878
+ },
+ {
+  "event_id": "EV-006",
+  "data": "2026-08-18",
+  "tip": "nod_lipsa",
+  "decizie": "predictie",
+  "scor": 0.813
+ },
+ {
+  "event_id": "EV-007",
+  "data": "2026-08-20",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-008",
+  "data": "2026-08-22",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.83
+ },
+ {
+  "event_id": "EV-009",
+  "data": "2026-08-26",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.927
+ },
+ {
+  "event_id": "EV-010",
+  "data": "2026-08-29",
+  "tip": "racord_nou",
+  "decizie": "conflict",
+  "scor": 0.812
+ },
+ {
+  "event_id": "EV-011",
+  "data": "2026-08-29",
+  "tip": "racord_nou",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-012",
+  "data": "2026-09-03",
+  "tip": "racord_nou",
+  "decizie": "predictie",
+  "scor": 0.63
+ },
+ {
+  "event_id": "EV-013",
+  "data": "2026-09-08",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-014",
+  "data": "2026-09-10",
+  "tip": "activ_inlocuit",
+  "decizie": "aplicat",
+  "scor": 0.883
+ },
+ {
+  "event_id": "EV-015",
+  "data": "2026-09-15",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-016",
+  "data": "2026-09-22",
+  "tip": "activ_inlocuit",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-017",
+  "data": "2026-09-29",
+  "tip": "activ_inlocuit",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-018",
+  "data": "2026-10-02",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.763
+ },
+ {
+  "event_id": "EV-019",
+  "data": "2026-10-02",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.773
+ },
+ {
+  "event_id": "EV-020",
+  "data": "2026-10-03",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-021",
+  "data": "2026-10-05",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-022",
+  "data": "2026-10-06",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-023",
+  "data": "2026-10-07",
+  "tip": "racord_nou",
+  "decizie": "scor_actualizat",
+  "scor": 0.886
+ },
+ {
+  "event_id": "EV-024",
+  "data": "2026-10-12",
+  "tip": "racord_nou",
+  "decizie": "scor_actualizat",
+  "scor": 0.917
+ },
+ {
+  "event_id": "EV-025",
+  "data": "2026-10-16",
+  "tip": "avarie_semnalata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-026",
+  "data": "2026-10-20",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 0.954
+ },
+ {
+  "event_id": "EV-027",
+  "data": "2026-10-21",
+  "tip": "racord_nou",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV-028",
+  "data": "2026-10-23",
+  "tip": "nod_lipsa",
+  "decizie": "adaugat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV-029",
+  "data": "2026-10-27",
+  "tip": "linie_planificata",
+  "decizie": "fara_efect",
+  "scor": 0.755
+ }
+]

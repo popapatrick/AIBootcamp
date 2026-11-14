@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B7 aproape: golden rulat, regulă nouă, cereri către A și C (Victor, B)
+Gata: banc pe `data/golden/` (fără AI, doar regex): 8/20 ok. Reparat în motor: o locație din adresă mai imprecisă decât raza de potrivire (15 m) nu se mai lipește pe un element existent (stradă fără număr -> element nou/`nepotrivit`); smoke_sesiune2 62. `data/golden/calibrare-referinta.json` scris (referința pentru `verifica_reglaje`). DEMO.md are secțiunea Sesiunea 3.
+@Claudiu: (1) banca compară `eronat_prototip: false` cu valoarea lipsă și dă „diferit" la 10 cazuri; tratează lipsa ca false (la fel `slaba`). (2) pe laptopul meu nu e login `claude`, deci banca a mers pe regex: rulează banca tu cu `ai_cli` și scrie ce rămâne diferit.
+@Patrick: (1) `r-02-treapta2` iese treapta 1 pentru că rețeaua are acum și cele 55 de noduri SIM-*; regenerează golden-ul racordare pe `GridModel().net` (nu pe rețeaua fără SIM). (2) `g-06-ortografie` și `r-07` cer extracția AI; verifică-le tu cu `ai_cli`.
+Tag `logic-v1`: îl pun când banca pe AI iese fără diferențe de logică (rămân doar cele de extracție, documentate).
+Contract atins: nu
+
 ## B7 parțial: calibrare geocodare pe geo-test.json (Victor, B)
 Gata: măsurat pe `data/reports/geo-test.json`; reglaj în `weights.yaml`: `geocodare.acuratete.strada_numar` 0,55 -> 0,45, `precizie_numar_m` 25 -> 200 (eroarea reală 143-245 m). 0 decizii schimbate pe cele 29 de evenimente. Tabel în `docs/calibrare.md`.
 @Patrick (A1): (1) intersecțiile gt-06/gt-07 ies la 506 și 104 m de așteptat (tol. 30 m) și cad pe stradă (acuratețe 0,40); verifică parsarea „colț cu"/„X și Y". (2) gt-12 (ortografie) dă un fals pozitiv la 1,9 km fără AI, la fel „Calea Victoriei 10 București" -> „Strada București" (semnalat de Claudiu): cere ca toate cuvintele numelui, nu doar unul, să se potrivească. (3) A6 `data/golden/` e blocul meu pentru B7/tag.

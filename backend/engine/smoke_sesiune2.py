@@ -213,6 +213,13 @@ def main() -> None:
     th = mg.apply_event(ev("G-2", "2026-09-11", "mentenanta", "nod_lipsa", ref={"adresa": "Strada Inexistenta Zzz"}, inc=0.9))
     verifica("geocodare: stradă necunoscută -> fără coordonate inventate",
              next(p for p in th["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "nepotrivit" and th["decizie"] == "neaplicat")
+    # stradă fără număr (precizie ±100+ m): nu se potrivește pe un element existent, nod_lipsa devine element nou
+    tstr = mk().apply_event(ev("G-5", "2026-09-13", "mentenanta", "nod_lipsa", ref={"adresa_structurata": {"strada": nume_str, "numar": None, "localitate": None, "reper": None}}, inc=0.9))
+    pstr = next(p for p in tstr["pasi"] if p["nume"] == "potrivire")["rezultat"]
+    verifica("geocodare: stradă fără număr nu se potrivește pe element existent (precizie > rază)", pstr["status"] == "absent_din_model"
+             and "adresa_prea_imprecisa_pentru_element_existent" in pstr["semnale"], pstr["status"])
+    tavr = mk().apply_event(ev("G-6", "2026-09-13", "mentenanta", "avarie_semnalata", ref={"adresa_structurata": {"strada": nume_str, "numar": None, "localitate": None, "reper": None}}, inc=0.9))
+    verifica("geocodare: avarie doar cu stradă = nepotrivit, nu se lipește pe un element", next(p for p in tavr["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "nepotrivit")
     ts = mg.apply_event(ev("G-3", "2026-09-12", "mentenanta", "verificare", ref={"element_id": "A-T-001"}, inc=1.0))
     verifica("standardizare: cu ID nu se plafonează", ts["pasi"][0]["incredere"] == 1.0)
 

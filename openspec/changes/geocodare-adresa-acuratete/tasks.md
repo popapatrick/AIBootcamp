@@ -16,7 +16,7 @@
 
 - [x] 3.1 (B2) `match.py` pasul 3: apelează `backend.geo`, folosește rezultatul ca coordonate din adresă, calitate = acuratețe, semnal în jurnal
 - [x] 3.2 (B2) Plafon `incredere_extractie` după localizator; teste în `smoke_match.py` și `smoke_engine.py`
-- [ ] 3.3 (B7) Calibrare pe `geo-test.json`: eroare în metri vs. acuratețe, rezultat în `docs/calibrare.md`
+- [x] 3.3 (B7) Calibrare pe `geo-test.json`: eroare în metri vs. acuratețe, rezultat în `docs/calibrare.md`
 
 ## 4. API (C)
 

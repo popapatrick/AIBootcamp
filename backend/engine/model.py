@@ -125,6 +125,16 @@ class GridModel(Sesiune2):
             m = {**m, "calitate": round(min(m["calitate"], geo["acuratete"]) if m["status"] == "potrivit" else geo["acuratete"], 3),
                  "metoda": "adresa", "semnale": m["semnale"] + ["coordonate_din_adresa"],
                  "geocodare": geo, "motiv": m["motiv"] + f" (locație din adresă, ±{geo['precizie_m']} m, acuratețe {geo['acuratete']})"}
+        if geo and m["status"] in ("potrivit", "absent_din_model") and m["metoda"] == "adresa" and geo["precizie_m"] > w["potrivire"]["distanta_max_m"]:
+            # o locație din adresă, mai imprecisă decât raza de potrivire, nu poate desemna un element existent (nu inventăm potrivirea)
+            motiv_imp = (f"Locația din adresă are precizia ±{geo['precizie_m']:g} m, peste raza de potrivire "
+                         f"{w['potrivire']['distanta_max_m']} m: nu desemnează un element existent.")
+            if event["tip"] in ("nod_lipsa", "racord_nou"):
+                m = {**m, "status": "absent_din_model", "element_id": None, "calitate": geo["acuratete"],
+                     "semnale": m["semnale"] + ["adresa_prea_imprecisa_pentru_element_existent"], "motiv": motiv_imp + " Se tratează ca element nou."}
+            else:
+                m = {**m, "status": "nepotrivit", "element_id": None, "calitate": 0.0,
+                     "semnale": m["semnale"] + ["adresa_prea_imprecisa_pentru_element_existent"], "motiv": motiv_imp}
         if tf and m["status"] == "potrivit" and m["metoda"] in ("coordonate", "adresa"):
             m = {**m, "calitate": round(min(1.0, m["calitate"] * tf), 3), "semnale": m["semnale"] + ["trace_simulat"]}
         if event.get("_eronat"):
