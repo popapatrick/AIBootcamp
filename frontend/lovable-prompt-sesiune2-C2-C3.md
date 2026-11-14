@@ -11,11 +11,12 @@
 Modifică aplicația existentă (frontend, fără DB/auth, în română). Date FICTIVE. Datele vin doar din API (`API_BASE`). Fă ambele părți de mai jos într-o singură trecere.
 
 ### NU SCHIMBA (trebuie să rămână exact cum e)
-- Scala continuă de culoare după scor (praguri 0,4 și 0,75) rămâne disponibilă ca mod de colorare: adaugă un comutator „Colorare: tip (KMZ) / scor"; implicit „tip (KMZ)".
+- Scala continuă de culoare după scor (HSL, 0,3 roșu → 0,55 galben → 0,8 verde, cum e acum) rămâne disponibilă ca mod de colorare: adaugă un comutator „Colorare: tip (KMZ) / scor"; implicit „tip (KMZ)".
 - Timeline-ul cu butonul Play (și selectarea datei, `GET /retea?data=`).
 - Panoul „De ce?" la clic pe element (`GET /element/{id}`) și lista „Evenimente".
 - Parametrul `?api=<URL>` din adresă care setează `API_BASE`, plus „Setări → API_BASE".
 - Bannerul vizibil „DATE FICTIVE".
+- Cele 3 exemple demo existente din „Proces raport" (textele 1, 2 și apelul cu coordonate) rămân, cu aceleași texte, surse și date; „Generează exemplu" se adaugă lângă ele.
 - Mesajul „API indisponibil, setează API_BASE" și `mod` din `/health` în colț.
 
 ### PARTEA 1 (C2): aspectul hărții ca în KMZ
