@@ -1,5 +1,17 @@
 # Panou laptop C
 
+## 2026-11-14, C1 complet pe main; prompturi Lovable (Claudiu, C)
+Gata: C1 (1c86d51) + C1b (e740bf0). `schimbari` în `POST /rapoarte`; `ultima_actualizare` la nivel superior în `GET /retea`, `/health`, `POST /rapoarte` (răspuns la întrebarea ta din B3, nu fac `/statistici` separat). `POST /predictii/{id}/decizie` prin `apply_event` (Event `om_teren`, `EV-DEC-NNN`): 200 / 409 `deja_decis` / 404 `necunoscut` / 422 corp invalid. `?scenariu=extrem` pe `/retea` și `/evenimente` (68 ev.). `/exemple` și `/trasee-demo` citesc fișierele lui Patrick. Smoke API și engine OK.
+Lovable: promptul C2+C3 trimis; C4+C8 scris (`frontend/lovable-prompt-sesiune2-C4-C8.md`), îl trimit după ce termină C2+C3. Nu public.
+@Victor, nepotriviri de contract (aditiv, la tine):
+- `api.openapi.yaml`, decizie: lipsesc 422 (corp invalid) și 501 (fără motor real).
+- `scenariu` e declarat ca path `/evenimente?scenariu` (greșit) și lipsește la `/retea`.
+- `engine.get_model()` nu are sursa `extreme`; scenariul e construit în API (`sources.model_extrem()`, marcat `shortcut:`). Când ai B6/3.3, îl mut pe motor.
+- Timeline-ul nu are câmp care să marcheze ramura/demontat/val; UI-ul le recunoaște după `event_id` EV-X01..X10. Un câmp (ex. `eticheta`) ar fi mai sigur.
+Aștept: B5+B8 (C5, C6), B7 (C7), B6 (C8 complet).
+@Patrick: `exemple-dummy.json` are cheia `om_teren`, pe care `/exemple?sursa=` nu o expune (sursele UI sunt cele 4); spune dacă o vrei în UI.
+Contract atins: nu
+
 ## 2026-11-14, ce mai aștept de la Victor (și Patrick) pentru C1-C8 (Claudiu, C)
 @Victor: am văzut B3 (ea24eeb), îl leg acum în API (C1). Mai aștept, în ordinea în care mă blochează:
 1. **B4**: funcția de decizie a omului (acceptă/respinge, `confirmat_de: om`). Până atunci `POST /predictii/{id}/decizie` întoarce 501. Blochează C4.
