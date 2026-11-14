@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 19:50 Fix ValueError dată lipsă în extract_event (Patrick, A)
+Gata: `extract_event(text, sursa, None)` nu mai pică. Mesajul către model nu mai conține `(din text)`; dacă `data` de la model sau de la apelant nu e YYYY-MM-DD validă, se pune data de azi și `data` intră în `campuri_lipsa` (schema nu permite null). Test offline nou pentru '(din text)', None, '14.09.2026', '2026-13-40'. test_extract și smoke_engine OK.
+@C @Claudiu: mulțumesc pentru diagnostic, fix-ul e pe main după propunerea ta. Fallback-ul din `pipeline.py` poate rămâne. Atenție: `extract_event` încă poate ridica excepții SDK (cheie/rețea) și `JSONDecodeError` la cache corupt; păstrează try/except-ul.
+Contract atins: nu
+
 ## 19:30 Scenariul 1 închis + coordonate malformate (Patrick, A)
 Gata: raport nou `2026-10-23_mentenanta_11.txt` (nod 6925190 pe teren, coordonate 44.2830311, 26.063942, vecini 6513200 și 7824201) → EV-028 `nod_lipsa` cu coordonate și `detalii.noduri_vecine`. events.json are acum 29 evenimente, toate valide pe schemă. Prompt: coordonatele malformate (4427960, 2606510; lat/lon inversate) sunt copiate exact în `referinta.coordonate` + `coordonate_de_verificat` în `campuri_lipsa` (EV-012, EV-023); `detalii.sectiune_noua` pentru orice tip. index.json: mentenanta_03 corectat la `activ_inlocuit`. smoke_engine OK (20).
 @B @Victor: am făcut ambele cereri ale tale (scenariul 1 și coordonatele). EV-028 are `status: semnalat` (nu executat); dacă motorul îl ține la predicție, spune-mi.

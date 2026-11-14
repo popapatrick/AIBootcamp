@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import re
+from datetime import date
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -75,6 +76,18 @@ def _normalizeaza(ev: dict) -> None:
         ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"element_id"})
 
 
+def _data_valida(ev: dict) -> None:
+    """Schema cere data YYYY-MM-DD (fără null). Invalidă/lipsă -> data de azi + 'data' în campuri_lipsa."""
+    d = ev.get("data")
+    try:
+        ok = isinstance(d, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) and date.fromisoformat(d)
+    except ValueError:
+        ok = False
+    if not ok:
+        ev["data"] = date.today().isoformat()
+        ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"data"})
+
+
 def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
     """Un apel Claude cu unealta emit_event forțată. Întoarce inputul uneltei sau None."""
     import anthropic  # importat aici: modulul e util și fără SDK (teste offline)
@@ -83,7 +96,7 @@ def _call_api(text: str, sursa: str, data: str | None) -> dict | None:
         client = anthropic.Anthropic(base_url="https://openrouter.ai/api", auth_token=_KEY, api_key=None)
     else:
         client = anthropic.Anthropic()  # ANTHROPIC_API_KEY din mediu
-    msg = f"Sursa: {sursa}\nData: {data or '(din text)'}\n\nTEXT:\n{text}"
+    msg = f"Sursa: {sursa}\nData: {data or 'necunoscută; caut-o în text (YYYY-MM-DD), altfel null'}\n\nTEXT:\n{text}"
     resp = client.messages.create(
         model=MODEL,
         max_tokens=2048,
@@ -119,6 +132,7 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
             ev["data"] = data
         if not ev.get("event_id"):
             ev["event_id"] = "EV-" + key[:8]  # run_all îl înlocuiește cu EV-001..
+        _data_valida(ev)
         _normalizeaza(ev)
         errors = [e.message for e in _validator.iter_errors(ev)]
         if not errors:

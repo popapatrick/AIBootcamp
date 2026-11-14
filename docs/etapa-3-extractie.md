@@ -32,6 +32,7 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 ## Limite cunoscute
 - Cheie `sk-or-` (OpenRouter): folosește `base_url=openrouter.ai/api`, model `anthropic/claude-haiku-5.5` (slug verificat pe OpenRouter; suprascrie cu `EXTRACT_MODEL`).
 - Cache-ul nu prinde schimbările de prompt (vezi mai sus).
+- Data lipsă/invalidă (schema cere `date`, fără null): mesajul spune modelului „necunoscută; caut-o în text”; dacă răspunsul nu e YYYY-MM-DD valid, se pune data de azi și `data` intră în `campuri_lipsa` (`_data_valida`). Fix pentru `ValueError: '(din text)' is not a 'date'`.
 - Coordonatele sunt luate doar dacă apar explicit în text; nu se deduc.
 - Coordonate malformate (zecimală lipsă, lat/lon inversate): copiate exact ca în text, nu corectate; `coordonate_de_verificat` în `campuri_lipsa`. Corectarea o face motorul.
 

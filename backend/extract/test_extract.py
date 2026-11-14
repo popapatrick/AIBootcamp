@@ -1,6 +1,7 @@
 """Test offline etapa 3: python -m backend.extract.test_extract (fără API, fără rețea)."""
 import json
 import tempfile
+from datetime import date
 from pathlib import Path
 
 from backend.extract import extract as ex
@@ -41,6 +42,13 @@ def main() -> None:
             raise AssertionError("trebuia ValueError")
         except ValueError:
             pass
+        for bad in ("(din text)", None, "14.09.2026", "2026-13-40"):  # data invalidă de la model
+            ex._call_api = lambda *a, bad=bad: dict(GOOD, data=bad, campuri_lipsa=[])
+            ev = ex.extract_event(f"fără dată {bad}", "investitii", None)
+            assert ev["data"] == date.today().isoformat() and "data" in ev["campuri_lipsa"], bad
+        ex._call_api = lambda *a: dict(GOOD, data="2026-08-05", campuri_lipsa=[])
+        ev = ex.extract_event("dată în text", "investitii", None)
+        assert ev["data"] == "2026-08-05" and "data" not in ev["campuri_lipsa"]
     print("OK: validare schema, cache hit, reîncercare, eroare după reîncercare")
 
 
