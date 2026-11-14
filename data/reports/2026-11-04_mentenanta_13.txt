@@ -1,0 +1,4 @@
+DATE FICTIVE
+Raport de teren, 4 noiembrie 2026.
+Am trecut pe tronsonul A-T-012 (între 6166490 și 6240749). Nu mai există conductor între cei doi stâlpi, tronsonul a fost demontat. Recomand scoaterea lui din harta GIS.
+Ing. fictiv (date fictive)

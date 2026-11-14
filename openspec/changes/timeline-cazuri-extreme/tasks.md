@@ -8,10 +8,10 @@
 
 ## 2. Date (A)
 
-- [ ] 2.1 `data/events/events.extreme.json`: ramură pe etape (3-4 evenimente), segment demontat (2 rapoarte), val de apeluri (3+), peste setul existent
-- [ ] 2.2 Rapoartele text aferente în `data/reports/` și intrări în `index.json`
-- [ ] 2.3 Validează toate evenimentele cu `event.schema.json`
-- [ ] 2.4 `docs/etapa-12-scenariu-extrem.md`
+- [x] 2.1 `data/events/events.extreme.json`: ramură pe etape (3-4 evenimente), segment demontat (2 rapoarte), val de apeluri (3+), peste setul existent
+- [x] 2.2 Rapoartele text aferente în `data/reports/` și intrări în `index.json`
+- [x] 2.3 Validează toate evenimentele cu `event.schema.json`
+- [x] 2.4 `docs/etapa-12-scenariu-extrem.md`
 
 ## 3. Motor (B)
 

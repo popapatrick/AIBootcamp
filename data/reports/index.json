@@ -230,5 +230,85 @@
     "scenariu": null,
     "element_id_asteptat": "R-T-012",
     "tip_asteptat": "linie_planificata"
+  },
+  {
+    "fisier": "2026-09-07_investitii_06.txt",
+    "sursa": "investitii",
+    "data": "2026-09-07",
+    "scenariu": null,
+    "element_id_asteptat": "7261864",
+    "tip_asteptat": "linie_planificata"
+  },
+  {
+    "fisier": "2026-09-30_racordari_08.txt",
+    "sursa": "racordari",
+    "data": "2026-09-30",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "racord_nou"
+  },
+  {
+    "fisier": "2026-10-14_mentenanta_12.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-14",
+    "scenariu": null,
+    "element_id_asteptat": "7900101",
+    "tip_asteptat": "nod_lipsa"
+  },
+  {
+    "fisier": "2026-10-19_investitii_07.txt",
+    "sursa": "investitii",
+    "data": "2026-10-19",
+    "scenariu": null,
+    "element_id_asteptat": "A-T-012",
+    "tip_asteptat": "activ_demontat"
+  },
+  {
+    "fisier": "2026-11-04_mentenanta_13.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-04",
+    "scenariu": null,
+    "element_id_asteptat": "A-T-012",
+    "tip_asteptat": "activ_demontat"
+  },
+  {
+    "fisier": "2026-11-05_mentenanta_14.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-05",
+    "scenariu": null,
+    "element_id_asteptat": "7900101",
+    "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-11-09_apel_client_07.txt",
+    "sursa": "apel_client",
+    "data": "2026-11-09",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-11-10_apel_client_08.txt",
+    "sursa": "apel_client",
+    "data": "2026-11-10",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-11-11_apel_client_09.txt",
+    "sursa": "apel_client",
+    "data": "2026-11-11",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-11-12_apel_client_10.txt",
+    "sursa": "apel_client",
+    "data": "2026-11-12",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
   }
 ]

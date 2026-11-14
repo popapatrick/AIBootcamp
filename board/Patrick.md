@@ -2,6 +2,14 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Sesiunea 2: A1-A7 pe main (Patrick, A)
+Gata: A1+A7 `data/reports/exemple-dummy.json` (mentenanta, investitii, racordari, apel_client + om_teren; sens giratoriu `mut-01..03`, cerere racordare `cer-01..03`, tabletă cu adresă vagă `mnt-06/07`, decizii `om-01/02`). A2 promptul `extract_event` acoperă apel_client, mutare_fire, cerere_racordare, decizia omului (teste mock). A3 `backend/trace` (`smoke_trace`: OK 10). A4 `backend/racordare` (`smoke_racordare`: OK 7). A5 `data/reports/trasee-dummy.json` (4 trasee). A6 `data/events/events.extreme.json` (39 = 29 + EV-X01..X10, toate valide pe schemă) + 10 rapoarte noi în index.json.
+@Victor (B7/B8): `localizeaza` primește `net` = `load_network()`; `prezice_lant` acceptă și network.geojson, și dict-ul motorului. Praguri hardcodate (de mutat în weights.yaml dacă vrei): racordare 40 m stradă (`MAX_STRADA_M`), trace calitate de bază 0,9 și prag stâlp = `raza_oprire_m`. Racordarea urmează o singură stradă (fără graf între străzi; altfel linie_dreapta).
+@Victor (3.1-3.3): pe motorul actual, EV-X04/X05 (`activ_demontat` pe A-T-012) urcă scorul în loc să-l scoată din uz, iar valul EV-X07..X10 (lângă A-T-005) scade doar ~0,034/apel, fără agregare. `get_model()` citește doar events.json; trebuie sursa `extreme`. Detalii: docs/etapa-12-scenariu-extrem.md.
+@Claudiu: promptul s-a schimbat, deci cheile de cache s-au schimbat: textele demo trimise live prin `POST /rapoarte` fac apel API real până se reextrag. events.json nu e afectat (static). `/exemple?sursa=` citește cheile din exemple-dummy.json; `om_teren` e cheie separată. Slider-ul pentru `?scenariu=extrem` trebuie să meargă până la 2026-11-12.
+În lucru: A8 (README-uri gata, docs 10/12/13/16 gata). Neverificat: promptul nou pe model real (doar mock).
+Contract atins: nu
+
 ## 20:10 sectiune_noua la EV-010 (Patrick, A)
 @B @Victor: ai avut dreptate, modelul a omis-o la re-extragere. EV-010 (A-T-021) are acum `detalii.sectiune_noua = "TYIR 3x50+54,6 OL-Al"`; conflictul cu EV-009 apare din nou (calibrare: `racord_nou -> conflict 0.51`). Fix durabil: `_sectiune` în extract.py completează `sectiune_noua` din text cu regex dacă modelul o lasă goală (o singură potrivire, nu pentru conductor demontat/vechi). Doar EV-010 s-a schimbat în events.json. test_extract și smoke_engine OK.
 Contract atins: nu

@@ -1,0 +1,12 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0502
+Data: 2026-10-14
+Echipa: mentenanta
+Tip lucrare: ramură nouă JT, montaj stâlp
+Cod element: nod 7900101
+Coordonate: 44.2852, 26.0608
+Adresa: str. Fictivă, zona nord-vest (adresă fictivă)
+Nr. cadastral: -
+Constatare: Stâlpul nou 7900101 este montat și legat de nodurile 7261864 și 7363515. Cele două tronsoane noi nu apar în harta GIS.
+Status: executat

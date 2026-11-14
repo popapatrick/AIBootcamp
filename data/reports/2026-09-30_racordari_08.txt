@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ RACORDARE – RACORD NOU
+Nr. fișă: R-2026-0131
+Data: 2026-09-30
+Echipa: racordari
+Cod element: -
+Coordonate: lat 44.2852, lon 26.0608
+Adresa: str. Fictivă nr. 51 (adresă fictivă)
+Nr. cadastral: CF-fictiv 520031
+Observații: racord pe stâlp nou, pe traseul ramurii noi
+Status: executat

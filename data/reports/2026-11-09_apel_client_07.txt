@@ -1,0 +1,9 @@
+DATE FICTIVE
+Apel client – fișă apel
+Data: 2026-11-09 ora 07:15
+ID client: CL-42011
+Locație: coordonate 44.27652, 26.06331 (aplicație telefon)
+Transcriere:
+Operator: Bună, cu ce vă pot ajuta?
+Client: Nu am curent de azi-noapte, lumina a plecat și nu mai revine.
+Operator: Vă înregistrez, echipa verifică.
