@@ -45,7 +45,7 @@ def statistici(data: str) -> dict:
     """{data, elemente, procent: {in_model, predictie, de_verificat}, scor_mediu, verificat_recent_pct}."""
 
 def timeline() -> list[dict]:
-    """[{data, event_id, decizie, rezumat, elemente_atinse}] pentru timeline-ul din UI. decizie: adaugat | aplicat | predictie | conflict | de_verificat | scor_actualizat | fara_efect | neaplicat | respins (decizia omului a retras o predicție)."""
+    """[{data, event_id, decizie, tip, eticheta, rezumat, elemente_atinse}]; eticheta = mutare_fire | demontat | val_apeluri | racordare | decizie_om | tipul evenimentului; pentru timeline-ul din UI. decizie: adaugat | aplicat | predictie | conflict | de_verificat | scor_actualizat | fara_efect | neaplicat | respins (decizia omului a retras o predicție)."""
 ```
 Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json`. Eșantion fals dar valid: `data/model/sample/` (înlocuit de cel real când e gata).
 

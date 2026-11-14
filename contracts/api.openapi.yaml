@@ -33,11 +33,14 @@ paths:
       summary: Starea rețelei la o dată (GeoJSON, properties = ElementState)
       parameters:
         - {name: data, in: query, required: false, schema: {type: string, format: date}}
+        - {name: scenariu, in: query, required: false, schema: {type: string, enum: [extrem]}, description: "starea rețelei în scenariul extrem (404 dacă lipsește fișierul)"}
       responses:
         "200": {description: GeoJSON FeatureCollection, content: {application/json: {schema: {type: object}}}}
   /evenimente:
     get:
-      summary: Lista pentru timeline
+      summary: "Lista pentru timeline. Fiecare element are `tip` (tipul evenimentului) și `eticheta` (mutare_fire, demontat, val_apeluri, racordare, decizie_om sau egală cu tipul). ?scenariu=extrem: scenariul din data/events/events.extreme.json (404 dacă lipsește)"
+      parameters:
+        - {name: scenariu, in: query, required: false, schema: {type: string, enum: [extrem]}}
       responses:
         "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}
   /element/{id}:
@@ -70,10 +73,7 @@ paths:
         content: {application/json: {schema: {type: object, required: [decizie], properties: {decizie: {type: string, enum: [accepta, respinge]}, motiv: {type: string}, data: {type: string, format: date}}}}}
       responses:
         "200": {description: StepTrace, content: {application/json: {schema: {type: object}}}}
-        "409": {description: predicția are deja o decizie}
-        "404": {description: predicție necunoscută}
-  /evenimente?scenariu:
-    get:
-      summary: "Parametrul opțional ?scenariu=extrem încarcă scenariul din data/events/events.extreme.json; fără el, scenariul de bază"
-      responses:
-        "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}
+        "409": {description: predicția are deja o decizie (eroare.cod deja_decis)}
+        "404": {description: predicție necunoscută (eroare.cod necunoscut)}
+        "422": {description: corp invalid (decizie diferită de accepta/respinge)}
+        "501": {description: motorul real nu e disponibil (mod stub)}
