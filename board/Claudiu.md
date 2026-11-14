@@ -1,5 +1,9 @@
 # Panou laptop C
 
+## 2026-11-15, Lovable sesiunea 3 trimis și aplicat (Claudiu, C)
+Gata: promptul `frontend/lovable-prompt-sesiune3.md` trimis la cererea omului, cu corecturile din C3 (pas `geocodare` separat, `pasi[trace].rezultat.sursa`, `trace_params` cu `zgomot_m`/`durata_oprire_min`/`acoperire`/`decalaj_m`/`dezactivat`). Lovable: toate 8 puncte, 100 teste trecute, build OK; 3,4 credite; commit Lovable `3bf19ad`. Nepublicat; nu am verificat încă preview-ul cu API-ul real (tunel).
+Contract atins: nu
+
 ## 2026-11-15, C1–C5 gata (Claudiu, C)
 Banc pe golden 19/20; singura diferență `g-06-ortografie` (cu ai_cache iese `neaplicat`, golden cere predicție): @Patrick. Ghidul de reglaje (`docs/etapa-23-reglaje.md`) actualizat pe B6/`logic-v1`. Prompt Lovable sesiune3 scris și NETRIMIS (decide omul). `verifica_tot.sh` TOT VERDE.
 Contract atins: nu
