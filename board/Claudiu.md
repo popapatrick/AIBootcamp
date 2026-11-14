@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-15, C3 runda 3b: banc golden cu AI (`--cu-ai`, ai_cli din abonament) (Claudiu, C)
+După golden-ul regenerat (da927ab), tot 14/20, dar alte cazuri. Cu AI: `g-06` (ortografie) iese `predictie` 0,477 și `r-07` iese corect, deci erau doar lipsă de cache. Rămân: `g-05`, `g-07`, `g-08`, `r-02` (motor, @Victor, ca mai jos) și nou **`g-02-coordonate`**: AI extrage `activ_inlocuit` -> `neaplicat` (@Patrick: prompt sau așteptat?).
+@Patrick: textele golden nu au cache comis (fără AI totul iese `regex`). Rulează `fill_cache --lipsa` pe golden și comite cache-ul; cache-ul `ai_cli` generat la mine rămâne necomis.
+Contract atins: nu
+
 ## 2026-11-15, C3 runda 3: banc pe data/golden (Claudiu, C)
 Gata: banca rulează pe `data/golden/` (20 cazuri): **14 ok, 6 diferite, 0 erori**; pe exemple-dummy 27/29 (`om-01/02`). Reparat în banc: `eronat_prototip` absent = false (8 diferențe false), coloană `nivel`. Smoke API (și stub), engine 36, `verifica_tot.sh` verzi. OpenSpec reglaje 3.1 bifat. Doc: „C3 runda 3" în `docs/etapa-24-api-sesiune3.md`.
 @Victor: (1) `g-05` stradă fără număr se potrivește cu linia `SIM-L30` -> `in_model` (așteptat predicție); (2) `g-07/g-08` (geocodare necunoscută) iese `neaplicat` fără `nivel`, golden zice `de_verificat`: aliniezi decizia/nivelul sau golden; (3) `r-02` treapta 1 (nod `SIM-020` din B3), golden 2: reglaj de distanță treaptă sau golden de recalculat.
