@@ -168,7 +168,11 @@ def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
                 else:  # extract_event cere dată: folosim data primirii raportului
                     data_ext = date.today().isoformat()
                     data_primirii = True
-            ev = ext(text, sursa, data_ext)
+            ev = dict(ext(text, sursa, data_ext))  # copie: nu atingem cache-ul din memorie
+            _counter[0] += 1
+            if ev.get("event_id") != f"EV-LIVE-{_counter[0]:03d}":
+                ev["event_id_extractie"] = ev.get("event_id")
+            ev["event_id"] = f"EV-LIVE-{_counter[0]:03d}"  # ID unic de sesiune
             metoda_ext = "claude (A)"
             if data_primirii:
                 metoda_ext = "claude (A), data = data primirii"
