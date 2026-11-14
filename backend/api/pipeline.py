@@ -150,8 +150,13 @@ def _scor_provizoriu(ev: dict, pot: dict) -> dict:
     return {"scor_nou": round(scor, 3), "nivel": nivel, "motive": motive}
 
 
-def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
+def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | None = None,
+               trace: list[dict] | None = None) -> dict:
     """Rulează pipeline-ul pe un raport nou; întoarce StepTrace.
+
+    `locatie` {lat, lon} (clic pe hartă) și `trace` (traseul tabletei) intră în `detalii` ale Event-ului
+    (`detalii.locatie`, `detalii.centru`, `detalii.trace`); `locatie` completează și `referinta.coordonate`
+    doar dacă extracția nu a găsit coordonate. Răspunsul are mereu `schimbari` (listă; goală dacă motorul nu le dă).
 
     Exemplu: proceseaza("Stâlp nou la 44.2847, 26.0606", "mentenanta")
     -> {"event_id": "EV-LIVE-001", "pasi": [...4 pași...], "modificari": [...], "mod": {...}}
@@ -187,6 +192,24 @@ def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
         ev = extract_stub(text, sursa, data)
         metoda_ext = ev.get("metoda_extractie")
 
+    if locatie or trace:
+        det = ev.setdefault("detalii", {})
+        if locatie:
+            det["locatie"] = det["centru"] = locatie
+            ref = ev.setdefault("referinta", {})
+            if not ref.get("coordonate"):
+                ref["coordonate"] = locatie
+        if trace:
+            det["trace"] = trace
+
+    out = _ruleaza(ev, metoda_ext)
+    out.setdefault("schimbari", [])   # nu inventăm: [] dacă motorul nu le dă (B3)
+    out.setdefault("ultima_actualizare", sources.ultima_actualizare(ev["data"]))
+    return out
+
+
+def _ruleaza(ev: dict, metoda_ext: str) -> dict:
+    """Aplică Event-ul: motorul real dacă există, altfel potrivire + scor provizoriu."""
     apply = sources.engine_func("apply_event")
     if apply:
         trace = apply(ev)
@@ -270,3 +293,25 @@ def live_element(element_id: str) -> dict | None:
                     "istoric": [{"data": x["event"]["data"], "nivel": x["stare"]["nivel"],
                                  "scor": x["stare"]["scor"], "motive": x["stare"]["motive"]}]}
     return None
+
+
+def decizie(tinta_id: str, decizie: str, motiv: str | None, data: str | None) -> dict:
+    """Decizia omului asupra unei predicții (Event `verificare`, `om_teren`, contracts/interfaces.md).
+
+    Cere funcția `aplica_decizie(event)` a motorului (B4; KeyError = predicție necunoscută,
+    ValueError = deja decisă). Fără ea ridică NotImplementedError (API: 501); nu simulează.
+    """
+    f = sources.engine_func("aplica_decizie")
+    if not f:
+        raise NotImplementedError("motorul nu are încă aplica_decizie (sarcina B4 a lui Victor)")
+    _counter[0] += 1
+    ev = {"event_id": f"EV-LIVE-{_counter[0]:03d}", "echipa_sursa": "om_teren", "tip": "verificare",
+          "referinta": {"element_id": tinta_id, "coordonate": None, "adresa": None, "nr_cadastral": None,
+                        "id_client": None},
+          "status": "executat", "data": data or date.today().isoformat(), "forma_sursa": "campuri",
+          "tip_sursa_pondere": "om_teren", "text_original": motiv or "", "incredere_extractie": 1.0,
+          "campuri_lipsa": [], "detalii": {"decizie": {"tinta_id": tinta_id, "decizie": decizie,
+                                                       "motiv": motiv}}}
+    out = f(ev)
+    out.setdefault("schimbari", [])
+    return out

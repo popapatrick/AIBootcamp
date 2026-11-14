@@ -110,8 +110,14 @@ def date_disponibile() -> list[str]:
     return sorted(_snapshot_files())
 
 
-def retea(data: str | None) -> dict:
+def retea(data: str | None, scenariu: str | None = None) -> dict:
     """GeoJSON cu starea la `data` (sau cea mai recentă). Alege instantaneul cu data <= `data`."""
+    if scenariu:
+        m = model_extrem()
+        data = data or max((j["data"] for j in m.jurnal), default=_azi())
+        fc = m.snapshot(data)
+        fc["data_instantaneu"] = data
+        return fc
     snap = engine_func("snapshot")
     if snap:
         if data is None:
@@ -129,8 +135,10 @@ def retea(data: str | None) -> dict:
     return fc
 
 
-def evenimente() -> list[dict]:
+def evenimente(scenariu: str | None = None) -> list[dict]:
     """Lista pentru timeline: [{data, event_id, rezumat, elemente_atinse}], sortată după dată."""
+    if scenariu:
+        return sorted(model_extrem().timeline(), key=lambda e: e.get("data", ""))
     tl = engine_func("timeline")
     if tl:
         items = tl()
@@ -174,3 +182,53 @@ def model_net() -> dict | None:
         return defects.build()["model"]
     except Exception:
         return None
+
+
+# ---------------------------------------------------------------- scenariul extrem (sesiunea 2)
+EXTREME = ROOT / "data" / "events" / "events.extreme.json"
+_extrem: list = []   # [GridModel] cache; rămâne în memorie până la repornire
+
+
+class ScenariuLipsa(Exception):
+    """Fișierul scenariului nu există (se traduce în 404)."""
+
+
+def model_extrem():
+    """GridModel separat: evenimentele de bază + `data/events/events.extreme.json`, reluate în ordinea datelor.
+
+    Nu atinge modelul de bază al motorului. Ridică ScenariuLipsa dacă fișierul lipsește.
+    shortcut: construit aici, nu în engine.get_model() (B 3.3 nu e gata); de înlocuit când engine primește sursa `extreme`.
+    """
+    if not _extrem:
+        if not EXTREME.is_file():
+            raise ScenariuLipsa("scenariul extrem nu există încă: lipsește data/events/events.extreme.json")
+        from backend.engine import engine as eng, osm
+        from backend.engine.model import GridModel
+        m = GridModel()
+        m.traseu_fn = osm.traseu_fn()
+        evs = eng._incarca_evenimente() + _load(EXTREME)
+        for ev in sorted(evs, key=lambda e: (e["data"], e["event_id"])):
+            m.apply_event(ev)
+        _extrem.append(m)
+    return _extrem[0]
+
+
+def ultima_actualizare(data: str | None, scenariu: str | None = None) -> str | None:
+    """`ultima_actualizare` din statistici(data) al motorului; None dacă motorul nu o dă încă."""
+    try:
+        if scenariu:
+            st = model_extrem().statistici(data or _azi())
+        else:
+            f = engine_func("statistici")
+            st = f(data or _date_motor()[-1]) if f else {}
+        return st.get("ultima_actualizare")
+    except ScenariuLipsa:
+        raise
+    except Exception:
+        return None
+
+
+def raport_json(nume: str):
+    """Conținutul `data/reports/<nume>` sau None dacă lipsește."""
+    p = ROOT / "data" / "reports" / nume
+    return _load(p) if p.is_file() else None

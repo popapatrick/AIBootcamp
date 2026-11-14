@@ -26,11 +26,33 @@ app = FastAPI(title="Grid model API (prototip, date fictive)", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 NOTA = "date fictive, rețea demonstrativă"
+Scenariu = Literal["extrem"] | None
+
+
+def _sc(f):
+    """Rulează f(); scenariul lipsă devine 404 clar."""
+    try:
+        return f()
+    except sources.ScenariuLipsa as e:
+        raise HTTPException(404, str(e))
+
+
+class Coord(BaseModel):
+    lat: float
+    lon: float
 
 
 class Raport(BaseModel):
     text: str
     sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]
+    data: _date | None = None
+    locatie: Coord | None = None          # clic pe hartă (cerere_racordare, mutare_fire)
+    trace: list[dict] | None = None       # traseul tabletei: [{t, lat, lon}]
+
+
+class Decizie(BaseModel):
+    decizie: Literal["accepta", "respinge"]
+    motiv: str | None = None
     data: _date | None = None
 
 
@@ -41,6 +63,7 @@ def health() -> dict:
     f = sources.engine_func("sursa_evenimente")
     if f:
         out["sursa_evenimente"] = f()
+    out["ultima_actualizare"] = sources.ultima_actualizare(None)   # null până o dă motorul (B3)
     return out
 
 
@@ -49,23 +72,63 @@ def rapoarte(r: Raport) -> dict:
     """Procesează un raport nou; întoarce StepTrace (extracție, potrivire, predicție, scor)."""
     if not r.text.strip():
         raise HTTPException(422, "text gol")
-    return pipeline.proceseaza(r.text, r.sursa, r.data.isoformat() if r.data else None)
+    return pipeline.proceseaza(r.text, r.sursa, r.data.isoformat() if r.data else None,
+                              r.locatie.model_dump() if r.locatie else None, r.trace)
 
 
 @app.get("/retea")
-def retea(data: _date | None = Query(None)) -> dict:
-    """GeoJSON FeatureCollection cu starea la `data`; properties = ElementState."""
+def retea(data: _date | None = Query(None), scenariu: Scenariu = Query(None)) -> dict:
+    """GeoJSON FeatureCollection cu starea la `data`; properties = ElementState.
+
+    `?scenariu=extrem`: scenariul din data/events/events.extreme.json (404 dacă lipsește).
+    `ultima_actualizare`: din motor (null până îl dă B).
+    """
     d = data.isoformat() if data else None
-    fc = sources.retea(d)
-    fc = pipeline.live_overlay(fc, d)
+    fc = _sc(lambda: sources.retea(d, scenariu))
+    if not scenariu:
+        fc = pipeline.live_overlay(fc, d)
+    fc["ultima_actualizare"] = _sc(lambda: sources.ultima_actualizare(d or fc.get("data_instantaneu"), scenariu))
     fc["nota"] = NOTA
     return fc
 
 
 @app.get("/evenimente")
-def evenimente() -> list[dict]:
-    """Lista pentru timeline, sortată după dată (include rapoartele live din sesiune)."""
-    return sorted(sources.evenimente() + pipeline.live_evenimente(), key=lambda e: e.get("data", ""))
+def evenimente(scenariu: Scenariu = Query(None)) -> list[dict]:
+    """Lista pentru timeline, sortată după dată (include rapoartele live din sesiune).
+
+    `?scenariu=extrem`: scenariul extrem (fără rapoarte live); 404 dacă fișierul lipsește.
+    """
+    live = [] if scenariu else pipeline.live_evenimente()
+    return sorted(_sc(lambda: sources.evenimente(scenariu)) + live, key=lambda e: e.get("data", ""))
+
+
+@app.get("/exemple")
+def exemple(sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]) -> list[dict]:
+    """Texte dummy pentru „Generează exemplu" din data/reports/exemple-dummy.json; [] dacă fișierul lipsește."""
+    d = sources.raport_json("exemple-dummy.json") or []
+    if isinstance(d, dict):   # acceptăm și {sursa: [...]}
+        d = d.get(sursa, [])
+    return [x for x in d if not isinstance(x, dict) or x.get("sursa", sursa) == sursa]
+
+
+@app.get("/trasee-demo")
+def trasee_demo() -> list[dict]:
+    """Trasee GPS dummy din data/reports/trasee-dummy.json; [] dacă fișierul lipsește."""
+    return sources.raport_json("trasee-dummy.json") or []
+
+
+@app.post("/predictii/{pred_id}/decizie")
+def decizie(pred_id: str, d: Decizie) -> dict:
+    """Decizia omului (accepta/respinge) asupra unei predicții. 501 până are motorul `aplica_decizie` (B4);
+    404 predicție necunoscută; 409 deja decisă."""
+    try:
+        return pipeline.decizie(pred_id, d.decizie, d.motiv, d.data.isoformat() if d.data else None)
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
+    except KeyError:
+        raise HTTPException(404, f"predicție necunoscută: {pred_id}")
+    except ValueError as e:
+        raise HTTPException(409, f"predicția are deja o decizie: {e}")
 
 
 @app.get("/date")
