@@ -1,0 +1,223 @@
+[
+  {
+    "event_id": "FB-01",
+    "echipa_sursa": "mentenanta",
+    "tip": "nod_lipsa",
+    "status": "executat",
+    "data": "2026-08-12",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.7,
+    "text_original": "La colțul străzii lipsește un stâlp din GIS, la 44.28497, 26.06019.",
+    "referinta": {
+      "coordonate": {
+        "lat": 44.2849717,
+        "lon": 26.0601908
+      }
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-02",
+    "echipa_sursa": "racordari",
+    "tip": "nod_lipsa",
+    "status": "executat",
+    "data": "2026-08-26",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.95,
+    "text_original": "Confirm stâlpul 6948201 la 44.28497, 26.06019, între 6166490 și 6396507.",
+    "referinta": {
+      "element_id": "6948201",
+      "coordonate": {
+        "lat": 44.2849717,
+        "lon": 26.0601908
+      }
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "noduri_vecine": [
+        "6166490",
+        "6396507"
+      ],
+      "sursa_date": "rezerva_B (sintetic)"
+    },
+    "tip_sursa_pondere": "tableta_coordonate"
+  },
+  {
+    "event_id": "FB-03",
+    "echipa_sursa": "investitii",
+    "tip": "activ_inlocuit",
+    "status": "executat",
+    "data": "2026-09-03",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.9,
+    "text_original": "Înlocuit cablul pe A-T-002 cu TYIR 3x70+54,6 OL-Al.",
+    "referinta": {
+      "element_id": "A-T-002"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-04",
+    "echipa_sursa": "racordari",
+    "tip": "racord_nou",
+    "status": "executat",
+    "data": "2026-09-08",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.85,
+    "text_original": "Racord nou client; coordonate trecute greșit: 26.066749, 44.281447.",
+    "referinta": {
+      "coordonate": {
+        "lat": 26.066749299999998,
+        "lon": 44.2814471433525
+      }
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-05",
+    "echipa_sursa": "apel_client",
+    "tip": "avarie_semnalata",
+    "status": "semnalat",
+    "data": "2026-09-12",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.8,
+    "text_original": "Nu am curent, client C-1001.",
+    "referinta": {
+      "coordonate": {
+        "lat": 44.281747749999994,
+        "lon": 26.065848350000003
+      },
+      "id_client": "C-1001"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-06",
+    "echipa_sursa": "apel_client",
+    "tip": "avarie_semnalata",
+    "status": "semnalat",
+    "data": "2026-09-13",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.8,
+    "text_original": "Nu am curent, client C-1002.",
+    "referinta": {
+      "coordonate": {
+        "lat": 44.281747749999994,
+        "lon": 26.065848350000003
+      },
+      "id_client": "C-1002"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-07",
+    "echipa_sursa": "apel_client",
+    "tip": "avarie_semnalata",
+    "status": "semnalat",
+    "data": "2026-09-14",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.8,
+    "text_original": "Cablu căzut, client C-1003.",
+    "referinta": {
+      "coordonate": {
+        "lat": 44.281747749999994,
+        "lon": 26.065848350000003
+      },
+      "id_client": "C-1003"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-08",
+    "echipa_sursa": "mentenanta",
+    "tip": "activ_inlocuit",
+    "status": "executat",
+    "data": "2026-09-20",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.7,
+    "text_original": "Pe A-T-002 am montat TYIR 3x95+54,6 OL-Al.",
+    "referinta": {
+      "element_id": "A-T-002"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sectiune_noua": "TYIR 3x95+54,6 OL-Al",
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  },
+  {
+    "event_id": "FB-09",
+    "echipa_sursa": "mentenanta",
+    "tip": "avarie_semnalata",
+    "status": "executat",
+    "data": "2026-10-05",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.9,
+    "text_original": "Verificat în teren A-T-021, avarie remediată.",
+    "referinta": {
+      "element_id": "A-T-021"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sursa_date": "rezerva_B (sintetic)"
+    },
+    "tip_sursa_pondere": "tableta_coordonate"
+  },
+  {
+    "event_id": "FB-10",
+    "echipa_sursa": "investitii",
+    "tip": "linie_planificata",
+    "status": "planificat",
+    "data": "2026-10-10",
+    "forma_sursa": "campuri",
+    "incredere_extractie": 0.95,
+    "text_original": "Linie nouă planificată între nodurile 6768404 și 7774567.",
+    "referinta": {},
+    "campuri_lipsa": [],
+    "detalii": {
+      "noduri": [
+        "6768404",
+        "7774567"
+      ],
+      "sursa_date": "rezerva_B (sintetic)"
+    },
+    "tip_sursa_pondere": "tableta_coordonate"
+  },
+  {
+    "event_id": "FB-11",
+    "echipa_sursa": "mentenanta",
+    "tip": "activ_inlocuit",
+    "status": "executat",
+    "data": "2026-10-15",
+    "forma_sursa": "text_liber",
+    "incredere_extractie": 0.6,
+    "text_original": "Se pare că A-T-077 a fost schimbat cu un cablu mai gros.",
+    "referinta": {
+      "element_id": "A-T-077"
+    },
+    "campuri_lipsa": [],
+    "detalii": {
+      "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
+      "sursa_date": "rezerva_B (sintetic)"
+    }
+  }
+]

@@ -13,7 +13,7 @@ REAL = r["real"]
 OK: list[bool] = []
 
 
-def ev(i, data, echipa, tip, status, forma="formular", incredere=0.9, sursa=None, **kw):
+def ev(i, data, echipa, tip, status, forma="campuri", incredere=0.9, sursa=None, **kw):
     e = {"event_id": f"T-{i:02d}", "echipa_sursa": echipa, "tip": tip, "status": status, "data": data,
          "forma_sursa": forma, "incredere_extractie": incredere, "text_original": "test",
          "referinta": kw.pop("referinta", {}), "detalii": kw.pop("detalii", {})}

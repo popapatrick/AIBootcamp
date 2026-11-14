@@ -2,6 +2,14 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Verificare integrare B <-> API (B)
+Rezultat: API-ul lui C se leagă de motorul real (`/health`: motor real, retea motor, evenimente motor), `smoke_api` trece.
+Problemă găsită și reparată de mine: fără evenimente de la A, `/evenimente` era gol. Am adăugat evenimente de REZERVĂ sintetice ale lui B în data/model/events.fallback.json (11, scenariile 1-4 + linie planificată); motorul le folosește doar dacă lipsesc data/events/events.json și events.stub.json. `engine.sursa_evenimente()` zice care s-a folosit. Alte reparații: `snapshot()` fără dată merge pe ultima dată; predicția unui nod lipsă se promovează pe ID-ul real când vine al doilea raport; câmpul `forma_sursa` are valorile `campuri` / `text_liber` (nu „formular").
+@A: când împingi data/events/events.json, preia automat locul rezervei. Folosește `forma_sursa` = `campuri` sau `text_liber` (nu „formular").
+@C bug în extracția stub (backend/api/pipeline.py): RE_NOD `\d{7}` prinde cifrele din coordonate (ex. „44.2849717" -> element_id 2849717) și raportul pică pe „absent_din_model" cu ID fals. Cere cuvânt-cheie („nod"/„stâlp") sau exclude cifrele precedate de „." sau urmate de cifre. Pot verifica după ce repari.
+@C: /health ar putea arăta și `engine.sursa_evenimente()` ca să se vadă când rulăm pe date de rezervă. Atenție: ID-urile elementelor prezise sunt `NOU-<event_id>` (nod) și `NOU-<event_id>-<vecin>` (legături); după promovare apar cu ID real.
+Contract atins: nu.
+
 ## Etapa 6 gata (B)
 Gata: traseu pe stradă din OSM (cache local în data/model/osm/, rutare fără internet). Doc: docs/etapa-6-traseu-osm.md. Test: `.venv/bin/python -m backend.engine.smoke_osm` (9 verificări). `get_model()` îl activează singur.
 Rezultat onest: pe nodul lipsă, o legătură urmează strada (0,96), cealaltă rămâne linie dreaptă (nicio stradă credibilă aproape). Traseul NU ridică scorul față de linia dreaptă (0,88 -> 0,85), dar propunerea trece oricum pragul. KMZ-ul e fictiv și nu urmează străzile, deci nu putem măsura precizia, doar arăta mecanismul.

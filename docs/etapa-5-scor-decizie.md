@@ -37,6 +37,14 @@ Fiecare stare are `motive` (cel mai recent primul), cu textul, efectul asupra sc
 - `scadere_per_30_zile` a fost schimbat de la −0,05 la −0,07 ca scăderea să se vadă în 3 luni.
 - Evenimentele se aplică în ordine cronologică; un eveniment mai vechi decât ultimul aplicat primește data ultimului (notă în `trace["nota"]`).
 
+## Evenimente de rezervă (cât lipsesc ale lui A)
+`engine.get_model()` reia evenimentele din `data/events/events.json`, apoi `events.stub.json` (ale lui A) și, dacă nu există niciunul, din `data/model/events.fallback.json` (11 evenimente sintetice ale lui B, generate cu `python -m backend.engine.fallback_events`, aliniate la scenariile 1, 2, 3, 4 și la linia planificată). `engine.sursa_evenimente()` spune care s-a folosit. Rezerva nu trebuie prezentată ca date de la PPC sau de la echipe.
+
+## Verificare integrare cu API-ul lui C (14 nov)
+- Fără evenimente, API-ul cu motor real avea `/evenimente` gol și testul `smoke_api` pica. Cu rezerva, `.venv/bin/python -m backend.api.smoke_api` trece („OK: API").
+- Un nod lipsă propus întâi ca predicție (text liber) apare punctat; un al doilea raport cu ID-ul real îl promovează: predicția veche e retrasă (rămâne vizibilă la datele anterioare), iar elementul nou ia ID-ul real. Ex.: `NOU-FB-01` (predicție, 12 aug) devine `6948201` (în model, 26 aug).
+- Vecinii **deduși** pot fi greșiți: pentru nodul lipsă, predicția din text liber a ales vecinul `7261864` în loc de `6396507`. De aceea scorul scade când vecinii nu sunt dați în raport.
+
 ## Limite cunoscute
 - Pragurile sunt puncte de plecare: se calibrează pe rapoartele reale ale lui A (testat până acum pe evenimente sintetice).
 - Apelurile fără element potrivit (client unde modelul nu are linie) rămân doar în jurnal, nu generează încă propuneri.

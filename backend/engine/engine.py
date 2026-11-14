@@ -17,12 +17,26 @@ EVENTS = ROOT / "data" / "events"
 _model: GridModel | None = None
 
 
+FALLBACK = ROOT / "data" / "model" / "events.fallback.json"
+_sursa = ["niciuna"]
+
+
 def _incarca_evenimente() -> list[dict]:
-    for nume in ("events.json", "events.stub.json"):
-        p = EVENTS / nume
-        if p.exists():
-            return sorted(json.loads(p.read_text(encoding="utf-8")), key=lambda e: (e["data"], e["event_id"]))
+    """events.json (A), apoi events.stub.json (A), apoi rezerva lui B (sintetică, doar cât lipsesc ale lui A)."""
+    for cale, nume in ((EVENTS / "events.json", "events.json"), (EVENTS / "events.stub.json", "events.stub.json"),
+                       (FALLBACK, "rezerva_B")):
+        if cale.exists():
+            ev = json.loads(cale.read_text(encoding="utf-8"))
+            if ev:
+                _sursa[0] = nume
+                return sorted(ev, key=lambda e: (e["data"], e["event_id"]))
     return []
+
+
+def sursa_evenimente() -> str:
+    """De unde vin evenimentele reluate: events.json | events.stub.json | rezerva_B | niciuna."""
+    get_model()
+    return _sursa[0]
 
 
 def get_model() -> GridModel:

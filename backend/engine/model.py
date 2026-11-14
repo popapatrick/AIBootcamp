@@ -35,6 +35,7 @@ class GridModel:
         self.ultima_data = start
         self.istoric: dict[str, list[dict]] = {}   # element_id -> versiuni de stare, cronologic
         self.predictii: dict[str, dict] = {}       # element_id -> {tip_element, geometrie, props} (neaplicate)
+        self.retrase: dict[str, dict] = {}         # predicții înlocuite de un element cu ID real (pentru istoric)
         self.jurnal: list[dict] = []
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         init = self.w["scor"]["initial_element_kmz"]
@@ -224,7 +225,8 @@ class GridModel:
             return self._neaplicat(event, trace, "Element lipsă, dar fără coordonate nu îl putem plasa pe hartă.")
         ref, det = event.get("referinta") or {}, event.get("detalii") or {}
         eid = (ref.get("element_id") or "").strip()
-        if not (eid.isdigit() and len(eid) >= 5) or eid in self.net["noduri"]:
+        id_dat = eid if (eid.isdigit() and len(eid) >= 5 and eid not in self.net["noduri"]) else None
+        if not id_dat:
             eid = f"NOU-{event['event_id']}"
         cu_tronsoane = event["tip"] == "nod_lipsa"
 
@@ -268,6 +270,7 @@ class GridModel:
         metoda = "traseu_strada_osm" if urmeaza is not None else "linie_dreapta"
 
         # există deja o predicție pentru același element? atunci acest raport o întărește
+        vechi_ids: list[str] = []
         pid = next((p for p, v in self.predictii.items() if "punct" in v and (
             p == eid or dist_m(pt, v["punct"]) <= w["potrivire"]["distanta_max_m"])), None)
         sp, factori = S.scor_propunere(event, q, w, urmeaza)
@@ -276,7 +279,11 @@ class GridModel:
             vechi = self._curent(pid)["predictie"]["scor_propunere"]
             sp = S.clamp(max(vechi, sp) + w["scor"]["confirmare_teren"] * S.fiabilitate(event, w) * q, w)
             motive.append(f"Al doilea raport despre {pid}: scorul propunerii crește de la {vechi} la {round(sp, 3)}.")
-            eid = pid
+            if id_dat and id_dat != pid:
+                vechi_ids = [pid] + [k for k in self.predictii if k.startswith(f"{pid}-") or k.startswith(f"NOU-{pid}-")]
+                eid = id_dat          # raportul dă ID-ul real: predicția se „mută" pe el
+            else:
+                eid = pid
         niv = S.decizie(sp, w)
         planificat = event["status"] != "executat"
         if planificat and niv == "in_model":
@@ -294,9 +301,15 @@ class GridModel:
         if niv == "de_verificat":
             self._scor_pas(trace, "neaplicat", rez, motive + [txt + f" Sub pragul {w['praguri']['predictie']}: nu se desenează, rămâne în jurnal."], sp)
             return
+        for oid in vechi_ids:           # predicția veche e înlocuită de elementul cu ID-ul real
+            tip_o = self._curent(oid)["tip_element"]
+            self._pune(oid, tip_o, data, retras=True, nivel="predictie",
+                       motive=[{"text": f"Înlocuită de elementul {eid} (raportul {event['event_id']} dă ID-ul real).",
+                                "efect": 0.0, "eveniment": event["event_id"], "data": data}] + self._curent(oid)["motive"])
+            self.retrase[oid] = self.predictii.pop(oid, None)   # geometria rămâne pentru date anterioare
         specs = [(eid, "nod", {"punct": pt, "geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}})]
         for v, puncte, met in legaturi:
-            tid = f"NOU-{eid}-{v}"
+            tid = f"{eid}-{v}" if eid.startswith("NOU-") else f"NOU-{eid}-{v}"
             specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v),
                                            "geometrie": {"type": "LineString",
                                                          "coordinates": [[o, a] for a, o in puncte]}}))
@@ -377,7 +390,7 @@ class GridModel:
     def _geometrie(self, eid: str) -> dict | None:
         el = self._elemente().get(eid)
         if el is None:
-            p = self.predictii.get(eid)
+            p = self.predictii.get(eid) or self.retrase.get(eid)
             return p["geometrie"] if p else None
         if el["tip_element"] == "tronson":
             return {"type": "LineString", "coordinates": [[o, a] for a, o in el["puncte"]]}
@@ -408,13 +421,15 @@ class GridModel:
                               "efect": round(eff - st["scor"], 3), "eveniment": None, "data": data}] + out["motive"]
         return out
 
-    def snapshot(self, data: str) -> dict:
-        """GeoJSON FeatureCollection cu starea rețelei la `data` (properties = ElementState + atribute)."""
+    def snapshot(self, data: str | None = None) -> dict:
+        """GeoJSON FeatureCollection cu starea rețelei la `data` (properties = ElementState + atribute).
+        Fără `data`: ultima dată cunoscută (ultimul eveniment aplicat)."""
+        data = data or self.ultima_data
         feats = []
         for eid in self.istoric:
             st = self.stare_efectiva(eid, data)
             g = self._geometrie(eid)
-            if not st or not g:
+            if not st or not g or st.get("retras"):
                 continue
             props = self._props_element(eid)
             props.update(st.pop("props", {}))
