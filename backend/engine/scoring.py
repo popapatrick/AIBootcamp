@@ -46,8 +46,11 @@ def efect_input(event: dict, calitate_potrivire: float, w: dict) -> tuple[float,
     f = fiabilitate(event, w)
     if event.get("echipa_sursa") == "apel_client":
         return w["scor"]["contradictie"] * f * calitate_potrivire, "semnal_negativ"
-    if event.get("status") == "executat" and event.get("echipa_sursa") in ECHIPE_TEREN:
-        return w["scor"]["confirmare_teren"] * f * calitate_potrivire, "confirmare"
+    if event.get("echipa_sursa") in ECHIPE_TEREN:
+        if event.get("status") == "executat":
+            return w["scor"]["confirmare_teren"] * f * calitate_potrivire, "confirmare"
+        if event.get("status") == "semnalat":
+            return w["scor"]["confirmare_teren"] * w["scor"]["factor_semnalat_teren"] * f * calitate_potrivire, "confirmare"
     return 0.0, "fara_efect"
 
 

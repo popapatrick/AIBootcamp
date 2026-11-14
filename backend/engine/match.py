@@ -83,13 +83,25 @@ def _coordonate(ref: dict, net: dict, semnale: list[str]):
     if _in_zona(lon, lat, bb):          # lat și lon inversate
         semnale.append("coordonate_corectate")
         return (lon, lat)
+    # punct zecimal pierdut: 4427960 / 2606510 -> 44.27960 / 26.06510
+    def _repara(v: float) -> float | None:
+        t = str(int(abs(v)))
+        return float(t[:2] + "." + t[2:]) if abs(v) >= 1000 and len(t) >= 4 else None
+    a, b = _repara(lat), _repara(lon)
+    if a is not None and b is not None:
+        for la, lo in ((a, b), (b, a)):
+            if _in_zona(la, lo, bb):
+                semnale.append("coordonate_zecimale_reparate")
+                return (la, lo)
     semnale.append("coordonate_in_afara_zonei")
     return None
 
 
 def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
     """Potrivește `event` (contracts/event.schema.json) pe `net` (modelul curent)."""
-    w = (weights or load_weights())["potrivire"]
+    w = dict((weights or load_weights())["potrivire"])
+    if event.get("echipa_sursa") == "apel_client":
+        w["distanta_max_m"] = w.get("distanta_max_apel_m", w["distanta_max_m"])
     ref = event.get("referinta") or {}
     els = _elemente(net)
     semnale: list[str] = []
@@ -145,6 +157,8 @@ def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
             q = w["calitate_dupa_coordonate"] * (1 - 0.5 * d / w["distanta_max_m"])
             if "coordonate_corectate" in semnale:
                 q *= 0.8
+            if "coordonate_zecimale_reparate" in semnale:
+                q *= w.get("factor_zecimale_reparate", 0.7)
             return rez("potrivit", cand[0]["element_id"], "coordonate", q,
                        f"Cel mai apropiat element: {cand[0]['element_id']} la {d} m")
         return rez("absent_din_model", None, "coordonate", 0.0,

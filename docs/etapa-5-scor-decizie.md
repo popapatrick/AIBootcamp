@@ -34,7 +34,7 @@ Fiecare stare are `motive` (cel mai recent primul), cu textul, efectul asupra sc
 
 ## Decizii
 - Scorul unei propuneri nu înmulțește totul cu fiabilitatea: așa nici un raport bun din text liber, nici unul de pe tabletă nu ar trece de 0,75 și „majoritatea n-ar intra" (cerința lui Victor). Cu valorile de acum, tableta și formularul cu ID trec; textul liber fără ID și cu extracție slabă rămâne predicție.
-- `scadere_per_30_zile` a fost schimbat de la −0,05 la −0,07 ca scăderea să se vadă în 3 luni.
+- `scadere_per_30_zile` a rămas −0,05 după calibrare (vezi `docs/calibrare.md`).
 - Evenimentele se aplică în ordine cronologică; un eveniment mai vechi decât ultimul aplicat primește data ultimului (notă în `trace["nota"]`).
 
 ## Evenimente de rezervă (cât lipsesc ale lui A)

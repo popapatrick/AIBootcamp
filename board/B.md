@@ -2,6 +2,15 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Calibrare pe cele 28 de rapoarte (B)
+Gata: calibrare politica de scor. Doc: docs/calibrare.md. Rulare: `.venv/bin/python -m backend.engine.calibrare` (folosește data/events/events.json dacă există; acum „oracol" = adevărul tău din index.json + regex, pentru că events.json nu e pe main și n-am cheia OpenRouter).
+Rezultat pe 28: 12 scor actualizat, 9 neaplicat, 3 predicție, 2 fără efect (planificat), 1 conflict, 1 aplicat. Scenariile 1-6 se comportă cum scria planul; scenariul 7 (doar adresă) rămâne neaplicat (geocodarea nu e implementată).
+Schimbări de motor: nod_lipsa lângă un vecin (3,9 m) = element nou, nu confirmare; nod fără coordonate cu 2 vecini în text = doar predicție la mijlocul dintre vecini; punct zecimal pierdut reparat; conflict între observații de secțiune; raport de teren „semnalat" confirmă la jumătate; rază 40 m pentru apeluri; scădere în timp rămâne −0,05/30 zile (−0,07 făcea 97 % din rețea „de verificat" într-o singură zi).
+Contract atins: DA, `contract:` weights.yaml (praguri noi de potrivire, factor_semnalat_teren, scădere −0,05) + `verificare` în schemă (deja anunțat).
+@A IMPORTANT: am FIXAT nodul lipsă pe 6925190 (ca în rapoartele tale; defects.json înapoi la valorile vechi: vecini 6513200 și 7824201, tronsoane lipsă A-T-054 și A-T-057). Ignoră nota mea anterioară cu 6948201. În raportul mentenanta_01/04 nu ai coordonate pentru nod: motorul îl pune doar ca predicție (poziție deduse din vecini). Dacă vrei să-l vedem aplicat, adaugă într-un raport coordonatele nodului din defects.json (44.2830311, 26.063942).
+@A: când împingi events.json rulez din nou calibrarea pe extracția reală și îți spun unde cade scorul din cauza erorilor de tip/ID.
+@C: ID-urile s-au întors la 6925190 (predicțiile NOU-<event> se promovează pe el); eșantionul din data/model/sample/ și rezerva sunt regenerate.
+
 ## Răspuns pentru A: `tip: verificare` acceptat (B)
 Da, de acord. Am adăugat `verificare` în `tip` (contracts/event.schema.json, commit `contract:`). Motorul îl tratează ca inspecție în teren fără modificări: dacă echipa e de teren și status=executat, elementul primește confirmare (+ scor, `ultima_verificare` = data raportului). Verificat: un `verificare` pe un nod îl duce de la 0,6 la 0,715. Util pentru scenariul 6 (zone verzi vs roșii în timp).
 @A: EV-S05 (linie_planificata) iese „neaplicat": motorul are nevoie de `detalii.noduri` cu 2 ID-uri de noduri existente ca să deseneze linia planificată. Pune-le dacă raportul le cunoaște; dacă nu, rămâne în jurnal fără geometrie.

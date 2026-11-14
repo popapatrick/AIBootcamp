@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 from pathlib import Path
 
 from backend.engine import scoring as S
@@ -96,7 +97,10 @@ class GridModel:
         trace["pasi"].append({"nume": "potrivire", "rezultat": m, "incredere": m["calitate"]})
 
         tip = event["tip"]
-        if tip == "linie_planificata":
+        m = self._ajusteaza_element_nou(event, m, trace)
+        if tip == "linie_planificata" and m["status"] == "potrivit":
+            self._efect_pe_element(event, m, trace)      # planificat pe un element existent: doar notă, fără schimbare
+        elif tip == "linie_planificata":
             self._planificata(event, m, trace)
         elif m["status"] == "absent_din_model" and tip in ("nod_lipsa", "racord_nou"):
             self._propune_element_nou(event, m, trace)
@@ -109,6 +113,29 @@ class GridModel:
                             "elemente": [s["element_id"] for s in trace["modificari"]],
                             "motiv": trace["pasi"][-1].get("motive", [""])[0] if trace["pasi"][-1].get("motive") else ""})
         return trace
+
+    def _ajusteaza_element_nou(self, event: dict, m: dict, trace: dict) -> dict:
+        """Un nod lipsă nu se potrivește cu un nod vecin aflat la câțiva metri: peste
+        `distanta_max_element_nou_m` față de elementul cel mai apropiat, e un element NOU."""
+        lim = self.w["potrivire"]["distanta_max_element_nou_m"]
+        if (event["tip"] == "nod_lipsa" and m["status"] == "potrivit" and m["metoda"] == "coordonate"
+                and m["candidati"] and m["candidati"][0]["distanta_m"] > lim):
+            m = {**m, "status": "absent_din_model", "element_id": None, "calitate": 0.0,
+                 "semnale": m["semnale"] + ["element_nou_langa_existent"],
+                 "motiv": f"Cel mai apropiat element ({m['candidati'][0]['element_id']}) e la "
+                          f"{m['candidati'][0]['distanta_m']} m, peste {lim} m: se tratează ca element nou, nu ca acela."}
+            trace["pasi"][-1] = {"nume": "potrivire", "rezultat": m, "incredere": 0.0}
+        return m
+
+    def _vecini_declarati(self, event: dict, exclus: str | None) -> list[str]:
+        """Noduri vecine date în raport: `detalii.noduri_vecine`, altfel ID-uri de noduri existente din text."""
+        det = event.get("detalii") or {}
+        out = [v for v in (det.get("noduri_vecine") or []) if v in self.net["noduri"]]
+        if len(out) < 2:
+            for tok in re.findall(r"\b\d{7}\b", event.get("text_original") or ""):
+                if tok in self.net["noduri"] and tok != exclus and tok not in out:
+                    out.append(tok)
+        return out
 
     def _scor_pas(self, trace: dict, decizie: str, rezultat: dict, motive: list[str], incredere: float | None = None):
         trace["decizie"] = decizie
@@ -127,18 +154,22 @@ class GridModel:
         f, q = S.fiabilitate(event, w), m["calitate"]
         det = event.get("detalii") or {}
         el = self._elemente()[eid]
-        sect_noua = det.get("sectiune_noua")
+        sect_noua = det.get("sectiune_noua") or det.get("sectiune_observata")
         motive: list[str] = []
         trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
+        # orice raport (nu planificat) care spune ce secțiune are un tronson e o observație, aplicată sau nu
+        obs_kw = ({"ultima_observatie": {"event_id": event["event_id"], "data": data, "echipa": event["echipa_sursa"],
+                                         "valoare": sect_noua}}
+                  if sect_noua and el["tip_element"] == "tronson" and event["tip"] != "linie_planificata" else {})
 
         # a) schimbare de proprietate (secțiune) la un tronson
-        if event["tip"] == "activ_inlocuit" and sect_noua and el["tip_element"] == "tronson":
+        if event["tip"] != "linie_planificata" and sect_noua and el["tip_element"] == "tronson":
             veche = cur["props"].get("sectiune", el.get("sectiune"))
             if sect_noua == veche:
                 motive.append(f"Raportul confirmă secțiunea existentă ({veche}).")
             else:
-                ua = cur.get("ultimul_aplicat")
-                conflict = (ua and ua["proprietate"] == "sectiune" and ua["valoare"] != sect_noua
+                ua = cur.get("ultima_observatie")
+                conflict = (ua and ua["valoare"] != sect_noua
                             and ua["event_id"] != event["event_id"]
                             and S.zile(ua["data"], data) <= w["scor"]["fereastra_conflict_zile"])
                 if conflict:
@@ -146,7 +177,7 @@ class GridModel:
                     scor = S.clamp(eff + delta, w)
                     t = (f"Conflict: {ua['event_id']} ({ua['echipa']}, {ua['data']}) spune «{ua['valoare']}», "
                          f"acest raport spune «{sect_noua}». Nimic nou aplicat, de verificat.")
-                    st = self._pune(eid, el["tip_element"], data, nivel="de_verificat", scor=scor,
+                    st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="de_verificat", scor=scor,
                                     motive=self._motiv(eid, t, delta, event),
                                     predictie={"metoda": "propunere_proprietate", "urmeaza_strada": None,
                                                "propunere": {"proprietate": "sectiune", "valoare": sect_noua},
@@ -155,7 +186,7 @@ class GridModel:
                     self._scor_pas(trace, "conflict", {"scor_nou": scor, "nivel": "de_verificat"}, [t])
                     return
                 sp, factori = S.scor_propunere(event, q, w)
-                niv = S.decizie(sp, w, planificat=event["status"] != "executat")
+                niv = S.decizie(sp, w, planificat=event["status"] == "planificat")
                 txt = (f"Propunere: secțiunea {veche} -> {sect_noua}, scor {sp} "
                        f"(fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
                        f"potrivire {factori['calitate_potrivire']}).")
@@ -163,7 +194,7 @@ class GridModel:
                     delta = w["scor"]["confirmare_teren"] * f * q
                     scor = S.clamp(eff + delta, w)
                     t = txt + f" Peste pragul {w['praguri']['aplicat']}: aplicat."
-                    st = self._pune(eid, el["tip_element"], data, nivel="in_model", scor=scor,
+                    st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="in_model", scor=scor,
                                     ultima_verificare=data, props={**cur["props"], "sectiune": sect_noua},
                                     motive=self._motiv(eid, t, delta, event), predictie=None,
                                     ultimul_aplicat={"event_id": event["event_id"], "data": data,
@@ -172,7 +203,7 @@ class GridModel:
                     dec = "aplicat"
                 elif niv == "predictie":
                     t = txt + f" Sub pragul {w['praguri']['aplicat']}: rămâne predicție, neaplicată."
-                    st = self._pune(eid, el["tip_element"], data, nivel="predictie", scor=eff,
+                    st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="predictie", scor=eff,
                                     motive=self._motiv(eid, t, 0.0, event),
                                     predictie={"metoda": "propunere_proprietate", "urmeaza_strada": None,
                                                "propunere": {"proprietate": "sectiune", "valoare": sect_noua},
@@ -180,7 +211,7 @@ class GridModel:
                     dec = "predictie"
                 else:
                     t = txt + f" Sub pragul {w['praguri']['predictie']}: doar de verificat."
-                    st = self._pune(eid, el["tip_element"], data, nivel="de_verificat", scor=eff,
+                    st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="de_verificat", scor=eff,
                                     motive=self._motiv(eid, t, 0.0, event))
                     dec = "de_verificat"
                 trace["modificari"].append(self._publica(eid, st))
@@ -210,7 +241,7 @@ class GridModel:
         else:
             motive.insert(0, text)
         ver = event["data"] if efect == "confirmare" else cur["ultima_verificare"]
-        st = self._pune(eid, el["tip_element"], data, nivel=nivel, scor=scor, ultima_verificare=ver,
+        st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel=nivel, scor=scor, ultima_verificare=ver,
                         motive=self._motiv(eid, " ".join(motive), delta, event))
         trace["modificari"].append(self._publica(eid, st))
         self._scor_pas(trace, "scor_actualizat" if efect != "fara_efect" else "fara_efect",
@@ -221,18 +252,23 @@ class GridModel:
         w, data = self.w, event["data"]
         cf = m["coordonate_folosite"]
         pt = (cf["lat"], cf["lon"]) if cf else None
-        if not pt:
-            return self._neaplicat(event, trace, "Element lipsă, dar fără coordonate nu îl putem plasa pe hartă.")
         ref, det = event.get("referinta") or {}, event.get("detalii") or {}
         eid = (ref.get("element_id") or "").strip()
         id_dat = eid if (eid.isdigit() and len(eid) >= 5 and eid not in self.net["noduri"]) else None
         if not id_dat:
             eid = f"NOU-{event['event_id']}"
         cu_tronsoane = event["tip"] == "nod_lipsa"
+        dati = self._vecini_declarati(event, id_dat) if cu_tronsoane else []
+        pozitie_dedusa = False
+        if not pt and cu_tronsoane and len(dati) >= 2:
+            na, nb = (self.net["noduri"][x] for x in dati[:2])
+            pt = ((na["lat"] + nb["lat"]) / 2, (na["lon"] + nb["lon"]) / 2)
+            pozitie_dedusa = True      # fără coordonate: mijlocul dintre vecini, doar ca predicție slabă
+        if not pt:
+            return self._neaplicat(event, trace, "Element lipsă, dar fără coordonate (și fără doi vecini cunoscuți) nu îl putem plasa pe hartă.")
 
         vecini, dedusi = [], False
         if cu_tronsoane:
-            dati = [v for v in (det.get("noduri_vecine") or []) if v in self.net["noduri"]]
             if len(dati) >= 2:
                 vecini = dati[:2]
             else:
@@ -245,6 +281,10 @@ class GridModel:
             q *= w["propunere"]["factor_vecini_dedusi"]
         if "coordonate_corectate" in m["semnale"]:
             q *= 0.8
+        if "coordonate_zecimale_reparate" in m["semnale"]:
+            q *= w["potrivire"]["factor_zecimale_reparate"]
+        if pozitie_dedusa:
+            q *= w["potrivire"]["factor_pozitie_din_vecini"]
 
         # geometria legăturilor: traseu OSM dacă există (etapa 6), altfel linie dreaptă
         legaturi, urm, info_leg = [], [], []
@@ -288,13 +328,17 @@ class GridModel:
         planificat = event["status"] != "executat"
         if planificat and niv == "in_model":
             niv = "predictie"
+        if pozitie_dedusa and niv == "in_model":
+            niv = "predictie"       # poziția e doar un ghid (mijlocul dintre vecini): nu se aplică în model
+            motive.append("Poziția nodului e dedusă din vecini (fără coordonate în raport): rămâne predicție.")
         txt = (f"Propunere: {'nod lipsă' if cu_tronsoane else 'racord nou'} {eid}"
                + (f" între {vecini[0]} și {vecini[1]}" + (" (vecini deduși)" if dedusi else "") if vecini else "")
                + f", scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
                  f"potrivire {factori['calitate_potrivire']}" + (f", urmează strada {urmeaza}" if urmeaza is not None else "") + ").")
         trace["pasi"].append({"nume": "predictie", "incredere": urmeaza if urmeaza is not None else q,
                               "rezultat": {"metoda": metoda, "element_nou": eid, "vecini": vecini,
-                                           "vecini_dedusi": dedusi, "urmeaza_strada": urmeaza,
+                                           "vecini_dedusi": dedusi, "pozitie_dedusa": pozitie_dedusa,
+                                           "urmeaza_strada": urmeaza,
                                            "legaturi": info_leg}})
         rez = {"scor_propunere": sp, "factori": factori, "nivel": niv}
 

@@ -1,20 +1,20 @@
 {
   "nota": "Date fictive. Adevărul despre defectele introduse în model.",
   "scenariul_1_nod_lipsa": {
-    "nod_lipsa": "6948201",
+    "nod_lipsa": "6925190",
     "tronsoane_lipsa": [
-      "A-T-017",
-      "A-T-133"
+      "A-T-054",
+      "A-T-057"
     ],
     "noduri_vecine": [
-      "6166490",
-      "6396507"
+      "6513200",
+      "7824201"
     ],
     "coordonate": {
-      "lat": 44.2849717,
-      "lon": 26.0601908
+      "lat": 44.2830311,
+      "lon": 26.063942
     },
-    "frangere_grade": 108.9
+    "frangere_grade": 120.9
   },
   "scenariul_2_cablu_inlocuit": {
     "tronson": "A-T-002",

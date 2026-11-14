@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "data" / "model"
 SECTIUNE_VECHE = "TYIR 3x35+54,6 OL-Al"   # ce știe modelul
 SECTIUNE_NOUA = "TYIR 3x70+54,6 OL-Al"    # ce e în teren după înlocuire
+NOD_LIPSA = "6925190"                      # nodul scos din model (curba străzii)
 
 
 def _bend_deg(net: dict, node_id: str, t1: dict, t2: dict) -> float:
@@ -46,17 +47,12 @@ def build() -> dict:
             if n:
                 inc.setdefault(n, []).append(t)
 
-    # Scenariul 1: nod aerian de grad 2, cu cea mai mare frângere a traseului (stradă curbată).
-    # Ambele tronsoane ≥ 18 m și niciun alt nod la mai puțin de 15 m: altfel o coordonată la nodul
-    # lipsă s-ar potrivi cu un nod vecin aflat la câțiva metri și scenariul nu ar fi clar.
-    def izolat(n):
-        c = (net["noduri"][n]["lat"], net["noduri"][n]["lon"])
-        return min(dist_m(c, (o["lat"], o["lon"])) for k, o in net["noduri"].items() if k != n) >= 15
-
-    cand = [(n, ts) for n, ts in inc.items()
-            if len(ts) == 2 and all(t["id"].startswith("A-") and t["lungime_m"] >= 18 for t in ts)
-            and net["noduri"][n]["serie"].startswith("Nod JT") and izolat(n)]
-    nod_lipsa, ts = max(cand, key=lambda x: _bend_deg(net, x[0], *x[1]))
+    # Scenariul 1: nodul din curba străzii, FIXAT pe 6925190 pentru că rapoartele lui A (data/reports/) îl
+    # folosesc deja. Nodul are un vecin la 3,9 m (7824201); ambiguitatea o rezolvă potrivirea
+    # (un element nou se potrivește pe coordonate doar la mai puțin de `distanta_max_element_nou_m`).
+    nod_lipsa = NOD_LIPSA
+    ts = inc[nod_lipsa]
+    assert len(ts) == 2, f"{nod_lipsa} nu are exact 2 tronsoane"
     taie = {t["id"] for t in ts}
     vecini = sorted({c for t in ts for c in t["capete"] if c and c != nod_lipsa})
 

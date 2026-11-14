@@ -39,7 +39,9 @@ def main() -> None:
     check("cod fără prefix, un singur tronson posibil", ev(element_id="T-100"), "potrivit", element_id="A-T-100", semnal="cod_fara_prefix")
     check("cod fără prefix ambiguu", ev(element_id="T-002"), "ambiguu", semnal="cod_fara_prefix")
     check("coordonate pe nod existent", ev(coordonate={"lat": n_lat, "lon": n_lon}), "potrivit", element_id=nod_ok["id"], metoda="coordonate")
-    check("coordonate la nodul lipsă", ev(coordonate=lipsa["coordonate"]), "absent_din_model", metoda="coordonate")
+    # nodul lipsă are un vecin la 3,9 m: match_event singur îl potrivește pe vecin; GridModel tratează
+    # nod_lipsa ca element NOU peste distanta_max_element_nou_m (vezi smoke_engine)
+    check("coordonate la nodul lipsă (doar potrivirea)", ev(coordonate=lipsa["coordonate"]), "potrivit", metoda="coordonate")
     check("lat/lon inversate", ev(coordonate={"lat": n_lon, "lon": n_lat}), "potrivit", element_id=nod_ok["id"], semnal="coordonate_corectate")
     check("zecimale lipsă", ev(coordonate={"lat": 4.428, "lon": 26.06}), "nepotrivit", semnal="coordonate_in_afara_zonei")
     check("doar adresă", ev(adresa="Str. Exemplu 5", nr_cadastral="12345"), "nepotrivit", semnal="doar_adresa")

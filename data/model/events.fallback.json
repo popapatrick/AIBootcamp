@@ -7,11 +7,11 @@
     "data": "2026-08-12",
     "forma_sursa": "text_liber",
     "incredere_extractie": 0.7,
-    "text_original": "La colțul străzii lipsește un stâlp din GIS, la 44.28497, 26.06019.",
+    "text_original": "La colțul străzii lipsește un stâlp din GIS, la 44.28303, 26.06394.",
     "referinta": {
       "coordonate": {
-        "lat": 44.2849717,
-        "lon": 26.0601908
+        "lat": 44.2830311,
+        "lon": 26.063942
       }
     },
     "campuri_lipsa": [],
@@ -27,19 +27,19 @@
     "data": "2026-08-26",
     "forma_sursa": "campuri",
     "incredere_extractie": 0.95,
-    "text_original": "Confirm stâlpul 6948201 la 44.28497, 26.06019, între 6166490 și 6396507.",
+    "text_original": "Confirm stâlpul 6925190 la 44.28303, 26.06394, între 6513200 și 7824201.",
     "referinta": {
-      "element_id": "6948201",
+      "element_id": "6925190",
       "coordonate": {
-        "lat": 44.2849717,
-        "lon": 26.0601908
+        "lat": 44.2830311,
+        "lon": 26.063942
       }
     },
     "campuri_lipsa": [],
     "detalii": {
       "noduri_vecine": [
-        "6166490",
-        "6396507"
+        "6513200",
+        "7824201"
       ],
       "sursa_date": "rezerva_B (sintetic)"
     },

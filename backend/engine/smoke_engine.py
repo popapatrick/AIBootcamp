@@ -40,6 +40,32 @@ def main() -> None:
              f"{t['decizie']} {t['pasi'][-1]['rezultat'].get('scor_propunere')}")
     verifica("tronsoanele noi sunt în model", sum(1 for k in m.net["tronsoane"] if k.startswith("NOU-")) == 2)
 
+    # nod_lipsa doar cu coordonate, la 3,9 m de un nod vecin: tratat ca element nou, nu ca nodul vecin
+    mn = GridModel()
+    t = mn.apply_event(ev(40, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+                          referinta={"coordonate": c}))
+    verifica("nod lipsă lângă un vecin -> element nou, nu confirmare", t["decizie"] in ("predictie", "adaugat")
+             and "element_nou_langa_existent" in t["pasi"][1]["rezultat"]["semnale"], t["decizie"])
+    # fără coordonate, cu doi vecini în text: poziție dedusă, doar predicție
+    t = GridModel().apply_event({**ev(41, "2026-08-09", "mentenanta", "nod_lipsa", "executat", incredere=0.95,
+                                       sursa="tableta_coordonate", referinta={"element_id": LIPSA["nod_lipsa"]}),
+                                 "text_original": f"Nodul lipsește între {LIPSA['noduri_vecine'][0]} și {LIPSA['noduri_vecine'][1]}."})
+    verifica("fără coordonate: poziție dedusă, nu se aplică", t["decizie"] == "predictie"
+             and t["pasi"][2]["rezultat"]["pozitie_dedusa"] is True, t["decizie"])
+    # doua observatii diferite de secțiune în fereastră, fără aplicare anterioară -> conflict
+    mc = GridModel()
+    mc.apply_event(ev(42, "2026-08-26", "mentenanta", "avarie_semnalata", "semnalat", forma="text_liber", incredere=0.7,
+                      referinta={"element_id": "A-T-021"}, detalii={"sectiune_observata": mc.net["tronsoane"]["A-T-021"]["sectiune"]}))
+    t = mc.apply_event(ev(43, "2026-08-29", "racordari", "activ_inlocuit", "executat", forma="text_liber", incredere=0.7,
+                          referinta={"element_id": "A-T-021"}, detalii={"sectiune_noua": "TYIR 3x50+54,6 OL-Al"}))
+    verifica("secțiune observată vs raportată diferit -> conflict", t["decizie"] == "conflict", t["decizie"])
+    # coordonate cu punct zecimal pierdut: reparate
+    mr = GridModel()
+    t = mr.apply_event(ev(44, "2026-09-03", "racordari", "racord_nou", "executat",
+                          referinta={"coordonate": {"lat": 4427960, "lon": 2606510}}))
+    verifica("coordonate fără punct zecimal: reparate", "coordonate_zecimale_reparate" in t["pasi"][1]["rezultat"]["semnale"],
+             str(t["pasi"][1]["rezultat"]["semnale"]))
+
     # Scenariul 1b: același tip de raport, dar text liber, fără ID, vecini deduși -> doar predicție
     m2 = GridModel()
     t = m2.apply_event(ev(2, "2026-08-10", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
@@ -99,7 +125,7 @@ def main() -> None:
     # Scenariul 6: fără verificare, scorul scade în timp și devine de_verificat
     mm = GridModel()
     a = next(x for x in mm.snapshot("2026-08-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
-    b = next(x for x in mm.snapshot("2026-11-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
+    b = next(x for x in mm.snapshot("2027-02-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
     verifica("scade în timp", b["scor"] < a["scor"] and b["nivel"] == "de_verificat", f"{a['scor']} -> {b['scor']} {b['nivel']}")
     verifica("„de ce” include scăderea în timp", any("Neverificat" in x["text"] for x in b["motive"]))
 
