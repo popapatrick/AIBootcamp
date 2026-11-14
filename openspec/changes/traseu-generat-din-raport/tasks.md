@@ -17,7 +17,7 @@
 
 ## 4. API (C)
 
-- [ ] 4.1 (C1) `trace_params` în `POST /rapoarte`, `trace_sursa` și opririle în răspuns; teste în `smoke_api.py`
+- [x] 4.1 (C1) `trace_params` în `POST /rapoarte`, `trace_sursa` și opririle în răspuns; teste în `smoke_api.py` (API pass-through; complet după B4)
 
 ## 5. Documentație
 

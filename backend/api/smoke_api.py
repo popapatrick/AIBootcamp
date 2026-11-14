@@ -197,6 +197,35 @@ def main() -> None:
         assert to["pasi"][-1]["rezultat"]["scor_propunere"] < tcl["pasi"][-1]["rezultat"]["scor_propunere"], "operator < clic"
     print("locatie operator:", lo["lat"], lo["lon"], "±", lo["precizie_m"], "m", to["modificari"][0]["nivel"] if to["modificari"] else "")
 
+    # --- sesiunea 3 (C1): trace_params, geocodare, zona, /reguli, /geocodeaza
+    tp = {"puncte": 60, "zgomot_m": 5, "durata_oprire_min": 12, "acoperire": 0.9, "decalaj_m": 0}
+    t3 = c.post("/rapoarte", json={"text": "Stâlp nou care nu apare în GIS, coordonate 44.2849717, 26.0601908.",
+                                   "sursa": "mentenanta", "data": "2026-10-26", "trace_params": tp}).json()
+    assert ext(t3)["detalii"]["trace_params"] == tp, ext(t3)["detalii"]
+    assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta", "trace_params": {"puncte": "a"}}).status_code == 422
+    assert "trace_params" not in ext(rn).get("detalii", {}), "trace_params apare fără să fie cerut"
+    from backend.api import pipeline as _pl
+    geo = {"lat": 44.28, "lon": 26.06, "precizie_m": 25, "metoda": "osm_cache", "acuratete": 0.55, "motiv": "smoke"}
+    o = {"pasi": [{"nume": "extractie", "rezultat": {"detalii": {"geocodare": geo}}}, {"nume": "scor"}]}
+    _pl._pas_geocodare({"detalii": {}}, o)
+    assert [p["nume"] for p in o["pasi"]] == ["extractie", "geocodare", "scor"] and o["pasi"][1]["rezultat"] == geo \
+        and o["pasi"][1]["incredere"] == 0.55, o
+    o = {"pasi": [{"nume": "extractie", "rezultat": {"detalii": {}}}]}
+    _pl._pas_geocodare({"detalii": {}}, o)
+    assert [p["nume"] for p in o["pasi"]] == ["extractie"], "fără geocodare în Event nu se inventează pasul"
+    z = c.get("/retea").json()["zona"]
+    assert set(z) == {"centru", "raza_m"} and z["raza_m"] == 3000 and 44 < z["centru"]["lat"] < 45 \
+        and 26 < z["centru"]["lon"] < 27, z
+    rg = c.get("/reguli")
+    assert rg.status_code == 200 and rg.json()["zona"]["raza_max_m"] == 3000 and "praguri" in rg.json(), rg.text
+    g = c.get("/geocodeaza", params={"adresa": "Strada Liviu Rebreanu 12"})
+    if sources.geocodeaza_func():
+        assert g.status_code == 200 and "status" in g.json(), g.text
+    else:
+        assert g.status_code == 501 and "B2/A1" in g.json()["detail"], g.text
+    assert c.get("/geocodeaza").status_code == 422
+    print("sesiunea 3: zona", z["raza_m"], "m, /reguli ok, /geocodeaza", g.status_code)
+
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
     assert c.get("/ui/").status_code == 200
     print("OK: API")

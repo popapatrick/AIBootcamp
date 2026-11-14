@@ -245,3 +245,31 @@ def raport_json(nume: str):
     """Conținutul `data/reports/<nume>` sau None dacă lipsește."""
     p = ROOT / "data" / "reports" / nume
     return _load(p) if p.is_file() else None
+
+
+def geocodeaza_func():
+    """`geocodeaza(referinta, strazi, cfg)` din backend.geo / motor (contracts/interfaces.md, sesiunea 3) sau None."""
+    return _find("geocodeaza", ["backend.geo", "backend.geo.geocodare", "backend.geo.geocodeaza"] + _ENGINE_MODULES)
+
+
+def zona() -> dict | None:
+    """Zona prototipului {centru: {lat, lon}, raza_m}: din `engine.zona.zona_ok` dacă există (B1), altfel centroidul
+    nodurilor rețelei de start + `zona.raza_max_m` din weights.yaml. None dacă lipsește modelul sau configurația."""
+    import yaml
+    net = model_net()
+    cfg = yaml.safe_load((ROOT / "contracts" / "weights.yaml").read_text(encoding="utf-8"))
+    if not net or "zona" not in cfg:
+        return None
+    n = list(net["noduri"].values())
+    f = _find("zona_ok", ["backend.engine.zona"])
+    if f and n:
+        try:
+            r = f(n[0]["lat"], n[0]["lon"], net, cfg)
+            return {"centru": r["centru"], "raza_m": r["raza_m"]}
+        except Exception:
+            pass
+    if not n:
+        return None
+    return {"centru": {"lat": round(sum(x["lat"] for x in n) / len(n), 7),
+                       "lon": round(sum(x["lon"] for x in n) / len(n), 7)},
+            "raza_m": cfg["zona"]["raza_max_m"]}

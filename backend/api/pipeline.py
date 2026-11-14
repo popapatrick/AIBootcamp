@@ -183,9 +183,13 @@ def locatie_operator(text: str, lat: float | None = None, lon: float | None = No
 
 
 def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | None = None,
-               trace: list[dict] | None = None, locatie_operator: dict | None = None) -> dict:
+               trace: list[dict] | None = None, locatie_operator: dict | None = None,
+               trace_params: dict | None = None) -> dict:
     """Rulează pipeline-ul pe un raport nou; întoarce StepTrace.
 
+    `trace_params` (opțional) intră în `detalii.trace_params`: motorul/backend.trace îl folosesc la generarea traseului.
+    Câmpurile sesiunii 3 produse de motor (`detalii.geocodare`, `trace_sursa`, `origine`, `predictie.slaba/treapta`,
+    `eronat_prototip`, `adresa_structurata`) trec neatinse; dacă Event-ul are `detalii.geocodare`, se adaugă pasul „geocodare".
     `locatie_operator` {lat, lon, precizie_m, simulata} (poziție simulată) intră în `detalii.locatie_operator`.
     `locatie` {lat, lon} (clic pe hartă) și `trace` (traseul tabletei) intră în `detalii` ale Event-ului
     (`detalii.locatie`, `detalii.centru`, `detalii.trace`); `locatie` completează și `referinta.coordonate`
@@ -243,6 +247,8 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
 
     if locatie_operator:   # doar indiciu: NU intră în referinta.coordonate (motorul îl pune ultimul și îl marchează simulat)
         ev.setdefault("detalii", {})["locatie_operator"] = locatie_operator
+    if trace_params:
+        ev.setdefault("detalii", {})["trace_params"] = trace_params
     if locatie or trace:
         det = ev.setdefault("detalii", {})
         if locatie:
@@ -254,6 +260,7 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
             det["trace"] = trace
 
     out = _ruleaza(ev, metoda_ext)
+    _pas_geocodare(ev, out)
     pas = next((p for p in out["pasi"] if p.get("nume") == "extractie"), None)
     if pas is not None:
         pas["metoda_cod"] = cod
@@ -262,6 +269,21 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
     out.setdefault("schimbari", [])   # nu inventăm: [] dacă motorul nu le dă (B3)
     out.setdefault("ultima_actualizare", sources.ultima_actualizare(ev["data"]))
     return out
+
+
+def _pas_geocodare(ev: dict, out: dict) -> None:
+    """Adaugă pasul „geocodare” (după extracție) dacă Event-ul sau pasul de extracție poartă `detalii.geocodare`.
+    Nu inventează: fără `detalii.geocodare` (motorul nu a geocodat) nu se adaugă nimic."""
+    pasi = out.get("pasi", [])
+    if any(p.get("nume") == "geocodare" for p in pasi):
+        return
+    pe = next((p for p in pasi if p.get("nume") == "extractie"), None)
+    surse = [ev] + ([pe["rezultat"]] if pe and isinstance(pe.get("rezultat"), dict) else [])
+    geo = next((g for e in surse if isinstance((g := (e.get("detalii") or {}).get("geocodare")), dict)), None)
+    if geo is None:
+        return
+    i = pasi.index(pe) + 1 if pe in pasi else 0
+    pasi.insert(i, {"nume": "geocodare", "rezultat": geo, "incredere": geo.get("acuratete")})
 
 
 def _ruleaza(ev: dict, metoda_ext: str) -> dict:

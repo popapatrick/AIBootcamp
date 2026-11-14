@@ -40,6 +40,8 @@ Valorile de mai jos sunt verificate cap-coadă pe API local cu extracția Claude
 6. **Demontat și val de apeluri** (opțional, din `docs/DEMO.md`): A-T-014 demontat apoi `scos_din_uz`; 3 apeluri pe A-T-030 scad scorul cu plafon.
 7. **Locația operatorului (simulată).** Cerere racordare fără coordonate, text „Cerere racordare: client nou, casă pe Strada Liviu Rebreanu", buton „Folosește locația operatorului (simulată)". Se vede: punct dummy pe stradă cu ±40 m și marcaj „simulată", indicii cu `gasit`, lanț punctat de 4 stâlpi, scor 0,48-0,57 (sub cel cu clic, 0,60-0,71), nivel predicție, „de ce" cu „poziția SIMULATĂ". Verifică și un text negăsit („strada Foo"): eroare 422 clară, fără punct. Încă fără buton în Lovable (prompt separat); până atunci se verifică pe API: `GET /locatie-operator-demo?text=...`.
 
+8. **Sesiunea 3 (degradat până la motor).** `GET /retea` are `zona` (cerc 3000 m); `GET /reguli` arată `weights.yaml`; `GET /geocodeaza?adresa=...` dă 501 până la A1/B2; `POST /rapoarte` acceptă `trace_params`. Banca: `python3 -m backend.api.banc_logica` (schelet, fără `data/golden/`). Promptul Lovable sesiune 3 e netrimis, deci UI-ul nu arată încă origine/slabă/zonă. Detalii: `docs/etapa-18-api-sesiune3.md`, reglaje: `docs/etapa-23-reglaje.md`.
+
 ### Riscuri cunoscute (abateri pe board)
 - Cererea de racordare pe sursa `racordari` (aceleași coordonate) iese `predictie` 0,738, nu `adaugat` ~0,84 cum scrie DEMO.md (extracție 0,7, sub prag 0,75). Nu promite „adaugat" decât cu raport structurat. @Victor aliniază DEMO.md/pragul.
 - Textul tabletei „stâlp nou necartat pe Strada Liviu Rebreanu..." iese `racord_nou`, nu `nod_lipsa`, la extracția Claude (prompt A2). Folosește `trace-1` din „Generează traseu", nu textul liber.

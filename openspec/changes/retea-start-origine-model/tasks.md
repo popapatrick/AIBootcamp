@@ -16,8 +16,8 @@
 
 ## 4. API și UI (C)
 
-- [ ] 4.1 (C1) `origine` în răspuns și teste în `smoke_api.py`
-- [ ] 4.2 (C4) Prompt Lovable (scris, netrimis): „Rețea de start" / „Generat de model", contur punctat, fără „Predicție AI"
+- [x] 4.1 (C1) `origine` în răspuns și teste în `smoke_api.py` (API pass-through; complet după B3)
+- [x] 4.2 (C4) Prompt Lovable (scris, netrimis): „Rețea de start" / „Generat de model", contur punctat, fără „Predicție AI"
 
 ## 5. Documentație
 

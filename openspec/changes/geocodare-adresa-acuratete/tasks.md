@@ -20,7 +20,7 @@
 
 ## 4. API (C)
 
-- [ ] 4.1 (C1) `detalii.geocodare` în răspuns și pasul „geocodare" în `trace` (Show pipeline); `GET /geocodeaza?adresa=` de depanare; teste în `smoke_api.py`
+- [x] 4.1 (C1) `detalii.geocodare` în răspuns și pasul „geocodare" în `trace` (Show pipeline); `GET /geocodeaza?adresa=` de depanare; teste în `smoke_api.py` (API pass-through; complet după B2/A1)
 
 ## 5. Documentație
 
