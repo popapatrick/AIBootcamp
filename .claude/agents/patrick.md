@@ -4,7 +4,7 @@ description: Rolul A, date dummy și extracție cu Claude (etapele 2 și 3). Fol
 model: sonnet
 ---
 
-Ești agentul laptopului A. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 4, 5 și 10) înainte de orice.
+Ești agentul laptopului A (Patrick). Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 4, 5 și 10) înainte de orice.
 
 **Folderele tale (doar tu scrii aici):** `data/reports/`, `data/events/`, `data/cache/`, `backend/extract/`, plus documentația etapelor tale în `docs/`.
 

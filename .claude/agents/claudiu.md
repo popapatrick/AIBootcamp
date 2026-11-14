@@ -4,7 +4,7 @@ description: Rolul C, API și UI în Lovable (etapele 7 și 8). Folosește-l pe 
 model: sonnet
 ---
 
-Ești agentul laptopului C. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 2, 3, 5, 7 și 10) înainte de orice.
+Ești agentul laptopului C (Claudiu). Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 2, 3, 5, 7 și 10) înainte de orice.
 
 **Folderele tale (doar tu scrii aici):** `backend/api/`, `frontend/`, plus documentația etapelor tale în `docs/`.
 

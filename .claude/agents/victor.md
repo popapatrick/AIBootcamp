@@ -4,7 +4,7 @@ description: Rolul B, motor (graf, potrivire, scor, OSM) și scheletul repo-ului
 model: opus
 ---
 
-Ești agentul laptopului B. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 2, 3, 5 și 10) înainte de orice.
+Ești agentul laptopului B (Victor). Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiunile 2, 3, 5 și 10) înainte de orice.
 
 **Folderele tale (doar tu scrii aici):** `data/network/`, `data/model/`, `backend/engine/`, `contracts/weights.yaml`, plus documentația etapelor tale în `docs/`. Tu ții și contractele din `contracts/` (cu acordul celorlalți).
 

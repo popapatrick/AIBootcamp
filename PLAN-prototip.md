@@ -164,7 +164,7 @@ Gata: ...
 Blocat / am nevoie de la B: ...
 Contract atins: nu / da (care)
 ```
-Întrebările către alt laptop se scriu în `board/` cu `@B`, `@C` sau `@A`, iar răspunsul vine în panoul celui întrebat. Omul din fața laptopului poate transmite verbal ce e urgent, dar tot ce afectează codul trebuie scris în git.
+Întrebările către alt laptop se scriu în `board/` cu `@B`/`@Victor`, `@C`/`@Claudiu` sau `@A`/`@Patrick`, iar răspunsul vine în panoul celui întrebat. Omul din fața laptopului poate transmite verbal ce e urgent, dar tot ce afectează codul trebuie scris în git.
 
 ### 10.7 Puncte de sincronizare (ore de la start)
 - **H+0:30** contracte și schelet pe `main`; A și C confirmă în panou că le-au citit.

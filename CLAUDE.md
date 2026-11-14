@@ -7,7 +7,7 @@ Roluri: A = Patrick, B = Victor, C = Claudiu (agenți `.claude/agents/patrick.md
 
 ## La începutul fiecărui bloc de lucru
 1. `git pull --rebase origin main`
-2. Citește `board/*.md` (în special întrebările către tine, marcate `@A`/`@B`/`@C`) și `git log --oneline -20 -- contracts/`.
+2. Citește `board/*.md` (în special întrebările către tine, marcate `@A`/`@B`/`@C` sau `@Patrick`/`@Victor`/`@Claudiu`) și `git log --oneline -20 -- contracts/`.
 3. Alege următoarea etapă din `PLAN-prototip.md` care e a ta.
 
 ## Reguli git
