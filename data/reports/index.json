@@ -37,7 +37,7 @@
     "data": "2026-08-14",
     "scenariu": null,
     "element_id_asteptat": "R-T-006",
-    "tip_asteptat": "linie_planificata"
+    "tip_asteptat": "activ_inlocuit"
   },
   {
     "fisier": "2026-08-18_mentenanta_04.txt",
@@ -214,6 +214,14 @@
     "scenariu": 7,
     "element_id_asteptat": null,
     "tip_asteptat": "racord_nou"
+  },
+  {
+    "fisier": "2026-10-23_mentenanta_11.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-23",
+    "scenariu": 1,
+    "element_id_asteptat": "6925190",
+    "tip_asteptat": "nod_lipsa"
   },
   {
     "fisier": "2026-10-27_investitii_05.txt",

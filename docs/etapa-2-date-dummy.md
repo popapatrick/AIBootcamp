@@ -3,12 +3,12 @@
 Date FICTIVE (PTAB 7812).
 
 ## Ce face
-`data/reports/` conține 28 de rapoarte fictive (.txt): ~12 fișe cu câmpuri, restul text liber și transcrieri de apeluri. Acoperă scenariile 1–7; scenariul 8 este rutină. Fiecare fișier începe cu `DATE FICTIVE`.
+`data/reports/` conține 29 de rapoarte fictive (.txt): ~12 fișe cu câmpuri, restul text liber și transcrieri de apeluri. Acoperă scenariile 1–7; scenariul 8 este rutină. `2026-10-23_mentenanta_11.txt` închide scenariul 1 (nod 6925190 confirmat pe teren, lipsă din GIS, cu coordonate). Fiecare fișier începe cu `DATE FICTIVE`.
 
 ## Distribuție pe sursă
 | sursa | nr. |
 |---|---|
-| mentenanta | 10 |
+| mentenanta | 11 |
 | racordari | 7 |
 | apel_client | 6 |
 | investitii | 5 |

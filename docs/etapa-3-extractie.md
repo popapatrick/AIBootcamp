@@ -13,8 +13,7 @@ extract_event(text: str, sursa: str, data: str | None = None) -> dict
 ## Cum funcționează
 - Model: `claude-haiku-5-5`, cu unealta `emit_event` forțată (`tool_choice`), având ca input schema evenimentului.
 - Validare cu `jsonschema`. La eroare, o reîncercare. Dacă și a doua e invalidă: `ValueError`.
-- Cache în `data/cache/` (cheie sha256 din model + sursa + data + text). Cache hit = fără apel API.
-- Promptul (`SYSTEM`) nu intră în cheia cache. După orice modificare a promptului: șterge `data/cache/*.json`.
+- Cache în `data/cache/` (cheie sha256 din model + prompt `SYSTEM` + sursa + data + text). Cache hit = fără apel API.
 
 ## Cum se rulează
 ```bash
@@ -28,12 +27,13 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 ## Status
 - Nerulat pe API real (lipsă cheie).
 - Testul offline (`test_extract`) acoperă validarea, cache-ul, reîncercarea și eroarea după reîncercare.
-- Pendinte: verificare manuală a ≥3 rapoarte față de `data/reports/index.json`.
+- Verificat: toate rapoartele comparate automat cu `data/reports/index.json`, plus citite manual `2026-08-05_mentenanta_02`, `2026-08-29_racordari_02`, `2026-10-20_mentenanta_10`.
 
 ## Limite cunoscute
 - Cheie `sk-or-` (OpenRouter): folosește `base_url=openrouter.ai/api`, model `anthropic/claude-haiku-5.5` (slug verificat pe OpenRouter; suprascrie cu `EXTRACT_MODEL`).
 - Cache-ul nu prinde schimbările de prompt (vezi mai sus).
 - Coordonatele sunt luate doar dacă apar explicit în text; nu se deduc.
+- Coordonate malformate (zecimală lipsă, lat/lon inversate): copiate exact ca în text, nu corectate; `coordonate_de_verificat` în `campuri_lipsa`. Corectarea o face motorul.
 
 ## Ce trebuie să știe ceilalți
 - B: `events.json` are același format ca `events.stub.json`, cu ID-uri `EV-001`...
