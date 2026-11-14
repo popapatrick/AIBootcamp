@@ -16,6 +16,12 @@ import yaml
 
 from backend.api import sources
 
+try:
+    from backend.extract import CacheMiss
+except Exception:  # extracția lui A lipsește: nu va fi ridicată oricum
+    class CacheMiss(Exception):  # type: ignore[no-redef]
+        pass
+
 _live: list[dict] = []          # rapoarte procesate în sesiunea curentă (mod stub/parțial)
 _counter = [0]
 
@@ -27,6 +33,9 @@ RE_DATA = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b|\b(\d{1,2})[./](\d{1,2})[./](\d{4
 RE_CADASTRAL = re.compile(r"(?:nr\.?\s*)?cadastral\w*\s*[:\-]?\s*(\d{3,})", re.I)
 RE_ADRESA = re.compile(r"\b((?:str\.|strada|șos\.|sos\.|bd\.|aleea)\s+(?:(?!\bnr\b|\bnum[ăa]rul\b)[^,.;\n])+(?:(?:nr\.?|num[ăa]rul)\s*\d+[A-Za-z]?)?)",
                        re.I)
+RE_CERERE_RACORDARE = re.compile(r"^\s*cerere racordare\s*:", re.I)
+RE_FIRE_MUTATE = re.compile(r"^\s*fire mutate\s*:\s*(?P<motiv>[^,]+?)\s*,\s*centru\b", re.I)
+RE_TABLETA = re.compile(r"^\s*raport tablet[ăa]\s*:\s*control pe\b", re.I)
 RE_CLIENT = re.compile(r"\b(?:client|cod client|id client)\s*[:\-]?\s*([A-Z0-9-]{4,})", re.I)
 
 TIPURI = [  # (cuvinte cheie, tip, status implicit)
@@ -74,7 +83,19 @@ def extract_stub(text: str, sursa: str, data: str | None) -> dict:
             lipsa.append(f"referinta.{camp}")
 
     tip, status = None, None
-    if sursa == "apel_client":
+    detalii: dict = {}
+    fm = RE_FIRE_MUTATE.match(text)
+    if RE_CERERE_RACORDARE.match(text):   # textele fixe ale butoanelor UI (C5-C7), fără AI
+        tip, status = "cerere_racordare", "planificat"
+    elif fm and ref["coordonate"]:
+        tip, status = "mutare_fire", "executat"
+        motiv = fm.group("motiv").strip()
+        detalii = {"centru": ref["coordonate"],
+                   "motiv_mutare": "sens_giratoriu" if "giratoriu" in motiv.lower() else motiv}
+        lipsa.append("raza_m")   # textul nu o dă; motorul folosește raza implicită
+    elif RE_TABLETA.match(text):   # localizarea vine din trace (detalii.trace), nu din text
+        tip, status = "nod_lipsa", "executat"
+    elif sursa == "apel_client":
         tip, status = "avarie_semnalata", "semnalat"
     else:
         for cuvinte, t, s in TIPURI:
@@ -109,7 +130,7 @@ def extract_stub(text: str, sursa: str, data: str | None) -> dict:
         "text_original": text,
         "incredere_extractie": incredere,
         "campuri_lipsa": lipsa,
-        "detalii": {"sectiune_noua": sec.group(1).strip()} if sec else {},
+        "detalii": detalii or ({"sectiune_noua": sec.group(1).strip()} if sec else {}),
         "metoda_extractie": "stub_regex (fără Claude)",
     }
 
@@ -162,6 +183,7 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
     -> {"event_id": "EV-LIVE-001", "pasi": [...4 pași...], "modificari": [...], "mod": {...}}
     """
     ext = sources.extract_func()
+    cod, motiv = "regex", None
     if ext:
         try:
             data_primirii = False
@@ -173,7 +195,9 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
                 else:  # extract_event cere dată: folosim data primirii raportului
                     data_ext = date.today().isoformat()
                     data_primirii = True
+            hit = sources.cache_hit(text, sursa, data_ext)
             ev = dict(ext(text, sursa, data_ext))  # copie: nu atingem cache-ul din memorie
+            cod = "ai_cache" if hit else "ai_api"
             _counter[0] += 1
             if ev.get("event_id") != f"EV-LIVE-{_counter[0]:03d}":
                 ev["event_id_extractie"] = ev.get("event_id")
@@ -184,10 +208,18 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
                 lipsa = ev.setdefault("campuri_lipsa", [])
                 if not any(str(x).startswith("data (") for x in lipsa):
                     lipsa.append("data (folosită data primirii raportului)")
+        except CacheMiss:  # text nou, fără cache și fără API permis
+            ev = extract_stub(text, sursa, data)
+            metoda_ext = "stub_regex (text nou, fără cache)"
+            motiv = "text nou, fără cache: extracție simplificată (regex)"
+            ev["metoda_extractie"] = metoda_ext
+            cod = "regex"
         except Exception as e:  # cheie lipsă, rețea, ValueError: demo-ul nu pică
             ev = extract_stub(text, sursa, data)
             metoda_ext = f"stub_regex (rezervă: {type(e).__name__})"
+            motiv = f"extracția AI a eșuat ({type(e).__name__}): extracție simplificată (regex)"
             ev["metoda_extractie"] = metoda_ext
+            cod = "regex"
     else:
         ev = extract_stub(text, sursa, data)
         metoda_ext = ev.get("metoda_extractie")
@@ -203,6 +235,11 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
             det["trace"] = trace
 
     out = _ruleaza(ev, metoda_ext)
+    pas = next((p for p in out["pasi"] if p.get("nume") == "extractie"), None)
+    if pas is not None:
+        pas["metoda_cod"] = cod
+        if motiv:
+            pas["motiv"] = motiv
     out.setdefault("schimbari", [])   # nu inventăm: [] dacă motorul nu le dă (B3)
     out.setdefault("ultima_actualizare", sources.ultima_actualizare(ev["data"]))
     return out

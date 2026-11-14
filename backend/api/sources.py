@@ -55,6 +55,25 @@ def extract_func():
     return _find("extract_event", _EXTRACT_MODULES)
 
 
+def cache_hit(text: str, sursa: str, data: str | None) -> bool:
+    """True dacă `extract_event` ar răspunde din cache (fără apel API). False dacă nu putem verifica."""
+    try:
+        from backend.extract import extract as ex
+        return (ex.CACHE_DIR / f"{ex.cache_key(text, sursa, data)}.json").exists()
+    except Exception:
+        return False
+
+
+def extractie_cod() -> str:
+    """Modul curent de extracție: `ai_api` | `ai_cache` | `regex` (contracts/interfaces.md, metoda_cod)."""
+    import os
+    if not extract_func():
+        return "regex"
+    if os.environ.get("EXTRACT_ALLOW_API") == "1" and _are_cheie():
+        return "ai_api"
+    return "ai_cache"
+
+
 def _load(p: Path):
     return json.loads(p.read_text(encoding="utf-8"))
 

@@ -75,6 +75,49 @@ def main() -> None:
                     "detalii": {"centru": {"lat": 44.2830448, "lon": 26.0636533}, "motiv_mutare": "sens_giratoriu"}})
         assert next(p for p in tz["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "zona", tz["pasi"]
 
+    # --- metoda_cod (ai_cache | ai_api | regex), fără AI nou: cache hit sau regex
+    import random
+    xc = h.get("extractie_cod")
+    assert xc in ("ai_cache", "regex"), h   # niciodată ai_api în teste (fără cheie, EXTRACT_ALLOW_API oprit)
+    if xc == "ai_cache":
+        ex0 = c.get("/exemple", params={"sursa": "mentenanta"}).json()[0]
+        r0 = c.post("/rapoarte", json={"text": ex0["text"], "sursa": "mentenanta", "data": ex0.get("data")}).json()
+        assert r0["pasi"][0]["metoda_cod"] == "ai_cache", r0["pasi"][0]
+    rn = c.post("/rapoarte", json={"text": f"Text nou fără cache {random.random()}", "sursa": "mentenanta",
+                                   "data": "2026-10-25"}).json()
+    assert rn["pasi"][0]["metoda_cod"] == "regex", rn["pasi"][0]
+    if xc == "ai_cache":
+        assert "fără cache" in rn["pasi"][0]["motiv"], rn["pasi"][0]
+    print("metoda_cod:", xc, "-> text nou:", rn["pasi"][0]["metoda_cod"])
+
+    # textele butoanelor UI (C5-C7) dau tipul corect și fără AI (regex)
+    def ext(t):
+        return next(p for p in t["pasi"] if p["nume"] == "extractie")["rezultat"]
+    lr = {"lat": 44.2850305, "lon": 26.0595998}
+    tr1 = next(x for x in c.get("/trasee-demo").json() if x["id"] == "trace-1")
+    tb = c.post("/rapoarte", json={"text": "Cerere racordare: client nou, casă la coord 44.2850305, 26.0595998",
+                                   "sursa": "apel_client", "data": "2026-10-28", "locatie": lr}).json()
+    assert ext(tb)["tip"] == "cerere_racordare" and ext(tb)["referinta"]["coordonate"] == lr, ext(tb)
+    if apply:
+        assert any(p["nume"] == "predictie" for p in tb["pasi"]) and \
+            any(m.get("predictie", {}) and m["predictie"].get("metoda") == "lant_racordare" for m in tb["modificari"]), tb["pasi"]
+    cf = {"lat": 44.2830448, "lon": 26.0636533}
+    tf = c.post("/rapoarte", json={"text": "Fire mutate: sens giratoriu, centru 44.2830448, 26.0636533. "
+                                   "S-au mutat firele aeriene.", "sursa": "mentenanta", "data": "2026-10-29",
+                                   "locatie": cf}).json()
+    assert ext(tf)["tip"] == "mutare_fire" and ext(tf)["detalii"]["centru"] == cf \
+        and ext(tf)["detalii"]["motiv_mutare"] == "sens_giratoriu", ext(tf)
+    if apply:
+        assert next(p for p in tf["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "zona", tf["pasi"]
+    tt = c.post("/rapoarte", json={"text": f"Raport tabletă: control pe {tr1['adresa']}, lucrare finalizată.",
+                                   "sursa": "mentenanta", "data": tr1["data"], "trace": tr1["puncte"]}).json()
+    assert ext(tt)["tip"] == "nod_lipsa", ext(tt)
+    if apply:
+        assert any(p["nume"] == "trace" for p in tt["pasi"]) and \
+            any(str(m["element_id"]).startswith("NOU-") for m in tt["modificari"]), tt["pasi"]
+    sc = lambda t: sorted({round(m["scor"], 3) for m in t["modificari"]})[-3:]
+    print("butoane (regex?):", xc, "racordare", sc(tb), "zona", len(tf["modificari"]), "trace", sc(tt))
+
     for s_ in ("mentenanta", "investitii", "racordari", "apel_client"):
         r = c.get("/exemple", params={"sursa": s_})
         assert r.status_code == 200 and isinstance(r.json(), list), r.text

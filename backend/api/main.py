@@ -59,7 +59,7 @@ class Decizie(BaseModel):
 @app.get("/health")
 def health() -> dict:
     """{"status": "ok", "mod": {...}} — `mod` arată dacă fiecare parte e stub sau reală."""
-    out = {"status": "ok", "mod": sources.mod(), "nota": NOTA}
+    out = {"status": "ok", "mod": sources.mod(), "nota": NOTA, "extractie_cod": sources.extractie_cod()}
     f = sources.engine_func("sursa_evenimente")
     if f:
         out["sursa_evenimente"] = f()

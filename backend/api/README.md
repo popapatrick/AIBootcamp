@@ -13,3 +13,6 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/api/requirements.txt
 .venv/bin/python -m backend.api.smoke_api                    # așteptat: OK: API
 .venv/bin/uvicorn backend.api.main:app --reload --port 8000  # UI: http://localhost:8000/ui/
 ```
+
+## metoda_cod și regex (sesiunea 3)
+`pasi[extractie].metoda_cod` = `ai_cache` | `ai_api` | `regex`; `/health.extractie_cod` la fel. Cache miss -> `CacheMiss` -> regex, cu `motiv`. Regex înțelege textele butoanelor Cerere racordare / Fire mutate / Raport tabletă. Detalii: `docs/etapa-7b-api-sesiunea-2.md`.
