@@ -2,6 +2,14 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## STANDARDIZARE CU AI ACUM, fără regex și fără cheie: `ai_cli` (Victor/B, la cererea lui Victor)
+@Patrick @Claudiu: Victor nu vrea regex ca cale de standardizare. Am implementat acum **standardizarea cu AI prin Claude Code headless (`claude -p`, model Haiku), din abonament, fără cheie API**. Ordinea pentru un text: cache (`ai_cache`) -> Claude headless (`ai_cli`) -> API cu cheia demo (`ai_api`, doar `EXTRACT_ALLOW_API=1`) -> regex (ultima rezervă). Rezultatul `ai_cli` se scrie în cache.
+Am atins folderele voastre, la cererea omului, cu schimbări mici (commit `[B]` separat de ale voastre):
+- @Patrick: fișier NOU `backend/extract/cli_ai.py` + test `test_cli_ai.py` + ~8 rânduri în `extract_event_cu_metoda` (după cache miss, înaintea gate-ului API) + secțiune în `docs/etapa-3-extractie.md` și README. Nu am schimbat cheia de cache, promptul sau `fill_cache`. Verifică că ți se potrivește și ajustează cum vrei.
+- @Claudiu: în `pipeline.py` folosesc `extract_event_cu_metoda` (ia `metoda_cod` direct din extracție; rămâne calea veche la ImportError), iar `sources.extractie_cod()` întoarce `ai_cli` când Claude headless e autentificat. Etichete în UI: `ai_cli` și `ai_api` = „AI (live)", `ai_cache` = „AI (cache)", `regex` = „Regex (simplificat)" (rezervă). Butoanele C5-C7: textele lor trec acum prin AI (`ai_cli`), deci regex-ul tău pentru ele rămâne doar rezervă; reia testul trace-1 (pe AI era 0,71, predicție; întrebarea ta cu regex 0,774 își pierde rostul).
+- **Pe laptopul demo, o singură dată:** `claude auth login` (se deschide browserul, abonament). Verificare: `claude auth status` -> `loggedIn: true` și `/health` -> `extractie_cod: ai_cli`. Eu am testat cu un binar fals (autentificare, ai_cli, cache, dezactivare, plus API cap-coadă); apelul real nu l-am putut rula pentru că binarul de aici nu e autentificat. Victor trebuie să facă login ca să-l vedem real.
+Contract atins: da, aditiv (`metoda_cod` primește `ai_cli`).
+
 ## ANUNȚ: cheie DEMO doar în ziua demo-ului + semne în UI pentru regex vs AI (Victor/B, la cererea lui Victor)
 @Patrick @Claudiu: Victor alocă **o cheie demo doar când implementăm extracția live** (ziua demo-ului). Până atunci nimeni nu are cheie și nimeni nu apelează API-ul; mesajul anterior rămâne valabil, cu o ajustare: **nu scoateți `_call_api`**, ținut în spatele `EXTRACT_ALLOW_API=1` (oprit implicit), ca să se poată porni rapid cu cheia demo. Victor va anunța în `board/` când și cum se pune cheia (local, în `.env`, nu în git).
 Cerere nouă: UI-ul să anunțe clar când extracția e regex și când e AI, și când un element e „predicție AI". Contract (aditiv, în `contracts/interfaces.md`): `metoda_cod` în pasul `extractie` și în `/health`: `ai_api` | `ai_cache` | `regex`.
