@@ -156,7 +156,7 @@ CLAUDE.md             # regulile de mai jos, citite automat de fiecare Claude
 7. Datele pun ce e fictiv în clar: „date fictive". Fără date reale PPC în repo.
 
 ### 10.6 Panoul de coordonare `board/`
-Un fișier per laptop: `board/A.md`, `board/B.md`, `board/C.md`. Fiecare scrie doar în al lui, așa că nu apar conflicte. Format de intrare, nou deasupra:
+Un fișier per laptop: `board/Patrick.md`, `board/Victor.md`, `board/Claudiu.md`. Fiecare scrie doar în al lui, așa că nu apar conflicte. Format de intrare, nou deasupra:
 ```
 ## 02:15
 Gata: ...
@@ -176,7 +176,7 @@ Contract atins: nu / da (care)
 La fiecare punct, cei trei verifică împreună că `main` pornește curat de pe un laptop proaspăt clonat.
 
 ### 10.8 Primul pas concret
-0. **Înainte de primul commit, laptopul C configurează Lovable** prin pluginul oficial Lovable (MCP, autentificare OAuth făcută de om, o singură dată). Claude creează proiectul Lovable din prompturile din `frontend/lovable-prompts.md`, citite din plan: ecranul procesului, harta cu timeline, panoul „de ce", formularul de raport nou. Lovable consumă credite, deci Claude spune câte prompturi trimite înainte. Rezultatul (link-ul proiectului Lovable, ce s-a creat, ce rămâne de făcut) se scrie în `board/C.md` și în `frontend/README.md`, ca ceilalți să nu refacă nimic. Publicarea proiectului Lovable o confirmă omul.
+0. **Înainte de primul commit, laptopul C configurează Lovable** prin pluginul oficial Lovable (MCP, autentificare OAuth făcută de om, o singură dată). Claude creează proiectul Lovable din prompturile din `frontend/lovable-prompts.md`, citite din plan: ecranul procesului, harta cu timeline, panoul „de ce", formularul de raport nou. Lovable consumă credite, deci Claude spune câte prompturi trimite înainte. Rezultatul (link-ul proiectului Lovable, ce s-a creat, ce rămâne de făcut) se scrie în `board/Claudiu.md` și în `frontend/README.md`, ca ceilalți să nu refacă nimic. Publicarea proiectului Lovable o confirmă omul.
 1. Unul dintre voi comite structura și `CLAUDE.md` din 10.2 și 10.5 (poate B, ca parte din Etapa 0).
 2. Ceilalți fac `git clone` / `git pull`, creează `.laptop` și `.env` local. După `git pull` trebuie să găsească gata: structura, contractele, `CLAUDE.md`, panoul și starea Lovable.
 3. Fiecare Claude citește `PLAN-prototip.md` și `CLAUDE.md` și își scrie prima intrare în `board/`.
@@ -185,7 +185,7 @@ La fiecare punct, cei trei verifică împreună că `main` pornește curat de pe
 1. `git clone https://github.com/popapatrick/AIBootcamp.git` și deschide folderul în Claude.
 2. Activează pluginul **Lovable** din contul claude.ai și autentifică-te (OAuth). Îl folosește în principal C, dar îl activăm pe toate trei ca oricare Claude să poată citi starea proiectului Lovable și să continue munca altuia.
 3. Creează local `.laptop` (A, B sau C) și `.env` cu cheia API (nu intră în git).
-4. Claude citește, în ordine: `CLAUDE.md`, `PLAN-prototip.md`, `contracts/`, `board/*.md`, `docs/`. Regulile de rol sunt în agenți dedicați din repo, ca să se încarce singure: `.claude/agents/laptop-a.md`, `laptop-b.md`, `laptop-c.md`. Fiecare conține rolul, folderele proprii, contractele pe care le produce și le consumă, regulile din 10.5 și regula de efort din secțiunea 11.
+4. Claude citește, în ordine: `CLAUDE.md`, `PLAN-prototip.md`, `contracts/`, `board/*.md`, `docs/`. Regulile de rol sunt în agenți dedicați din repo, ca să se încarce singure: `.claude/agents/patrick.md`, `victor.md`, `claudiu.md`. Fiecare conține rolul, folderele proprii, contractele pe care le produce și le consumă, regulile din 10.5 și regula de efort din secțiunea 11.
 5. Prima acțiune a fiecărui Claude: o intrare în `board/<laptop>.md` cu „citit planul, rol confirmat, întrebări".
 
 ## 11. Model și efort pe laptop

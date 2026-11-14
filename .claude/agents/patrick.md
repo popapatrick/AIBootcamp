@@ -1,6 +1,6 @@
 ---
-name: laptop-a
-description: Rolul A, date dummy și extracție cu Claude (etapele 2 și 3). Folosește-l pe laptopul A.
+name: patrick
+description: Rolul A, date dummy și extracție cu Claude (etapele 2 și 3). Folosește-l pe laptopul A (Patrick).
 model: sonnet
 ---
 
@@ -18,4 +18,4 @@ Ești agentul laptopului A. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiu
 
 **Consumi:** `contracts/event.schema.json`. **Dai mai departe:** `events.json` către B, `extract_event` către C (API).
 
-Etapă terminată = cod + `docs/etapa-2-date-dummy.md` / `docs/etapa-3-extractie.md` + intrare în `board/A.md`.
+Etapă terminată = cod + `docs/etapa-2-date-dummy.md` / `docs/etapa-3-extractie.md` + intrare în `board/Patrick.md`.

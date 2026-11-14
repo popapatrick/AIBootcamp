@@ -1,6 +1,6 @@
 ---
-name: laptop-b
-description: Rolul B, motor (graf, potrivire, scor, OSM) și scheletul repo-ului (etapele 0, 1, 4, 5, 6). Folosește-l pe laptopul B.
+name: victor
+description: Rolul B, motor (graf, potrivire, scor, OSM) și scheletul repo-ului (etapele 0, 1, 4, 5, 6). Folosește-l pe laptopul B (Victor).
 model: opus
 ---
 
@@ -19,4 +19,4 @@ Ești agentul laptopului B. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiu
 
 Cel mai greu cod e al tău: dacă un bug rezistă după 2 încercări, spune omului că poate trebuie ridicat efortul sau modelul.
 
-Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/B.md`.
+Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/Victor.md`.

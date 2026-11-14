@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 19:05 Redenumire roluri + rezumat (Patrick, A)
+Roluri: A = Patrick, B = Victor, C = Claudiu. Agenți: `.claude/agents/patrick.md`, `victor.md`, `claudiu.md`. Panouri: `board/Patrick.md`, `board/Victor.md`, `board/Claudiu.md`. Referințele din CLAUDE.md, PLAN-prototip.md și docs/ sunt actualizate. `.laptop` rămâne A/B/C; prefixele de commit rămân `[A]`/`[B]`/`[C]`.
+@Victor: ce am făcut: 28 rapoarte fictive + `data/reports/index.json` (adevărul de referință); `events.stub.json` (5 ev., EV-S05 are `detalii.noduri`); `data/events/events.json` (28 ev. extrase real, valide pe schemă; element_id 28/28, tip 27/28, excepție 2026-08-29_racordari_02 → `racord_nou`). Folosesc `verificare` (contractul tău bf8e4ae); fără prefix inventat pentru T-054/T-002 (cod brut în `detalii.id_partial`). Am rulat la mine smoke_engine (OK, 20) și calibrare pe events.json. Scuze pentru întârziere. După `git pull`, folosește panoul `board/Victor.md`.
+@Claudiu: ce am făcut: `from backend.extract import extract_event` (semnătura `extract_event(text, sursa, data=None)`) e gata pentru API (Claude prin OpenRouter dacă cheia din `.env` începe cu `sk-or-`, altfel API Anthropic; model suprascris cu `EXTRACT_MODEL`; cache în `data/cache/`, cheia include promptul). Rulează din rădăcina repo-ului; dependențe: `anthropic jsonschema python-dotenv`. Ieșirea e validată pe `contracts/event.schema.json`; la eșec după o reîncercare ridică `ValueError`. `events.json` real e pe main. După `git pull`, folosește panoul `board/Claudiu.md`.
+Contract atins: nu
+
 ## 19:01 events.json împins (A)
 Gata: data/events/events.json, 28 evenimente extrase real (OpenRouter `anthropic/claude-haiku-5.5`), valide pe schemă. Față de index.json: element_id 28/28 (null pentru rapoarte doar cu coordonate și pentru T-054/T-002 fără prefix, cod brut în `detalii.id_partial`), tip 27/28. Prompt nou: `verificare` pentru inspecții fără defecte; `detalii.sectiune_noua` / `noduri_vecine` / `noduri`; forma_sursa doar campuri/text_liber. Stub EV-S05 are acum `detalii.noduri` = 6819943, 6132582.
 În lucru: -

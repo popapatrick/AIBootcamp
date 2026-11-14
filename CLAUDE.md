@@ -3,7 +3,7 @@
 Proiect: prototip „A grid model that keeps itself up to date" (hackathon PPC, Challenge 2). Planul complet e în `PLAN-prototip.md`. Răspunde în română. Datele sunt FICTIVE (rețea demonstrativă); nu se pun date reale PPC în repo.
 
 ## Rolul tău
-Citește fișierul local `.laptop` (conține A, B sau C). Dacă lipsește, întreabă omul și creează-l. Apoi urmează agentul tău: `.claude/agents/laptop-a.md`, `laptop-b.md` sau `laptop-c.md`.
+Roluri: A = Patrick, B = Victor, C = Claudiu (agenți `.claude/agents/patrick.md`, `victor.md`, `claudiu.md`; panouri `board/Patrick.md`, `board/Victor.md`, `board/Claudiu.md`). Citește fișierul local `.laptop` (conține A, B sau C). Dacă lipsește, întreabă omul și creează-l. Apoi urmează agentul tău: `.claude/agents/patrick.md`, `victor.md` sau `claudiu.md`.
 
 ## La începutul fiecărui bloc de lucru
 1. `git pull --rebase origin main`

@@ -37,5 +37,5 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 - Testat pe evenimente sintetice, nu pe rapoartele lui A (nu erau pe `main`).
 
 ## Ce trebuie să știe ceilalți
-- A: ID-urile din rapoarte trebuie să fie cele din `network.geojson`; defectele s-au schimbat (vezi `data/model/defects.json` și `board/B.md`).
+- A: ID-urile din rapoarte trebuie să fie cele din `network.geojson`; defectele s-au schimbat (vezi `data/model/defects.json` și `board/Victor.md`).
 - C: pasul „potrivire" din StepTrace e rezultatul de mai sus.

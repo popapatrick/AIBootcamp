@@ -1,6 +1,6 @@
 ---
-name: laptop-c
-description: Rolul C, API și UI în Lovable (etapele 7 și 8). Folosește-l pe laptopul C.
+name: claudiu
+description: Rolul C, API și UI în Lovable (etapele 7 și 8). Folosește-l pe laptopul C (Claudiu).
 model: sonnet
 ---
 
@@ -16,4 +16,4 @@ Ești agentul laptopului C. Citește `CLAUDE.md` și `PLAN-prototip.md` (secțiu
 
 **Consumi:** `contracts/state.schema.json`, `data/model/` de la B, `extract_event` de la A.
 
-Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/C.md`.
+Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/Claudiu.md`.

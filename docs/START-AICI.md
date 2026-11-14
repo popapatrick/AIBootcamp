@@ -14,13 +14,13 @@ Apoi deschide folderul în Claude (aplicația Claude Code) și activează plugin
 ## Ce îi spui lui Claude (copiază promptul laptopului tău)
 
 **Laptop A**
-> Ești laptopul A. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/laptop-a.md, apoi contracts/ și board/. Scrie prima intrare în board/A.md și începe cu etapa 2 (date dummy), scriind întâi data/events/events.stub.json. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
+> Ești laptopul A. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/patrick.md, apoi contracts/ și board/. Scrie prima intrare în board/Patrick.md și începe cu etapa 2 (date dummy), scriind întâi data/events/events.stub.json. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
 
 **Laptop B**
-> Ești laptopul B. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/laptop-b.md, apoi contracts/ și board/. Scrie prima intrare în board/B.md și începe cu etapa 1 (rețeaua în graf), apoi publică data/model/sample/ pentru C. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
+> Ești laptopul B. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/victor.md, apoi contracts/ și board/. Scrie prima intrare în board/Victor.md și începe cu etapa 1 (rețeaua în graf), apoi publică data/model/sample/ pentru C. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
 
 **Laptop C**
-> Ești laptopul C. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/laptop-c.md, apoi contracts/ și board/. Scrie prima intrare în board/C.md. Începe cu API-ul în mod stub (etapa 7) și cu prompturile Lovable în frontend/lovable-prompts.md; spune-mi câte prompturi trimiți în Lovable înainte să le trimiți. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
+> Ești laptopul C. Citește CLAUDE.md, PLAN-prototip.md și .claude/agents/claudiu.md, apoi contracts/ și board/. Scrie prima intrare în board/Claudiu.md. Începe cu API-ul în mod stub (etapa 7) și cu prompturile Lovable în frontend/lovable-prompts.md; spune-mi câte prompturi trimiți în Lovable înainte să le trimiți. Lucrează autonom, comite des, urmează regulile din CLAUDE.md.
 
 ## Pe parcurs
 - La fiecare ~30 min, spune-i lui Claude: „fă `git pull --rebase`, citește board/ și continuă".
