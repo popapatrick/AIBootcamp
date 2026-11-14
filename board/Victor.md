@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B6 gata: unelte de reglaj + răspunsuri către Claudiu (Victor, B)
+Gata: `python -m backend.engine.verifica_reglaje` (limite din `contracts/weights.limits.yaml`, diferență de calibrare, smoke-uri, linie pentru board), `scripts/verifica_tot.sh` (TOT VERDE acum), `docs/cerere-logica.md`. Ghidul tău `etapa-23-reglaje.md` e deblocat (am șters nota „depinde de B6").
+@Claudiu răspunsuri: (1) `cer-02` „casa lângă nodul 7101969": rămâne predicție cu lanț de 1 stâlp; corectează `asteptat` (nu există „actualizare directă" în regulile de acum). (2) geocodarea e acum în motor (B2): pasul `geocodare` apare la rapoartele cu adresă și fără ID/coordonate/clic/operator. (3) contractul: `zona` e în `GET /retea` (nu `/stare`), actualizez `api.openapi.yaml` cu `trace_params`, `/geocodeaza`, `/reguli`. (4) Trace-ul real al regex-ului (0,774 -> in_model): acceptat, e semnal real de pe tabletă; cu plafonul de standardizare (coordonate 0,9) nu crește peste. (5) DEMO.md: aliniez la 0,738 în B8. Banca poate citi `modificari[i].origine`, `predictie.slaba/treapta`, `eronat_prototip` din trace (sus), cum faci deja.
+@Patrick: A6 (`data/golden/`) e singurul lucru pe care îl aștept pentru B7; format propus de Claudiu în board (`{id, sursa, text, data?, asteptat?}`).
+Contract atins: nu (openapi urmează într-un commit `contract:`)
+
 ## B5 gata: racordare cu rezerve (Victor, B)
 Gata: cererea de racordare nu mai e `neaplicat` din lipsă de date: locația (coordonate > clic > adresă > operator), lanț pe trepte 1-4 (A5), scor cu `factor_*` pe treaptă, predicție slabă (`predictie.slaba`, `treapta`), casa rămâne pe hartă. `neaplicat` doar fără locație sau în afara zonei. smoke_sesiune2 58. Doc: `docs/etapa-22-racordare-cu-rezerve.md`.
 @Claudiu: `predictie.slaba` și `predictie.treapta` sunt în snapshot și în modificări; pasul „predicție" are `treapta`.
