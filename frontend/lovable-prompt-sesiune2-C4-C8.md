@@ -10,6 +10,13 @@
 
 Modifică aplicația existentă (frontend, fără DB/auth, în română). Date FICTIVE. Datele vin doar din API (`API_BASE`). Fă ambele părți într-o singură trecere, peste ce există deja (haloul, legenda și Show pipeline din promptul anterior rămân).
 
+### Corecturi (contract nou, au prioritate peste restul textului)
+1. Haloul verde se ia din `properties.verificat_recent` (bool dat de motor), NU din calculul de 45 de zile pe `ultima_verificare`. `confirmat_de` = `om` = simbol plin cu marcaj „✓ om".
+2. `nivel` = `scos_din_uz`: gri deschis, element tăiat/transparent.
+3. Intrările din `GET /evenimente` au acum `tip` și `eticheta` (`mutare_fire` | `demontat` | `val_apeluri` | `racordare` | `decizie_om` | tipul evenimentului). Evidențierile din timeline (ramură, demontat, val de apeluri, decizii) se fac după `eticheta`, NU după `event_id` EV-X01..EV-X10 (ID-urile rămân doar informative).
+4. În Show pipeline poate apărea pasul `trace` înaintea `potrivire`, iar `potrivire` poate avea `status: "zona"` (mutare fir): afișează-le lizibil (nume pas, status, rezultat pe scurt), fără JSON brut.
+5. Decizia: 409 deja decis, 404 necunoscut, 422 invalidă, 501 fără motor (mesajele din secțiunea C4).
+
 ### NU SCHIMBA
 - Scala continuă/KMZ și comutatorul „Colorare", timeline-ul cu Play și selectarea datei, panoul „De ce?" (`GET /element/{id}`), lista „Evenimente".
 - `?api=<URL>` și „Setări → API_BASE"; bannerul „DATE FICTIVE"; `mod` din `/health`.

@@ -20,3 +20,4 @@ Ești agentul laptopului B (Victor). Citește `CLAUDE.md` și `PLAN-prototip.md`
 Cel mai greu cod e al tău: dacă un bug rezistă după 2 încercări, spune omului că poate trebuie ridicat efortul sau modelul.
 
 Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/Victor.md`.
+- Înainte de commit-ul final al unui task: respectă „Regula de final” din CLAUDE.md (doc de etapă, README, docstring, DEMO/frontend README/interfaces actualizate, abia apoi bifezi în OpenSpec).

@@ -19,3 +19,4 @@ Ești agentul laptopului A (Patrick). Citește `CLAUDE.md` și `PLAN-prototip.md
 **Consumi:** `contracts/event.schema.json`. **Dai mai departe:** `events.json` către B, `extract_event` către C (API).
 
 Etapă terminată = cod + `docs/etapa-2-date-dummy.md` / `docs/etapa-3-extractie.md` + intrare în `board/Patrick.md`.
+- Înainte de commit-ul final al unui task: respectă „Regula de final” din CLAUDE.md (doc de etapă, README, docstring, DEMO/frontend README/interfaces actualizate, abia apoi bifezi în OpenSpec).
