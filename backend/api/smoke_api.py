@@ -5,12 +5,14 @@ Verifică fiecare endpoint pe date FICTIVE, în modul în care se află (stub / 
 from fastapi.testclient import TestClient
 
 from backend.api.main import app
+from backend.api.sources import ROOT
 
 
 def main() -> None:
     c = TestClient(app)
     h = c.get("/health").json()
     assert h["status"] == "ok", h
+    assert "ultima_actualizare" in h, h
     print("health:", h["mod"])
 
     ev = c.get("/evenimente").json()
@@ -49,6 +51,40 @@ def main() -> None:
         assert nid in ids, "raportul live nu apare pe hartă"
         assert c.get(f"/element/{nid}").status_code == 200
     assert any(e["event_id"] == t["event_id"] for e in c.get("/evenimente").json())
+
+    # --- sesiunea 2 (C1)
+    assert isinstance(t["schimbari"], list), "schimbari lipsește din StepTrace"
+    if t["mod"]["motor"] == "real":   # B3 legat real, nu []/null
+        assert t["schimbari"] and t["schimbari"][0]["ce"] and t["ultima_actualizare"], t
+        assert c.get("/retea").json()["ultima_actualizare"] and c.get("/health").json()["ultima_actualizare"]
+    assert "ultima_actualizare" in t and "ultima_actualizare" in c.get("/retea").json()
+    loc, tr = {"lat": 44.285, "lon": 26.061}, [{"t": "2026-10-20T10:00:00", "lat": 44.285, "lon": 26.061}]
+    t2 = c.post("/rapoarte", json={"text": "Cerere racordare casă nouă.", "sursa": "racordari",
+                                   "data": "2026-10-21", "locatie": loc, "trace": tr}).json()
+    det = next(p for p in t2["pasi"] if p["nume"] == "extractie")["rezultat"]["detalii"]
+    assert det["locatie"] == loc and det["centru"] == loc and det["trace"] == tr, det
+    assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta", "locatie": {"lat": "a"}}).status_code == 422
+
+    for s_ in ("mentenanta", "investitii", "racordari", "apel_client"):
+        r = c.get("/exemple", params={"sursa": s_})
+        assert r.status_code == 200 and isinstance(r.json(), list), r.text
+    assert c.get("/exemple", params={"sursa": "gresit"}).status_code == 422
+    assert isinstance(c.get("/trasee-demo").json(), list)
+
+    r = c.post("/predictii/PRED-X/decizie", json={"decizie": "accepta", "motiv": "văzut în teren"})
+    assert r.status_code in (200, 404, 409, 501), r.text   # 501 până la B4
+    print("decizie:", r.status_code)
+    assert c.post("/predictii/PRED-X/decizie", json={"decizie": "poate"}).status_code == 422
+
+    r = c.get("/evenimente", params={"scenariu": "extrem"})
+    if (ROOT / "data" / "events" / "events.extreme.json").is_file():
+        assert r.status_code == 200 and r.json(), r.text
+        assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 200
+    else:
+        assert r.status_code == 404 and "extrem" in r.json()["detail"], r.text
+        assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404
+    print("scenariu extrem:", r.status_code)
+    assert c.get("/evenimente", params={"scenariu": "altul"}).status_code == 422
 
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
     assert c.get("/ui/").status_code == 200

@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": "A-T-002",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-15",
+  "text_original": "Am înlocuit cablul pe tronsonul A-T-002 cu TYIR 3x70+54,6 OL-Al.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate",
+    "adresa",
+    "nr_cadastral",
+    "id_client"
+  ],
+  "detalii": {
+    "sectiune_noua": "TYIR 3x70+54,6 OL-Al"
+  }
+}
