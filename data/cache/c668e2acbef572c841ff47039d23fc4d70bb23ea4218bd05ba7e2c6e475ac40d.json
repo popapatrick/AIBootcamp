@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu",
+    "coordonate": {
+      "lat": 44.2850305,
+      "lon": 26.0595998
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "Cerere racordare: client nou, casă la coord 44.2850305, 26.0595998, Strada Liviu Rebreanu",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "detalii": {},
+  "campuri_lipsa": [
+    "id_client",
+    "nr_cadastral",
+    "element_id"
+  ]
+}
