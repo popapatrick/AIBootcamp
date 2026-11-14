@@ -7,8 +7,8 @@
 
 ## 2. Modul `backend/trace/` (A)
 
-- [ ] 2.1 (A3) `backend/trace/`: `gaseste_opriri` și `localizeaza` (opriri, potrivire cu strada OSM, alegerea locului, ambiguitate)
-- [ ] 2.2 (A3) `smoke_trace.py` (opriri, stradă, ambiguitate, fallback) și README în folder
+- [x] 2.1 (A3) `backend/trace/`: `gaseste_opriri` și `localizeaza` (opriri, potrivire cu strada OSM, alegerea locului, ambiguitate)
+- [x] 2.2 (A3) `smoke_trace.py` (opriri, stradă, ambiguitate, fallback) și README în folder
 
 ## 2b. Integrare în motor (B)
 
@@ -17,9 +17,9 @@
 
 ## 3. Date (A, A5)
 
-- [ ] 3.1 `data/reports/trasee-dummy.json`: cel puțin 3 trasee, între care „verificat stâlpi existenți și oprit unde nu era stâlp"
+- [x] 3.1 `data/reports/trasee-dummy.json`: cel puțin 3 trasee, între care „verificat stâlpi existenți și oprit unde nu era stâlp"
 - [ ] 3.2 Rapoarte de tabletă asociate (adresă vagă) în `exemple-dummy.json`
-- [ ] 3.3 `docs/etapa-16-trasee-dummy.md`
+- [x] 3.3 `docs/etapa-16-trasee-dummy.md`
 
 ## 4. API și UI (C)
 
