@@ -222,7 +222,17 @@ def write_cache(key: str, ev: dict) -> None:
 
 
 def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
-    """Transformă un raport/apel în Event conform contracts/event.schema.json.
+    """Transformă un raport/apel în Event; vezi `extract_event_cu_metoda` (aceeași logică, fără metoda)."""
+    return extract_event_cu_metoda(text, sursa, data)[0]
+
+
+def extract_event_cu_metoda(text: str, sursa: str, data: str | None = None) -> tuple[dict, str]:
+    """Ca `extract_event`, dar întoarce (event, metoda_cod): "ai_cache" la cache hit, "ai_api" la apel API.
+
+    Metoda nu intră în event (cache și schemă rămân neschimbate). Cache miss fără API: CacheMiss
+    (apelantul cade pe regex, metoda_cod "regex").
+
+    Transformă un raport/apel în Event conform contracts/event.schema.json.
 
     sursa: una din echipa_sursa (mentenanta, investitii, racordari, apel_client, om_teren).
     Nu inventează: ce lipsește intră în campuri_lipsa. Cache din data/cache/.
@@ -238,7 +248,7 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
         before = json.dumps(ev, sort_keys=True)
         if json.dumps(_sectiune(ev, text), sort_keys=True) != before and not any(_validator.iter_errors(ev)):
             path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")  # disc == returnat
-        return ev
+        return ev, "ai_cache"
 
     if os.environ.get("EXTRACT_ALLOW_API") != "1":
         raise CacheMiss(f"fără intrare în cache pentru textul ({sursa}, {data}): {text[:60]!r}; "
@@ -248,5 +258,5 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
         ev, errors = _finalizeaza(_call_api(text, sursa, data), text, sursa, data, key)
         if not errors:
             write_cache(key, ev)
-            return ev
+            return ev, "ai_api"
     raise ValueError(f"extract_event: ieșire invalidă după reîncercare: {errors}")

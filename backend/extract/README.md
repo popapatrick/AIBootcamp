@@ -30,3 +30,5 @@ Agentul Haiku primește `system` + `user_message` și întoarce JSON-ul evenimen
 
 ## Sesiunea 2: tipuri noi
 Promptul acoperă și `apel_client` (call center), `mutare_fire` (`detalii.centru/raza_m/motiv_mutare`), `cerere_racordare` (locația în `referinta.coordonate`) și decizia omului (`verificare`, sursa `om_teren`, `detalii.decizie`). `extract_event` acceptă sursa `om_teren`. Atenție: schimbarea promptului schimbă cheile din `data/cache/`: rapoartele deja extrase dau cache miss (`CacheMiss`) până la reumplere cu `fill_cache`. Vezi `docs/etapa-13-mutare-fire.md`.
+
+`extract_event_cu_metoda(text, sursa, data=None) -> (event, metoda_cod)`: aceeași logică ca `extract_event` (care o apelează), plus `metoda_cod` = `ai_cache` (cache hit) sau `ai_api` (apel API cu `EXTRACT_ALLOW_API=1`). Cache miss fără API: `CacheMiss`, apelantul cade pe `regex`. Metoda nu intră în event (cache și schemă neschimbate).

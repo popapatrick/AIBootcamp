@@ -47,6 +47,11 @@ def main() -> None:
         assert ex.extract_event(TEXT, "mentenanta", "2026-09-14") == ev  # cache hit
         assert len(calls) == 1, "cache miss"
 
+        # metoda_cod: API la miss, cache la hit (event identic, fără metoda în el)
+        ev1, m1 = ex.extract_event_cu_metoda("text metoda", "mentenanta", "2026-09-14")
+        ev2, m2 = ex.extract_event_cu_metoda("text metoda", "mentenanta", "2026-09-14")
+        assert (m1, m2) == ("ai_api", "ai_cache") and ev1 == ev2 and "metoda" not in ev1 and len(calls) == 2
+
         seq = [dict(GOOD, tip="inventat"), json.loads(json.dumps(GOOD))]  # 1: invalid, 2: ok
         ex._call_api = lambda *a: seq.pop(0)
         assert ex.extract_event("alt text", "mentenanta", "2026-09-14")["tip"] == "activ_inlocuit"

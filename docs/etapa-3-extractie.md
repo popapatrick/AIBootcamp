@@ -56,3 +56,6 @@ Dată: când apelantul nu dă `data`, data întoarsă de model se păstrează do
 - Flux: `--lipsa --out` -> loturi către agenți Haiku (primesc `system` + `user_message`, întorc JSON) -> `--import`.
 - Neacoperit: `trasee-dummy.json` (fără texte de raport) și textele din `docs/DEMO.md` (fără dată fixă, deci cheie variabilă).
 - Verificare: `.venv/bin/python -m backend.extract.test_extract` (CacheMiss implicit, calea `EXTRACT_ALLOW_API=1`, cheie fără MODEL, round-trip `--import`). **Atenție:** regulile din prompt (ex. stâlp necartat = `nod_lipsa`, `mutare_fire`, decizie om) sunt verificate doar cu mock; trebuie verificate cu un agent Haiku real înainte de a considera cache-ul bun.
+
+## Metoda de extracție (contract: `metoda_cod`)
+`extract_event_cu_metoda(text, sursa, data=None) -> (event, metoda_cod)` (exportat din `backend.extract`): `ai_cache` la cache hit, `ai_api` la apel API; `CacheMiss` rămâne neschimbat (apelantul folosește `regex`). `extract_event` = `extract_event_cu_metoda(...)[0]`, semnătura neschimbată; metoda nu e în event.

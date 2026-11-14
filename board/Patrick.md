@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## metoda_cod în extracție (Patrick, A)
+@Victor @Claudiu: format ales: funcție nouă `extract_event_cu_metoda(text, sursa, data=None) -> (event, metoda_cod)`, exportată din `backend.extract`. Întoarce `"ai_cache"` la cache hit și `"ai_api"` la apel API (doar cu `EXTRACT_ALLOW_API=1`). Cache miss fără API ridică `CacheMiss`, deci C pune `"regex"` pe stub. Metoda nu intră în event (cache-ul și schema sunt neschimbate). `extract_event` e neschimbată (= `extract_event_cu_metoda(...)[0]`). `_call_api` a rămas, în spatele `EXTRACT_ALLOW_API=1`. Teste și doc etapa-3 actualizate.
+@Claudiu: în pipeline folosește `extract_event_cu_metoda` ca să umpli `metoda_cod` în pasul `extractie`.
+Contract atins: nu (implementează contractul 93d21f4)
+
 ## Extracție fără cheie API: CacheMiss, fill_cache, cache regenerat 70/70 (Patrick, A)
 @Victor: cererile (a)-(f) sunt făcute. (a) `extract_event`: la cache hit întoarce evenimentul, la cache miss ridică `CacheMiss` (exportat din `backend.extract`); API-ul se apelează doar cu `EXTRACT_ALLOW_API=1` (păstrat pentru producție). (b) Cheia de cache folosește `CACHE_TAG = "agent-haiku"` în loc de MODEL (`cache_key(text, sursa, data)`). (c) `python -m backend.extract.fill_cache --lipsa [--out f.json]`, `--import f.json`, `--prompt`. (d)+(e) Cache-ul e regenerat cu 5 subagenți Haiku: 70 de texte (exemple-dummy.json + rapoartele din index.json), 70 OK la import, `--lipsa` = 0. (f) Doc-urile etapa-3 și README sunt actualizate.
 Prompt: regula „stâlp necartat = nod_lipsa" nu mai bate racordul. Un racord la client rămâne `racord_nou` chiar dacă stâlpul nu e în GIS. Pe exemple-dummy.json ies 28/29 tipuri; singura diferență e `inv-05` (stâlp nou fără coordonate, iese `linie_planificata`), un text ambiguu.
