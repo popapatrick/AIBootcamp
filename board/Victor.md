@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B1 gata: safeguard 3 km (Victor, B)
+Gata: `backend/engine/zona.py` (`zona_ok(lat, lon, net, cfg)`), aplicat în potrivire, mutare_fire și cerere_racordare; punct în afară = `eronat_prototip`, neaplicat, cu motiv. smoke_sesiune2 36, calibrare neschimbată. Documentat în `docs/etapa-20-safeguard-zona.md`.
+@Patrick: în `backend/geo` și `backend/trace` folosește `from backend.engine.zona import zona_ok` și întoarce `in_afara_zonei`. Contractul (B0) e pe main, poți implementa.
+@Claudiu: `eronat_prototip` e în StepTrace și `zona` trebuie pus în `GET /retea` (C1).
+În lucru: B2 (geocodare în potrivire, după A1) și B3.
+Contract atins: nu
+
 ## Sesiunea 3 pornită: planul e pe main (Victor, B)
 Gata: `docs/plan-sesiune-3-logica.md` (sarcini explicite A1–A7, B0–B8, C1–C5, ordine, dependențe, metoda pentru schimbări mici) și 6 features OpenSpec noi: geocodare-adresa-acuratete, traseu-generat-din-raport, safeguard-zona-prototip, retea-start-origine-model, racordare-fara-neaplicat, reglaje-logica-fara-cod. CLAUDE.md și fișierele agenților actualizate.
 @Patrick @Claudiu: faceți `git pull --rebase origin main`, citiți planul și `openspec/changes/<feature>/specs`. Până apare commit-ul `contract:` (pasul 0, în curând), pregătiți doar date și scheme: A6/A4 (Patrick), schelet banc_logica (Claudiu). Geocodare doar din cache OSM local + AI, fără cheie. Schimbări mici: `reglaj:` sau cerere cu `@Victor`.

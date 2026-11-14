@@ -155,6 +155,26 @@ def main() -> None:
                  ev("T-2", tr["data"], "mentenanta", "verificare", ref={"element_id": "A-T-001", "adresa": tr["adresa"]},
                     det={"trace": tr["puncte"]}))["pasi"]))
 
+    # --- safeguard: zona prototipului (3 km față de centroidul rețelei de start)
+    from backend.engine.zona import zona_ok
+    mz = mk()
+    c0 = mz.net["_zona_centru"]
+    def la_nord(m_):   # punct la m_ metri la nord de centru
+        return {"lat": c0[0] + m_ / 111_320, "lon": c0[1]}
+    z29, z31 = zona_ok(**la_nord(2900), net=mz.net, cfg=mz.w), zona_ok(**la_nord(3100), net=mz.net, cfg=mz.w)
+    verifica("zona: 2,9 km în zonă, 3,1 km în afară", z29["ok"] and not z31["ok"], f"{z29['distanta_m']} / {z31['distanta_m']}")
+    t40 = mz.apply_event(ev("Z-1", "2026-09-01", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(40_000)}))
+    verifica("zona: coordonate la 40 km = eronat în prototip, neaplicat", t40["decizie"] == "neaplicat" and t40.get("eronat_prototip")
+             and "in_afara_zonei_prototip" in t40["pasi"][1]["rezultat"]["semnale"] and not t40["modificari"])
+    verifica("zona: motivul spune distanța și limita", "40" in t40["pasi"][-1]["motive"][0] and "3000" in t40["pasi"][-1]["motive"][0],
+             t40["pasi"][-1]["motive"][0])
+    tm = mz.apply_event(ev("Z-2", "2026-09-02", "mentenanta", "mutare_fire", det={"centru": la_nord(5000)}))
+    verifica("zona: mutare_fire în afara zonei = eronat", tm["decizie"] == "neaplicat" and tm.get("eronat_prototip"))
+    tr_ = mz.apply_event(ev("Z-3", "2026-09-03", "racordari", "cerere_racordare", ref={"coordonate": la_nord(6000)}, sursa="om_teren"))
+    verifica("zona: cerere de racordare în afara zonei = eronat, fără excepție pe sursă", tr_["decizie"] == "neaplicat" and tr_.get("eronat_prototip"))
+    ti = mz.apply_event(ev("Z-4", "2026-09-04", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(1500)}))
+    verifica("zona: 1,5 km nu e eronat", not ti.get("eronat_prototip"))
+
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 

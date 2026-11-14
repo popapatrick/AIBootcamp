@@ -23,6 +23,7 @@ import math
 import re
 
 from backend.engine.config import load_weights
+from backend.engine.zona import zona_ok
 from backend.engine.network import dist_m
 
 TRONSON_CU_PREFIX = re.compile(r"^[ARS]-T-\d+$")
@@ -59,28 +60,22 @@ def _dist_la_punct(p: tuple[float, float], el: dict) -> float:
     return best
 
 
-def _bbox(net: dict, margine_m: float = 500.0) -> tuple[float, float, float, float]:
-    lats = [n["lat"] for n in net["noduri"].values()]
-    lons = [n["lon"] for n in net["noduri"].values()]
-    dlat = margine_m / 111_320
-    dlon = margine_m / (111_320 * math.cos(math.radians(sum(lats) / len(lats))))
-    return min(lats) - dlat, max(lats) + dlat, min(lons) - dlon, max(lons) + dlon
+def _coordonate(ref: dict, net: dict, semnale: list[str], cfg: dict):
+    """Întoarce (lat, lon) utilizabile sau None; corectează inversarea lat/lon.
 
-
-def _in_zona(lat: float, lon: float, bb) -> bool:
-    return bb[0] <= lat <= bb[1] and bb[2] <= lon <= bb[3]
-
-
-def _coordonate(ref: dict, net: dict, semnale: list[str]):
-    """Întoarce (lat, lon) utilizabile sau None; corectează inversarea lat/lon."""
+    „În zonă" = cercul prototipului (`zona.raza_max_m` în jurul centroidului rețelei de start, backend.engine.zona).
+    """
     c = ref.get("coordonate")
     if not c:
         return None
     lat, lon = float(c["lat"]), float(c["lon"])
-    bb = _bbox(net)
-    if _in_zona(lat, lon, bb):
+
+    def in_z(la, lo):
+        return zona_ok(la, lo, net, cfg)["ok"]
+
+    if in_z(lat, lon):
         return (lat, lon)
-    if _in_zona(lon, lat, bb):          # lat și lon inversate
+    if in_z(lon, lat):          # lat și lon inversate
         semnale.append("coordonate_corectate")
         return (lon, lat)
     # punct zecimal pierdut: 4427960 / 2606510 -> 44.27960 / 26.06510
@@ -90,7 +85,7 @@ def _coordonate(ref: dict, net: dict, semnale: list[str]):
     a, b = _repara(lat), _repara(lon)
     if a is not None and b is not None:
         for la, lo in ((a, b), (b, a)):
-            if _in_zona(la, lo, bb):
+            if in_z(la, lo):
                 semnale.append("coordonate_zecimale_reparate")
                 return (la, lo)
     semnale.append("coordonate_in_afara_zonei")
@@ -99,13 +94,14 @@ def _coordonate(ref: dict, net: dict, semnale: list[str]):
 
 def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
     """Potrivește `event` (contracts/event.schema.json) pe `net` (modelul curent)."""
-    w = dict((weights or load_weights())["potrivire"])
+    cfg = weights or load_weights()
+    w = dict(cfg["potrivire"])
     if event.get("echipa_sursa") == "apel_client":
         w["distanta_max_m"] = w.get("distanta_max_apel_m", w["distanta_max_m"])
     ref = event.get("referinta") or {}
     els = _elemente(net)
     semnale: list[str] = []
-    pt = _coordonate(ref, net, semnale)
+    pt = _coordonate(ref, net, semnale, cfg)
     cand = []
     if pt:
         cand = sorted(({"element_id": i, "distanta_m": round(_dist_la_punct(pt, e), 1)}
