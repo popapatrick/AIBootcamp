@@ -1,5 +1,13 @@
 # Panou laptop C
 
+## 2026-11-14, API pe contractul B5-B8 + test cap-coadă cu extracția Claude (Claudiu, C)
+Gata: C1c (30ce218): `model_scenariu("extrem")` în API (shortcut scos), câmpurile noi trec neatinse (`tip`/`eticheta`, `verificat_recent`, `scos_din_uz`, pas `trace`, `potrivire.status: zona`). `smoke_api` nu mai depinde de extracție (predicția se pregătește cu un Event `nod_lipsa` direct); trece cu Claude și cu `API_EXTRACTIE=stub`. Decizia rămâne pe `apply_event` + `trace.eroare.cod` (`aplica_decizie` ridică același ValueError pentru 409 și 400).
+Test cap-coadă pe API local (port 8011, Claude real): giratoriu cu clic OK (zonă 40 m, 19 elemente de verificat, 4 trasee propuse); cerere racordare fără GIS OK (lanț 2 stâlpi + casă, 0,66-0,69); trace-1 + „Strada Liviu Rebreanu" OK (pas `trace`, oprire 21,7 min, 3 stâlpi vizitați actualizați, stâlp prezis 0,71); apel + Acceptă 200, a doua 409; extrem 68 ev. cu `eticheta`. Cache Claude comis (fb422a1).
+@Victor: cererea de racordare pe sursa `racordari` (aceleași coordonate, 44.2850305, 26.0595998) iese `predictie` 0,738, nu `adaugat` ~0,84 ca în DEMO.md (extracție 0,7). Aliniezi DEMO.md sau pragul/factorii?
+@Patrick: (1) textul „Raport tabletă: stâlp nou necartat pe Strada Liviu Rebreanu, în dreptul curții, executat. Am verificat și stâlpii din jur." iese `racord_nou`, așteptat `nod_lipsa` (promptul extract, A2). (2) `mut-01` din exemple-dummy.json are coordonatele 44.2799, 26.0594, în afara rețelei demo: iese `absent_din_model`. Pune un centru din rețea (ex. 44.2830448, 26.0636533, cum a cerut Victor).
+Lovable: C2+C3 în lucru, urmează C4+C8 și C5-C7 (prompturi în `frontend/`). Nu public.
+Contract atins: nu
+
 ## 2026-11-14, C1 complet pe main; prompturi Lovable (Claudiu, C)
 Gata: C1 (1c86d51) + C1b (e740bf0). `schimbari` în `POST /rapoarte`; `ultima_actualizare` la nivel superior în `GET /retea`, `/health`, `POST /rapoarte` (răspuns la întrebarea ta din B3, nu fac `/statistici` separat). `POST /predictii/{id}/decizie` prin `apply_event` (Event `om_teren`, `EV-DEC-NNN`): 200 / 409 `deja_decis` / 404 `necunoscut` / 422 corp invalid. `?scenariu=extrem` pe `/retea` și `/evenimente` (68 ev.). `/exemple` și `/trasee-demo` citesc fișierele lui Patrick. Smoke API și engine OK.
 Lovable: promptul C2+C3 trimis; C4+C8 scris (`frontend/lovable-prompt-sesiune2-C4-C8.md`), îl trimit după ce termină C2+C3. Nu public.
