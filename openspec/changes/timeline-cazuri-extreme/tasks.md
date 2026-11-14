@@ -18,7 +18,7 @@
 - [x] 3.1 Regula `activ_demontat` în `model.py` (neaplicat sub prag, jurnal cu „de ce")
 - [x] 3.2 Semnal agregat pentru val de apeluri
 - [x] 3.3 Încărcare scenariu: `engine.get_model()` acceptă sursa `extreme`; teste în `smoke_engine.py`
-- [ ] 3.4 Recalibrare și rezultat în `docs/calibrare.md`
+- [x] 3.4 Recalibrare și rezultat în `docs/calibrare.md`
 
 ## 4. API și UI (C)
 
@@ -28,4 +28,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 Pași noi în `docs/DEMO.md` (B)
+- [x] 5.1 Pași noi în `docs/DEMO.md` (B)

@@ -26,4 +26,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 Pas nou în `docs/DEMO.md` (B)
+- [x] 5.1 Pas nou în `docs/DEMO.md` (B)

@@ -29,4 +29,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-17-locatie-din-trace.md` (B): limite (GPS simulat, necalibrat)
+- [x] 5.1 `docs/etapa-17-locatie-din-trace.md` (B): limite (GPS simulat, necalibrat)

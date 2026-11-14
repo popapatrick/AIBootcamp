@@ -26,4 +26,4 @@
 
 ## 5. Documentație
 
-- [ ] 5.1 `docs/etapa-15-cerere-racordare.md` (B)
+- [x] 5.1 `docs/etapa-15-cerere-racordare.md` (B)

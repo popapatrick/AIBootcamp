@@ -31,4 +31,4 @@
 
 ## 6. Documentație
 
-- [ ] 6.1 `docs/etapa-11-interfata-rapoarte.md` (C), completări în `docs/DEMO.md` (B)
+- [x] 6.1 `docs/etapa-11-interfata-rapoarte.md` (C), completări în `docs/DEMO.md` (B)
