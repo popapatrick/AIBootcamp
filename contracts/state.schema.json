@@ -3,37 +3,115 @@
   "title": "ElementState",
   "description": "Starea unui element al rețelei la o dată. Produs de B, consumat de C (API/UI). Instantaneele sunt GeoJSON FeatureCollection cu aceste câmpuri în properties.",
   "type": "object",
-  "required": ["element_id", "tip_element", "nivel", "scor", "valid_de_la", "motive"],
+  "required": [
+    "element_id",
+    "tip_element",
+    "nivel",
+    "scor",
+    "valid_de_la",
+    "motive"
+  ],
   "properties": {
-    "element_id": {"type": "string"},
-    "tip_element": {"enum": ["nod", "tronson", "post_transformare"]},
+    "element_id": {
+      "type": "string"
+    },
+    "tip_element": {
+      "enum": [
+        "nod",
+        "tronson",
+        "post_transformare"
+      ]
+    },
     "nivel": {
-      "enum": ["in_model", "predictie", "de_verificat"],
+      "enum": [
+        "in_model",
+        "predictie",
+        "de_verificat"
+      ],
       "description": "in_model = aplicat; predictie = nesigur, neaplicat (linie punctată în UI); de_verificat = semnal contradictoriu sau scor scăzut"
     },
-    "scor": {"type": "number", "minimum": 0, "maximum": 1},
-    "valid_de_la": {"type": "string", "format": "date"},
-    "ultima_verificare": {"type": ["string", "null"], "format": "date"},
+    "scor": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "valid_de_la": {
+      "type": "string",
+      "format": "date"
+    },
+    "ultima_verificare": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
     "motive": {
       "type": "array",
       "description": "Lista „de ce”, cea mai recentă prima.",
       "items": {
         "type": "object",
-        "required": ["text", "efect"],
+        "required": [
+          "text",
+          "efect"
+        ],
         "properties": {
-          "text": {"type": "string"},
-          "efect": {"type": "number", "description": "schimbarea scorului, ex. +0.25"},
-          "eveniment": {"type": ["string", "null"], "description": "event_id sursă"},
-          "data": {"type": "string", "format": "date"}
+          "text": {
+            "type": "string"
+          },
+          "efect": {
+            "type": "number",
+            "description": "schimbarea scorului, ex. +0.25"
+          },
+          "eveniment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "event_id sursă"
+          },
+          "data": {
+            "type": "string",
+            "format": "date"
+          }
         }
       }
     },
     "predictie": {
-      "type": ["object", "null"],
-      "description": "Doar când nivel=predictie: geometria propusă și comparația cu linia dreaptă.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Doar când nivel=predictie sau există o propunere neaplicată (ex. conflict): ce se propune, cu scorul propunerii.",
       "properties": {
-        "metoda": {"enum": ["linie_dreapta", "traseu_strada_osm"]},
-        "urmeaza_strada": {"type": ["number", "null"], "description": "0-1, cât de bine urmează strada"}
+        "metoda": {
+          "enum": [
+            "linie_dreapta",
+            "traseu_strada_osm",
+            "propunere_proprietate"
+          ]
+        },
+        "urmeaza_strada": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "0-1, cât de bine urmează strada"
+        },
+        "propunere": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Ce se propune și nu e aplicat: {proprietate: sectiune|element_nou|linie_planificata, valoare}"
+        },
+        "scor_propunere": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "scorul propunerii (diferit de scorul elementului)"
+        }
       }
     }
   }

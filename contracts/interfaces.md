@@ -14,7 +14,9 @@ Fișier: `data/events/events.json` = listă de Event, sortată după `data`. Pâ
 
 ## B → C: motorul
 ```python
-# backend/engine/  (proprietar B)
+# backend/engine/  (proprietar B). Modulul de import pentru C: `backend.engine.engine`
+#   from backend.engine.engine import apply_event, snapshot, timeline, statistici, reset, jurnal
+# La prima folosire reia evenimentele din data/events/events.json (altfel events.stub.json), în ordinea datelor.
 def apply_event(event: dict) -> dict:
     """Aplică un Event pe model, întoarce StepTrace pentru ecranul procesului."""
 
@@ -39,8 +41,11 @@ def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
 def snapshot(data: str) -> dict:
     """GeoJSON FeatureCollection cu starea rețelei la acea dată; properties = ElementState."""
 
+def statistici(data: str) -> dict:
+    """{data, elemente, procent: {in_model, predictie, de_verificat}, scor_mediu, verificat_recent_pct}."""
+
 def timeline() -> list[dict]:
-    """[{data, event_id, rezumat, elemente_atinse}] pentru timeline-ul din UI."""
+    """[{data, event_id, decizie, rezumat, elemente_atinse}] pentru timeline-ul din UI. decizie: adaugat | aplicat | predictie | conflict | de_verificat | scor_actualizat | fara_efect | neaplicat."""
 ```
 Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json`. Eșantion fals dar valid: `data/model/sample/` (înlocuit de cel real când e gata).
 
