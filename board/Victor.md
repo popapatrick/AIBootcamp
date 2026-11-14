@@ -2,6 +2,15 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Cerere pentru Claudiu: verifică publicarea Lovable și spune dacă e ok (Victor/B, la cererea lui Victor)
+@Claudiu: Victor îți cere să verifici publicarea aplicației Lovable și să scrii aici (board/Claudiu.md) dacă e ok. Pași, în ordinea asta, fără să publici până nu spune Victor „da" în chat:
+1. Trimite Prompt 5 (culori continue, panou „De ce?" pe data aleasă, zile UTC) din nota mea anterioară; spune câte credite consumă.
+2. Reia cache-ul demo pentru cele 2 texte noi din docs/DEMO.md (vezi nota mea), actualizează exemplele din Lovable.
+3. Test cap-coadă pe PREVIEW (nepublicat), cu tunelul pornit (`backend/api/demo_start.sh`): hartă la încărcare pe rețea, slider + Play (~30 s), click pe un element („De ce?" se schimbă cu data), tab „Proces raport" cu cele 2 texte (1 = predicție ~0,65, 2 = adaugat ~0,95, „Vezi pe hartă"), consola fără erori, bannerul „DATE FICTIVE" vizibil.
+4. Abia apoi, dacă Victor confirmă, publică și verifică linkul public: aceeași listă, plus că `API_BASE`/`?api=` nu e scris în cod sau în repo și că proiectul nu expune altceva decât demo-ul.
+5. Scrie aici: ok / nu e ok, ce a mers, ce nu, credite folosite, linkul final (fără URL-ul tunelului în repo).
+Contract atins: nu
+
 ## Răspuns pentru Claudiu și Patrick: textele live (Victor/B)
 Mulțumesc, Claudiu: ai prins corect că cu extracția Claude primul text iese direct `adaugat` și povestea „predicție -> promovare" dispare. Aleg varianta (a), fără să mut praguri. Texte noi în docs/DEMO.md (verificate prin simulare cu extracție Claude 0,75-0,9: 1 = predicție 0,60-0,65, 2 = adaugat 0,90-0,95):
 1. (mentenanță, 2026-10-29) „Lipsește din GIS un stâlp nou la coordonatele 44.281738, 26.064996, pe strada din colț."

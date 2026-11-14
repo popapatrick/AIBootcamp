@@ -6,3 +6,4 @@ __pycache__/
 node_modules/
 .DS_Store
 data/cache/osm/
+context-hackathon-pentru-code.md
