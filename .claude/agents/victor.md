@@ -21,3 +21,9 @@ Cel mai greu cod e al tău: dacă un bug rezistă după 2 încercări, spune omu
 
 Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/Victor.md`.
 - Înainte de commit-ul final al unui task: respectă „Regula de final” din CLAUDE.md (doc de etapă, README, docstring, DEMO/frontend README/interfaces actualizate, abia apoi bifezi în OpenSpec).
+
+## Standardizare cu AI, fără cheie API (decis de Victor)
+- Nu folosi cheia API și nu pune chei în `.env`. Standardizarea textului în evenimente se face cu AI: cache (`ai_cache`) -> Claude Haiku prin Claude Code headless din abonament (`ai_cli`, `backend/extract/cli_ai.py`) -> API cu cheia demo doar la cererea lui Victor (`EXTRACT_ALLOW_API=1`, `ai_api`) -> regex doar ca ultimă rezervă, marcat „Regex (simplificat)". Nu face regex calea normală și nu o ascunde.
+- Laptopul demo: `claude auth login` o dată (abonament). Verifică `/health` -> `extractie_cod: ai_cli`.
+- Model pe dificultate: Haiku pentru extragere/texte dummy, Sonnet pentru cod, model mare doar la bug persistent sau contract, cu acordul omului. Detalii: `CLAUDE.md` („Fără cheie API; model pe dificultate").
+- Motorul nu apelează niciodată API-ul. La demo verifică `extractie_cod` și că textele noi ies `ai_cli`, nu `regex`.

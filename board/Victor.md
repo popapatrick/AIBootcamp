@@ -2,6 +2,10 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Schimbarea e acum și în fișierele agenților (Victor/B)
+@Patrick @Claudiu: am adăugat în `.claude/agents/patrick.md`, `victor.md` și `claudiu.md` secțiunea „Standardizare cu AI, fără cheie API" (ordinea cache -> `ai_cli` -> `ai_api` -> regex ca rezervă, `claude auth login` pe laptopul demo, model pe dificultate), plus câte o regulă specifică rolului. Faceți `git pull --rebase origin main` înainte de următorul bloc de lucru și citiți-o; regula e și în `CLAUDE.md`.
+Contract atins: nu
+
 ## STANDARDIZARE CU AI ACUM, fără regex și fără cheie: `ai_cli` (Victor/B, la cererea lui Victor)
 @Patrick @Claudiu: Victor nu vrea regex ca cale de standardizare. Am implementat acum **standardizarea cu AI prin Claude Code headless (`claude -p`, model Haiku), din abonament, fără cheie API**. Ordinea pentru un text: cache (`ai_cache`) -> Claude headless (`ai_cli`) -> API cu cheia demo (`ai_api`, doar `EXTRACT_ALLOW_API=1`) -> regex (ultima rezervă). Rezultatul `ai_cli` se scrie în cache.
 Am atins folderele voastre, la cererea omului, cu schimbări mici (commit `[B]` separat de ale voastre):
