@@ -7,8 +7,8 @@
 
 ## 2. Generator (A)
 
-- [ ] 2.1 (A3) `backend/trace/genereaza.py`: `genereaza_traseu`, determinist pe seed, cu parametri
-- [ ] 2.2 (A3) `smoke_trace.py`: oprirea generată e redescoperită de `localizeaza`; cazuri cu zgomot mare, acoperire mică, decalaj; README
+- [x] 2.1 (A3) `backend/trace/genereaza.py`: `genereaza_traseu`, determinist pe seed, cu parametri
+- [x] 2.2 (A3) `smoke_trace.py`: oprirea generată e redescoperită de `localizeaza`; cazuri cu zgomot mare, acoperire mică, decalaj; README
 
 ## 3. Motor (B)
 

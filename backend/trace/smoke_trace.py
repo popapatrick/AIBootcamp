@@ -5,7 +5,8 @@ from pathlib import Path
 from backend.engine.config import load_weights
 from backend.engine.network import load_network
 from backend.engine.osm import strazi
-from backend.trace import gaseste_opriri, localizeaza
+from backend.engine.network import dist_m
+from backend.trace import gaseste_opriri, genereaza_traseu, localizeaza
 
 cfg, net, S = load_weights(), load_network(), strazi()
 N = 0
@@ -49,4 +50,30 @@ c = R["trace-3"]
 ok(c["status"] == "gasit" and c["strada"] is None and abs(c["calitate"] - 0.9 * cfg["trace"]["factor_fara_strada"]) < 1e-6, "fallback fără stradă")
 ok(R["trace-4"]["status"] == "fara_opriri", "traseu doar mers")
 ok(localizeaza(T[0]["puncte"], "STRADA LIVIU REBREANU nr. 3", net, S, cfg)["strada"] is not None, "normalizare")
+
+# traseu generat: punct pe o stradă numită din cache
+st = next(x for x in S if x["nume"] and len(x["puncte"]) > 3)
+mid = st["puncte"][len(st["puncte"]) // 2]
+P = {"lat": mid[0], "lon": mid[1]}
+G = cfg["trace_generat"]
+g1 = genereaza_traseu(P, S, G, "r1")
+ok(g1 == genereaza_traseu(P, S, G, "r1"), "determinist pe seed")
+ok(g1 != genereaza_traseu(P, S, G, "r2"), "seed diferit, traseu diferit")
+ok(40 <= len(g1) <= 60 and g1[0]["t"] < g1[-1]["t"], "număr puncte și ordine")
+r = localizeaza(g1, st["nume"], net, S, cfg)
+ok(r["status"] == "gasit" and dist_m((r["alegere"]["lat"], r["alegere"]["lon"]), mid) < 10, "oprirea generată redescoperită")
+ok(r["alegere"]["durata_min"] >= G["durata_oprire_min"] - 3, "durata oprire")
+# decalaj: oprirea se mută cu ~decalaj
+r = localizeaza(genereaza_traseu(P, S, {**G, "decalaj_m": 50}, "r1"), st["nume"], net, S, cfg)
+d = dist_m((r["alegere"]["lat"], r["alegere"]["lon"]), mid)
+ok(r["status"] != "fara_opriri" and 40 < d < 60, f"decalaj 50 m (d={d:.0f})")
+# oprire scurtă (sub durata_min_min) și zgomot mare: nu se mai găsește oprirea
+ok(localizeaza(genereaza_traseu(P, S, {**G, "durata_oprire_min": 2}, "r1"), st["nume"], net, S, cfg)["status"] == "fara_opriri", "oprire scurtă")
+ok(localizeaza(genereaza_traseu(P, S, {**G, "zgomot_m": 40}, "r1"), st["nume"], net, S, cfg)["status"] == "fara_opriri", "zgomot mare")
+# zgomot moderat: încă găsită, dar mai puțin precis decât la zgomot mic
+e = lambda z: dist_m(*[(lambda a: (a["lat"], a["lon"]))(localizeaza(genereaza_traseu(P, S, {**G, "zgomot_m": z}, "r3"), st["nume"], net, S, cfg)["alegere"]), mid])
+ok(e(1) < 3, "zgomot 1 m precis")
+# acoperire mică: oprirea poate pierde puncte, durata scade
+ok(len(genereaza_traseu(P, S, {**G, "acoperire": 0.3}, "r1")) < len(g1), "acoperire mică, mai puține puncte")
+ok(len(genereaza_traseu(P, [], G, "r1")) > 30, "fără străzi")
 print(f"OK: {N} verificări")

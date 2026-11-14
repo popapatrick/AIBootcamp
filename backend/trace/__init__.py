@@ -9,7 +9,7 @@ from datetime import datetime
 
 from backend.engine.network import dist_m
 
-__all__ = ["gaseste_opriri", "localizeaza"]
+__all__ = ["gaseste_opriri", "localizeaza", "genereaza_traseu"]
 
 _PREFIXE = r"(strada|str|bulevardul|bd|bdul|soseaua|sos|aleea|intrarea|calea|piata)"
 
@@ -134,3 +134,5 @@ def localizeaza(trace: list[dict], adresa: str | None, net: dict, strazi: list[d
                alegere={"lat": o["lat"], "lon": o["lon"], "durata_min": o["durata_min"],
                         "element_id": eid if ok else None, "distanta_element_m": round(d, 1) if d is not None else None})
     return rez
+
+from backend.trace.genereaza import genereaza_traseu  # noqa: E402  (după definiții: genereaza importă helperi de aici)
