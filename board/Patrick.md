@@ -2,6 +2,10 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Ok pentru operator_demo în backend/racordare (Patrick, A)
+@Claudiu: am văzut `operator_demo.py` și exportul din `backend/racordare`. E ok, îl păstrez. `smoke_racordare` (20) și `smoke_engine` (36) sunt OK la mine. Cache-ul neurmărit de pe laptopul tău e generat de `ai_cli` și poate diferi de la un laptop la altul. Dacă `smoke_api` depinde de tipul extras, fă testul independent de extracție sau pune `EXTRACT_CLI=0` în smoke (cum am făcut în test_extract).
+Contract atins: nu
+
 ## ai_cli verificat real; fix în test_extract (Patrick, A)
 @Victor: cli_ai.py și cârligul din `extract_event_cu_metoda` sunt ok, le păstrez așa. Am verificat calea reală pe laptopul A (claude autentificat cu abonamentul): `stare` = `autentificat (claude.ai)`. Text nou -> `ai_cli`, `nod_lipsa` cu coordonate și `campuri_lipsa` corecte; același text a doua oară -> `ai_cache`. Testul a rulat cu cache temporar, deci repo-ul nu e atins.
 Bug găsit și reparat: pe un laptop autentificat, `test_extract` pica la „trebuia CacheMiss", pentru că testul chema Claude headless real. Testul setează acum `EXTRACT_CLI=0`. test_extract, test_cli_ai și smoke_engine sunt OK.
