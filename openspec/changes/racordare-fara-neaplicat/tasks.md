@@ -2,7 +2,7 @@
 
 ## 1. Contract (B, commit `contract:`, pasul 0)
 
-- [ ] 1.1 `predictie.slaba`, `racordare.treapta` în `state.schema.json` și `interfaces.md`; `racordare.raza_extinsa_m`, `prag_afisare`, `factor_raza_extinsa`, `factor_linie_dreapta_lunga`, `factor_doar_casa` în `weights.yaml`
+- [x] 1.1 `predictie.slaba`, `racordare.treapta` în `state.schema.json` și `interfaces.md`; `racordare.raza_extinsa_m`, `prag_afisare`, `factor_raza_extinsa`, `factor_linie_dreapta_lunga`, `factor_doar_casa` în `weights.yaml`
 
 ## 2. Modul `backend/racordare` (A)
 
@@ -11,8 +11,8 @@
 
 ## 3. Motor (B)
 
-- [ ] 3.1 (B5) `_cerere_racordare`: scara pentru locație (inclusiv geocodare și trace), nivel „predicție slabă", casa rămâne pe hartă, motive clare
-- [ ] 3.2 (B5) Teste în `smoke_sesiune2.py` (fiecare treaptă, predicție slabă, cele două cazuri neaplicate)
+- [x] 3.1 (B5) `_cerere_racordare`: scara pentru locație (inclusiv geocodare și trace), nivel „predicție slabă", casa rămâne pe hartă, motive clare
+- [x] 3.2 (B5) Teste în `smoke_sesiune2.py` (fiecare treaptă, predicție slabă, cele două cazuri neaplicate)
 
 ## 4. API (C)
 

@@ -230,6 +230,33 @@ def main() -> None:
     t2_, _ = tfac("TG-6", {"zgomot_m": 3, "durata_oprire_min": 15})
     verifica("trace generat: determinist pe event_id", t1_["pasi"][-1] == t2_["pasi"][-1])
 
+    # --- racordare cu rezerve: fără „neaplicat” din lipsă de date
+    mq = mk()
+    c0q = mq.net["_zona_centru"]
+    def racq(i, ref, det=None, sursa="apel_client", inc=0.9):
+        t_ = mk().apply_event(ev(i, "2026-10-22", "apel_client" if sursa == "apel_client" else "racordari", "cerere_racordare", "semnalat",
+                                 ref=ref, det=det or {}, sursa=sursa, forma="text_liber", inc=inc))
+        pr_ = next((p for p in t_["pasi"] if p["nume"] == "predictie"), None)
+        return t_, (pr_ or {}).get("rezultat") or {}
+    # casă la ~2,5 km de orice nod (în zonă, departe de rețea): treapta 3 sau 4, tot predicție (slabă), nu neaplicat
+    t_far, p_far = racq("RQ-1", {"coordonate": {"lat": c0q[0] + 2500 / 111_320, "lon": c0q[1]}})
+    verifica("racordare: casă departe de rețea nu mai e neaplicat", t_far["decizie"] in ("predictie", "adaugat") and not t_far.get("eronat_prototip"),
+             t_far["decizie"] + " " + str(t_far["pasi"][-1].get("motive")))
+    verifica("racordare: treapta 3 sau 4 în pași și slabă", p_far.get("treapta") in (3, 4) and t_far["pasi"][-1]["rezultat"].get("slaba") is True,
+             str(p_far.get("treapta")))
+    verifica("racordare: punctul casei rămâne pe hartă (modificare cu predictie.slaba)",
+             any(x["element_id"].endswith("-casa") and (x.get("predictie") or {}).get("slaba") for x in t_far["modificari"]))
+    # casă lângă rețea, treapta 1, scor normal
+    ploc2 = {"lat": c0q[0] + 20 / 111_320, "lon": c0q[1] + 20 / 111_320}
+    t_n, p_n = racq("RQ-2", {"coordonate": ploc2}, sursa="formular", inc=0.95)
+    verifica("racordare: lângă rețea = treapta 1/2, nu slabă", p_n.get("treapta") in (1, 2) and t_n["pasi"][-1]["rezultat"].get("slaba") is False,
+             str(p_n.get("treapta")))
+    # singurele neaplicate: fără locație și în afara zonei
+    t_0, _ = racq("RQ-3", {})
+    verifica("racordare: fără locație = neaplicat cu motiv", t_0["decizie"] == "neaplicat" and "locația" in t_0["pasi"][-1]["motive"][0])
+    t_o, _ = racq("RQ-4", {"coordonate": {"lat": c0q[0] + 9000 / 111_320, "lon": c0q[1]}})
+    verifica("racordare: în afara zonei = neaplicat eronat", t_o["decizie"] == "neaplicat" and t_o.get("eronat_prototip"))
+
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 

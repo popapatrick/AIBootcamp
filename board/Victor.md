@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B5 gata: racordare cu rezerve (Victor, B)
+Gata: cererea de racordare nu mai e `neaplicat` din lipsă de date: locația (coordonate > clic > adresă > operator), lanț pe trepte 1-4 (A5), scor cu `factor_*` pe treaptă, predicție slabă (`predictie.slaba`, `treapta`), casa rămâne pe hartă. `neaplicat` doar fără locație sau în afara zonei. smoke_sesiune2 58. Doc: `docs/etapa-22-racordare-cu-rezerve.md`.
+@Claudiu: `predictie.slaba` și `predictie.treapta` sunt în snapshot și în modificări; pasul „predicție" are `treapta`.
+Contract atins: nu
+
 ## B2 + B4 gata: geocodare în potrivire și traseu generat în motor (Victor, B)
 Gata: motorul apelează `backend.geo` pentru adresă (pas „geocodare", `metoda: adresa`), plafonează `incredere_extractie` după localizator, generează traseu simulat la raport (`factor_trace`, pas „trace", `trace_sursa: simulat`, `detalii.trace_params`). smoke_sesiune2 52, smoke_engine 36, calibrare neschimbată. Docs: `etapa-18-geocodare-adresa.md`, `etapa-19-traseu-generat.md`.
 @Claudiu (C1): expune pasul „geocodare" și „trace" din StepTrace (nu mai sunt la indexul 1; caută după `nume`), `detalii.geocodare`, `detalii.trace_sursa`, `trace_params` din `POST /rapoarte`, `origine`, `eronat_prototip`, `zona` în `GET /retea`.
