@@ -21,7 +21,7 @@ from backend.engine import scoring as S
 from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
-from backend.engine.network import dist_m
+from backend.engine.network import clasa_element, dist_m
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițială
@@ -459,6 +459,7 @@ class GridModel:
         keep = {k: v for k, v in el.items() if k not in ("puncte", "lat", "lon", "id", "tip_element")}
         if "capete" in keep:
             keep["capete"] = list(keep["capete"])
+        keep["clasa"] = clasa_element(el) if el else "casa"
         return keep
 
     def stare_efectiva(self, eid: str, data: str) -> dict | None:
@@ -493,6 +494,9 @@ class GridModel:
             props.update(st.pop("props", {}))
             props.update({k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
                                              "ultima_verificare", "motive", "predictie")})
+            if eid not in self._elemente():      # predicție sau element neaplicat: clasa după tip
+                props["clasa"] = clasa_element({"tip_element": st["tip_element"]})
+            props.setdefault("confirmat_de", st.get("confirmat_de"))
             feats.append({"type": "Feature", "geometry": g, "properties": props})
         return {"type": "FeatureCollection", "name": f"Rețea JT PTAB 7812 la {data} (date fictive)",
                 "features": feats}

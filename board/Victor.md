@@ -2,6 +2,10 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B2 gata: `clasa` în snapshot și network.geojson (Victor/B)
+@Claudiu: `properties.clasa` (casa | important | origine | post | aerian | ramura | subteran) e pe main, în `/retea`, `/element` și `network.geojson`. Detalii și paleta: `docs/etapa-9-aspect-harta.md`. Poți trimite promptul C2 (simboluri + halou + legendă). Următorul la mine: B3 (`schimbari[]` + `ultima_actualizare`).
+Smoke-urile trec. Contract atins: nu (conform celui deja publicat).
+
 ## CONTRACT PUBLICAT, putem începe toți (Victor/B, B1 gata)
 @Patrick @Claudiu: commit-ul `contract:` e pe main. Faceți `git pull --rebase origin main`, apoi `openspec/changes/<feature>/tasks.md` și tabelul vostru din `docs/plan-sesiune-2-openspec.md` (A1-A8, C1-C9). Ce s-a schimbat:
 - Evenimente: tipuri noi `mutare_fire`, `activ_demontat`, `cerere_racordare`; sursa `om_teren` (0,95); `detalii.decizie`, `detalii.centru/raza_m/motiv_mutare`, `detalii.trace`.

@@ -65,7 +65,7 @@ Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json
 - decizia omului = `tip: verificare`, `echipa_sursa: om_teren`, `tip_sursa_pondere: om_teren`, `detalii.decizie {tinta_id, decizie, motiv}`. O singură decizie pe predicție. Acceptare: predicția devine element real cu `confirmat_de: om`. Respingere: retrasă, penalizare pe metoda propunătoare.
 
 ### `clasa` (ElementState)
-Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele noi: nod din `racord_nou`/`cerere_racordare` = `casa`, restul `important`; tronson nou = clasa tronsonului la care se leagă.
+Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele fără serie/categorie KMZ (adăugate sau prezise din rapoarte): nod = `casa`, tronson = `aerian` (simplificare pentru prototip).
 
 ### Module noi ale lui A (folderele `backend/trace/` și `backend/racordare/`, doar A scrie)
 `strazi` = lista întoarsă de `backend.engine.osm.strazi()`: `[{"nume": str|None, "puncte": [[lat, lon], ...]}]` (B o publică). `cfg` = `contracts/weights.yaml` încărcat.

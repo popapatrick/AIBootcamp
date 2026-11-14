@@ -113,19 +113,47 @@ def load_network() -> dict:
     return {"post": post, "noduri": noduri, "tronsoane": tronsoane}
 
 
+def clasa_element(el: dict) -> str:
+    """Clasa vizuală din KMZ (contracts/state.schema.json, `clasa`).
+    Noduri: serie 7 = casa, serie 5/6 = important, origine plecare JT = origine; post = post.
+    Tronsoane: aerian | ramura | subteran după categorie. Elementele fără serie/categorie
+    (adăugate din rapoarte): nod = casa, tronson = aerian."""
+    tip = el.get("tip_element")
+    if tip == "post_transformare":
+        return "post"
+    if tip == "tronson":
+        cat = (el.get("categorie") or "").lower()
+        if "subteran" in cat:
+            return "subteran"
+        if "ramur" in cat:
+            return "ramura"
+        return "aerian"
+    serie = (el.get("serie") or "").lower()
+    if "origine" in serie:
+        return "origine"
+    if "serie 7" in serie:
+        return "casa"
+    if "serie 5" in serie or "serie 6" in serie:
+        return "important"
+    return "casa"
+
+
 def to_geojson(net: dict) -> dict:
     """GeoJSON FeatureCollection (coordonate [lon, lat]), pentru hartă."""
     feats = []
     if net["post"]:
         p = net["post"]
         feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [p["lon"], p["lat"]]},
-                      "properties": {k: v for k, v in p.items() if k not in ("lat", "lon")}})
+                      "properties": {**{k: v for k, v in p.items() if k not in ("lat", "lon")},
+                                     "clasa": clasa_element(p)}})
     for n in net["noduri"].values():
         feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [n["lon"], n["lat"]]},
-                      "properties": {k: v for k, v in n.items() if k not in ("lat", "lon")}})
+                      "properties": {**{k: v for k, v in n.items() if k not in ("lat", "lon")},
+                                     "clasa": clasa_element(n)}})
     for t in net["tronsoane"].values():
         props = {k: v for k, v in t.items() if k != "puncte"}
         props["capete"] = list(t["capete"])
+        props["clasa"] = clasa_element(t)
         feats.append({"type": "Feature",
                       "geometry": {"type": "LineString",
                                    "coordinates": [[lon, lat] for lat, lon in t["puncte"]]},
