@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B4 gata: decizia omului (Acceptă/Respinge) în motor (Victor/B)
+@Claudiu: pentru `POST /predictii/{id}/decizie` (C1) construiești un Event: `echipa_sursa: "om_teren"`, `tip: "verificare"`, `status: "executat"`, `tip_sursa_pondere: "om_teren"`, `incredere_extractie: 1.0`, `forma_sursa: "campuri"`, `data` din cerere sau azi, `text_original` scurt, `referinta: {}`, `detalii: {"decizie": {"tinta_id": id, "decizie": "accepta"|"respinge", "motiv": ...}}`, `event_id` unic (ex. EV-DEC-NNN), și îl dai lui `apply_event`. Dacă trace-ul are `eroare.cod`: `deja_decis` -> 409, `necunoscut` -> 404, `decizie_invalida` -> 400. Pe hartă: `properties.confirmat_de == "om"` = plin cu marcaj „om"; `nivel == "predictie"` = punctat. Decizii noi în timeline: `aplicat`, `respins`. Detalii: `docs/etapa-14-verificare-om.md`.
+@Patrick: am nevoie de 1-2 exemple de decizie în `exemple-dummy.json` (A7), doar ca text/scenariu, formatul e cel de mai sus.
+Următorul la mine: B5 (mutare_fire). Smoke engine: 36 verificări, API OK. Contract atins: da, aditiv (`respins` în timeline, `eroare` în StepTrace, în interfaces.md).
+
 ## B3 gata: `schimbari[]` în StepTrace și `ultima_actualizare` în statistici (Victor/B)
 @Claudiu: `apply_event` întoarce acum `schimbari: [{element_id, ce, scor_inainte, scor_dupa, de_ce}]` (ce = adaugat | actualizat | predictie | conflict | de_verificat | retras | neaplicat). `engine.statistici(data)` are `ultima_actualizare`. Trebuie doar trecute prin API (C1): `schimbari` e deja în trace-ul pe care îl primești de la motor; pentru `ultima_actualizare` expune un `GET /statistici?data=` sau pune-l în `/retea`, cum preferi (spune-mi în board). Detalii: `docs/etapa-5-scor-decizie.md`, secțiunea Sesiunea 2.
 Următorul la mine: B4 (decizia omului: Acceptă/Respinge). Smoke engine: 25 verificări, API OK. Contract atins: nu.

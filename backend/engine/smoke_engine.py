@@ -163,6 +163,53 @@ def main() -> None:
                            referinta={"adresa": "Strada Necunoscută 5"}))
     verifica("schimbari: neaplicat are o intrare cu motiv", t3["schimbari"] and t3["schimbari"][0]["ce"] == "neaplicat"
              and t3["schimbari"][0]["de_ce"], str(t3["schimbari"]))
+    # B4: decizia omului (om_teren) asupra unei predicții
+    def decizie_ev(i, data, tinta, alege):
+        return ev(i, data, "om_teren", "verificare", "executat", sursa="om_teren", incredere=1.0,
+                  detalii={"decizie": {"tinta_id": tinta, "decizie": alege}})
+    md = GridModel()
+    tp = md.apply_event(ev(70, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+                           referinta={"coordonate": c}))
+    pred = next((x["element_id"] for x in tp["modificari"] if x["tip_element"] == "nod"), None)
+    verifica("pregătire: există o predicție de nod", tp["decizie"] == "predictie" and pred is not None, str(pred))
+    ta = md.apply_event(decizie_ev(71, "2026-08-20", pred, "accepta"))
+    sa = next(x for x in md.snapshot("2026-08-21")["features"] if x["properties"]["element_id"] == pred)["properties"]
+    verifica("om acceptă -> aplicat, confirmat_de om, scor mare", ta["decizie"] == "aplicat" and pred in md.net["noduri"]
+             and sa["nivel"] == "in_model" and sa["confirmat_de"] == "om" and sa["scor"] >= 0.75, f"{sa['nivel']} {sa['scor']}")
+    verifica("acceptarea: schimbari = adaugat", any(x["element_id"] == pred and x["ce"] == "adaugat" for x in ta["schimbari"]))
+    sp_ = next(x for x in md.snapshot("2026-08-15")["features"] if x["properties"]["element_id"] == pred)["properties"]
+    verifica("înainte de decizie e încă predicție AI", sp_["nivel"] == "predictie" and sp_["confirmat_de"] is None)
+    t2x = md.apply_event(decizie_ev(72, "2026-08-21", pred, "respinge"))
+    verifica("a doua decizie e refuzată (deja_decis)", t2x["decizie"] == "neaplicat" and t2x["eroare"]["cod"] == "deja_decis")
+    tn = md.apply_event(decizie_ev(73, "2026-08-22", "NOU-INEXISTENT", "accepta"))
+    verifica("predicție necunoscută", tn["eroare"]["cod"] == "necunoscut")
+
+    mr = GridModel()
+    tr0 = mr.apply_event(ev(74, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+                            referinta={"coordonate": c}))
+    predr = next(x["element_id"] for x in tr0["modificari"] if x["tip_element"] == "nod")
+    sc0 = tr0["pasi"][-1]["rezultat"]["scor_propunere"] if "scor_propunere" in tr0["pasi"][-1]["rezultat"] else None
+    tr = mr.apply_event(decizie_ev(75, "2026-08-20", predr, "respinge"))
+    verifica("om respinge -> predicția e retrasă, nimic în model", tr["decizie"] == "respins" and predr not in mr.net["noduri"]
+             and not any(x["properties"]["element_id"] == predr for x in mr.snapshot("2026-08-21")["features"]))
+    verifica("respingerea retrage și legăturile", all(x["ce"] == "retras" for x in tr["schimbari"]) and len(tr["schimbari"]) >= 1,
+             str([x["ce"] for x in tr["schimbari"]]))
+    verifica("respingerea penalizează metoda", mr.penalizare_metoda and max(mr.penalizare_metoda.values()) > 0, str(mr.penalizare_metoda))
+    tr2 = mr.apply_event(ev(76, "2026-08-25", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+                            referinta={"coordonate": c}))
+    verifica("propunere nouă cu aceeași metodă: scor mai mic și motivul penalizării",
+             any("respinsă în teren" in x for x in tr2["pasi"][-1].get("motive", [])), str(tr2["decizie"]))
+
+    # decizia omului asupra unei propuneri de secțiune (tronson existent)
+    mp = GridModel()
+    tpp = mp.apply_event({**ev(80, "2026-08-10", "apel_client", "activ_inlocuit", "semnalat", forma="text_liber", incredere=0.6,
+                               referinta={"element_id": "A-T-021"}, detalii={"sectiune_noua": "TYIR 3x50+54,6 OL-Al"})})
+    tdd = mp.apply_event(decizie_ev(81, "2026-08-12", "A-T-021", "accepta"))
+    sp3 = next(x for x in mp.snapshot("2026-08-13")["features"] if x["properties"]["element_id"] == "A-T-021")["properties"]
+    verifica("om acceptă propunerea de secțiune -> aplicată, confirmat de om",
+             tpp["decizie"] == "predictie" and tdd["decizie"] == "aplicat" and sp3["sectiune"] == "TYIR 3x50+54,6 OL-Al"
+             and sp3["confirmat_de"] == "om" and sp3["predictie"] is None, f"{sp3['nivel']} {sp3['scor']}")
+
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 

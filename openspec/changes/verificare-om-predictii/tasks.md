@@ -2,14 +2,14 @@
 
 ## 1. Contract (B, commit `contract:`)
 
-- [ ] 1.1 Sursa `om_teren` (0,95) în `weights.yaml` și în `tip_sursa_pondere`
-- [ ] 1.2 `detalii.decizie` pentru `verificare`; endpoint `POST /predictii/{id}/decizie` în `api.openapi.yaml` și `interfaces.md`
+- [x] 1.1 Sursa `om_teren` (0,95) în `weights.yaml` și în `tip_sursa_pondere`
+- [x] 1.2 `detalii.decizie` pentru `verificare`; endpoint `POST /predictii/{id}/decizie` în `api.openapi.yaml` și `interfaces.md`
 
 ## 2. Motor (B)
 
-- [ ] 2.1 `apply_event` pentru `verificare` cu `om_teren`: acceptare, respingere, o singură decizie
-- [ ] 2.2 Marcaj `confirmat_de: om` în snapshot
-- [ ] 2.3 Teste în `smoke_engine.py`
+- [x] 2.1 `apply_event` pentru `verificare` cu `om_teren`: acceptare, respingere, o singură decizie
+- [x] 2.2 Marcaj `confirmat_de: om` în snapshot
+- [x] 2.3 Teste în `smoke_engine.py`
 
 ## 3. API și UI (C)
 

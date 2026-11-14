@@ -45,7 +45,7 @@ def statistici(data: str) -> dict:
     """{data, elemente, procent: {in_model, predictie, de_verificat}, scor_mediu, verificat_recent_pct}."""
 
 def timeline() -> list[dict]:
-    """[{data, event_id, decizie, rezumat, elemente_atinse}] pentru timeline-ul din UI. decizie: adaugat | aplicat | predictie | conflict | de_verificat | scor_actualizat | fara_efect | neaplicat."""
+    """[{data, event_id, decizie, rezumat, elemente_atinse}] pentru timeline-ul din UI. decizie: adaugat | aplicat | predictie | conflict | de_verificat | scor_actualizat | fara_efect | neaplicat | respins (decizia omului a retras o predicție)."""
 ```
 Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json`. Eșantion fals dar valid: `data/model/sample/` (înlocuit de cel real când e gata).
 
@@ -63,6 +63,8 @@ Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json
 - `activ_demontat`: element scos din uz doar dacă scorul propunerii trece pragul de aplicare; altfel semnal negativ.
 - `cerere_racordare`: locația în `referinta.coordonate`. Actualizare directă dacă există date, altfel lanț prezis de stâlpi (`backend.racordare`).
 - decizia omului = `tip: verificare`, `echipa_sursa: om_teren`, `tip_sursa_pondere: om_teren`, `detalii.decizie {tinta_id, decizie, motiv}`. O singură decizie pe predicție. Acceptare: predicția devine element real cu `confirmat_de: om`. Respingere: retrasă, penalizare pe metoda propunătoare.
+
+Un refuz al deciziei omului (a doua decizie, predicție necunoscută, decizie invalidă) întoarce StepTrace cu `decizie: neaplicat` și `eroare: {cod: deja_decis | necunoscut | decizie_invalida, mesaj}`; API-ul le traduce în 409 / 404 / 400.
 
 ### `clasa` (ElementState)
 Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele fără serie/categorie KMZ (adăugate sau prezise din rapoarte): nod = `casa`, tronson = `aerian` (simplificare pentru prototip).
