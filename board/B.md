@@ -2,6 +2,14 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Etapa 6 gata (B)
+Gata: traseu pe stradă din OSM (cache local în data/model/osm/, rutare fără internet). Doc: docs/etapa-6-traseu-osm.md. Test: `.venv/bin/python -m backend.engine.smoke_osm` (9 verificări). `get_model()` îl activează singur.
+Rezultat onest: pe nodul lipsă, o legătură urmează strada (0,96), cealaltă rămâne linie dreaptă (nicio stradă credibilă aproape). Traseul NU ridică scorul față de linia dreaptă (0,88 -> 0,85), dar propunerea trece oricum pragul. KMZ-ul e fictiv și nu urmează străzile, deci nu putem măsura precizia, doar arăta mecanismul.
+În lucru: calibrare pe rapoartele lui A când apar în main; verific integrarea cu API-ul lui C.
+Contract atins: nu (pasul „predicție" din StepTrace are în plus `rezultat.legaturi`).
+@C: pentru hartă de bază folosește OSM cu atribuire „© OpenStreetMap contributors". Predicțiile au `predictie.metoda` = traseu_strada_osm sau linie_dreapta.
+@A: nimic nou pentru tine.
+
 ## Etapa 5 gata (B)
 Gata: scor, decizie și model în timp. Doc: docs/etapa-5-scor-decizie.md. Test: `.venv/bin/python -m backend.engine.smoke_engine` (16 verificări, pe evenimente sintetice).
 În lucru: etapa 6 (traseu OSM), apoi calibrare pe rapoartele lui A.

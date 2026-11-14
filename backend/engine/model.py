@@ -245,7 +245,7 @@ class GridModel:
             q *= 0.8
 
         # geometria legăturilor: traseu OSM dacă există (etapa 6), altfel linie dreaptă
-        legaturi, urm = [], []
+        legaturi, urm, info_leg = [], [], []
         for v in vecini:
             nv = self.net["noduri"][v]
             a, b = pt, (nv["lat"], nv["lon"])
@@ -253,10 +253,19 @@ class GridModel:
             if r:
                 legaturi.append((v, r["puncte"], "traseu_strada_osm"))
                 urm.append(r["urmeaza_strada"])
+                info_leg.append({"vecin": v, "metoda": "traseu_strada_osm", "urmeaza_strada": r["urmeaza_strada"],
+                                 "abatere_dreapta_m": r.get("abatere_dreapta_m"), "lungime_m": r["lungime_m"],
+                                 "lungime_dreapta_m": r["lungime_dreapta_m"]})
             else:
                 legaturi.append((v, [a, b], "linie_dreapta"))
-        urmeaza = round(sum(urm) / len(urm), 3) if urm else None
-        metoda = "traseu_strada_osm" if urm else "linie_dreapta"
+                urm.append(None)
+                info_leg.append({"vecin": v, "metoda": "linie_dreapta", "urmeaza_strada": None,
+                                 "motiv": "nicio stradă credibilă aproape" if self.traseu_fn else "traseu OSM indisponibil"})
+        # o legătură fără stradă credibilă rămâne linie dreaptă și contează neutru (0,5: nici confirmată,
+        # nici infirmată); dacă nicio legătură nu are traseu, factorul lipsește și ponderile se renormalizează
+        urmeaza = (round(sum(0.5 if u is None else u for u in urm) / len(urm), 3)
+                   if any(u is not None for u in urm) else None)
+        metoda = "traseu_strada_osm" if urmeaza is not None else "linie_dreapta"
 
         # există deja o predicție pentru același element? atunci acest raport o întărește
         pid = next((p for p, v in self.predictii.items() if "punct" in v and (
@@ -278,7 +287,8 @@ class GridModel:
                  f"potrivire {factori['calitate_potrivire']}" + (f", urmează strada {urmeaza}" if urmeaza is not None else "") + ").")
         trace["pasi"].append({"nume": "predictie", "incredere": urmeaza if urmeaza is not None else q,
                               "rezultat": {"metoda": metoda, "element_nou": eid, "vecini": vecini,
-                                           "vecini_dedusi": dedusi, "urmeaza_strada": urmeaza}})
+                                           "vecini_dedusi": dedusi, "urmeaza_strada": urmeaza,
+                                           "legaturi": info_leg}})
         rez = {"scor_propunere": sp, "factori": factori, "nivel": niv}
 
         if niv == "de_verificat":

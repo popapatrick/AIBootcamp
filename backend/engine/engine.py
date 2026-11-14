@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from backend.engine import osm
 from backend.engine.model import GridModel, ROOT
 
 EVENTS = ROOT / "data" / "events"
@@ -28,6 +29,7 @@ def get_model() -> GridModel:
     global _model
     if _model is None:
         _model = GridModel()
+        _model.traseu_fn = osm.traseu_fn()      # None dacă lipsește cache-ul de străzi: linii drepte
         for ev in _incarca_evenimente():
             _model.apply_event(ev)
     return _model
