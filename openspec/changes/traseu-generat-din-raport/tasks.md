@@ -2,8 +2,8 @@
 
 ## 1. Contract (B, commit `contract:`, pasul 0)
 
-- [ ] 1.1 `detalii.trace_params`, `detalii.trace_sursa` în `event.schema.json` și `interfaces.md`; semnătura `backend.trace.genereaza_traseu(punct, strazi, params, seed)`
-- [ ] 1.2 Secțiunea `trace_generat` în `weights.yaml` (puncte, zgomot, durată, acoperire, decalaj, bonus_max, acoperire_min, toleranta_adresa_m)
+- [x] 1.1 `detalii.trace_params`, `detalii.trace_sursa` în `event.schema.json` și `interfaces.md`; semnătura `backend.trace.genereaza_traseu(punct, strazi, params, seed)`
+- [x] 1.2 Secțiunea `trace_generat` în `weights.yaml` (puncte, zgomot, durată, acoperire, decalaj, bonus_max, acoperire_min, toleranta_adresa_m)
 
 ## 2. Generator (A)
 
@@ -12,8 +12,8 @@
 
 ## 3. Motor (B)
 
-- [ ] 3.1 (B4) La procesarea raportului cu locație și fără trace, apelează generatorul; `localizeaza` pe rezultat; `factor_trace` în calitatea locației; jurnal
-- [ ] 3.2 (B4) Teste în `smoke_engine.py`: bonus, penalizare, contradicție, fără trace
+- [x] 3.1 (B4) La procesarea raportului cu locație și fără trace, apelează generatorul; `localizeaza` pe rezultat; `factor_trace` în calitatea locației; jurnal
+- [x] 3.2 (B4) Teste în `smoke_engine.py`: bonus, penalizare, contradicție, fără trace
 
 ## 4. API (C)
 

@@ -12,6 +12,7 @@ Toate pragurile vin din `contracts/weights.yaml`. Contracte: `contracts/interfac
 from __future__ import annotations
 
 import math
+import re
 
 from backend.engine import scoring as S
 from backend.engine.network import dist_m
@@ -51,6 +52,112 @@ class Sesiune2:
         if a:
             event["referinta"] = {**ref, "coordonate": {"lat": a["lat"], "lon": a["lon"]}}
         return event
+
+    @staticmethod
+    def _localizator(ref: dict) -> str | None:
+        """Cel mai bun localizator din text: id | coordonate | strada_numar | strada | reper | None."""
+        if (ref.get("element_id") or "").strip():
+            return "id"
+        if ref.get("coordonate"):
+            return "coordonate"
+        ad = ref.get("adresa_structurata") or {}
+        if ad.get("strada") and ad.get("numar"):
+            return "strada_numar"
+        if ad.get("strada"):
+            return "strada"
+        if ad.get("reper") or ref.get("adresa"):
+            return "strada_numar" if re.search(r"\b(nr\.?|numarul|nr)\s*\d+", ref.get("adresa") or "", re.I) else "strada"
+        return None
+
+    def _plafon_standardizare(self, event: dict, trace: dict) -> dict:
+        """Încrederea extracției nu depășește plafonul localizatorului cel mai bun din text (weights.standardizare)."""
+        pl = (self.w.get("standardizare") or {}).get("plafon_dupa_localizator") or {}
+        loc = self._localizator(event.get("referinta") or {})
+        inc = float(event.get("incredere_extractie", 1.0))
+        if loc in pl and inc > pl[loc]:
+            trace["pasi"][0]["incredere"] = pl[loc]
+            trace["pasi"][0]["rezultat"]["plafon_standardizare"] = {"localizator": loc, "plafon": pl[loc], "initial": inc}
+            return {**event, "incredere_extractie": pl[loc]}
+        return event
+
+    def _foloseste_geocodare(self, event: dict, trace: dict) -> dict:
+        """Fără ID și fără coordonate, dar cu adresă: backend.geo dă coordonate aproximative (doar cache OSM + AI)."""
+        ref, det0 = event.get("referinta") or {}, event.get("detalii") or {}
+        if (ref.get("element_id") or "").strip() or ref.get("coordonate") or not (ref.get("adresa") or ref.get("adresa_structurata")):
+            return event
+        if det0.get("locatie") or det0.get("locatie_operator") or det0.get("trace"):
+            return event        # clic pe hartă, poziția operatorului sau trace au deja o locație (mai precisă decât adresa)
+        try:
+            from backend.engine import osm
+            from backend.geo import geocodeaza
+            g = geocodeaza(ref, osm.strazi(), self.w)
+        except Exception as e:      # fără cache OSM sau modul: ca înainte, nepotrivit
+            trace["pasi"].append({"nume": "geocodare", "incredere": 0.0, "rezultat": {"status": "necunoscut", "motiv": f"geocodare indisponibilă: {e}"}})
+            return event
+        trace["pasi"].append({"nume": "geocodare", "incredere": g.get("acuratete"), "rezultat": g})
+        if g.get("status") != "gasit":
+            return event
+        z = zona_ok(g["lat"], g["lon"], self.net, self.w)
+        if not z["ok"]:
+            g["status"] = "in_afara_zonei"
+            return {**event, "_eronat": (g["lat"], g["lon"])}
+        det = event.get("detalii") or {}
+        return {**event, "referinta": {**ref, "coordonate": {"lat": g["lat"], "lon": g["lon"]}},
+                "detalii": {**det, "geocodare": {k: g.get(k) for k in ("lat", "lon", "precizie_m", "metoda", "acuratete", "motiv")}}}
+
+    def _trace_generat(self, event: dict, trace: dict) -> dict:
+        """Traseu simulat al tabletei lângă punctul din raport (feature traseu-generat-din-raport).
+
+        Doar pentru rapoarte de echipă (nu apel/om) cu locație (coordonate sau adresă geocodată), fără ID și fără trace real.
+        Complementar: nu schimbă locația, doar acuratețea ei (`detalii.trace_factor`): oprire lungă, zgomot mic, acoperire bună și
+        oprire consistentă cu adresa o cresc (plafon `bonus_max`); zgomot/acoperire slabă sau contradicție o scad.
+        Dezactivare per raport: `detalii.trace_params = {"dezactivat": true}`.
+        """
+        ref, det = event.get("referinta") or {}, event.get("detalii") or {}
+        pt = ref.get("coordonate")
+        w = self.w
+        cfg = w.get("trace_generat")
+        par = det.get("trace_params") or {}
+        if (not cfg or par.get("dezactivat") or det.get("trace") or (ref.get("element_id") or "").strip() or not pt
+                or event["echipa_sursa"] not in S.ECHIPE_TEREN or event["tip"] in ("mutare_fire", "cerere_racordare", "activ_demontat", "verificare")):
+            return event
+        try:
+            from backend.engine import osm
+            from backend.trace import localizeaza
+            from backend.trace.genereaza import genereaza_traseu
+            params = {**cfg, **{k: v for k, v in par.items() if k != "dezactivat"}}
+            punct = {"lat": pt["lat"], "lon": pt["lon"], "t": f"{event['data']}T14:00:00"}
+            strazi = osm.strazi()
+            tr = genereaza_traseu(punct, strazi, params, event["event_id"])
+            rez = localizeaza(tr, ref.get("adresa"), self.net, strazi, w)
+        except Exception as e:
+            trace["pasi"].append({"nume": "trace", "incredere": 0.0, "rezultat": {"sursa": "simulat", "status": "indisponibil", "motiv": str(e)}})
+            return event
+        a = rez.get("alegere")
+        bonus = pen = 0.0
+        motive = []
+        if a:
+            dur = a["durata_min"]
+            dmin = w["trace"]["durata_min_min"]
+            b_dur = max(0.0, min(1.0, (dur - dmin) / max(1e-9, cfg["durata_bonus_min"])))
+            b_zg = max(0.0, 1 - params["zgomot_m"] / max(1e-9, cfg["zgomot_max_bonus_m"]))
+            bonus = cfg["bonus_max"] * b_dur * b_zg
+            d = dist_m((pt["lat"], pt["lon"]), (a["lat"], a["lon"]))
+            if d > cfg["toleranta_adresa_m"]:
+                pen += cfg["penalizare_contradictie"]
+                motive.append(f"oprirea e la {d:.0f} m de locația din raport (peste {cfg['toleranta_adresa_m']} m): contradicție")
+            motive.append(f"oprire {dur:.0f} min, zgomot {params['zgomot_m']:g} m: bonus {bonus:.3f}")
+        else:
+            pen += cfg["penalizare_contradictie"]
+            motive.append("nicio oprire detectată în traseu")
+        if params["acoperire"] < cfg["acoperire_min"]:
+            pen += cfg["penalizare_acoperire"]
+            motive.append(f"acoperire {params['acoperire']:g} sub {cfg['acoperire_min']}")
+        factor = round(max(0.3, 1 + bonus - pen), 3)
+        trace["pasi"].append({"nume": "trace", "incredere": factor, "rezultat": {
+            "sursa": "simulat", "status": rez.get("status"), "alegere": a, "opriri": rez.get("opriri"), "puncte": len(tr),
+            "params": params, "factor_trace": factor, "motiv": "; ".join(motive)}})
+        return {**event, "detalii": {**det, "trace_sursa": "simulat", "trace_factor": factor, "trace_params": params}}
 
     def _confirma_vizitate(self, event: dict, trace: dict):
         """Opririle scurte lângă stâlpi existenți sunt verificări în plus ale lor (doar rapoarte de teren executate)."""

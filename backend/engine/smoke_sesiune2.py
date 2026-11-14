@@ -165,7 +165,7 @@ def main() -> None:
     verifica("zona: 2,9 km în zonă, 3,1 km în afară", z29["ok"] and not z31["ok"], f"{z29['distanta_m']} / {z31['distanta_m']}")
     t40 = mz.apply_event(ev("Z-1", "2026-09-01", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(40_000)}))
     verifica("zona: coordonate la 40 km = eronat în prototip, neaplicat", t40["decizie"] == "neaplicat" and t40.get("eronat_prototip")
-             and "in_afara_zonei_prototip" in t40["pasi"][1]["rezultat"]["semnale"] and not t40["modificari"])
+             and "in_afara_zonei_prototip" in next(p_ for p_ in t40["pasi"] if p_["nume"] == "potrivire")["rezultat"]["semnale"] and not t40["modificari"])
     verifica("zona: motivul spune distanța și limita", "40" in t40["pasi"][-1]["motive"][0] and "3000" in t40["pasi"][-1]["motive"][0],
              t40["pasi"][-1]["motive"][0])
     tm = mz.apply_event(ev("Z-2", "2026-09-02", "mentenanta", "mutare_fire", det={"centru": la_nord(5000)}))
@@ -189,6 +189,46 @@ def main() -> None:
              all(sn1[e_]["origine"] == "retea_start" for e_ in sn0 if e_ in sn1))
     pred = [p for p in sn1.values() if p.get("predictie")]
     verifica("origine: predicțiile au predictie.origine generat_model", all(p["predictie"]["origine"] == "generat_model" for p in pred))
+
+    # --- geocodare în potrivire (adresă -> coordonate) și plafon de standardizare
+    import backend.engine.osm as osm_g
+    nume_str = next((x["nume"] for x in osm_g.strazi() if x.get("nume")), None)
+    mg = mk()
+    tg = mg.apply_event(ev("G-1", "2026-09-10", "mentenanta", "nod_lipsa", ref={"adresa_structurata": {"strada": nume_str, "numar": "12", "localitate": None, "reper": None}}, inc=0.95))
+    pg = next((p for p in tg["pasi"] if p["nume"] == "geocodare"), None)
+    verifica("geocodare: pas cu coordonate din adresă", pg and pg["rezultat"]["status"] == "gasit", str(pg and pg["rezultat"]))
+    pm = next(p for p in tg["pasi"] if p["nume"] == "potrivire")["rezultat"]
+    verifica("geocodare: potrivirea nu mai e nepotrivit „doar adresă”", pm["status"] != "nepotrivit" and pm["metoda"] == "adresa"
+             and "coordonate_din_adresa" in pm["semnale"], pm["status"] + " " + str(pm["metoda"]))
+    verifica("standardizare: încrederea extracției plafonată la strada_numar (0,7)", tg["pasi"][0]["incredere"] == 0.7, str(tg["pasi"][0]["incredere"]))
+    th = mg.apply_event(ev("G-2", "2026-09-11", "mentenanta", "nod_lipsa", ref={"adresa": "Strada Inexistenta Zzz"}, inc=0.9))
+    verifica("geocodare: stradă necunoscută -> fără coordonate inventate",
+             next(p for p in th["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "nepotrivit" and th["decizie"] == "neaplicat")
+    ts = mg.apply_event(ev("G-3", "2026-09-12", "mentenanta", "verificare", ref={"element_id": "A-T-001"}, inc=1.0))
+    verifica("standardizare: cu ID nu se plafonează", ts["pasi"][0]["incredere"] == 1.0)
+
+    # --- traseu generat la raport: bonus, zgomot, decalaj (contradicție), dezactivare
+    def tfac(i, par=None, coord=None):
+        t_ = mk().apply_event(ev(i, "2026-09-20", "mentenanta", "nod_lipsa", ref={"coordonate": coord or la_nord(200)},
+                                 det={"trace_params": par} if par else {}, sursa="tableta_coordonate", forma="campuri"))
+        p_ = next((x for x in t_["pasi"] if x["nume"] == "trace"), None)
+        return t_, p_
+    _, p_b = tfac("TG-1", {"zgomot_m": 3, "durata_oprire_min": 15})
+    _, p_z = tfac("TG-2", {"zgomot_m": 40, "durata_oprire_min": 15})
+    _, p_d = tfac("TG-3", {"zgomot_m": 3, "durata_oprire_min": 15, "decalaj_m": 120})
+    _, p_a = tfac("TG-4", {"zgomot_m": 3, "durata_oprire_min": 15, "acoperire": 0.4})
+    tz_, p_x = tfac("TG-5", {"dezactivat": True})
+    fb = p_b["rezultat"]["factor_trace"] if p_b else None
+    verifica("trace generat: bonus peste 1 dar sub plafon", p_b and 1.0 < fb <= 1 + mk().w["trace_generat"]["bonus_max"] + 1e-9, str(fb))
+    verifica("trace generat: etichetat simulat", p_b and p_b["rezultat"]["sursa"] == "simulat")
+    verifica("trace generat: zgomot mare nu mai dă bonus", p_z and p_z["rezultat"]["factor_trace"] <= 1.0, str(p_z and p_z["rezultat"]["factor_trace"]))
+    verifica("trace generat: oprire decalată = contradicție, factor mai mic",
+             p_d and p_d["rezultat"]["factor_trace"] < fb and "contradic" in p_d["rezultat"]["motiv"], str(p_d and p_d["rezultat"]))
+    verifica("trace generat: acoperire mică scade", p_a and p_a["rezultat"]["factor_trace"] < fb)
+    verifica("trace generat: dezactivabil, fără eroare", p_x is None and tz_["decizie"] is not None)
+    t1_, _ = tfac("TG-6", {"zgomot_m": 3, "durata_oprire_min": 15})
+    t2_, _ = tfac("TG-6", {"zgomot_m": 3, "durata_oprire_min": 15})
+    verifica("trace generat: determinist pe event_id", t1_["pasi"][-1] == t2_["pasi"][-1])
 
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
