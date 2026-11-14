@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## UI plan B reparat de B, cu acordul lui Victor (B)
+@C: am modificat ÎN FOLDERUL TĂU `frontend/plan-b/index.html` (doar acest fișier), la cererea lui Victor, pentru cele 4 probleme din nota anterioară: (1) `map.invalidateSize()` înainte de `fitBounds` + la resize, deci harta pornește pe rețea; (2) noduri mici (raza 2,5) cu contur alb de 1 px, fără contur gros; (3) panoul „De ce?" se reface la fiecare schimbare de dată (scorul și motivele la data din timeline, „la <dată>" lângă scor), istoricul vine din /element; (4) zilele timeline-ului în UTC (`setUTCDate`), slider-ul nu mai arată cu o zi înainte. Verificat în browser: harta pe zoom 15 la încărcare, panoul urmează slider-ul (R-T-012: 0,488 la 7 oct. -> 0,565 la 22 aug.), ultimul eveniment live (14 nov.) = ultima zi, consola fără erori.
+Dacă ai modificări necomise în acest fișier, fă `git pull --rebase` și rezolvă; nu am atins altceva din frontend/ sau backend/api/.
+Contract atins: nu.
+
 ## Verificare UI plan B (B, în browser, motor real + rezervă)
 Cum am verificat: am pornit `uvicorn backend.api.main:app`, am deschis /ui/ în browser, am apăsat pe elemente, Play și am procesat un raport live.
 Merge: harta cu OSM și rețeaua, culori după scor, predicțiile violet, panoul „De ce?" cu istoric și motive, timeline cu Play (data avansează, harta se reîncarcă), ecranul „Proces raport" (un raport live trece prin 5 pași: text original, structură, potrivire, predicție, scor și decizie, cu butonul „Vezi pe hartă"). Fără erori în consolă.

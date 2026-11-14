@@ -94,7 +94,8 @@ const $ = id => document.getElementById(id);
 const map = L.map("map").setView([44.284, 26.063], 16);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {maxZoom: 20, attribution: "© OpenStreetMap"}).addTo(map);
-let layer = null, evs = [], zile = [], idx = 0, timer = null, fitted = false;
+let layer = null, evs = [], zile = [], idx = 0, timer = null, fitted = false, selectat = null, fcCur = null;
+window.addEventListener("resize", () => map.invalidateSize());
 
 const culoare = p => p.nivel === "predictie" ? "var(--pred)" : p.nivel === "de_verificat" ? "#dc2626"
   : p.scor >= 0.75 ? "#16a34a" : p.scor >= 0.4 ? "#eab308" : "#dc2626";
@@ -107,21 +108,30 @@ async function deseneaza(data) {
   const fc = await get("/retea" + (data ? "?data=" + data : ""));
   if (layer) map.removeLayer(layer);
   layer = L.geoJSON(fc, {
-    style: f => ({color: culoare(f.properties).replace("var(--pred)", "#7c3aed"), weight: f.properties.nivel === "predictie" ? 4 : 3,
-                  dashArray: f.properties.nivel === "predictie" ? "6 6" : null}),
-    pointToLayer: (f, ll) => L.circleMarker(ll, {radius: f.properties.nivel === "in_model" ? 3 : 7,
-      color: culoare(f.properties).replace("var(--pred)", "#7c3aed"), fillOpacity: .8,
-      dashArray: f.properties.nivel === "predictie" ? "3 3" : null}),
+    style: f => f.geometry.type === "Point"
+      ? {color: "#fff", weight: 1, fillColor: culoare(f.properties).replace("var(--pred)", "#7c3aed"), fillOpacity: .95}
+      : {color: culoare(f.properties).replace("var(--pred)", "#7c3aed"), weight: f.properties.nivel === "predictie" ? 4 : 3,
+         dashArray: f.properties.nivel === "predictie" ? "6 6" : null},
+    pointToLayer: (f, ll) => L.circleMarker(ll, {radius: f.properties.nivel === "in_model" ? 2.5 : 6}),
     onEachFeature: (f, l) => l.on("click", () => deCe(f.properties.element_id || f.properties.id)),
   }).addTo(map);
-  if (!fitted && layer.getBounds().isValid()) { map.fitBounds(layer.getBounds()); fitted = true; }
+  if (!fitted && layer.getBounds().isValid()) {
+    map.invalidateSize();   // altfel zona vizibilă e măsurată greșit și fitBounds ajunge pe zoom 0
+    map.fitBounds(layer.getBounds()); fitted = true;
+  }
+  fcCur = fc;
+  if (selectat) await deCe(selectat);   // panoul „De ce?" urmează data aleasă în timeline
 }
 
 async function deCe(id) {
-  const el = await get("/element/" + encodeURIComponent(id));
+  selectat = id;
+  const el0 = await get("/element/" + encodeURIComponent(id));
+  // starea la data aleasă în timeline (din instantaneul curent); istoricul vine din /element
+  const f = fcCur && fcCur.features.find(x => (x.properties.element_id || x.properties.id) === id);
+  const el = f ? {...el0, ...f.properties} : el0;
   const ist = (el.istoric || []).map(h => `<div class="ev">${h.data}: ${h.nivel}, scor ${h.scor}</div>`).join("");
   $("deCe").innerHTML = `<b>${esc(el.element_id)}</b> (${esc(el.tip_element)})
-    <span class="badge b-${el.nivel}">${esc(el.nivel)}</span> scor <b>${el.scor}</b>
+    <span class="badge b-${el.nivel}">${esc(el.nivel)}</span> scor <b>${el.scor}</b> <span style="color:var(--mut);font-size:12px">la ${esc($("dataCur").textContent)}</span>
     <div style="color:var(--mut);font-size:12px">valid de la ${esc(el.valid_de_la)} · ultima verificare ${esc(el.ultima_verificare || "niciodată")}</div>
     ${(el.motive || []).map(m => `<div class="motiv"><span class="efect ${m.efect > 0 ? "p" : m.efect < 0 ? "n" : ""}">${fmt(m.efect)}</span>
       ${esc(m.text)} <span style="color:var(--mut);font-size:11px">${esc(m.eveniment || "")} ${esc(m.data || "")}</span></div>`).join("")}
@@ -132,7 +142,7 @@ async function deCe(id) {
 function zileDin(ev) {  // zi cu zi între primul și ultimul eveniment, ca timeline-ul să curgă uniform
   if (!ev.length) return [new Date().toISOString().slice(0, 10)];
   const a = new Date(ev[0].data), b = new Date(ev[ev.length - 1].data), out = [];
-  for (let d = a; d <= b; d.setDate(d.getDate() + 1)) out.push(d.toISOString().slice(0, 10));
+  for (let d = a; d <= b; d.setUTCDate(d.getUTCDate() + 1)) out.push(d.toISOString().slice(0, 10));   // UTC: altfel fusul orar mută ziua cu -1
   return out;
 }
 
