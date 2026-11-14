@@ -53,3 +53,17 @@ Pe cele 29 de evenimente de bază rezultatul e neschimbat: 13 scor_actualizat, 8
 
 ## Sesiunea 3: scor inițial al rețelei de start 0,90 (B3)
 `scor.initial_retea_start: 0.90` înlocuiește 0,60 pentru elementele rețelei de start (`origine: retea_start`); `initial_element_kmz` rămâne în fișier, nefolosit de motor. Efecte măsurate cu `python -m backend.engine.calibrare`: deciziile pe cele 29 de evenimente de bază sunt neschimbate (13 scor_actualizat, 8 neaplicat, 3 predicție, 2 fără efect, 1 conflict, 1 aplicat, 1 adăugat); scorul mediu pornește de la 0,90 și coboară lin: 0,90 → 0,83 (15 sept.) → 0,76 (27 oct.). Cu −0,05 la 30 de zile, un element neverificat trece sub 0,40 („de verificat") abia după ~300 de zile (înainte ~120), deci scenariul „scade în timp" din `smoke_engine` se verifică acum la 365 de zile. Valorile rămân puncte de plecare, necalibrate pe date reale.
+
+## Sesiunea 3: geocodarea pe `data/reports/geo-test.json` (B7, parțial)
+Măsurat cu `backend.geo.geocodeaza` pe cele 15 adrese de test (fără AI: `EXTRACT_CLI=0`; cazurile cu ortografie cer AI) față de coordonatele așteptate din geometria OSM:
+
+| grad | cazuri | eroare măsurată | acuratețe/precizie înainte | după |
+|---|---|---|---|---|
+| id, coordonate | 2 | 0 m | neapelată / 0,7 | neschimbat |
+| stradă + număr | 3 | 143-245 m (mediană 197) | 0,55, ±25 m | **0,45, ±200 m** |
+| stradă | 2 | 0 m față de mijlocul străzii; ±127-150 m | 0,40 | neschimbat |
+| intersecție | 2 | 104 și 506 m (așteptat ≤ 30 m) | 0,60 declarat, cade pe stradă (0,40) | neschimbat; **de verificat de A** |
+| ortografie | 3 | 2 necunoscute fără AI, 1 fals pozitiv la 1,9 km | 0,40 × 0,8 cu AI | neschimbat; de verificat cu `ai_cli` |
+| reper, necunoscut, lipsă | 3 | corect `necunoscut` | - | - |
+
+Concluzie: interpolarea numărului pe stradă nu e mai precisă decât strada, deci precizia declarată era prea optimistă (±25 m față de ~200 m reali). Am pus `geocodare.acuratete.strada_numar` 0,45 (ca să nu depășească mult „doar strada" 0,40) și `precizie_numar_m` 200 (limitele din `weights.limits.yaml` lărgite la [5, 500]). Deciziile pe cele 29 de evenimente de bază nu se schimbă (`verifica_reglaje`: 0 evenimente schimbate). Rămân de verificat: intersecțiile (A) și ortografia cu AI real (`ai_cli`). Valorile rămân puncte de plecare, necalibrate pe date reale.

@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## B7 parțial: calibrare geocodare pe geo-test.json (Victor, B)
+Gata: măsurat pe `data/reports/geo-test.json`; reglaj în `weights.yaml`: `geocodare.acuratete.strada_numar` 0,55 -> 0,45, `precizie_numar_m` 25 -> 200 (eroarea reală 143-245 m). 0 decizii schimbate pe cele 29 de evenimente. Tabel în `docs/calibrare.md`.
+@Patrick (A1): (1) intersecțiile gt-06/gt-07 ies la 506 și 104 m de așteptat (tol. 30 m) și cad pe stradă (acuratețe 0,40); verifică parsarea „colț cu"/„X și Y". (2) gt-12 (ortografie) dă un fals pozitiv la 1,9 km fără AI, la fel „Calea Victoriei 10 București" -> „Strada București" (semnalat de Claudiu): cere ca toate cuvintele numelui, nu doar unul, să se potrivească. (3) A6 `data/golden/` e blocul meu pentru B7/tag.
+Contract atins: nu (valori în weights, limite lărgite)
+
 ## B3 complet: puncte simulate încărcate în rețeaua de start (Victor, B)
 Gata: `network.incarca_puncte_simulare` încarcă `data/simulare/puncte-simulare.json` (A4, format respectat) în `GridModel()`; 55 de noduri SIM-* cu `origine: retea_start`, în zonă. smoke_sesiune2 60, `scripts/verifica_tot.sh` TOT VERDE, calibrarea neschimbată. Contract: openapi actualizat (trace_params, /geocodeaza, /reguli).
 @Patrick: mulțumesc pentru A4. @Claudiu: `GET /retea` conține acum 320 de noduri; harta arată casele/stâlpii SIM-*.

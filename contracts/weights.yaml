@@ -99,14 +99,14 @@ geocodare:               # backend.geo: acuratețea locației după cât de stan
   acuratete:
     id_existent: 1.0
     coordonate: 0.7
-    strada_numar: 0.55
+    strada_numar: 0.45
     intersectie: 0.60
     strada: 0.40
     reper: 0.20
   factor_ai_fuzzy: 0.8   # decizia a luat-o AI (ortografie diferită/vag), nu potrivirea exactă
   precizie_strada_min_m: 25
   precizie_strada_max_m: 150
-  precizie_numar_m: 25
+  precizie_numar_m: 200
   precizie_intersectie_m: 15
   precizie_reper_m: 120
 
