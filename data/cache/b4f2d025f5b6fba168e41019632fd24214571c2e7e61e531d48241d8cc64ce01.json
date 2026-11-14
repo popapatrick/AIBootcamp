@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "text_original": "Giratoriu nou la iesirea din localitate, s-au mutat firele. nu am coordonatele la mine",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "centru",
+    "raza_m"
+  ],
+  "detalii": {
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "Giratoriu nou la iesirea din localitate; firele au fost mutate. Coordonatele nu sunt disponibile."
+  }
+}

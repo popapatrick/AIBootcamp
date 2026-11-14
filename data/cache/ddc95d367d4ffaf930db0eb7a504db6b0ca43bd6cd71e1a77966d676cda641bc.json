@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+    "adresa": "Regina Maria cu Primaverii",
+    "coordonate": {
+      "lat": 44.2830448,
+      "lon": 26.0636533
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-10",
+  "text_original": "Sens giratoriu nou la intersectia Regina Maria cu Primaverii, centru 44.2830448, 26.0636533. S-au mutat firele aeriene, raza cca 60 m. Executat 10.11.2026",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.9,
+  "forma_sursa": "text_liber",
+  "detalii": {
+    "centru": {
+      "lat": 44.2830448,
+      "lon": 26.0636533
+    },
+    "raza_m": 60,
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "Raza indicata ca cca 60 m."
+  }
+}

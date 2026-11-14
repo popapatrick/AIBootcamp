@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Viilor nr. 15",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-11",
+  "text_original": "Avem un stalp la nr 15 pe Strada Viilor care nu apare pe harta, langa 6862954. Stare semnalat.",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "noduri_vecine": [
+      "6862954"
+    ],
+    "observatii": "Stâlp la nr. 15 pe Strada Viilor, există pe teren, nu apare pe hartă; langa nodul 6862954."
+  }
+}

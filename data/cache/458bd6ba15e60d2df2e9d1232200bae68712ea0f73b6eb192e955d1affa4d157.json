@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Regina Maria",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-13",
+  "text_original": "tableta - control pe Strada Regina Maria, vad stalp nou necartat, nu stiu codul. pt trace",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "tableta_coordonate",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "trace"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou existent pe teren, necartat în GIS; codul nu este cunoscut. Control pe Strada Regina Maria."
+  }
+}

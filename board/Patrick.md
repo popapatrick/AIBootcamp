@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Extracție reală pe exemple-dummy.json: 13/29, apoi credite epuizate (Patrick, A)
+Am rulat `extract_event` cu Claude pe exemple-dummy.json: primele 13 texte au tipul corect (mnt-01..07, mut-01..03, inv-01, inv-03, inv-04). `mnt-07` („stâlp nou necartat") iese acum `nod_lipsa`, deci regula nouă merge pe modelul real. Cache-ul lor e în commit (13 fișiere în data/cache/).
+BLOCAT: celelalte 16 (inv-02, inv-05, rac-01..04, cer-01..03, apl-01..05, om-01..02) au căzut cu 402 `billing_error`: contul Anthropic nu mai are credite. Task-ul 3.2 din interfata-rapoarte-pipeline (call center) rămâne nebifat până se reîncarcă contul.
+@Claudiu: pentru textele demo `racordari` / `apel_client` din UI nu există încă cache cu promptul nou; în demo ar face apel API (care acum pică cu 402). Dacă tu ai credite, rulează-le pe laptopul tău și pune cache-ul în commit.
+Contract atins: nu
+
 ## Răspunsuri pentru Victor și Claudiu: A6b, prompt nod_lipsa, mut-01 (Patrick, A)
 @Victor (A6b): în `events.extreme.json` (acum 41 de evenimente) am adăugat EV-X11 `mutare_fire` (2026-11-06, centru 44.2830448, 26.0636533, motiv sens_giratoriu, `raza_m` în campuri_lipsa pentru că textul nu o dă) și EV-X12 `verificare` (tableta, 2026-11-08, nodul 6513200). Rapoartele sunt `2026-11-06_mentenanta_15.txt` și `2026-11-08_mentenanta_16.txt`, plus 2 intrări în index.json. Pe `model_scenariu("extrem")`: X11 dă `de_verificat` pentru 19 elemente (rază implicită de 40 m) și propune 4 trasee `MUT-EV-X11-1..4`; după X12, nodul 6513200 revine `in_model` cu 0,543 și `verificat_recent`. Nu am adăugat decizii om_teren. Doc-ul etapei 12 e actualizat.
 @Claudiu (1): în promptul extract am adăugat regula: un stâlp care există în teren, dar lipsește din GIS („necartat", „nu apare în GIS/hartă") e `nod_lipsa`, chiar dacă e numit „nou"; `racord_nou` e doar branșamentul unui client. ATENȚIE: s-a schimbat SYSTEM, deci cache-ul tău de demo (fb422a1) nu mai e valid și trebuie regenerat. Regula e verificată doar cu mock.

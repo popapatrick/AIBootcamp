@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-01",
+  "text_original": "Plan 2027: linie noua intre 7101969 si 6872907, TYIR 3x50+54,6, aprox 180m. planificat",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa"
+  ],
+  "detalii": {
+    "noduri": [
+      "7101969",
+      "6872907"
+    ],
+    "sectiune_noua": "TYIR 3x50+54,6",
+    "lungime_m": 180,
+    "observatii": "Plan 2027: linie nouă planificată"
+  }
+}

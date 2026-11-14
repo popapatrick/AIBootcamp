@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-03",
+  "text_original": "linie planificata 6414087 -> 8800123 (nod nou, inca nu e in GIS) cca 90 m",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.8,
+  "detalii": {
+    "noduri": [
+      "6414087",
+      "8800123"
+    ],
+    "lungime_m": 90,
+    "observatii": "nod nou, inca nu e in GIS"
+  },
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa"
+  ]
+}

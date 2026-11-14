@@ -1,0 +1,22 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": "S-T-006",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-05",
+  "text_original": "S-T-006 inlocuit cu NA2XSY 3x150, lucrare terminata 05.11.2026",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.95,
+  "detalii": {
+    "sectiune_noua": "NA2XSY 3x150"
+  },
+  "campuri_lipsa": []
+}

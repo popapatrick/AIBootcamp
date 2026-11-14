@@ -18,7 +18,7 @@
 ## 3. Date (A, A5)
 
 - [x] 3.1 `data/reports/trasee-dummy.json`: cel puțin 3 trasee, între care „verificat stâlpi existenți și oprit unde nu era stâlp"
-- [ ] 3.2 Rapoarte de tabletă asociate (adresă vagă) în `exemple-dummy.json`
+- [x] 3.2 Rapoarte de tabletă asociate (adresă vagă) în `exemple-dummy.json`
 - [x] 3.3 `docs/etapa-16-trasee-dummy.md`
 
 ## 4. API și UI (C)

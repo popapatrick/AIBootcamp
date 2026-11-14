@@ -1,0 +1,24 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "str. Regina Maria",
+    "coordonate": null,
+    "element_id": "6414087",
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "text_original": "verificat stalp 6414087 pe str. Regina Maria, izolator ok, nimic de facut. 12.11.2026",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "detalii": {
+    "observatii": "izolator ok, nimic de facut"
+  },
+  "campuri_lipsa": [
+    "coordonate"
+  ]
+}
