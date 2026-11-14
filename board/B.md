@@ -2,6 +2,23 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## UI plan B reparat de B, cu acordul lui Victor (B)
+@C: am modificat ÎN FOLDERUL TĂU `frontend/plan-b/index.html` (doar acest fișier), la cererea lui Victor, pentru cele 4 probleme din nota anterioară: (1) `map.invalidateSize()` înainte de `fitBounds` + la resize, deci harta pornește pe rețea; (2) noduri mici (raza 2,5) cu contur alb de 1 px, fără contur gros; (3) panoul „De ce?" se reface la fiecare schimbare de dată (scorul și motivele la data din timeline, „la <dată>" lângă scor), istoricul vine din /element; (4) zilele timeline-ului în UTC (`setUTCDate`), slider-ul nu mai arată cu o zi înainte. Verificat în browser: harta pe zoom 15 la încărcare, panoul urmează slider-ul (R-T-012: 0,488 la 7 oct. -> 0,565 la 22 aug.), ultimul eveniment live (14 nov.) = ultima zi, consola fără erori.
+Dacă ai modificări necomise în acest fișier, fă `git pull --rebase` și rezolvă; nu am atins altceva din frontend/ sau backend/api/.
+Contract atins: nu.
+
+## Verificare UI plan B (B, în browser, motor real + rezervă)
+Cum am verificat: am pornit `uvicorn backend.api.main:app`, am deschis /ui/ în browser, am apăsat pe elemente, Play și am procesat un raport live.
+Merge: harta cu OSM și rețeaua, culori după scor, predicțiile violet, panoul „De ce?" cu istoric și motive, timeline cu Play (data avansează, harta se reîncarcă), ecranul „Proces raport" (un raport live trece prin 5 pași: text original, structură, potrivire, predicție, scor și decizie, cu butonul „Vezi pe hartă"). Fără erori în consolă.
+@C probleme găsite (în frontend/plan-b/index.html):
+1. **La încărcare harta e pe zoom 0 (toată lumea), rețeaua e un punct.** `map.getSize()` dă 644x643 deși zona vizibilă e ~503 px: `fitBounds` rulează înainte de layout. Soluție: `map.invalidateSize()` înainte de `fitBounds` (și la `window.onload`/resize). Verificat în pagină: cu `invalidateSize()` + `fitBounds` ajunge la zoom 15 și se vede rețeaua.
+2. Markerele de noduri sunt prea mari și acoperă liniile (la zoom 15 rețeaua arată ca un nor de puncte). Micșorează raza (ex. 2-3 px) sau desenează nodurile doar la zoom ≥ 17.
+3. Panoul „De ce?" rămâne pe data la care ai selectat elementul: la schimbarea datei din timeline (sau Play) afișează text vechi („Neverificat de 87 zile" la o dată mai veche). Reîncarcă `/element/{id}` sau recalculează la schimbarea datei.
+4. După un raport live, slider-ul arată 2026-11-13 deși evenimentul e 2026-11-14 (probabil `toISOString()` în UTC vs dată locală).
+5. Extracția e încă „stub_regex" (încredere 0,45): backend/extract nu e activ pe acest laptop (lipsește cheia OpenRouter). Pe laptopul lui A ar fi „claude".
+Reparat de mine (B): `urmeaza_strada` din predicții e acum pe fiecare legătură (avea media tuturor, deci arăta „linie_dreaptă, urmează strada 0,67" pentru o legătură fără stradă).
+Contract atins: nu.
+
 ## Calibrare pe cele 28 de rapoarte (B)
 Gata: calibrare politica de scor. Doc: docs/calibrare.md. Rulare: `.venv/bin/python -m backend.engine.calibrare` (folosește data/events/events.json dacă există; acum „oracol" = adevărul tău din index.json + regex, pentru că events.json nu e pe main și n-am cheia OpenRouter).
 Rezultat pe 28: 12 scor actualizat, 9 neaplicat, 3 predicție, 2 fără efect (planificat), 1 conflict, 1 aplicat. Scenariile 1-6 se comportă cum scria planul; scenariul 7 (doar adresă) rămâne neaplicat (geocodarea nu e implementată).

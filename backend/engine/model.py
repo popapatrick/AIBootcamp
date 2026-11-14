@@ -352,9 +352,9 @@ class GridModel:
                                 "efect": 0.0, "eveniment": event["event_id"], "data": data}] + self._curent(oid)["motive"])
             self.retrase[oid] = self.predictii.pop(oid, None)   # geometria rămâne pentru date anterioare
         specs = [(eid, "nod", {"punct": pt, "geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}})]
-        for v, puncte, met in legaturi:
+        for (v, puncte, met), u_leg in zip(legaturi, urm):
             tid = f"{eid}-{v}" if eid.startswith("NOU-") else f"NOU-{eid}-{v}"
-            specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v),
+            specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v), "urmeaza": u_leg,
                                            "geometrie": {"type": "LineString",
                                                          "coordinates": [[o, a] for a, o in puncte]}}))
         if niv == "in_model":
@@ -363,7 +363,7 @@ class GridModel:
         else:
             for sid, tip_el, sp_ in specs:
                 self.predictii[sid] = sp_
-                pr = {"metoda": sp_.get("metoda", metoda), "urmeaza_strada": urmeaza,
+                pr = {"metoda": sp_.get("metoda", metoda), "urmeaza_strada": sp_["urmeaza"] if "urmeaza" in sp_ else urmeaza,
                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp}
                 if sid in self.istoric:
                     mot = self._motiv(sid, txt + " Sub prag: rămâne predicție.", 0.0, event)
