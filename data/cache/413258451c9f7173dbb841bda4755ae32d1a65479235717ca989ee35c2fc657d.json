@@ -1,0 +1,25 @@
+{
+  "event_id": "M-2026-0455",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "str. Fictivă nr. 9 (adresă fictivă)",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "CF-fictiv 418902"
+  },
+  "status": "semnalat",
+  "data": "2026-09-15",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0455\nData: 2026-09-15\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 9 (adresă fictivă)\nNr. cadastral: CF-fictiv 418902\nConstatare: branșament ars, fără alimentare la imobil\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Branșament ars, fără alimentare la imobil. Cod element și coordonate necompletate ('-')."
+  }
+}

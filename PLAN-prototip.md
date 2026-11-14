@@ -8,7 +8,7 @@ Un prototip care transformă rapoartele echipelor (mentenanță, investiții, ra
 ## 2. Decizii luate
 - **Rețea de bază:** `Retea_JT_PTAB_7812.kmz` (date fictive: 264 tronsoane aeriene/ramuri/subterane, 265 noduri, 1 post de transformare, lângă Giurgiu/Ilfov). Din ea scoatem sau mutăm câteva elemente ca să avem ce descoperi.
 - **Inputuri dummy în română:** fișe cu câmpuri (coordonate, adresă, nr. cadastral) și text liber ca din Word, pentru mentenanță, investiții, racordări, plus apeluri de clienți (ID client + locație).
-- **Extracție text → structură:** API Claude (Victor are cheie; merge doar în `.env`, ignorat de git).
+- **Extracție text → structură:** ~~API Claude cu cheie~~ (renunțat, 14 nov.: cheia dă probleme). Acum: subagenți Claude Code cu Haiku (din abonament) generează evenimentele în `data/cache/`; la rulare, cache + stub regex. Vezi CLAUDE.md, „Fără cheie API".
 - **Potrivire pe rețea:** cod nod/tronson dacă e dat; altfel coordonate (element apropiat); altfel adresă geocodată, cu scor mic.
 - **Traseu cablu lipsă:** străzi din OpenStreetMap, traseu probabil pe stradă între nodurile vecine, comparat cu linia dreaptă. Fără analiză de imagini.
 - **Ponderile se aplică sistemului întreg, nu doar apelurilor.** Fiecare input (raport de mentenanță, investiții, racordări, apel de client) are o fiabilitate, iar fiecare predicție (traseu, tip de activ, element lipsă) are o încredere. Toate intră în același calcul de scor. Apelul clientului e doar un alt tip de input, fără mecanism special. „Nu am curent/net" poate însemna că a căzut rețeaua, nu că lipsește, deci apelul are pondere mică și adaugă ipoteze, nu certitudini.

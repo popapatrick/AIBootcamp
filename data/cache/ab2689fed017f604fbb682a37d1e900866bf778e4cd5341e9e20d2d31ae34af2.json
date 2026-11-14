@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-CL-40560-20261005",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": null,
+    "coordonate": {
+      "lat": 44.2826,
+      "lon": 26.0615
+    },
+    "element_id": null,
+    "id_client": "CL-40560",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-05",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-05 ora 21:30\nID client: CL-40560\nLocație: coordonate 44.28260, 26.06150 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu am curent de la ora 21. Ceilalți vecini la fel.\nOperator: Vă înregistrez, echipa va fi trimisă.\nClient: Mulțumesc.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "adresa",
+    "element_id",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "Client fără curent de la ora 21:00 (apel la 21:30, 2026-10-05). Vecinii au aceeași problemă. Operatorul a înregistrat apelul și va trimite echipa."
+  }
+}

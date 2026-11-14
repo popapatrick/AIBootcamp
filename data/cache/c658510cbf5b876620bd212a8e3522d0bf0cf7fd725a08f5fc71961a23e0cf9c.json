@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "curba străzii",
+    "coordonate": {
+      "lat": 44.2830311,
+      "lon": 26.063942
+    },
+    "element_id": "6925190",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-28",
+  "text_original": "Confirm în teren nodul 6925190 din curba străzii, la coordonatele 44.2830311, 26.063942, între nodurile 6513200 și 7824201.",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "forma_sursa": "text_liber",
+  "detalii": {
+    "noduri_vecine": [
+      "6513200",
+      "7824201"
+    ]
+  }
+}

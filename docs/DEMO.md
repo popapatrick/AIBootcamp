@@ -33,6 +33,7 @@ Rezultat verificat (simulat cu extracția Claude, încredere 0,75–0,9, text li
 
 ## Riscuri la demo
 - **Harta de bază cere internet** (plăci OpenStreetMap). La repetiție, într-un moment plăcile nu s-au încărcat și fundalul a fost gri; liniile rămân vizibile. Plan B: înregistrare video a unei rulări reușite.
+- **Fără cheie API (decis 14 nov.):** extracția live = cache din `data/cache/` (generat de subagenți Haiku) sau stub regex; un text nou care nu e în cache iese cu stub. Folosește doar textele pregătite.
 - **Extracția live depinde de laptop:** cu `stub regex` unele texte primesc alt tip (aici raportul de mai sus iese «avarie»), dar motorul îl tratează tot ca nod lipsă pentru că ID-ul numeric nu există în model. Cu Claude iese `nod_lipsa`.
 - **Scenariul 1 se închide acum în timeline** (EV-028 al lui A, 23 oct.), deci partea live folosește alt nod, `7011223`. Nu mai folosi textul vechi cu `6925190`: nodul e deja în model și raportul ar doar confirma.
 - **Apelurile:** 3 din 5 nu s-au putut potrivi (unul fără coordonate, două la peste 40 m de orice element); în timeline scad doar două elemente.

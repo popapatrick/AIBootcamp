@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "str. Fictivă nr. 31",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "CF-fictiv 418955"
+  },
+  "status": "semnalat",
+  "data": "2026-10-16",
+  "text_original": "DATE FICTIVE\nAm fost la adresa str. Fictivă nr. 31, nr. cadastral CF-fictiv 418955 (date fictive).\nStâlpul de branșament are izolatorul crăpat. Nu am reușit să identific nodul pe harta GIS.\nStare: semnalat.\n",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Stâlpul de branșament are izolatorul crăpat. Echipa nu a putut identifica nodul pe harta GIS; codul nodului nu apare în text. Date fictive."
+  }
+}

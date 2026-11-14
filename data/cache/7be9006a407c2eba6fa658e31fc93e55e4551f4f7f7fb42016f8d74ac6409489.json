@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "Raport tabletă: stâlp nou necartat pe Strada Liviu Rebreanu, în dreptul curții, executat. Am verificat și stâlpii din jur.",
+  "tip_sursa_pondere": "tableta_coordonate",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou necartat pe Strada Liviu Rebreanu, în dreptul curții; executat. Au fost verificați și stâlpii din jur (fără rezultat detaliat în text)."
+  }
+}

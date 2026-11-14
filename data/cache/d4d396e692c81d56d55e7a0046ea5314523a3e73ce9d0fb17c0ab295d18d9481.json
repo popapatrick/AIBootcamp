@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "lângă școală, la capătul străzii fictive",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": "CL-41533",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-03",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-03 ora 09:05\nID client: CL-41533\nLocație: lângă școală, la capătul străzii fictive (fără coordonate)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu e curent la noi, la capăt, lângă școală.\nOperator: Ați verificat siguranțele?\nClient: Da, sunt bune, e tot blocul fără lumină.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Clientul raportează lipsa curentului în tot blocul, siguranțele sunt bune (verificat de client). Apel la 09:05. Locația este descrisă vag, fără coordonate."
+  }
+}

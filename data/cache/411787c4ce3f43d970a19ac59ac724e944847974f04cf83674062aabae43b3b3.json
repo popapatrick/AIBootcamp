@@ -1,0 +1,27 @@
+{
+  "event_id": "R-2026-0077",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "str. Fictivă nr. 22 (adresă fictivă)",
+    "coordonate": {
+      "lat": 26.066262,
+      "lon": 44.279575
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "CF-fictiv 301177"
+  },
+  "status": "executat",
+  "data": "2026-08-12",
+  "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0077\nData: 2026-08-12\nEchipa: racordari\nCod element: -\nCoordonate: lat 26.066262, lon 44.279575\nAdresa: str. Fictivă nr. 22 (adresă fictivă)\nNr. cadastral: CF-fictiv 301177\nObservații: racord pe stâlpul din colț\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "racord pe stâlpul din colț; nr. fișă R-2026-0077; cod element necompletat ('-')"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-22",
+  "text_original": "DATE FICTIVE\nReferat investiție – lucrare de înlocuire\nSăptămâna trecută am schimbat cablul aerian pe tronsonul T-002, între stâlpii 6168883 și 6580180. Cablul vechi era TYIR 3x35+54,6 OL-Al, iar cel nou este TYIR 3x70+54,6 OL-Al. Lungime circa 38 m.\nLucrarea nu a fost trecută în GIS. Rog refacerea secțiunii în model.\nExecutat și recepționat la 2026-09-22.\n",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
+    "lungime_m": 38,
+    "id_partial": "T-002",
+    "observatii": "Cablul vechi era TYIR 3x35+54,6 OL-Al, între stâlpii 6168883 și 6580180. Lucrarea nu a fost trecută în GIS; se cere refacerea secțiunii în model. Executat și recepționat la 2026-09-22. Lungime circa 38 m."
+  }
+}

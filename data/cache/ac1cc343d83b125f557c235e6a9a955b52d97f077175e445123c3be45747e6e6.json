@@ -1,24 +1,25 @@
 {
+  "event_id": "EV-001",
   "echipa_sursa": "apel_client",
   "tip": "avarie_semnalata",
   "referinta": {
-    "element_id": "9999003",
+    "adresa": "Regina Maria",
     "coordonate": null,
-    "adresa": "str Regina Maria",
-    "nr_cadastral": null,
-    "id_client": "CL-51004"
+    "element_id": "9999003",
+    "id_client": "CL-51004",
+    "nr_cadastral": null
   },
   "status": "semnalat",
   "data": "2026-11-13",
-  "forma_sursa": "text_liber",
-  "tip_sursa_pondere": "apel_client",
   "text_original": "apel CL-51004 zice ca stalpul 9999003 a cazut pe drum, str Regina Maria",
-  "incredere_extractie": 0.8,
-  "campuri_lipsa": [
-    "coordonate"
-  ],
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
   "detalii": {
-    "observatii": "stalp cazut pe drum"
+    "observatii": "Clientul raportează stâlpul 9999003 căzut pe drum, str. Regina Maria."
   },
-  "event_id": "EV-ac1cc343"
+  "campuri_lipsa": [
+    "coordonate",
+    "nr_cadastral"
+  ]
 }

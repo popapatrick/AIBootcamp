@@ -1,22 +1,23 @@
 {
+  "event_id": "EV-001",
   "echipa_sursa": "racordari",
   "tip": "cerere_racordare",
   "referinta": {
-    "element_id": null,
-    "coordonate": null,
     "adresa": "str Viilor nr 40",
-    "nr_cadastral": "420555",
-    "id_client": null
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "420555"
   },
   "status": "planificat",
   "data": "2026-11-13",
-  "forma_sursa": "text_liber",
-  "tip_sursa_pondere": "text_liber",
   "text_original": "buna ziua, vreau sa ma racordez, am casa pe str Viilor nr 40, CF-fictiv 420555",
-  "incredere_extractie": 0.75,
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.85,
   "campuri_lipsa": [
-    "coordonate"
+    "coordonate",
+    "element_id"
   ],
-  "detalii": {},
-  "event_id": "EV-ebbb7677"
+  "detalii": {}
 }

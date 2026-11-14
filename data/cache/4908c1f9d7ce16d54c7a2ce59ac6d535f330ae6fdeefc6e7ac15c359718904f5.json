@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-CL-39910-20260822",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": null,
+    "coordonate": {
+      "lat": 44.28124,
+      "lon": 26.05973
+    },
+    "element_id": null,
+    "id_client": "CL-39910",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-08-22",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-08-22 ora 19:10\nID client: CL-39910\nLocație: coordonate 44.28124, 26.05973 (aplicație telefon)\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Lumina pâlpâie de o oră, se aprinde și se stinge.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "adresa",
+    "element_id",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "Client raportează lumina pâlpâie de o oră, se aprinde și se stinge. Operatorul a înregistrat apelul, echipa verifică. Ora apelului: 19:10."
+  }
+}

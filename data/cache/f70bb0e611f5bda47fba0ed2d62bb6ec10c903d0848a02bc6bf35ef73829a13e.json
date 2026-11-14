@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-INV-2026-09-29-001",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": "str. Fictivă nr. 14",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "CF-fictiv 418777"
+  },
+  "status": "executat",
+  "data": "2026-09-29",
+  "text_original": "DATE FICTIVE\nReferat investiție, 29 septembrie 2026.\nPe str. Fictivă nr. 14, nr. cad. CF-fictiv 418777, am modificat branșamentul monofazat în trifazat. Lucrare executată. Nu am notat codul elementului.\n",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "detalii.sectiune_noua"
+  ],
+  "detalii": {
+    "observatii": "Modificare branșament monofazat în trifazat, lucrare executată. Codul elementului nu a fost notat de echipă."
+  }
+}

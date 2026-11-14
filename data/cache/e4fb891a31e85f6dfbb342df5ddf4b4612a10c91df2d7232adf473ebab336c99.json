@@ -1,27 +1,28 @@
 {
+  "event_id": "EV-001",
   "echipa_sursa": "racordari",
   "tip": "cerere_racordare",
   "referinta": {
-    "element_id": null,
+    "adresa": "str Orhideelor 30",
     "coordonate": {
       "lat": 44.281,
       "lon": 26.0618
     },
-    "adresa": "str Orhideelor 30",
-    "nr_cadastral": null,
-    "id_client": null
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
   },
   "status": "planificat",
   "data": "2026-11-12",
-  "forma_sursa": "text_liber",
-  "tip_sursa_pondere": "text_liber",
   "text_original": "CERERE RACORDARE: client nou, casa la coord 44.2810, 26.0618 (str Orhideelor 30), vrea racord monofazat. Cerere 2026-11-12",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
   "incredere_extractie": 0.85,
   "campuri_lipsa": [
-    "nr_cadastral"
+    "nr_cadastral",
+    "element_id"
   ],
   "detalii": {
-    "observatii": "client nou; racord monofazat"
-  },
-  "event_id": "EV-e4fb891a"
+    "observatii": "client nou, racord monofazat"
+  }
 }

@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-M-2026-0488",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "str. Fictivă, zona stației PTAB 7812 (adresă fictivă)",
+    "coordonate": {
+      "lat": 44.2830311,
+      "lon": 26.063942
+    },
+    "element_id": "6925190",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-23",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0488\nData: 2026-10-23\nEchipa: mentenanta\nTip lucrare: verificare trasee JT, strada cu curbă\nCod element: nod 6925190\nCoordonate: 44.2830311, 26.063942\nAdresa: str. Fictivă, zona stației PTAB 7812 (adresă fictivă)\nNr. cadastral: -\nConstatare: Nodul 6925190 există pe teren, în curba străzii, între nodurile 6513200 și 7824201. Lipsește din harta GIS.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "noduri_vecine": [
+      "6513200",
+      "7824201"
+    ],
+    "observatii": "Tip lucrare: verificare trasee JT, strada cu curbă. Nr. fișă: M-2026-0488. Nodul există pe teren în curba străzii, lipsește din harta GIS."
+  }
+}

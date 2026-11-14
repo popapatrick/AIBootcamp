@@ -1,20 +1,25 @@
 {
+  "event_id": "EV-001",
   "echipa_sursa": "racordari",
   "tip": "racord_nou",
   "referinta": {
-    "element_id": "7456900",
-    "coordonate": null,
     "adresa": "str. Orhideelor 12",
-    "nr_cadastral": "420031",
-    "id_client": null
+    "coordonate": null,
+    "element_id": "7456900",
+    "id_client": null,
+    "nr_cadastral": "420031"
   },
   "status": "executat",
   "data": "2026-11-06",
-  "forma_sursa": "campuri",
-  "tip_sursa_pondere": "formular",
   "text_original": "FISA RACORDARE: racord nou la nod 7456900, str. Orhideelor 12, CF-fictiv 420031, executat 2026-11-06",
-  "incredere_extractie": 0.95,
-  "campuri_lipsa": [],
-  "detalii": {},
-  "event_id": "EV-40727956"
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "detalii": {
+    "observatii": "CF-fictiv 420031 trecut ca nr_cadastral; fisa nu indica coordonate"
+  },
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "echipa_sursa_placeholder": "racordari"
 }

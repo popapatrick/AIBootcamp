@@ -1,0 +1,29 @@
+{
+  "event_id": "R-2026-0084",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": null,
+    "coordonate": {
+      "lat": 4427960,
+      "lon": 2606510
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "CF-fictiv 301502"
+  },
+  "status": "executat",
+  "data": "2026-09-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0084\nData: 2026-09-03\nEchipa: racordari\nCod element: -\nCoordonate: 4427960, 2606510\nAdresa: -\nNr. cadastral: CF-fictiv 301502\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "adresa",
+    "coordonate_de_verificat"
+  ],
+  "detalii": {
+    "observatii": "Fișa R-2026-0084, racord nou, status executat. Cod element lipsă (fișa indică '-'). Coordonatele apar fără zecimale și par greșite; copiate exact ca în text."
+  }
+}

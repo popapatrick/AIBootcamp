@@ -1,25 +1,24 @@
 {
+  "event_id": "EV-001",
   "echipa_sursa": "apel_client",
   "tip": "verificare",
   "referinta": {
-    "element_id": null,
+    "adresa": "str Orhideelor",
     "coordonate": {
       "lat": 44.27824,
       "lon": 26.06153
     },
-    "adresa": "str Orhideelor",
-    "nr_cadastral": null,
-    "id_client": "CL-51001"
+    "element_id": null,
+    "id_client": "CL-51001",
+    "nr_cadastral": null
   },
   "status": "semnalat",
   "data": "2026-11-14",
-  "forma_sursa": "text_liber",
-  "tip_sursa_pondere": "apel_client",
   "text_original": "CL-51001 sună din nou: a revenit curentul la ora 9, str Orhideelor. coord 44.27824, 26.06153",
-  "incredere_extractie": 0.8,
-  "campuri_lipsa": [],
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
   "detalii": {
-    "observatii": "a revenit curentul la ora 9"
-  },
-  "event_id": "EV-359ebdaa"
+    "observatii": "Clientul sună din nou; a revenit curentul la ora 9."
+  }
 }
