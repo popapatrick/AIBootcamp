@@ -159,8 +159,22 @@ def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
     ext = sources.extract_func()
     if ext:
         try:
-            ev = ext(text, sursa, data)
+            data_primirii = False
+            data_ext = data
+            if not data_ext:
+                m = RE_DATA.search(text)
+                if m:
+                    data_ext = m.group(1) or f"{m.group(4)}-{int(m.group(3)):02d}-{int(m.group(2)):02d}"
+                else:  # extract_event cere dată: folosim data primirii raportului
+                    data_ext = date.today().isoformat()
+                    data_primirii = True
+            ev = ext(text, sursa, data_ext)
             metoda_ext = "claude (A)"
+            if data_primirii:
+                metoda_ext = "claude (A), data = data primirii"
+                lipsa = ev.setdefault("campuri_lipsa", [])
+                if not any(str(x).startswith("data (") for x in lipsa):
+                    lipsa.append("data (folosită data primirii raportului)")
         except Exception as e:  # cheie lipsă, rețea, ValueError: demo-ul nu pică
             ev = extract_stub(text, sursa, data)
             metoda_ext = f"stub_regex (rezervă: {type(e).__name__})"

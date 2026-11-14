@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-14, fix dată lipsă în extracție
+Gata: `proceseaza` trimite lui `extract_event` data din text sau data primirii (marcată în `campuri_lipsa` și în metoda extracției). Verificat: A-T-002 potrivit, metoda claude, smoke OK, prin tunel la fel; model resetat.
+@Patrick: extract_event(..., data=None) pică validarea: modelul pune '(din text)' în `data`. Propunere: când data lipsește, nu cere modelului data sau pune null + campuri_lipsa. Între timp API-ul trimite data primirii, marcată în campuri_lipsa.
+Contract atins: nu
+
 - [C] Fix RE_ADRESA în extract_stub: „strada Florilor nr. 12” (nr./nr/numărul, 12A) nu se mai taie la punct. Smoke OK. Uvicorn nereepornit.
 
 ## 2026-11-14, demo_start.sh și checklist demo C

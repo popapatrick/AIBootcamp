@@ -57,3 +57,5 @@ UI plan B (Leaflet): `http://localhost:8000/ui/` (sau `/ui/?api=https://alt-host
 - Dacă `extract_event` ridică orice excepție (cheie lipsă, rețea, `ValueError`), `pipeline.proceseaza` cade pe `extract_stub`; `metoda` din pasul „extracție" și `mod.extractie_metoda` devin `stub_regex (rezervă: <TipEroare>)`. Nu se inventează date.
 - `/health.mod.extractie` = `claude` doar dacă există cheia; altfel `stub (rezervă: cheie API lipsă)`.
 - `/health.sursa_evenimente` = `engine.sursa_evenimente()` (ex. `events.json`, `events.stub.json` sau rezerva lui B).
+
+Dată lipsă: `extract_event` pică validarea fără dată, așa că `proceseaza` caută o dată în text, altfel folosește data de azi (data primirii); asta apare în `campuri_lipsa` („data (folosită data primirii raportului)”) și în metoda de extracție („claude (A), data = data primirii”).
