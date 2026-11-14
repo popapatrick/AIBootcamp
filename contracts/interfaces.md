@@ -66,6 +66,13 @@ Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json
 
 Un refuz al deciziei omului (a doua decizie, predicție necunoscută, decizie invalidă) întoarce StepTrace cu `decizie: neaplicat` și `eroare: {cod: deja_decis | necunoscut | decizie_invalida, mesaj}`; API-ul le traduce în 409 / 404 / 400.
 
+### Completări B5-B8 (aditive)
+- `nivel: scos_din_uz` (ElementState) pentru `activ_demontat` cu cel puțin `demontat.rapoarte_min` echipe și scor peste prag.
+- `verificat_recent` (bool) în snapshot, din `scor.verificat_recent_zile` (haloul verde în UI).
+- StepTrace: pas nou `trace` (rezultatul `backend.trace.localizeaza`) înaintea `potrivire`, când raportul are `detalii.trace` și nu are ID/coordonate; `potrivire` cu `status: zona` pentru `mutare_fire` (centru, raza_m, elemente).
+- Motorul: `engine.aplica_decizie(event)` (ridică KeyError/ValueError) și `engine.model_scenariu("extrem")`.
+- ID-uri generate: `MUT-<event>-<n>` (traseu propus după mutare), `NOU-<event>-S<n>`, `NOU-<event>-casa`, `NOU-<event>-L<n>` (lanț de racordare).
+
 ### `clasa` (ElementState)
 Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele fără serie/categorie KMZ (adăugate sau prezise din rapoarte): nod = `casa`, tronson = `aerian` (simplificare pentru prototip).
 

@@ -136,6 +136,10 @@
         null
       ],
       "description": "om = predicția a fost acceptată de un om (sursa om_teren); null = nu"
+    },
+    "verificat_recent": {
+      "type": "boolean",
+      "description": "true dacă ultima_verificare e în ultimele scor.verificat_recent_zile zile (weights.yaml) la data snapshot-ului; halou verde în UI"
     }
   }
 }
