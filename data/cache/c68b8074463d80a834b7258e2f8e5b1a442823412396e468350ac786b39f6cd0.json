@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Regina Maria nr 8",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": "420077"
+  },
+  "status": "executat",
+  "data": "2026-11-07",
+  "text_original": "racord executat la casa de pe Regina Maria nr 8 (cf 420077). fara cod stalp",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "fara cod stalp"
+  }
+}

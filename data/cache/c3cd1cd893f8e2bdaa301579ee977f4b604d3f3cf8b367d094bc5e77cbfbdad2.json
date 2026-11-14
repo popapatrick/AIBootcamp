@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "str Regina Maria 5",
+    "coordonate": {
+      "lat": 44.2793,
+      "lon": 26.066
+    },
+    "element_id": "7101969",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-12",
+  "text_original": "cerere racordare: casa langa nodul 7101969, str Regina Maria 5, coord 44.2793 26.0660. 12.11.2026",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "nr_cadastral"
+  ],
+  "detalii": {}
+}

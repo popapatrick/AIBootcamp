@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-OM-0002",
+  "echipa_sursa": "om_teren",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": "NOU-0002",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "am fost la fata locului, NOU-0002 nu exista, acolo e doar un copac. Resping.",
+  "tip_sursa_pondere": "om_teren",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.9,
+  "detalii": {
+    "decizie": {
+      "tinta_id": "NOU-0002",
+      "decizie": "respinge",
+      "motiv": "NOU-0002 nu exista, acolo e doar un copac"
+    }
+  },
+  "campuri_lipsa": []
+}

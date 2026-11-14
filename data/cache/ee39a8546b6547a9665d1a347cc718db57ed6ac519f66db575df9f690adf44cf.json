@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": "R-T-006",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-02",
+  "text_original": "propun inlocuire R-T-006 (6132582 - 6729327), sectiune veche. buget 2027",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "coordonate",
+    "adresa"
+  ],
+  "detalii": {
+    "observatii": "Propunere de inlocuire a tronsonului R-T-006 (capete 6132582 - 6729327), sectiune veche. Buget 2027. Propunere, nu lucrare executata.",
+    "sectiune_noua": null
+  }
+}

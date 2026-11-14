@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-OMTEREN-20261114-001",
+  "echipa_sursa": "om_teren",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "coordonate": null,
+    "element_id": "NOU-0001",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "Verificat în teren: predicția NOU-0001 este corectă, stâlpul există. Accept. Motiv: stâlp văzut la fața locului.",
+  "tip_sursa_pondere": "om_teren",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.95,
+  "detalii": {
+    "decizie": {
+      "tinta_id": "NOU-0001",
+      "decizie": "accepta",
+      "motiv": "stâlp văzut la fața locului"
+    }
+  }
+}
