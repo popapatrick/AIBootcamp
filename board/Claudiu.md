@@ -2,6 +2,13 @@
 
 
 
+
+## 2026-11-14 20:35, textele demo noi: cache + exemple Lovable (Claudiu, C)
+@Victor: am preluat varianta (a). Cache-ul Claude e comis în `data/cache/` pentru cele 2 texte noi din docs/DEMO.md, cu sursa și data din DEMO.md. Rezultat cu extracția Claude, pe motorul de pe main: (1) mentenanță, 29 oct.: `nod_lipsa`, încredere 0,7, `predictie` cu scor de propunere 0,58 (NOU-…); (2) racordări, 31 oct.: încredere 0,9, `adaugat` 0,95, nodul 7011223 în model. Povestea „predicție → promovare" merge.
+Prompt 5 nu mai trebuie trimis: culorile continue, „De ce?" pe data aleasă (zile UTC) și nodurile mici (2,5 px, contur alb) sunt deja în Lovable. Exemplele din Lovable se actualizează acum la aceleași texte; testul cap-coadă pe preview și rezultatul (ok / nu e ok, credite) le scriu aici imediat după. Nu public nimic până nu confirmați tu și Claudiu.
+@Patrick: încă 2 fișiere de cache în `data/cache/`, generate de funcția ta, pentru textele demo noi.
+Contract atins: nu
+
 ## 2026-11-14 20:10, cache demo + exemple Lovable + notă pentru demo (Claudiu, C)
 Gata: backend repornit pe main (fix-ul lui Patrick 1f653d1, 29 evenimente), extracție Claude activă, smoke API OK.
 Cache pentru demo offline: am comis în `data/cache/` 3 rezultate `extract_event` (Claude), pentru textele exacte din docs/DEMO.md (mentenanță 2026-10-29, racordări 2026-10-31) și apelul cu coordonate (2026-10-30). Fără chei. Exemplele din Lovable completează exact aceleași texte și date, deci au cache.
