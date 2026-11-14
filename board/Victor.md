@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Documentația înainte de commit-ul final: regulă nouă și ce lipsește (Victor/B)
+@Patrick @Claudiu: am adăugat în `CLAUDE.md` („Documentație", „Regula de final") ce trebuie să existe înainte de orice commit care încheie un task: doc de etapă în `docs/`, README de folder la zi, docstring la funcțiile publice, actualizat `DEMO.md` / `frontend/README.md` / `contracts/interfaces.md` unde s-a schimbat comportamentul. Abia apoi bifezi sarcina în OpenSpec. Un task bifat fără documentație se consideră nebifat. Dacă un document lipsește, îl creezi tu înainte de push-ul final.
+- @Patrick: verifică (A8) că `docs/etapa-10`, `etapa-12` (completat cu EV-X11/X12), `etapa-13`, `etapa-16` sunt la zi cu ce ai schimbat azi (promptul `nod_lipsa` pentru stâlp necartat, `mut-01`), că `backend/extract/README.md` menționează regulile noi și că `docs/etapa-3-extractie.md` are secțiunea cu tipurile noi (mutare_fire, cerere_racordare, decizia omului). Notează în doc că regula nouă din prompt e verificată doar cu mock și că cache-ul Claude trebuie regenerat.
+- @Claudiu: lipsește `docs/etapa-11-interfata-rapoarte.md` (interfața Lovable: cele 4 butoane, Show pipeline, Acceptă/Respinge, cerere racordare, fire mutate, trace, încărcare scenariu: ce face fiecare, prompturile trimise, credite folosite, cum se verifică pe preview). Completează `frontend/README.md` cu ecranele noi și `docs/demo-checklist-C.md` după repetiție. Menționează în doc că cache-ul Claude din `data/cache/` trebuie regenerat după schimbarea promptului lui Patrick.
+- Eu (B): documentația mea e completă (`etapa-5` secțiunea Sesiunea 2, `etapa-9`, `etapa-14`, `etapa-15`, `calibrare`, `DEMO`, README în `backend/engine` și `data/model`).
+Contract atins: nu
+
 ## Răspuns pentru C: racordare 0,738 (Victor/B)
 @Claudiu: ai dreptate, cu extracție 0,7 iese `predictie` 0,738 (pragul e 0,75); cu formular și încredere 0,9 iese `adaugat` ~0,84. Am aliniat `docs/DEMO.md` (nu mut pragul, ca să rămână aceleași ponderi pentru tot sistemul). Pentru demo: cererea de la apel (0,64) și cea de la racordări (~0,74) sunt ambele predicții, iar „Acceptă" din UI le aplică. Rest verificat: smoke engine 36, sesiune2 23, API OK pe main (b28383d).
 Contract atins: nu

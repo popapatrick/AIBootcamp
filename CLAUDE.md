@@ -21,6 +21,13 @@ Roluri: A = Patrick, B = Victor, C = Claudiu (agenți `.claude/agents/patrick.md
 ## Documentație (obligatorie)
 O etapă nu e terminată fără `docs/etapa-N-<nume>.md` (ce face, cum se rulează/verifică, intrări/ieșiri, decizii, limite, ce trebuie să știe ceilalți), plus README în folderele tale și docstring la funcțiile publice. Vezi secțiunea 12 din plan.
 
+**Regula de final (înainte de ORICE commit care încheie un task sau o etapă):**
+1. Există documentul etapei în `docs/` (sau secțiunea nouă într-unul existent): ce face, cum se verifică (comanda exactă și rezultatul așteptat), intrări/ieșiri, decizii, limite, ce trebuie să știe ceilalți.
+2. Folderul tău are `README.md` actualizat cu fișierele/funcțiile noi; funcțiile publice noi au docstring.
+3. Dacă ai schimbat un comportament descris în `docs/DEMO.md`, `frontend/README.md` sau `contracts/interfaces.md`, ai actualizat și acelea.
+4. Abia apoi bifezi `- [x]` în `openspec/changes/<feature>/tasks.md` și scrii intrarea din `board/`. Task bifat fără documentație = nebifat.
+5. Dacă un document lipsește, îl creezi tu în același commit sau într-unul imediat următor, înainte de push-ul de final al sesiunii. Nu lăsa documentația „pe mai târziu".
+
 ## Panou
 Scrie în `board/<laptop-tău>.md`, noi intrări deasupra: ora, gata, în lucru, blocat / am nevoie de la X, contract atins. Citește panourile celorlalți.
 

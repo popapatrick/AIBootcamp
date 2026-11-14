@@ -92,6 +92,9 @@ Dependențe: B7 așteaptă A3; B8 așteaptă A4; C8 așteaptă B6 și A6; C5 și
 - Restul folderelor rămân cum erau: A (`backend/extract`, `data/reports`, `data/events`), B (`backend/engine`, `data/model`, `contracts`), C (`backend/api`, `frontend`).
 - Neschimbat: ponderile se aplică întregului sistem, regula de intrare (nou -> adaugă; sigur -> aplică; nesigur -> predicție neaplicată cu scor), nu inventăm date lipsă, documentație pe etapă, commit-uri mici cu prefix `[A]`/`[B]`/`[C]`/`contract:`, fără `--force`, bug care persistă după 2 încercări -> spuneți că trebuie ridicat efortul.
 
+## 9b. Documentația, înainte de commit-ul final
+Regula e acum în `CLAUDE.md` (secțiunea Documentație, „Regula de final"). Pe scurt: doc de etapă + README de folder + docstring + actualizarea `DEMO.md` / `frontend/README.md` / `interfaces.md` acolo unde s-a schimbat comportamentul, toate înainte să bifezi un task în OpenSpec. Lista documentelor așteptate la final: `etapa-9` (B, gata), `etapa-10`, `etapa-12`, `etapa-13`, `etapa-16` (A), `etapa-14`, `etapa-15` (B, gata), `etapa-7b` (C, gata), `etapa-11` (C, interfața Lovable, lipsește), README în `backend/trace`, `backend/racordare`, `backend/engine`, `data/model`, `frontend`.
+
 ## 10. Limite și presupuneri
 - „Casă" = serie 7 (verde) e o presupunere din simbolurile KMZ.
 - Traseul GPS e simulat; adresa dă doar strada (numărul nu se geocodează); pragurile trace-ului nu sunt calibrate pe date reale.
