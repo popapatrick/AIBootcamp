@@ -1,0 +1,46 @@
+schema: spec-driven
+
+context: |
+  Language: ro
+  All artifacts must be written in ro.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Proiect: prototip PPC Challenge 2 "A grid model that keeps itself up to date".
+  Date FICTIVE (rețea demonstrativă PTAB 7812). Vezi CLAUDE.md și PLAN-prototip.md.
+  Roluri: A = Patrick (backend/extract, data/reports, data/events),
+  B = Victor (backend/engine, data/model), C = Claudiu (backend/api, frontend).
+  Contractele (contracts/) se schimbă doar prin commit "contract:", cu
+  contracts/interfaces.md actualizat în același commit.
+  Principii: ponderile din contracts/weights.yaml se aplică întregului sistem;
+  regula de intrare (nou -> adaugă; sigur -> aplică; nesigur -> predicție
+  neaplicată cu scor); nu inventa date lipsă.
+
+rules:
+  proposal:
+    - Spune ce rol (A/B/C) implementează fiecare parte și ce contracte se ating
+    - Spune explicit ce e în afara scopului
+  tasks:
+    - Grupează sarcinile pe rol (A/B/C); fiecare rol scrie doar în folderele lui
+    - Include sarcina de documentație docs/etapa-N-<nume>.md și un smoke test
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

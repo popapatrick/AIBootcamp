@@ -31,3 +31,6 @@ Dacă un bug nu se rezolvă după 2 încercări sau o eroare se repetă, spune e
 - Ponderile se aplică întregului sistem: toate inputurile și toate predicțiile trec prin același calcul de scor și același `contracts/weights.yaml`. Apelul clientului e doar un alt input.
 - Regula de intrare: nimic existent → se adaugă; există ceva și e sigur → se aplică; există ceva și e nesigur → predicție vizibil diferită, neaplicată, cu scor. Fiecare modificare are jurnal și „de ce".
 - Nu inventa date lipsă: marchează „lipsă" sau „de verificat".
+
+## OpenSpec (features noi)
+Features noi se planifică cu OpenSpec: `openspec/changes/<feature>/` (propunere, spec, sarcini pe roluri), creat cu `/openspec-propose "idee"`; implementare cu `/openspec-apply-change`; la final `/openspec-archive-change`. Citește `openspec/changes/` și `openspec/specs/` la începutul blocului de lucru. Instalare: `brew install node`, `npm install -g @fission-ai/openspec@latest`, apoi `git pull`. Cine deține feature-ul scrie în `openspec/changes/<feature>/`; `openspec/specs/` se schimbă doar prin arhivare.
