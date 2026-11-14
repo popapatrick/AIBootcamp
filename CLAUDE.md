@@ -16,7 +16,7 @@ Roluri: A = Patrick, B = Victor, C = Claudiu (agenți `.claude/agents/patrick.md
 - Push direct pe `main`. Înainte: rulează smoke test-ul sau pornește serverul. Nu împinge cod care strică `main`.
 - Dacă push e respins: `git pull --rebase origin main`, rezolvă, push. Niciodată `--force`.
 - Schimbare de contract = doar commit `contract:`, anunțat în `board/`, cu `contracts/interfaces.md` actualizat în același commit.
-- Secrete: cheia API doar în `.env` local. Nu o scrie în fișiere, commit-uri sau chat-ul din repo.
+- Secrete: nu scrie chei în fișiere, commit-uri sau chat. **Cheia API NU se mai folosește** (vezi „Fără cheie API" mai jos).
 
 ## Documentație (obligatorie)
 O etapă nu e terminată fără `docs/etapa-N-<nume>.md` (ce face, cum se rulează/verifică, intrări/ieșiri, decizii, limite, ce trebuie să știe ceilalți), plus README în folderele tale și docstring la funcțiile publice. Vezi secțiunea 12 din plan.
@@ -33,6 +33,12 @@ Scrie în `board/<laptop-tău>.md`, noi intrări deasupra: ora, gata, în lucru,
 
 ## Efort și model
 Dacă un bug nu se rezolvă după 2 încercări sau o eroare se repetă, spune explicit omului și în `board/` că „poate trebuie ridicat efortul sau modelul", cu motivul. Nu insista la nesfârșit.
+
+## Fără cheie API; model pe dificultate (decis de Victor, 14 nov.)
+- **Nu mai folosi cheia API** (nici OpenRouter, nici Anthropic). Cheia dă probleme; folosim abonamentul. Nu pune chei în `.env`, nu rula cod care apelează API-ul. Extracția fără cheie = **cache din `data/cache/` + stub regex** (rezerva din `backend/api/pipeline.py`).
+- Textele se transformă în evenimente de **subagenți Claude Code cu modelul Haiku** (din abonament), nu prin API: dai agentului promptul `SYSTEM` din `backend/extract/extract.py`, schema `contracts/event.schema.json` și textul; întoarce JSON-ul evenimentului; îl importi în cache (Patrick face uneltele, vezi `board/`).
+- **Model pe dificultate:** Haiku = extragere text -> eveniment, formatare, texte dummy, verificări simple. Sonnet = cod obișnuit (API, UI, teste, documentație). Model/efort mare (Opus) doar pentru bug care persistă după 2 încercări, schimbări de contract sau algoritmi dificili; spune-i omului înainte.
+- Consecință la demo: un text NOU scris live, care nu e în cache, iese cu extracția stub (regex), mai slabă. Pregătiți în cache toate textele de demo (`docs/DEMO.md`).
 
 ## Principii de produs (nu le încălca)
 - Ponderile se aplică întregului sistem: toate inputurile și toate predicțiile trec prin același calcul de scor și același `contracts/weights.yaml`. Apelul clientului e doar un alt input.
