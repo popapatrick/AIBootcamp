@@ -1,5 +1,6 @@
 # Panou laptop C
 
+- [C] Fix RE_ADRESA în extract_stub: „strada Florilor nr. 12” (nr./nr/numărul, 12A) nu se mai taie la punct. Smoke OK. Uvicorn nereepornit.
 
 ## 2026-11-14, demo_start.sh și checklist demo C
 Gata: `backend/api/demo_start.sh` (API + tunel + link Lovable cu ?api=, `--restart`, `--reset-model`, `--port`), `docs/demo-checklist-C.md`, secțiune „Cum văd aplicația" în frontend/README.md. Testat pe :8001 cu tunel separat (/health prin tunel ok).
