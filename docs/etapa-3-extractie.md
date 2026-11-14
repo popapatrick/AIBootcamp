@@ -37,3 +37,9 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 
 ## Ce trebuie să știe ceilalți
 - B: `events.json` are același format ca `events.stub.json`, cu ID-uri `EV-001`...
+
+## Rulare reală (OpenRouter)
+- 28/28 evenimente valide pe schemă în `data/events/events.json`.
+- Față de `data/reports/index.json`: `element_id` 28/28, `tip` 27/28 (excepție: `2026-08-29_racordari_02`, scenariul 5, extras ca `racord_nou`).
+- `verificare` = inspecție fără defecte (contract `bf8e4ae`). Coduri de tronson fără prefix (`T-054`) → `element_id: null`, cod brut în `detalii.id_partial`.
+- Cheia de cache include promptul de sistem: o schimbare de prompt invalidează cache-ul automat.
