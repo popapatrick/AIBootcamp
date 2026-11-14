@@ -32,3 +32,4 @@ grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' /tmp/claude-1000/cloudflared.lo
 - Plan B: `http://localhost:8000/ui/` (UI Leaflet servit de FastAPI).
 - Checklist demo: `docs/demo-checklist-C.md`.
 - Prompt Lovable sesiunea 3 (origine, predicție slabă/treaptă, eronat în prototip, cerc de zonă, parametri trace, pas „Geocodare"): scris în `frontend/lovable-prompt-sesiune3.md`, **netrimis** până decide omul și backend-ul întoarce câmpurile. API nou pentru el: `zona` în `GET /retea`, `trace_params` în `POST /rapoarte`; vezi `docs/etapa-24-api-sesiune3.md`.
+- Prompt Lovable timeline derulabil (panou vertical, scroll mută harta, în locul Play și al barei de dată): `frontend/lovable-prompt-timeline-derulabil.md`, **netrimis** până decide omul (~4-6 credite). API: `GET /evenimente` trece `schimbari`, `pasi`, `eronat_prototip` (vezi `docs/etapa-24-api-sesiune3.md`).

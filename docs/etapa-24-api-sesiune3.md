@@ -86,3 +86,6 @@ Teste: smoke_api (și stub), smoke_engine 36, `scripts/verifica_tot.sh` = TOT VE
 
 ## Stare finală
 Banca pe golden: 19/20 (`python3 -m backend.api.banc_logica --cu-ai`). Singura diferență: `g-06-ortografie`: cu ai_cache iese `neaplicat`, golden cere predicție (la Patrick). Smoke API OK; `bash scripts/verifica_tot.sh` = TOT VERDE.
+
+## Timeline derulabil, 2.1
+`GET /evenimente` (și `?scenariu=extrem`) nu filtrează nimic: `sources.evenimente` întoarce intrările motorului (`timeline()`) cum sunt, deci `schimbari[]`, `pasi[]` și `eronat_prototip` trec neatinse (29 intrări normal, 70 extrem, toate cu `pasi` și `schimbari`; `eronat_prototip` e `false` pe cele de start). Nu a fost nevoie de modificare în API. Test: blocul „timeline derulabil” din `backend/api/smoke_api.py` (ambele scenarii); `.venv/bin/python -m backend.api.smoke_api` și cu `API_EXTRACTIE=stub`: OK. Promptul Lovable: `frontend/lovable-prompt-timeline-derulabil.md` (netrimis).

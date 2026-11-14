@@ -187,6 +187,15 @@ def main() -> None:
         assert r.status_code == 404 and "extrem" in r.json()["detail"], r.text
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404
     print("scenariu extrem:", r.status_code, len(r.json()) if r.status_code == 200 else "")
+    # timeline derulabil 2.1: câmpurile motorului trec neatinse prin API, în ambele scenarii
+    for par, atins in (({}, c.get("/evenimente").json()), ({"scenariu": "extrem"}, r.json() if r.status_code == 200 else None)):
+        if atins is None:
+            continue
+        assert atins and all({"schimbari", "pasi", "eronat_prototip"} <= set(e) for e in atins if "pasi" in e or "schimbari" in e), par
+        e0 = next((e for e in atins if e.get("pasi") and e.get("schimbari")), None)
+        assert e0 and e0["pasi"][0]["nume"] and {"element_id", "scor_dupa"} <= set(e0["schimbari"][0]) \
+            and isinstance(e0["eronat_prototip"], bool), (par, e0 and list(e0))
+    print("timeline derulabil: schimbari/pasi/eronat_prototip trec prin API")
     assert c.get("/evenimente", params={"scenariu": "altul"}).status_code == 422
 
     # --- locația operatorului (simulată) din textul lui
