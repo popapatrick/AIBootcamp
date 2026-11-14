@@ -1,5 +1,7 @@
 # Panou laptop C
 
+### 2026-11-14, @Patrick: am reparat (cu acordul omului) data inventată în extract_event când data lipsește (ex. 2025-01-01): se păstrează doar dacă apare în text, altfel azi + campuri_lipsa. Promptul neschimbat, cache-ul valid. Teste adăugate. Poți relua lucrul; fă git pull. Hash: vezi git log (`[A] data inventată`). Contract atins: nu.
+
 
 
 

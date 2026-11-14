@@ -104,13 +104,41 @@ def _sectiune(ev: dict, text: str) -> dict:
     return ev
 
 
-def _data_valida(ev: dict) -> None:
-    """Schema cere data YYYY-MM-DD (fără null). Invalidă/lipsă -> data de azi + 'data' în campuri_lipsa."""
+_LUNI = {"ianuarie": 1, "februarie": 2, "martie": 3, "aprilie": 4, "mai": 5, "iunie": 6, "iulie": 7,
+         "august": 8, "septembrie": 9, "octombrie": 10, "noiembrie": 11, "decembrie": 12}
+
+
+def _date_din_text(text: str) -> set[str]:
+    """Toate datele din text, normalizate YYYY-MM-DD (ISO, DD.MM.YYYY, DD/MM/YYYY, '14 septembrie 2026')."""
+    gasite = []
+    for a, b, c in re.findall(r"(?<!\d)(\d{4})-(\d{1,2})-(\d{1,2})(?!\d)", text):
+        gasite.append((a, b, c))
+    for c, b, a in re.findall(r"(?<!\d)(\d{1,2})[./](\d{1,2})[./](\d{4})(?!\d)", text):
+        gasite.append((a, b, c))
+    for c, l, a in re.findall(r"(?<!\d)(\d{1,2})\s+([A-Za-zăâîșşțţĂÂÎȘŞȚŢ]+)\s+(\d{4})(?!\d)", text):
+        if l.lower() in _LUNI:
+            gasite.append((a, str(_LUNI[l.lower()]), c))
+    out = set()
+    for a, b, c in gasite:
+        try:
+            out.add(date(int(a), int(b), int(c)).isoformat())
+        except ValueError:
+            pass
+    return out
+
+
+def _data_valida(ev: dict, text: str | None = None) -> None:
+    """Schema cere data YYYY-MM-DD (fără null). Invalidă/lipsă -> data de azi + 'data' în campuri_lipsa.
+
+    Dacă text e dat (apelantul n-a dat data), data modelului se păstrează doar dacă apare în text.
+    """
     d = ev.get("data")
     try:
         ok = isinstance(d, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) and date.fromisoformat(d)
     except ValueError:
         ok = False
+    if ok and text is not None and d not in _date_din_text(text):
+        ok = False  # inventată de model
     if not ok:
         ev["data"] = date.today().isoformat()
         ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"data"})
@@ -151,6 +179,8 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
     path = CACHE_DIR / f"{key}.json"
     if path.exists():
         ev = json.loads(path.read_text(encoding="utf-8"))
+        if data is None:
+            _data_valida(ev, text)  # intrare veche cu dată inventată nu mai iese
         before = json.dumps(ev, sort_keys=True)
         if json.dumps(_sectiune(ev, text), sort_keys=True) != before and not any(_validator.iter_errors(ev)):
             path.write_text(json.dumps(ev, ensure_ascii=False, indent=2), encoding="utf-8")  # disc == returnat
@@ -164,7 +194,7 @@ def extract_event(text: str, sursa: str, data: str | None = None) -> dict:
             ev["data"] = data
         if not ev.get("event_id"):
             ev["event_id"] = "EV-" + key[:8]  # run_all îl înlocuiește cu EV-001..
-        _data_valida(ev)
+        _data_valida(ev, text if data is None else None)
         _normalizeaza(ev)
         _sectiune(ev, text)
         errors = [e.message for e in _validator.iter_errors(ev)]

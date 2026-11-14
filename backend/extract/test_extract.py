@@ -47,8 +47,23 @@ def main() -> None:
             ev = ex.extract_event(f"fără dată {bad}", "investitii", None)
             assert ev["data"] == date.today().isoformat() and "data" in ev["campuri_lipsa"], bad
         ex._call_api = lambda *a: dict(GOOD, data="2026-08-05", campuri_lipsa=[])
-        ev = ex.extract_event("dată în text", "investitii", None)
+        ev = ex.extract_event("dată în text 05.08.2026", "investitii", None)
         assert ev["data"] == "2026-08-05" and "data" not in ev["campuri_lipsa"]
+    # data inventată de model: păstrată doar dacă apare în text; data apelantului neatinsă
+    with tempfile.TemporaryDirectory() as tmp:
+        ex.CACHE_DIR = Path(tmp)
+        azi = date.today().isoformat()
+        ex._call_api = lambda *a: dict(GOOD, data="2025-01-01", campuri_lipsa=[])
+        ev = ex.extract_event("Am înlocuit cablul pe A-T-002.", "mentenanta", None)
+        assert ev["data"] == azi and "data" in ev["campuri_lipsa"], ev["data"]
+        ev = ex.extract_event("Am înlocuit cablul pe A-T-002.", "mentenanta", None)  # cache hit
+        assert ev["data"] == azi and "data" in ev["campuri_lipsa"]
+        ex._call_api = lambda *a: dict(GOOD, data="2026-09-14", campuri_lipsa=[])
+        for t in ("Lucrare din 14.09.2026.", "Lucrare din 14 septembrie 2026.", "Lucrare 14/9/2026."):
+            ev = ex.extract_event(t, "mentenanta", None)
+            assert ev["data"] == "2026-09-14" and "data" not in ev["campuri_lipsa"], t
+        ex._call_api = lambda *a: dict(GOOD, data="2025-01-01", campuri_lipsa=[])
+        assert ex.extract_event("fără dată apelant", "mentenanta", "2026-03-03")["data"] == "2026-03-03"
     for txt, det, asteptat in (
         ("Pe A-T-021 este montat conductor TYIR  3x50+54,6 OL-Al.", {}, "TYIR 3x50+54,6 OL-Al"),
         ("TYIR 3x50+54 ; TYIR 3x70+54.", {}, None),

@@ -46,3 +46,5 @@ python -m backend.extract.test_extract       # test offline: fără API, fără 
 - Față de `data/reports/index.json`: `element_id` 28/28, `tip` 27/28 (excepție: `2026-08-29_racordari_02`, scenariul 5, extras ca `racord_nou`).
 - `verificare` = inspecție fără defecte (contract `bf8e4ae`). Coduri de tronson fără prefix (`T-054`) → `element_id: null`, cod brut în `detalii.id_partial`.
 - Cheia de cache include promptul de sistem: o schimbare de prompt invalidează cache-ul automat.
+
+Dată: când apelantul nu dă `data`, data întoarsă de model se păstrează doar dacă apare efectiv în text (ISO, DD.MM.YYYY, DD/MM/YYYY, „14 septembrie 2026"); altfel data de azi și „data" în `campuri_lipsa`. Verificarea se aplică și pe intrările din cache (reparat de C la cererea omului).
