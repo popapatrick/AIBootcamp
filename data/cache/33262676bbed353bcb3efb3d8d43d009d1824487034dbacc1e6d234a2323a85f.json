@@ -1,0 +1,36 @@
+{
+  "event_id": "EV-007",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": "7900101",
+    "coordonate": {
+      "lat": 44.2852,
+      "lon": 26.0608
+    },
+    "adresa": "str. Fictivă, zona nord-vest (adresă fictivă)",
+    "adresa_structurata": {
+      "strada": "Fictivă",
+      "numar": null,
+      "localitate": null,
+      "reper": "zona nord-vest"
+    },
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-14",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0502\nData: 2026-10-14\nEchipa: mentenanta\nTip lucrare: ramură nouă JT, montaj stâlp\nCod element: nod 7900101\nCoordonate: 44.2852, 26.0608\nAdresa: str. Fictivă, zona nord-vest (adresă fictivă)\nNr. cadastral: -\nConstatare: Stâlpul nou 7900101 este montat și legat de nodurile 7261864 și 7363515. Cele două tronsoane noi nu apar în harta GIS.\nStatus: executat\n",
+  "incredere_extractie": 0.95,
+  "campuri_lipsa": [
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "noduri_vecine": [
+      "7261864",
+      "7363515"
+    ],
+    "observatii": "stâlp nou montat; cele două tronsoane noi nu apar în harta GIS"
+  }
+}

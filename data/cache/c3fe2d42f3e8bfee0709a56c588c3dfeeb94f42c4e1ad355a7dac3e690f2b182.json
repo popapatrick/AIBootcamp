@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-005",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "colțul dintre Strada Viilor și Strada Carpati",
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": null,
+      "localitate": null,
+      "reper": "colțul cu Strada Carpati"
+    }
+  },
+  "status": "semnalat",
+  "data": "2026-10-07",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "Inspecție la colțul dintre Strada Viilor și Strada Carpati, cablu vizibil uzat.",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "cablu vizibil uzat"
+  }
+}

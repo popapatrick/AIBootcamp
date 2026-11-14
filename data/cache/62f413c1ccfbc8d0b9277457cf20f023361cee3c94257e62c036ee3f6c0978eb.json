@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-014",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.3072,
+      "lon": 26.10022
+    },
+    "adresa": null,
+    "nr_cadastral": null,
+    "adresa_structurata": null,
+    "id_client": "CL-52001"
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "Operator: Alo? Client (CL-52001): nu avem lumina. Coord tel 44.30720, 26.10022. status semnalat",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "nu avem lumina"
+  }
+}

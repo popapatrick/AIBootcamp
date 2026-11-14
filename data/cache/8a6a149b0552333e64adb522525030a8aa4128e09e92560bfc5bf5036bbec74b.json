@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-007",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "Strada Crinului",
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "semnalat",
+  "data": "2026-10-14",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "text_original": "Stâlp căzut pe Strada Crinului.",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "id_client"
+  ],
+  "detalii": {}
+}

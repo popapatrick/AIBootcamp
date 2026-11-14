@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-015",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 26.066262,
+      "lon": 44.279575
+    },
+    "adresa": "str. Fictivă nr. 22 (adresă fictivă)",
+    "nr_cadastral": "CF-fictiv 301177",
+    "adresa_structurata": {
+      "strada": "Fictivă",
+      "numar": "22",
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "executat",
+  "data": "2026-08-12",
+  "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0077\nData: 2026-08-12\nEchipa: racordari\nCod element: -\nCoordonate: lat 26.066262, lon 44.279575\nAdresa: str. Fictivă nr. 22 (adresă fictivă)\nNr. cadastral: CF-fictiv 301177\nObservații: racord pe stâlpul din colț\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate_de_verificat"
+  ],
+  "detalii": {
+    "observatii": "racord pe stâlpul din colț"
+  }
+}

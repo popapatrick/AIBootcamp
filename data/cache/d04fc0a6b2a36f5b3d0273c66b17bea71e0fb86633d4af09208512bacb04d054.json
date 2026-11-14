@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-016",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": "6513200",
+    "coordonate": {
+      "lat": 44.2830311,
+      "lon": 26.063942
+    },
+    "adresa": "str. Fictivă, zona stației PTAB 7812 (adresă fictivă)",
+    "adresa_structurata": {
+      "strada": "Fictivă",
+      "numar": null,
+      "localitate": null,
+      "reper": "zona stației PTAB 7812"
+    },
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-08",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE VERIFICARE – MENTENANȚĂ\nNr. fișă: M-2026-0521\nData: 2026-11-08\nEchipa: mentenanta\nCod element: nod 6513200\nCoordonate: 44.2830311, 26.063942\nAdresa: str. Fictivă, zona stației PTAB 7812 (adresă fictivă)\nNr. cadastral: -\nConstatare: Nodul 6513200 verificat după mutarea firelor de la sensul giratoriu. Montaj corect, fără defecte.\nStatus: executat\n",
+  "incredere_extractie": 0.95,
+  "campuri_lipsa": [
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "verificat după mutarea firelor de la sensul giratoriu; montaj corect, fără defecte"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "event_id": "EV-006",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "element_id": "7238332",
+    "coordonate": null,
+    "adresa": "str Viilor",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": "Viilor",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "id_client": "CL-51002"
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "client CL-51002: a picat curentul, vad ca stalpul 7238332 scantei. str Viilor",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+    "observatii": "scântei la stâlp"
+  }
+}

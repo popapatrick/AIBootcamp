@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": "0287329",
+    "coordonate": null,
+    "adresa": null,
+    "adresa_structurata": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-20",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0471\nData: 2026-10-20\nCod element: nod 0287329 (plecare A)\nCoordonate: -\nConstatare: nod curat, fără supraîncălzire, control termografic.\nStatus: executat\n",
+  "incredere_extractie": 0.95,
+  "campuri_lipsa": [
+    "coordonate",
+    "adresa",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "control termografic, nod curat, fără supraîncălzire; plecare A"
+  }
+}

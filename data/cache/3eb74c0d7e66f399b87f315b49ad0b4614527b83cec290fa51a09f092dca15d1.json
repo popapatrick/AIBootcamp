@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-006",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "Strada Primăverii",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": "Primăverii",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "Raport tableta: verificat stalpii pe Strada Primăverii, am stat mai mult la un stalp cu izolator ud. Fara nr. Pentru trace.",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "numar",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "verificare stalpi; un stalp cu izolator ud, oprire mai lunga; fara numar"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "event_id": "EV-010",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "element_id": "7900101",
+    "coordonate": null,
+    "adresa": null,
+    "adresa_structurata": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-05",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "DATE FICTIVE\nVerificare, 5 noiembrie 2026.\nAm verificat vizual stâlpul 7900101 și cele două tronsoane noi spre 7261864 și 7363515. Montaj corect, conductoare întinse, fără defecte.\n",
+  "incredere_extractie": 0.95,
+  "campuri_lipsa": [
+    "coordonate",
+    "adresa",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "verificare vizuală, montaj corect, conductoare întinse, fără defecte; tronsoane spre 7261864 și 7363515"
+  }
+}

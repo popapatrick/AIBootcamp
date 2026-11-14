@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-017",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "coltul Strada Speranței colț cu Strada Bălții",
+    "nr_cadastral": null,
+    "id_client": null,
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": null,
+      "localitate": null,
+      "reper": "colț cu Strada Bălții"
+    }
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "stalp nou la coltul Strada Speranței colț cu Strada Bălții, nu e in GIS",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {}
+}

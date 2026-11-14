@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-015",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.28179,
+      "lon": 26.06473
+    },
+    "adresa": null,
+    "nr_cadastral": null,
+    "adresa_structurata": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "FISA INVESTITIE: stalp nou la 44.28179, 26.06473, executat",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {}
+}

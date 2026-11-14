@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "element_id": "9999002",
+    "coordonate": null,
+    "adresa": "str Viilor 22",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": "Viilor",
+      "numar": "22",
+      "localitate": null,
+      "reper": null
+    }
+  },
+  "status": "planificat",
+  "data": "2026-11-09",
+  "text_original": "racord la stalpul 9999002 str Viilor 22 - nu-l gasesc in GIS, planificat",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [],
+  "detalii": {}
+}

@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-010",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": null,
+    "coordonate": {
+      "lat": 44.53587,
+      "lon": 26.41963
+    },
+    "adresa": null,
+    "nr_cadastral": null,
+    "adresa_structurata": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "stalp nou montat la 44.53587, 26.41963, echipa 2",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "echipa 2"
+  }
+}

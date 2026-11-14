@@ -1,0 +1,28 @@
+{
+  "event_id": "EV-002",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "element_id": null,
+    "coordonate": null,
+    "adresa": "langa scoala",
+    "nr_cadastral": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "langa scoala"
+    }
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "stalp nou langa scoala, lipseste din GIS",
+  "incredere_extractie": 0.2,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {}
+}
