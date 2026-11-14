@@ -2,19 +2,21 @@
 
 `geocodeaza(referinta, strazi, cfg)` -> {status, lat, lon, precizie_m, metoda, acuratete, motiv}.
 Ordine: potrivire deterministă a numelui (fără diacritice/prefixe) -> intersecție -> AI (cli_ai) care alege DOAR
-dintre numele din cache; răspuns în afara listei = necunoscut. `in_afara_zonei` NU se decide aici (aici punctul e
-mereu pe o stradă din cache); safeguardul e `engine.zona.zona_ok`, aplicat de motor pe rezultat.
+dintre numele din cache; răspuns în afara listei = necunoscut. Un `gasit` la peste `zona.raza_max_m` de centroidul
+rețelei de start devine `in_afara_zonei` (`engine.zona.zona_ok`; lat/lon păstrate, metoda `in_afara_zonei`).
 """
 import json
 import re
 
-from backend.engine.network import dist_m
+from backend.engine.network import dist_m, load_network
+from backend.engine.zona import motiv_afara, zona_ok
 from backend.extract import cli_ai
 from backend.trace import _norm  # normalizare nume stradă (diacritice, prefixe), refolosită
 
 _SEP = re.compile(r"\s*(?:&|\bcol[tț]\s+cu\b|\bintersec[tț]ia\s+cu\b|\bintersec[tț]ie\s+cu\b)\s*", re.I)
 _NR = re.compile(r"\b(?:nr|numarul|numar|no)\.?\s*(\d+)|(?<=\s)(\d{1,3})\s*$", re.I)
 _AI_CACHE: dict = {}
+_NET: dict = {}  # rețeaua de start, încărcată o dată (doar pentru centroidul zonei)
 
 
 def _ax(a, b):  # puncte (lat, lon)
@@ -87,13 +89,24 @@ def _gaseste(text: str, g: dict, cfg: dict):
     return _ai(text, g, cfg), True
 
 
-def geocodeaza(referinta: dict, strazi: list[dict], cfg: dict) -> dict:
+def geocodeaza(referinta: dict, strazi: list[dict], cfg: dict, net: dict | None = None) -> dict:
     """Locație aproximativă din `referinta.adresa_structurata {strada, numar, localitate, reper}` sau `referinta.adresa`.
 
-    Întoarce {status: gasit|necunoscut, lat, lon, precizie_m, metoda: osm_cache|ai_estimare, acuratete 0-1, motiv}.
+    Întoarce {status: gasit|necunoscut|in_afara_zonei, lat, lon, precizie_m, metoda: osm_cache|ai_estimare|in_afara_zonei, acuratete 0-1, motiv}.
     Acuratețe = cfg.geocodare.acuratete[intersectie|strada_numar|strada|reper] (x factor_ai_fuzzy dacă a ales AI).
     Ipoteză (fără numere reale în OSM): numărul N se pune la fracția clamp(N/100, 0.1, 0.9) din cea mai lungă cale
-    a străzii (fără par/impar); strada singură = mijlocul căii, precizie = lungime/2 în [min, max] din cfg."""
+    a străzii (fără par/impar); strada singură = mijlocul căii, precizie = lungime/2 în [min, max] din cfg.
+    `net` = rețeaua de start pentru safeguardul de zonă; None = `load_network()` (reținută în modul)."""
+    r = _geocodeaza(referinta, strazi, cfg)
+    if r["status"] != "gasit":
+        return r
+    if net is None:
+        net = _NET or _NET.update(load_network()) or _NET
+    z = zona_ok(r["lat"], r["lon"], net, cfg)
+    return r if z["ok"] else {**r, "status": "in_afara_zonei", "metoda": "in_afara_zonei", "motiv": motiv_afara(z)}
+
+
+def _geocodeaza(referinta: dict, strazi: list[dict], cfg: dict) -> dict:
     c = cfg["geocodare"]
     ad = referinta.get("adresa_structurata") or {}
     strada, reper = ad.get("strada") or "", ad.get("reper") or ""

@@ -5,6 +5,7 @@ os.environ["EXTRACT_CLI"] = "0"
 from unittest import mock
 
 from backend.engine.config import load_weights
+from backend.engine.network import load_network
 from backend.engine.osm import strazi
 from backend.extract import cli_ai
 from backend.geo import geocodeaza, _AI_CACHE
@@ -50,4 +51,8 @@ for ales, status in (("Strada Liviu Rebreanu", "gasit"), ("Strada Inventata", "n
     if status == "gasit":
         ok(a["metoda"] == "ai_estimare" and a["acuratete"] == round(A["strada"] * cfg["geocodare"]["factor_ai_fuzzy"], 3), a)
 ok(geocodeaza({}, S, cfg)["status"] == "necunoscut" and geocodeaza({"adresa": "x"}, [], cfg)["status"] == "necunoscut", "gol")
+# în afara zonei: stradă din cache, dar cu raza_max_m mică (centroid fix -> punctul e „departe”)
+ofz = geocodeaza({"adresa_structurata": {"strada": "Strada Liviu Rebreanu"}}, S, {**cfg, "zona": {"raza_max_m": 1}}, net=load_network())
+ok(ofz["status"] == "in_afara_zonei" and ofz["metoda"] == "in_afara_zonei" and ofz["lat"] and "peste limita" in ofz["motiv"], ofz)
+ok(r["status"] == "gasit", "în zonă rămâne gasit")
 print(f"OK: {N} verificări")

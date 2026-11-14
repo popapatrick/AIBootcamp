@@ -9,6 +9,6 @@ Ordine: (1) nume normalizat (`backend.trace._norm`: fără diacritice/prefixe) c
 Acuratețe = `cfg.geocodare.acuratete[intersectie|strada_numar|strada|reper]`, x `factor_ai_fuzzy` dacă a ales AI. Precizie: stradă = lungime/2 în [min, max]; număr, intersecție, reper = valori fixe din cfg.
 
 Ipoteze: OSM nu are numere de casă, deci N se pune la fracția `clamp(N/100, 0.1, 0.9)` din cea mai lungă cale a străzii, fără par/impar. Reper fără nume de stradă = `necunoscut`.
-`in_afara_zonei` nu se decide aici (punctul e mereu pe o stradă din cache): îl aplică motorul cu `engine.zona.zona_ok`.
+Safeguard zonă: un `gasit` la peste `zona.raza_max_m` de centroid devine `status`/`metoda` = `in_afara_zonei` (lat/lon păstrate, `motiv` din `motiv_afara`). `geocodeaza(..., net=None)`: fără `net` se încarcă `load_network()` o dată (cache în modul).
 
 Verificare: `.venv/bin/python -m backend.geo.smoke_geo`

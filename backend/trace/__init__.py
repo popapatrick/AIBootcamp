@@ -8,6 +8,7 @@ import unicodedata
 from datetime import datetime
 
 from backend.engine.network import dist_m
+from backend.engine.zona import motiv_afara, zona_ok
 
 __all__ = ["gaseste_opriri", "localizeaza", "genereaza_traseu"]
 
@@ -82,12 +83,13 @@ def _cel_mai_aproape(p, els):
 
 
 def localizeaza(trace: list[dict], adresa: str | None, net: dict, strazi: list[dict], cfg: dict) -> dict:
-    """Întoarce {status: gasit|ambiguu|fara_opriri, opriri, strada: {nume, distanta_m}|None,
+    """Întoarce {status: gasit|ambiguu|fara_opriri|in_afara_zonei, opriri, strada: {nume, distanta_m}|None,
     alegere: {lat, lon, durata_min, element_id|None, distanta_element_m}|None,
     vizitate: [{element_id, durata_min}], ambiguitate: bool, calitate: 0-1, motiv}.
     `net` = rezultatul `load_network()` (cheile `noduri`, opțional `post`).
     Adresa dă strada (nume normalizat, conținut în adresă), traseul dă locul: oprirea cea mai lungă
-    la cel mult `distanta_strada_m` de stradă. Fără stradă potrivită: cea mai lungă oprire, calitate * factor_fara_strada."""
+    la cel mult `distanta_strada_m` de stradă. Fără stradă potrivită: cea mai lungă oprire, calitate * factor_fara_strada.
+    Dacă oprirea aleasă e la peste `zona.raza_max_m` de centroidul rețelei: status `in_afara_zonei` (alegere păstrată)."""
     c = cfg["trace"]
     opriri = gaseste_opriri(trace, cfg)
     rez = {"status": "fara_opriri", "opriri": opriri, "strada": None, "alegere": None, "vizitate": [],
@@ -130,9 +132,12 @@ def localizeaza(trace: list[dict], adresa: str | None, net: dict, strazi: list[d
     o = cand[0][0]
     eid, d = _cel_mai_aproape((o["lat"], o["lon"]), els)
     ok = d is not None and d <= c["raza_oprire_m"]
+    z = zona_ok(o["lat"], o["lon"], net, cfg)
     rez.update(status="ambiguu" if amb else "gasit", strada=strada, ambiguitate=amb, calitate=round(calitate, 3), motiv=motiv,
                alegere={"lat": o["lat"], "lon": o["lon"], "durata_min": o["durata_min"],
                         "element_id": eid if ok else None, "distanta_element_m": round(d, 1) if d is not None else None})
+    if not z["ok"]:
+        rez.update(status="in_afara_zonei", motiv=motiv_afara(z))
     return rez
 
 from backend.trace.genereaza import genereaza_traseu  # noqa: E402  (după definiții: genereaza importă helperi de aici)

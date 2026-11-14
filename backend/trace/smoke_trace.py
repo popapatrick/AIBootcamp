@@ -76,4 +76,9 @@ ok(e(1) < 3, "zgomot 1 m precis")
 # acoperire mică: oprirea poate pierde puncte, durata scade
 ok(len(genereaza_traseu(P, S, {**G, "acoperire": 0.3}, "r1")) < len(g1), "acoperire mică, mai puține puncte")
 ok(len(genereaza_traseu(P, [], G, "r1")) > 30, "fără străzi")
+# în afara zonei: oprire la ~5 km de centroid (> raza_max_m)
+from backend.engine.zona import centru_retea
+c0 = centru_retea(net)
+far = localizeaza(tr((c0[0] + 0.045, c0[1], 5)), "Strada X", net, S, cfg)
+ok(far["status"] == "in_afara_zonei" and far["alegere"] and "peste limita" in far["motiv"], far)
 print(f"OK: {N} verificări")
