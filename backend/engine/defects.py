@@ -47,9 +47,15 @@ def build() -> dict:
                 inc.setdefault(n, []).append(t)
 
     # Scenariul 1: nod aerian de grad 2, cu cea mai mare frângere a traseului (stradă curbată).
+    # Ambele tronsoane ≥ 18 m și niciun alt nod la mai puțin de 15 m: altfel o coordonată la nodul
+    # lipsă s-ar potrivi cu un nod vecin aflat la câțiva metri și scenariul nu ar fi clar.
+    def izolat(n):
+        c = (net["noduri"][n]["lat"], net["noduri"][n]["lon"])
+        return min(dist_m(c, (o["lat"], o["lon"])) for k, o in net["noduri"].items() if k != n) >= 15
+
     cand = [(n, ts) for n, ts in inc.items()
-            if len(ts) == 2 and all(t["id"].startswith("A-") for t in ts)
-            and net["noduri"][n]["serie"].startswith("Nod JT")]
+            if len(ts) == 2 and all(t["id"].startswith("A-") and t["lungime_m"] >= 18 for t in ts)
+            and net["noduri"][n]["serie"].startswith("Nod JT") and izolat(n)]
     nod_lipsa, ts = max(cand, key=lambda x: _bend_deg(net, x[0], *x[1]))
     taie = {t["id"] for t in ts}
     vecini = sorted({c for t in ts for c in t["capete"] if c and c != nod_lipsa})

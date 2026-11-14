@@ -1,7 +1,7 @@
 # Tabelul unic de ponderi. Proprietar: laptop B. Valorile sunt puncte de plecare, se ajustează în etapa 5.
 # Se aplică ÎNTREGULUI sistem: inputuri și predicții trec prin aceleași reguli. Apelul clientului e doar un alt input.
 
-fiabilitate_sursa:        # multiplică efectul unui input asupra scorului
+fiabilitate_sursa:        # intră în scorul oricărei propuneri și multiplică efectul asupra scorului unui element
   tableta_coordonate: 0.90
   formular: 0.75
   text_liber: 0.55
@@ -9,16 +9,21 @@ fiabilitate_sursa:        # multiplică efectul unui input asupra scorului
 
 scor:
   initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0
-  confirmare_teren: 0.25          # raport executat care confirmă elementul
-  contradictie: -0.20             # input care contrazice elementul
-  scadere_per_30_zile: -0.05      # fără verificare
+  confirmare_teren: 0.25          # raport executat care confirmă elementul (înmulțit cu fiabilitate × calitatea potrivirii)
+  contradictie: -0.20             # input care contrazice elementul (înmulțit la fel)
+  scadere_per_30_zile: -0.07      # fără verificare; după ~3 luni un element neverificat cade sub pragul „predicție"
+  fereastra_conflict_zile: 45     # două rapoarte diferite despre aceeași proprietate în această fereastră = conflict
   minim: 0.0
   maxim: 1.0
 
-predictie:                         # pentru elemente prezise (nod lipsă, traseu, tip activ)
-  pondere_incredere_extractie: 0.30
-  pondere_calitate_potrivire: 0.30
-  pondere_urmeaza_strada: 0.40     # doar când există traseu OSM
+# Scorul unei PROPUNERI (element nou, schimbare de proprietate, predicție): medie ponderată a factorilor
+# de mai jos; dacă un factor lipsește (ex. nu avem traseu OSM), ponderile rămase se renormalizează.
+propunere:
+  pondere_fiabilitate_sursa: 0.25
+  pondere_incredere_extractie: 0.25
+  pondere_calitate_potrivire: 0.25
+  pondere_urmeaza_strada: 0.25     # doar când există traseu OSM (etapa 6)
+  factor_vecini_dedusi: 0.7        # calitatea potrivirii se înmulțește cu asta când vecinii nu sunt dați în raport
 
 praguri:
   aplicat: 0.75        # peste: se aplică în model

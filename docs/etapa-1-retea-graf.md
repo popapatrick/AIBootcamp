@@ -25,7 +25,7 @@ Doar biblioteca standard Python 3.
 - Un raport poate spune „T-054" fără prefix; potrivirea (etapa 4) trebuie să trateze asta ca ambiguu.
 
 ## Defecte introduse (din `defects.json`)
-1. **Nod lipsă** `6925190`, împreună cu tronsoanele `A-T-054` și `A-T-057`; vecinii sunt `6513200` și `7824201`. Frângere de ~121 de grade în nod, deci un colț de stradă: linia dreaptă între vecini ar greși.
+1. **Nod lipsă** `6948201`, împreună cu tronsoanele `A-T-017` și `A-T-133`; vecinii sunt `6166490` și `6396507`. Frângere de ~109 de grade în nod, deci un colț de stradă: linia dreaptă între vecini ar greși. Nodul e ales izolat (niciun alt nod la mai puțin de 15 m, tronsoane ≥ 18 m); prima alegere avea un vecin la 3,9 m și o coordonată la nodul lipsă s-ar fi potrivit cu vecinul.
 2. **Cablu înlocuit nerecordat:** `A-T-002` are în model `TYIR 3x35+54,6 OL-Al`, iar în teren `TYIR 3x70+54,6 OL-Al`.
 
 ## Decizii
