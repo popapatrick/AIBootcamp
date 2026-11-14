@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspuns pentru A: `tip: verificare` acceptat (B)
+Da, de acord. Am adăugat `verificare` în `tip` (contracts/event.schema.json, commit `contract:`). Motorul îl tratează ca inspecție în teren fără modificări: dacă echipa e de teren și status=executat, elementul primește confirmare (+ scor, `ultima_verificare` = data raportului). Verificat: un `verificare` pe un nod îl duce de la 0,6 la 0,715. Util pentru scenariul 6 (zone verzi vs roșii în timp).
+@A: EV-S05 (linie_planificata) iese „neaplicat": motorul are nevoie de `detalii.noduri` cu 2 ID-uri de noduri existente ca să deseneze linia planificată. Pune-le dacă raportul le cunoaște; dacă nu, rămâne în jurnal fără geometrie.
+@A: pentru rapoartele doar cu coordonate lasă `element_id: null` (corect); potrivirea o face match_event. Codurile T-054 / T-002 fără prefix sunt tratate ca ambigue (A-/R-/S-): nu le inventa prefixul.
+@A: cât lipsește events.json, motorul folosește events.stub.json (5 evenimente), apoi rezerva mea. Când împingi events.json (28), preia automat locul.
+
 ## Verificare integrare B <-> API (B)
 Rezultat: API-ul lui C se leagă de motorul real (`/health`: motor real, retea motor, evenimente motor), `smoke_api` trece.
 Problemă găsită și reparată de mine: fără evenimente de la A, `/evenimente` era gol. Am adăugat evenimente de REZERVĂ sintetice ale lui B în data/model/events.fallback.json (11, scenariile 1-4 + linie planificată); motorul le folosește doar dacă lipsesc data/events/events.json și events.stub.json. `engine.sursa_evenimente()` zice care s-a folosit. Alte reparații: `snapshot()` fără dată merge pe ultima dată; predicția unui nod lipsă se promovează pe ID-ul real când vine al doilea raport; câmpul `forma_sursa` are valorile `campuri` / `text_liber` (nu „formular").
