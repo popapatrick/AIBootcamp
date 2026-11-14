@@ -7,8 +7,8 @@
 
 ## 2. Modul `backend/racordare/` (A)
 
-- [ ] 2.1 (A4) `backend/racordare/`: `prezice_lant` (cel mai apropiat nod, drum pe străzi OSM, stâlpi la distanța mediană calculată din rețea)
-- [ ] 2.2 (A4) `smoke_racordare.py` și README în folder
+- [x] 2.1 (A4) `backend/racordare/`: `prezice_lant` (cel mai apropiat nod, drum pe străzi OSM, stâlpi la distanța mediană calculată din rețea)
+- [x] 2.2 (A4) `smoke_racordare.py` și README în folder
 
 ## 2b. Integrare în motor (B)
 
