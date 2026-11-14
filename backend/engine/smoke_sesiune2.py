@@ -175,6 +175,21 @@ def main() -> None:
     ti = mz.apply_event(ev("Z-4", "2026-09-04", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(1500)}))
     verifica("zona: 1,5 km nu e eronat", not ti.get("eronat_prototip"))
 
+    # --- origine: rețea de start vs generat de model
+    mo = mk()
+    sn0 = {f["properties"]["element_id"]: f["properties"] for f in mo.snapshot("2026-08-01")["features"]}
+    verifica("origine: rețeaua de start are origine retea_start și scor initial_retea_start",
+             all(p["origine"] == "retea_start" for p in sn0.values())
+             and {p["scor"] for p in sn0.values()} == {mo.w["scor"]["initial_retea_start"]})
+    tn = mo.apply_event(ev("O-1", "2026-09-05", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(300)}, sursa="tableta_coordonate", forma="campuri"))
+    nou = [m_ for m_ in tn["modificari"] if m_["element_id"] not in sn0]
+    verifica("origine: elementul adăugat de sistem e generat_model", nou and all(m_["origine"] == "generat_model" for m_ in nou))
+    sn1 = {f["properties"]["element_id"]: f["properties"] for f in mo.snapshot("2026-09-05")["features"]}
+    verifica("origine: elementele rețelei rămân retea_start după evenimente",
+             all(sn1[e_]["origine"] == "retea_start" for e_ in sn0 if e_ in sn1))
+    pred = [p for p in sn1.values() if p.get("predictie")]
+    verifica("origine: predicțiile au predictie.origine generat_model", all(p["predictie"]["origine"] == "generat_model" for p in pred))
+
     assert all(OK), "unele verificări au eșuat"
     print(f"OK: {len(OK)} verificări")
 

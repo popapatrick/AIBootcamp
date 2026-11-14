@@ -125,7 +125,7 @@ def main() -> None:
     # Scenariul 6: fără verificare, scorul scade în timp și devine de_verificat
     mm = GridModel()
     a = next(x for x in mm.snapshot("2026-08-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
-    b = next(x for x in mm.snapshot("2027-02-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
+    b = next(x for x in mm.snapshot("2027-08-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
     verifica("scade în timp", b["scor"] < a["scor"] and b["nivel"] == "de_verificat", f"{a['scor']} -> {b['scor']} {b['nivel']}")
     verifica("„de ce” include scăderea în timp", any("Neverificat" in x["text"] for x in b["motive"]))
 

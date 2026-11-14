@@ -47,9 +47,9 @@ class GridModel(Sesiune2):
         self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         centru_retea(self.net)      # centroidul rețelei de start, înainte să se adauge ceva (safeguard)
-        init = self.w["scor"]["initial_element_kmz"]
+        init = self.w["scor"].get("initial_retea_start", self.w["scor"]["initial_element_kmz"])
         for eid, el in self._elemente().items():
-            self._pune(eid, el["tip_element"], start, nivel="in_model", scor=init, ultima_verificare=None,
+            self._pune(eid, el["tip_element"], start, nivel="in_model", scor=init, ultima_verificare=None, origine="retea_start",
                        motive=[{"text": "Element din modelul GIS, neverificat recent", "efect": 0.0,
                                 "eveniment": None, "data": start}])
 
@@ -67,6 +67,7 @@ class GridModel(Sesiune2):
         baza = copy.deepcopy(ist[-1]) if ist else {"element_id": eid, "tip_element": tip, "props": {},
                                                     "predictie": None, "ultimul_aplicat": None}
         baza.update(schimbari)
+        baza.setdefault("origine", "generat_model")     # tot ce nu vine din rețeaua de start e adăugat de sistem
         baza["valid_de_la"] = data
         if len(baza.get("motive", [])) > MAX_MOTIVE:
             baza["motive"] = baza["motive"][:MAX_MOTIVE]
@@ -649,7 +650,7 @@ class GridModel(Sesiune2):
     def _publica(self, eid: str, st: dict) -> dict:
         """ElementState (contracts/state.schema.json) pentru StepTrace."""
         return {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
-                                    "ultima_verificare", "motive", "predictie", "confirmat_de") if k in st}
+                                    "ultima_verificare", "motive", "predictie", "confirmat_de", "origine") if k in st}
 
     def _geometrie(self, eid: str) -> dict | None:
         el = self._elemente().get(eid)
@@ -703,6 +704,9 @@ class GridModel(Sesiune2):
             if eid not in self._elemente():      # predicție sau element neaplicat: clasa după tip
                 props["clasa"] = clasa_element({"tip_element": st["tip_element"]})
             props.setdefault("confirmat_de", st.get("confirmat_de"))
+            props["origine"] = st.get("origine", "generat_model")
+            if props.get("predictie"):
+                props["predictie"] = {**props["predictie"], "origine": "generat_model"}   # predicțiile sunt ale modelului, nu ale AI
             props["verificat_recent"] = bool(st["ultima_verificare"] and S.zile(st["ultima_verificare"], data)
                                              <= self.w["scor"]["verificat_recent_zile"])
             feats.append({"type": "Feature", "geometry": g, "properties": props})

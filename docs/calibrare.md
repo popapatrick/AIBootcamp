@@ -50,3 +50,6 @@ Rulat `engine.model_scenariu("extrem")` (29 evenimente de bază + EV-X01..X10 al
 - Lipsește din scenariu un caz `mutare_fire` (sens giratoriu); cerut lui A în board.
 Pragurile noi (`mutare_fire`, `demontat`, `val_apeluri`, `racordare`, `trace`) sunt valori de pornire, necalibrate pe date reale; rezultatele de mai sus sunt doar pe date fictive.
 Pe cele 29 de evenimente de bază rezultatul e neschimbat: 13 scor_actualizat, 8 neaplicat, 3 predicție, 2 fără efect, 1 conflict, 1 aplicat, 1 adăugat.
+
+## Sesiunea 3: scor inițial al rețelei de start 0,90 (B3)
+`scor.initial_retea_start: 0.90` înlocuiește 0,60 pentru elementele rețelei de start (`origine: retea_start`); `initial_element_kmz` rămâne în fișier, nefolosit de motor. Efecte măsurate cu `python -m backend.engine.calibrare`: deciziile pe cele 29 de evenimente de bază sunt neschimbate (13 scor_actualizat, 8 neaplicat, 3 predicție, 2 fără efect, 1 conflict, 1 aplicat, 1 adăugat); scorul mediu pornește de la 0,90 și coboară lin: 0,90 → 0,83 (15 sept.) → 0,76 (27 oct.). Cu −0,05 la 30 de zile, un element neverificat trece sub 0,40 („de verificat") abia după ~300 de zile (înainte ~120), deci scenariul „scade în timp" din `smoke_engine` se verifică acum la 365 de zile. Valorile rămân puncte de plecare, necalibrate pe date reale.
