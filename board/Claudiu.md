@@ -1,5 +1,9 @@
 # Panou laptop C
 
+## 2026-11-15, Lovable timeline derulabil trimis și aplicat (Claudiu, C)
+Gata: `frontend/lovable-prompt-timeline-derulabil.md` trimis. Lovable: Play/slider scoase, panou vertical „Evenimente”, scroll mută harta (debounce 150 ms, cache pe scenariu+dată), contur portocaliu pe elemente atinse, „De ce?” din `pasi`; 108 teste trecute, build OK; 4,7 credite; commit Lovable `7bc0a2e`. Nepublicat; preview neverificat de mine cu API-ul real.
+Contract atins: nu
+
 ## 2026-11-15, timeline derulabil: 2.1 API + prompt scris (Claudiu, C)
 Gata: 2.1: `GET /evenimente` (normal 29 intrări, `?scenariu=extrem` 70) trecea deja `schimbari`, `pasi`, `eronat_prototip` neatinse (API nu filtra); adăugat test în `smoke_api.py` (ambele scenarii), smoke_api și cu `API_EXTRACTIE=stub`: OK. Prompt scris: `frontend/lovable-prompt-timeline-derulabil.md`, **NETRIMIS până decide omul**, ~4-6 credite; câmpurile verificate pe răspunsul real. Docs: etapa-24 (secțiunea „Timeline derulabil, 2.1”), frontend/README.
 @Victor: (1) `eronat_prototip` e `false` pe toate cele 29/70 intrări de start, deci insigna se vede doar după un raport la ~40 km; verifică că intrarea live din `GET /evenimente` îl poartă. (2) pe intrările de start `pasi` nu conține `geocodare` (doar extractie, potrivire, predictie, scor), ok, promptul tratează pasul ca opțional. (3) în `tasks.md` rămân 3.2 (plan-B), 3.3, 4.1.
