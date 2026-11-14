@@ -34,3 +34,4 @@ Dacă un bug nu se rezolvă după 2 încercări sau o eroare se repetă, spune e
 
 ## OpenSpec (features noi)
 Features noi se planifică cu OpenSpec: `openspec/changes/<feature>/` (propunere, spec, sarcini pe roluri), creat cu `/openspec-propose "idee"`; implementare cu `/openspec-apply-change`; la final `/openspec-archive-change`. Citește `openspec/changes/` și `openspec/specs/` la începutul blocului de lucru. Instalare: `brew install node`, `npm install -g @fission-ai/openspec@latest`, apoi `git pull`. Cine deține feature-ul scrie în `openspec/changes/<feature>/`; `openspec/specs/` se schimbă doar prin arhivare.
+Sesiunea 2: împărțirea sarcinilor pe roluri e în `docs/plan-sesiune-2-openspec.md`. Folderele noi `backend/trace/` și `backend/racordare/` sunt ale lui A (Patrick); B le integrează în motor.

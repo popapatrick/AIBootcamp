@@ -10,7 +10,7 @@
 - [ ] 2.1 Calculează `clasa` din `serie`/`categorie` în `backend/engine/network.py` și o expune în `snapshot()` și `network.geojson`
 - [ ] 2.2 Elementele noi adăugate de rapoarte primesc `clasa`
 - [ ] 2.3 Extinde `smoke_network.py` (număr de noduri pe clasă: 148 casa, 112+1 important, 4 origine, 1 post)
-- [ ] 2.4 Aliniază `frontend/plan-b/index.html` (rezervă) la `clasa` și halou
+- [ ] 2.4 (opțional, doar dacă rămâne timp) Aliniază `frontend/plan-b/index.html` (rezervă) la `clasa` și halou
 
 ## 3. UI Lovable (C)
 

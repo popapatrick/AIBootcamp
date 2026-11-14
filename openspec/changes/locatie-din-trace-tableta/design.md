@@ -17,6 +17,8 @@ Potrivirea merge pe ID, apoi coordonate, apoi adresă; adresa nu e geocodată (r
 
 ## Decisions
 
+- Algoritmul trăiește în `backend/trace/` (folder nou, scrie doar A); B îl integrează în potrivire. Împărțirea completă: `docs/plan-sesiune-2-openspec.md`.
+
 - Oprire = grup de puncte într-o rază de 12 m (din `weights.yaml`) cu durata totală peste un prag (3 min); locul opririi = media ponderată în timp.
 - Alegerea locului: dintre opriri, cele aflate la cel mult 40 m de strada potrivită cu adresa; câștigă cea cu timpul cel mai lung. Fără stradă potrivită, câștigă oprirea cea mai lungă, cu scor mai mic.
 - Fereastra de timp (60 min) și pragurile merg în `weights.yaml`, nu în cod.

@@ -5,11 +5,15 @@
 - [ ] 1.1 Tip `cerere_racordare` în `event.schema.json` și `interfaces.md`
 - [ ] 1.2 `potrivire.raza_racordare_m` și plafonul de stâlpi prezisi în `weights.yaml`
 
-## 2. Motor (B)
+## 2. Modul `backend/racordare/` (A)
 
-- [ ] 2.1 Regula `cerere_racordare`: actualizare directă sau lanț prezis (`model.py`, `osm.py`)
-- [ ] 2.2 Distanța mediană dintre stâlpi calculată din rețea
-- [ ] 2.3 Teste în `smoke_engine.py` și `smoke_osm.py`
+- [ ] 2.1 (A4) `backend/racordare/`: `prezice_lant` (cel mai apropiat nod, drum pe străzi OSM, stâlpi la distanța mediană calculată din rețea)
+- [ ] 2.2 (A4) `smoke_racordare.py` și README în folder
+
+## 2b. Integrare în motor (B)
+
+- [ ] 2b.1 (B8) Regula `cerere_racordare`: actualizare directă sau apelul `prezice_lant`, predicții individuale pe stâlp (`model.py`)
+- [ ] 2b.2 (B8) Teste în `smoke_engine.py`
 
 ## 3. Extragere (A)
 

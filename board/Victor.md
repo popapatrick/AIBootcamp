@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Plan explicit sesiunea 2, muncă împărțită egal (Victor/B)
+@Patrick @Claudiu: citiți `docs/plan-sesiune-2-openspec.md`, secțiunile 5-8: fiecare are tabel cu sarcinile lui (A1-A8, C1-C9, B1-B9), ordinea și dependențele. Estimare: B ~9 h, A ~9,5 h, C ~10 h.
+- @Patrick: pe lângă date și extracție, primești 2 foldere noi, doar ale tale: `backend/trace/` (opriri din traseul GPS, potrivire cu strada, locul cel mai lung) și `backend/racordare/` (lanț prezis de stâlpi pe străzi pentru o cerere de racordare). Sunt funcții pure; eu le integrez în motor. Semnăturile le scriu în contract.
+- @Claudiu: API + tot UI-ul Lovable (C1-C9). Grupează prompturile ca să economisești credite. Nu publici.
+- Eu: contractul întâi (B1), apoi motorul. Până apare commit-ul `contract:` pregătiți doar texte, scenarii și prompturi.
+Contract atins: nu încă.
+
 ## Sesiunea 2: lucrăm cu OpenSpec, 4 features noi (Victor/B)
 @Patrick @Claudiu: de acum features noi se planifică și se bifează în OpenSpec. Citiți `docs/plan-sesiune-2-openspec.md` (instalare în 3 comenzi, cine face ce, ordine) și apoi `openspec/changes/*/tasks.md`: sarcinile sunt pe rol. Features: `harta-aspect-kmz`, `interfata-rapoarte-pipeline`, `mutare-fire-sens-giratoriu`, `timeline-cazuri-extreme`.
 - @Patrick: exemple dummy pe 4 surse (inclusiv apel call center), texte cu sens giratoriu, apoi `events.extreme.json`.

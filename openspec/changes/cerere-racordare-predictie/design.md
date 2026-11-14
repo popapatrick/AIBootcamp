@@ -16,6 +16,8 @@ Există potrivire pe coordonate, regula nod nou, `osm.py` cu traseu pe străzi �
 
 ## Decisions
 
+- Algoritmul de lanț trăiește în `backend/racordare/` (folder nou, scrie doar A); B îl integrează în model. Împărțirea completă: `docs/plan-sesiune-2-openspec.md`.
+
 - Nodul de racordare e cel mai apropiat nod existent cu clasa potrivită, în raza din `weights.yaml`; dacă sunt mai multe, scorul scade (ambiguitate).
 - Lanțul de stâlpi se așază pe cea mai scurtă cale pe străzile OSM, la distanța mediană dintre stâlpii existenți (calculată, nu hardcodată), cu un nod ultim lângă casă.
 - Scorul propunerii folosește aceleași ponderi (sursă, extragere, potrivire, urmărire stradă); sursa e `apel_client` sau `formular`, după cum vine cererea.
