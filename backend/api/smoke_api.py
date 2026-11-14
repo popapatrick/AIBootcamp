@@ -14,7 +14,9 @@ def main() -> None:
     print("health:", h["mod"])
 
     ev = c.get("/evenimente").json()
-    assert isinstance(ev, list) and ev, "timeline gol"
+    assert isinstance(ev, list), ev
+    if not ev:   # motor real fără data/events/events.json (A nu a livrat încă): pornim de la azi
+        ev = [{"data": c.get("/date").json()[-1]}]
     print("evenimente:", len(ev))
 
     fc = c.get("/retea").json()

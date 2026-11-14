@@ -21,7 +21,7 @@ _counter = [0]
 
 RE_TRONSON = re.compile(r"\b([ARS]-T-\d{1,4})\b")
 RE_TRONSON_SCURT = re.compile(r"(?<![A-Z]-)\b(T-\d{1,4})\b")
-RE_NOD = re.compile(r"\b(\d{7})\b")
+RE_NOD = re.compile(r"(?<![\d.,])(\d{7})(?![\d]|[.,]\d)")  # nu prinde cifre din coordonate
 RE_COORD = re.compile(r"(-?\d{1,2}[.,]\d{3,})\s*[,;/ ]\s*(-?\d{1,2}[.,]\d{3,})")
 RE_DATA = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b|\b(\d{1,2})[./](\d{1,2})[./](\d{4})\b")
 RE_CADASTRAL = re.compile(r"(?:nr\.?\s*)?cadastral\w*\s*[:\-]?\s*(\d{3,})", re.I)
@@ -166,10 +166,10 @@ def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
     apply = sources.engine_func("apply_event")
     if apply:
         trace = apply(ev)
-        pasi = trace.get("pasi", [])
-        if not any(p.get("nume") == "extractie" for p in pasi):
-            trace["pasi"] = [{"nume": "extractie", "rezultat": ev,
-                              "incredere": ev.get("incredere_extractie")}] + pasi
+        # Ecranul procesului arată Event-ul complet (B întoarce doar un rezumat al extracției).
+        pas_ext = {"nume": "extractie", "rezultat": ev, "incredere": ev.get("incredere_extractie"),
+                   "metoda": metoda_ext}
+        trace["pasi"] = [pas_ext] + [p for p in trace.get("pasi", []) if p.get("nume") != "extractie"]
         trace["mod"] = {**sources.mod(), "extractie_metoda": metoda_ext}
         return trace
 

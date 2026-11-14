@@ -130,7 +130,7 @@ async function deCe(id) {
 }
 
 function zileDin(ev) {  // zi cu zi între primul și ultimul eveniment, ca timeline-ul să curgă uniform
-  if (!ev.length) return [];
+  if (!ev.length) return [new Date().toISOString().slice(0, 10)];
   const a = new Date(ev[0].data), b = new Date(ev[ev.length - 1].data), out = [];
   for (let d = a; d <= b; d.setDate(d.getDate() + 1)) out.push(d.toISOString().slice(0, 10));
   return out;

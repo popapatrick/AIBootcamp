@@ -36,6 +36,13 @@ UI plan B (Leaflet): `http://localhost:8000/ui/` (sau `/ui/?api=https://alt-host
 - Rapoartele live se țin în memorie (se pierd la restart) și se suprapun pe hartă doar în mod stub; motorul real le aplică singur.
 - CORS deschis, pentru Lovable prin tunel.
 
+## Actualizare: legat de motorul real al lui B (etapa 5)
+- `/health` arată acum `retea=motor, evenimente=motor, motor=real`; doar `extractie=stub` (aștept etapa 3 de la A).
+- Scorul provizoriu din API nu se mai folosește: scorul, decizia și „de ce" vin din `apply_event` al lui B.
+- **Fără `data/events/events.json`** (A nu l-a livrat încă) timeline-ul e gol: API-ul folosește data de azi ca dată curentă (`/date` → `[azi]`), iar UI-ul pornește de la azi. Toată rețeaua apare „de verificat" (scorul inițial 0,60 scade în timp). Asta e corect, nu e un bug: nimeni n-a verificat nimic încă.
+- Pasul „extracție" din ecranul procesului arată Event-ul complet produs de extracție (B întoarce doar un rezumat).
+- Reparat în extracția stub: ID-ul de nod (7 cifre) nu mai e prins din interiorul coordonatelor (ex. `44.2849717`).
+
 ## Limite
 - Tunel HTTPS: pe laptopul C nu sunt instalate `cloudflared`/`ngrok` (de instalat de om; vezi `frontend/README.md`).
 - UI-ul plan B ia Leaflet și harta de fond de pe internet (unpkg, tile OSM).

@@ -83,8 +83,20 @@ def mod() -> dict:
     }
 
 
+def _azi() -> str:
+    from datetime import date
+    return date.today().isoformat()
+
+
+def _date_motor() -> list[str]:
+    """Datele evenimentelor din motor; fără evenimente încă, doar data de azi."""
+    return sorted({e["data"] for e in evenimente()}) or [_azi()]
+
+
 def date_disponibile() -> list[str]:
     """Datele pentru care avem instantanee (sortate)."""
+    if engine_func("snapshot"):
+        return _date_motor()
     return sorted(_snapshot_files())
 
 
@@ -93,9 +105,10 @@ def retea(data: str | None) -> dict:
     snap = engine_func("snapshot")
     if snap:
         if data is None:
-            ev = evenimente()
-            data = ev[-1]["data"] if ev else None
-        return snap(data)
+            data = _date_motor()[-1]
+        fc = snap(data)
+        fc["data_instantaneu"] = data
+        return fc
     files = _snapshot_files()
     if not files:
         return {"type": "FeatureCollection", "features": []}
@@ -125,7 +138,7 @@ def _id(props: dict) -> str | None:
 def element(element_id: str) -> dict | None:
     """Starea curentă + istoricul elementului, din toate instantaneele, în ordine cronologică."""
     if engine_func("snapshot"):
-        dates = sorted({e["data"] for e in evenimente()})
+        dates = _date_motor()
         snaps = [(d, engine_func("snapshot")(d)) for d in dates]
     else:
         snaps = [(d, _load(p)) for d, p in sorted(_snapshot_files().items())]

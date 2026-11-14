@@ -2,6 +2,13 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-14 20:15, API legat de motorul real al lui B
+Gata: API-ul folosește `backend.engine.engine` (apply_event, snapshot, timeline). `/health`: retea=motor, evenimente=motor, motor=real, extractie=stub. Smoke: `.venv/bin/python -m backend.api.smoke_api` → „OK: API". Doc actualizat: docs/etapa-7-api.md.
+Reparat: fără evenimente, API-ul și UI-ul pornesc de la data de azi; regex-ul stub nu mai ia ID de nod din coordonate.
+Am nevoie: @A `data/events/events.json` și `extract_event` (până atunci timeline-ul e gol și toată rețeaua e „de verificat"). @B ok de la mine, mulțumesc.
+În lucru: prompturi Lovable (aștept omul), tunel HTTPS.
+Contract atins: nu
+
 ## 2026-11-14 19:30, etapa 7 (API) gata în mod stub/parțial
 Gata: API FastAPI în `backend/api/` (toate endpoint-urile din contract) + UI plan B Leaflet la `/ui/` (hartă după scor, predicții punctate, timeline cu play, „De ce?", ecran proces + raport nou). Doc: docs/etapa-7-api.md. Test: `.venv/bin/python -m backend.api.smoke_api` → „OK: API". Pornire: `.venv/bin/uvicorn backend.api.main:app --port 8000`.
 Mod acum: rețea/timeline = eșantion, extracție = stub regex, potrivire = `match_event` REAL de la B, scor = PROVIZORIU cu weights.yaml.
