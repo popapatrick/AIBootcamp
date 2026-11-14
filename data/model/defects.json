@@ -1,0 +1,28 @@
+{
+  "nota": "Date fictive. Adevărul despre defectele introduse în model.",
+  "scenariul_1_nod_lipsa": {
+    "nod_lipsa": "6925190",
+    "tronsoane_lipsa": [
+      "A-T-054",
+      "A-T-057"
+    ],
+    "noduri_vecine": [
+      "6513200",
+      "7824201"
+    ],
+    "coordonate": {
+      "lat": 44.2830311,
+      "lon": 26.063942
+    },
+    "frangere_grade": 120.9
+  },
+  "scenariul_2_cablu_inlocuit": {
+    "tronson": "A-T-002",
+    "sectiune_in_model": "TYIR 3x35+54,6 OL-Al",
+    "sectiune_reala": "TYIR 3x70+54,6 OL-Al",
+    "capete": [
+      "6168883",
+      "6580180"
+    ]
+  }
+}

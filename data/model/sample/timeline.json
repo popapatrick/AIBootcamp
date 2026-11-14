@@ -1,0 +1,18 @@
+[
+  {
+    "data": "2026-09-01",
+    "event_id": "EV-SAMPLE-1",
+    "rezumat": "Exemplu: cablu înlocuit, scor scăzut",
+    "elemente_atinse": [
+      "A-T-002"
+    ]
+  },
+  {
+    "data": "2026-10-01",
+    "event_id": "EV-SAMPLE-2",
+    "rezumat": "Exemplu: predicție nod lipsă",
+    "elemente_atinse": [
+      "PRED-1"
+    ]
+  }
+]
