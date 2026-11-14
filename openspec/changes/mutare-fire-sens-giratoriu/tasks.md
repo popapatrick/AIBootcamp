@@ -8,9 +8,9 @@
 
 ## 2. Extragere (A)
 
-- [ ] 2.1 Prompt și exemple pentru `mutare_fire`, centrul din coordonatele din text
-- [ ] 2.2 2-3 texte dummy cu sens giratoriu în `data/reports/exemple-dummy.json`
-- [ ] 2.3 `docs/etapa-13-mutare-fire.md`
+- [x] 2.1 Prompt și exemple pentru `mutare_fire`, centrul din coordonatele din text
+- [x] 2.2 2-3 texte dummy cu sens giratoriu în `data/reports/exemple-dummy.json`
+- [x] 2.3 `docs/etapa-13-mutare-fire.md`
 
 ## 3. Motor (B)
 

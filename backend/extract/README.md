@@ -15,3 +15,6 @@ Din rădăcina repo-ului:
 
 ## Cache
 Rezultatele se scriu în `data/cache/` (cheie sha256 din model, sursă, dată, text și prompt). Cache hit = fără apel API. După o modificare de prompt cheia se schimbă automat; șterge `data/cache/` doar dacă vrei refacere completă.
+
+## Sesiunea 2: tipuri noi
+Promptul acoperă și `apel_client` (call center), `mutare_fire` (`detalii.centru/raza_m/motiv_mutare`), `cerere_racordare` (locația în `referinta.coordonate`) și decizia omului (`verificare`, sursa `om_teren`, `detalii.decizie`). `extract_event` acceptă sursa `om_teren`. Atenție: schimbarea promptului schimbă cheile din `data/cache/`: rapoartele deja extrase dau cache miss (apel API nou) până la reextragere. Vezi `docs/etapa-13-mutare-fire.md`.

@@ -18,7 +18,7 @@
 
 ## 4. Date (A)
 
-- [ ] 4.1 1-2 exemple de decizie în `data/reports/exemple-dummy.json`
+- [x] 4.1 1-2 exemple de decizie în `data/reports/exemple-dummy.json`
 
 ## 5. Documentație
 

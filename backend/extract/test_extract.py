@@ -97,6 +97,46 @@ def main() -> None:
         ev = ex.extract_event(t, "racordari", "2026-09-01")
         assert ev["detalii"]["sectiune_noua"] == "TYIR 3x50+54,6 OL-Al" and ev["campuri_lipsa"] == []
         assert json.loads((Path(tmp) / f"{key}.json").read_text(encoding="utf-8")) == ev
+    # tipuri sesiunea 2: ieșiri schema-valide trec; invalide (decizie/enum) cad
+    NOU = dict(GOOD, detalii={}, campuri_lipsa=[])
+    cazuri = {
+        "mutare_fire": dict(NOU, tip="mutare_fire", referinta={"element_id": None, "coordonate": {"lat": 44.2799, "lon": 26.0594}},
+                            detalii={"centru": {"lat": 44.2799, "lon": 26.0594}, "raza_m": 60, "motiv_mutare": "sens_giratoriu"}),
+        "mutare_fire fără raza": dict(NOU, tip="mutare_fire", detalii={"centru": {"lat": 44.2853, "lon": 26.0712}, "raza_m": None, "motiv_mutare": "sens_giratoriu"}, campuri_lipsa=["raza_m"]),
+        "cerere_racordare": dict(NOU, tip="cerere_racordare", status="planificat", referinta={"element_id": None, "coordonate": {"lat": 44.281, "lon": 26.0618}}),
+        "apel_client": dict(NOU, echipa_sursa="apel_client", tip="avarie_semnalata", status="semnalat", tip_sursa_pondere="apel_client",
+                            referinta={"element_id": None, "coordonate": None, "id_client": "CL-51001", "adresa": "Strada Orhideelor"}),
+        "decizie om": dict(NOU, echipa_sursa="om_teren", tip="verificare", tip_sursa_pondere="om_teren", referinta={"element_id": "NOU-0001"},
+                           detalii={"decizie": {"tinta_id": "NOU-0001", "decizie": "accepta", "motiv": "stâlp văzut"}}),
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        ex.CACHE_DIR = Path(tmp)
+        for nume, out in cazuri.items():
+            ex._call_api = lambda *a, out=out: json.loads(json.dumps(out))
+            ev = ex.extract_event(f"text {nume}", out["echipa_sursa"], "2026-11-14")
+            assert ev["tip"] == out["tip"] and ev["echipa_sursa"] == out["echipa_sursa"], nume
+        assert ev["detalii"]["decizie"]["tinta_id"] == "NOU-0001"
+        ex._call_api = lambda *a: dict(NOU, tip="mutare_fire", detalii={"centru": {"lat": 1}})  # centru fără lon
+        try:
+            ex.extract_event("centru incomplet", "mentenanta", "2026-11-14")
+            raise AssertionError("trebuia ValueError")
+        except ValueError:
+            pass
+        ex._call_api = lambda *a: dict(NOU, echipa_sursa="om_teren", detalii={"decizie": {"tinta_id": "NOU-1", "decizie": "poate"}})
+        try:
+            ex.extract_event("decizie invalidă", "om_teren", "2026-11-14")
+            raise AssertionError("trebuia ValueError")
+        except ValueError:
+            pass
+    # forma exemple-dummy.json
+    dummy = json.loads((ex.ROOT / "data" / "reports" / "exemple-dummy.json").read_text(encoding="utf-8"))
+    assert {"mentenanta", "investitii", "racordari", "apel_client", "om_teren"} <= set(dummy)
+    ids = set()
+    for sursa, lista in dummy.items():
+        assert sursa in ("om_teren",) or len(lista) >= 4, sursa
+        for x in lista:
+            assert set(x) == {"id", "titlu", "text", "data", "asteptat"} and set(x["asteptat"]) == {"tip", "element_id", "nota"}, x["id"]
+            assert x["id"] not in ids and date.fromisoformat(x["data"]); ids.add(x["id"])
     print("OK: validare schema, cache hit, reîncercare, eroare după reîncercare, sectiune_noua din regex (cache hit, variante, vechi)")
 
 

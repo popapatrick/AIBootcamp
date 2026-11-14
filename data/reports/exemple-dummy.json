@@ -1,0 +1,331 @@
+{
+ "mentenanta": [
+  {
+   "id": "mnt-01",
+   "titlu": "Verificare stâlp existent",
+   "text": "verificat stalp 6414087 pe str. Regina Maria, izolator ok, nimic de facut. 12.11.2026",
+   "data": "2026-11-12",
+   "asteptat": {
+    "tip": "verificare",
+    "element_id": "6414087",
+    "nota": "stâlp existent"
+   }
+  },
+  {
+   "id": "mnt-02",
+   "titlu": "Cablu înlocuit, tronson fără prefix",
+   "text": "Inlocuit cablu pe T-002 intre 6168883 si 6580180, acum TYIR 3x70+54,6 OL-Al. echipa 2, 10/11/2026",
+   "data": "2026-11-10",
+   "asteptat": {
+    "tip": "activ_inlocuit",
+    "element_id": null,
+    "nota": "cod fără prefix: element_id null, id_partial T-002"
+   }
+  },
+  {
+   "id": "mnt-03",
+   "titlu": "Stâlp inexistent în GIS",
+   "text": "Avem un stalp la nr 15 pe Strada Viilor care nu apare pe harta, langa 6862954. Stare semnalat.",
+   "data": "2026-11-11",
+   "asteptat": {
+    "tip": "nod_lipsa",
+    "element_id": null,
+    "nota": "stâlp inexistent în model; fără id"
+   }
+  },
+  {
+   "id": "mnt-04",
+   "titlu": "Avarie, id greșit",
+   "text": "avarie izolator crapat pe nod 9999001 (nu stiu sigur nr), str Orhideelor. de reparat",
+   "data": "2026-11-09",
+   "asteptat": {
+    "tip": "avarie_semnalata",
+    "element_id": "9999001",
+    "nota": "ID inexistent în rețea"
+   }
+  },
+  {
+   "id": "mnt-05",
+   "titlu": "Demontat segment",
+   "text": "Demontat tronson A-T-014, scos din uz dupa cedare stalp. executat 13.11.2026",
+   "data": "2026-11-13",
+   "asteptat": {
+    "tip": "activ_demontat",
+    "element_id": "A-T-014",
+    "nota": "tronson existent"
+   }
+  },
+  {
+   "id": "mnt-06",
+   "titlu": "Tabletă, adresă vagă 1",
+   "text": "Raport tableta: verificat stalpii pe Strada Primăverii, am stat mai mult la un stalp cu izolator ud. Fara nr. Pentru trace.",
+   "data": "2026-11-12",
+   "asteptat": {
+    "tip": "verificare",
+    "element_id": null,
+    "nota": "pentru trace: doar numele străzii"
+   }
+  },
+  {
+   "id": "mnt-07",
+   "titlu": "Tabletă, adresă vagă 2",
+   "text": "tableta - control pe Strada Regina Maria, vad stalp nou necartat, nu stiu codul. pt trace",
+   "data": "2026-11-13",
+   "asteptat": {
+    "tip": "nod_lipsa",
+    "element_id": null,
+    "nota": "pentru trace: doar numele străzii, fără cod"
+   }
+  },
+  {
+   "id": "mut-01",
+   "titlu": "Sens giratoriu 1",
+   "text": "Sens giratoriu nou la intersectia Regina Maria cu Primaverii, centru 44.2799, 26.0594. S-au mutat firele aeriene, raza cca 60 m. Executat 10.11.2026",
+   "data": "2026-11-10",
+   "asteptat": {
+    "tip": "mutare_fire",
+    "element_id": null,
+    "nota": "detalii.centru {44.2799, 26.0594}, raza_m 60, motiv sens_giratoriu"
+   }
+  },
+  {
+   "id": "mut-02",
+   "titlu": "Sens giratoriu 2",
+   "text": "lucrari giratoriu str Viilor, coord 44.2853, 26.0712: mutat stalpi si fire pt noul sens, nu stiu raza. 11/11/2026",
+   "data": "2026-11-11",
+   "asteptat": {
+    "tip": "mutare_fire",
+    "element_id": null,
+    "nota": "raza lipsă: raza_m null, în campuri_lipsa"
+   }
+  },
+  {
+   "id": "mut-03",
+   "titlu": "Sens giratoriu fără coordonate",
+   "text": "Giratoriu nou la iesirea din localitate, s-au mutat firele. nu am coordonatele la mine",
+   "data": "2026-11-12",
+   "asteptat": {
+    "tip": "mutare_fire",
+    "element_id": null,
+    "nota": "fără centru: centru în campuri_lipsa"
+   }
+  }
+ ],
+ "investitii": [
+  {
+   "id": "inv-01",
+   "titlu": "Linie planificată",
+   "text": "Plan 2027: linie noua intre 7101969 si 6872907, TYIR 3x50+54,6, aprox 180m. planificat",
+   "data": "2026-11-01",
+   "asteptat": {
+    "tip": "linie_planificata",
+    "element_id": null,
+    "nota": "noduri existente"
+   }
+  },
+  {
+   "id": "inv-02",
+   "titlu": "Înlocuire ramură",
+   "text": "propun inlocuire R-T-006 (6132582 - 6729327), sectiune veche. buget 2027",
+   "data": "2026-11-02",
+   "asteptat": {
+    "tip": "activ_inlocuit",
+    "element_id": "R-T-006",
+    "nota": "tronson existent, planificat"
+   }
+  },
+  {
+   "id": "inv-03",
+   "titlu": "Linie spre nod inexistent",
+   "text": "linie planificata 6414087 -> 8800123 (nod nou, inca nu e in GIS) cca 90 m",
+   "data": "2026-11-03",
+   "asteptat": {
+    "tip": "linie_planificata",
+    "element_id": null,
+    "nota": "nod 8800123 inexistent"
+   }
+  },
+  {
+   "id": "inv-04",
+   "titlu": "Cablu subteran",
+   "text": "S-T-006 inlocuit cu NA2XSY 3x150, lucrare terminata 05.11.2026",
+   "data": "2026-11-05",
+   "asteptat": {
+    "tip": "activ_inlocuit",
+    "element_id": "S-T-006",
+    "nota": "subteran, existent"
+   }
+  },
+  {
+   "id": "inv-05",
+   "titlu": "Fără cod",
+   "text": "Investitie: stalp nou pe Strada Viilor, langa scoala. fara coordonate inca",
+   "data": "2026-11-04",
+   "asteptat": {
+    "tip": "nod_lipsa",
+    "element_id": null,
+    "nota": "lipsesc element_id și coordonate"
+   }
+  }
+ ],
+ "racordari": [
+  {
+   "id": "rac-01",
+   "titlu": "Racord nou cu cod",
+   "text": "FISA RACORDARE: racord nou la nod 7456900, str. Orhideelor 12, CF-fictiv 420031, executat 2026-11-06",
+   "data": "2026-11-06",
+   "asteptat": {
+    "tip": "racord_nou",
+    "element_id": "7456900",
+    "nota": "nod existent"
+   }
+  },
+  {
+   "id": "rac-02",
+   "titlu": "Racord, doar adresă",
+   "text": "racord executat la casa de pe Regina Maria nr 8 (cf 420077). fara cod stalp",
+   "data": "2026-11-07",
+   "asteptat": {
+    "tip": "racord_nou",
+    "element_id": null,
+    "nota": "fără element_id; adresă + cadastral"
+   }
+  },
+  {
+   "id": "rac-03",
+   "titlu": "Racord, coordonate greșite",
+   "text": "racord nou, coord 4428190 2606480, str Primaverii 3, executat",
+   "data": "2026-11-08",
+   "asteptat": {
+    "tip": "racord_nou",
+    "element_id": null,
+    "nota": "coordonate fără zecimală; coordonate_de_verificat"
+   }
+  },
+  {
+   "id": "rac-04",
+   "titlu": "Stâlp inexistent",
+   "text": "racord la stalpul 9999002 str Viilor 22 - nu-l gasesc in GIS, planificat",
+   "data": "2026-11-09",
+   "asteptat": {
+    "tip": "racord_nou",
+    "element_id": "9999002",
+    "nota": "ID inexistent"
+   }
+  },
+  {
+   "id": "cer-01",
+   "titlu": "Cerere cu coordonate",
+   "text": "CERERE RACORDARE: client nou, casa la coord 44.2810, 26.0618 (str Orhideelor 30), vrea racord monofazat. Cerere 2026-11-12",
+   "data": "2026-11-12",
+   "asteptat": {
+    "tip": "cerere_racordare",
+    "element_id": null,
+    "nota": "coordonate în text; casă fără date în GIS -> lanț prezis"
+   }
+  },
+  {
+   "id": "cer-02",
+   "titlu": "Cerere cu nod cunoscut",
+   "text": "cerere racordare: casa langa nodul 7101969, str Regina Maria 5, coord 44.2793 26.0660. 12.11.2026",
+   "data": "2026-11-12",
+   "asteptat": {
+    "tip": "cerere_racordare",
+    "element_id": "7101969",
+    "nota": "casă cu date în GIS (nod casa existent) -> actualizare directă"
+   }
+  },
+  {
+   "id": "cer-03",
+   "titlu": "Cerere fără locație",
+   "text": "buna ziua, vreau sa ma racordez, am casa pe str Viilor nr 40, CF-fictiv 420555",
+   "data": "2026-11-13",
+   "asteptat": {
+    "tip": "cerere_racordare",
+    "element_id": null,
+    "nota": "fără coordonate; lipsa locației în campuri_lipsa"
+   }
+  }
+ ],
+ "apel_client": [
+  {
+   "id": "apl-01",
+   "titlu": "Cădere stradă",
+   "text": "Operator: Alo? Client (CL-51001): Nu avem lumina pe str Orhideelor de la 6. Coord tel 44.27824, 26.06153. status semnalat",
+   "data": "2026-11-14",
+   "asteptat": {
+    "tip": "avarie_semnalata",
+    "element_id": null,
+    "nota": "coordonate în text; ID client CL-51001"
+   }
+  },
+  {
+   "id": "apl-02",
+   "titlu": "Cădere lângă stâlp cunoscut",
+   "text": "client CL-51002: a picat curentul, vad ca stalpul 7238332 scantei. str Viilor",
+   "data": "2026-11-14",
+   "asteptat": {
+    "tip": "avarie_semnalata",
+    "element_id": "7238332",
+    "nota": "stâlp existent"
+   }
+  },
+  {
+   "id": "apl-03",
+   "titlu": "Apel vag",
+   "text": "Client: nu merge curentu... nu stiu adresa exacta, undeva spre Primaverii. CL-51003",
+   "data": "2026-11-13",
+   "asteptat": {
+    "tip": "avarie_semnalata",
+    "element_id": null,
+    "nota": "fără element_id și coordonate; campuri_lipsa"
+   }
+  },
+  {
+   "id": "apl-04",
+   "titlu": "Stâlp inexistent",
+   "text": "apel CL-51004 zice ca stalpul 9999003 a cazut pe drum, str Regina Maria",
+   "data": "2026-11-13",
+   "asteptat": {
+    "tip": "avarie_semnalata",
+    "element_id": "9999003",
+    "nota": "ID inexistent"
+   }
+  },
+  {
+   "id": "apl-05",
+   "titlu": "Revenire curent",
+   "text": "CL-51001 sună din nou: a revenit curentul la ora 9, str Orhideelor. coord 44.27824, 26.06153",
+   "data": "2026-11-14",
+   "asteptat": {
+    "tip": "verificare",
+    "element_id": null,
+    "nota": "restabilire; fără defect"
+   }
+  }
+ ],
+ "om_teren": [
+  {
+   "id": "om-01",
+   "titlu": "Decizie: acceptă",
+   "text": "Verificat în teren: predicția NOU-0001 este corectă, stâlpul există. Accept. Motiv: stâlp văzut la fața locului.",
+   "data": "2026-11-14",
+   "asteptat": {
+    "tip": "verificare",
+    "element_id": "NOU-0001",
+    "nota": "detalii.decizie {tinta_id NOU-0001, decizie accepta}; echipa om_teren (tinta_id exemplu, de înlocuit cu o predicție reală)"
+   }
+  },
+  {
+   "id": "om-02",
+   "titlu": "Decizie: respinge",
+   "text": "am fost la fata locului, NOU-0002 nu exista, acolo e doar un copac. Resping.",
+   "data": "2026-11-14",
+   "asteptat": {
+    "tip": "verificare",
+    "element_id": "NOU-0002",
+    "nota": "detalii.decizie {tinta_id NOU-0002, decizie respinge, motiv copac}; echipa om_teren"
+   }
+  }
+ ]
+}

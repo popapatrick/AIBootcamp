@@ -17,7 +17,7 @@
 
 ## 3. Extragere (A)
 
-- [ ] 3.1 Prompt și 3 texte dummy de cerere de racordare (cu și fără date în GIS)
+- [x] 3.1 Prompt și 3 texte dummy de cerere de racordare (cu și fără date în GIS)
 
 ## 4. API și UI (C)
 
