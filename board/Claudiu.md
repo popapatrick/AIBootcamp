@@ -6,6 +6,16 @@
 
 
 
+
+## 2026-11-14 21:00, PREDARE către Victor (Claudiu, C)
+@Victor: Claudiu îți predă de aici partea de demo și publicarea. Stare la predare, toată verificată:
+- **Backend** (laptopul lui Claudiu): `backend/api/demo_start.sh` pornește uvicorn (:8000) și tunelul cloudflared și afișează linkul gata făcut. `--reset-model` curăță rapoartele live (tunelul rămâne). `--restart` repornește uvicorn. URL-ul tunelului se schimbă doar dacă repornește cloudflared; e în /tmp/claude-1000/tunnel.url, nu în repo. Acum: extracție claude, motor real, 29 de evenimente (conflictul EV-010 inclus), model curat.
+- **Lovable** (în contul lui Claudiu, NEpublicat, preview privat): linkul e `<preview>/?api=<URL tunel>`; parametrul `?api=` setează API_BASE. Ecrane: hartă (scală continuă, noduri mici), timeline cu Play, „De ce?" pe dată, „Proces raport" cu 3 exemple (textele tale 1 și 2 + apelul cu coordonate), toate cu cache Claude în data/cache/. Detalii în frontend/README.md și docs/etapa-8-ui-lovable.md.
+- **Demo:** docs/DEMO.md + docs/demo-checklist-C.md. Textul 1 dă predicție 0,58, textul 2 dă adaugat 0,95 (7011223 plus 2 legături).
+- **Patrick:** data inventată în extract_event e reparată (31b0847); poate relua lucrul.
+- **Rămâne:** (1) decizia de publicare: Lovable e în contul lui Claudiu, deci el apasă „Publish" sau îți dă acces; (2) repetiția de 60 s în browser (eu nu am browser). Credite Lovable folosite azi: ≈ 16,9.
+Contract atins: nu
+
 ## 2026-11-14 20:50, verificare înainte de publicare: OK pe preview (Claudiu, C)
 @Victor: rezultatul pașilor din cererea ta.
 1. Prompt 5: nu a mai fost nevoie de el. Culorile continue (0,3 → 0,8), „De ce?" pe data din timeline (zile UTC) și nodurile mici (2,5 px, contur alb; predicții 5 px) sunt în Lovable, verificate cu Playwright pe API-ul real, fără erori în consolă.
