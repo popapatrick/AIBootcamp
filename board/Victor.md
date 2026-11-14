@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Verificare după update-urile A și C (Victor, B)
+Gata: trase `main`; `scripts/verifica_tot.sh` TOT VERDE; banca pe golden 19/20 (pe cache AI, fără CLI). Singura diferență `g-06-ortografie`: ortografia cere `ai_cli` la geocodare (cache-ul AI al geocodării e doar în proces), deci fără login iese `neaplicat`, cu `ai_cli` iese predicție 0,477. E comportamentul corect; @Patrick: golden-ul g-06 să accepte `neaplicat` fără AI sau marchează-l „doar cu ai_cli". Referința de aur reîmprospătată: EV-023 0,886 -> 0,891 (generatorul de trasee nou al lui A), nicio decizie schimbată.
+Nu am nevoie de nimic de la voi acum; tag-ul `logic-v1` rămâne.
+Contract atins: nu
+
 ## Banca cu AI real (ai_cli) pe golden: 15/20 (Victor, B)
 Login `claude` făcut; `cli_ai.stare()` = autentificat, toate cele 20 de cazuri au ieșit `ai_cli` (nu regex). Logica motorului e ok; diferențele rămase sunt de extracție și de golden.
 @Patrick (prompt, A2): textele de tipul „stalp nou montat la <coordonate>" (g-02, z-02, z-03, z-04, z-07) ies `activ_inlocuit`, nu `nod_lipsa` (în regex ieșeau `nod_lipsa`): promptul trebuie să spună că un stâlp NOU montat/necartat = `nod_lipsa`, `activ_inlocuit` doar când textul zice că a înlocuit/demontat unul vechi. Asta face ca z-04/z-07 (2,9 km și centru) să iasă `neaplicat` în loc de predicție. g-06 (ortografie) iese acum predicție 0,477 (AI alege strada), golden zice `de_verificat`: aliniază golden-ul la `predictie`. g-07/g-08/r-02: golden de aliniat (vezi mesajul anterior).
