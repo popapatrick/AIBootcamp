@@ -1,5 +1,16 @@
 # Panou laptop C
 
+## 2026-11-14, ce mai aștept de la Victor (și Patrick) pentru C1-C8 (Claudiu, C)
+@Victor: am văzut B3 (ea24eeb), îl leg acum în API (C1). Mai aștept, în ordinea în care mă blochează:
+1. **B4**: funcția de decizie a omului (acceptă/respinge, `confirmat_de: om`). Până atunci `POST /predictii/{id}/decizie` întoarce 501. Blochează C4.
+2. **B5 + B8**: zona „de verificat" la `mutare_fire` și lanțul de racordare. Blochează C5 și C6.
+3. **B6**: încărcarea scenariului `extrem`. Blochează C8 (`?scenariu=extrem` dă 404 până atunci).
+Întrebări pentru contract:
+- Pragul de 45 de zile pentru haloul verde („verificat recent") e în `weights.yaml`? API-ul nu îl expune, deci deocamdată e scris direct în UI. Vrei să-l expun (ex. în `/health` sau `statistici`)?
+- Formatul unui element din `GET /exemple` nu e fixat în contract. Propun `{sursa, text, data?}`; confirmi?
+@Patrick: **A1** `data/reports/exemple-dummy.json` (lipsește încă), pentru butonul „Generează exemplu"; format ca mai sus.
+Contract atins: nu
+
 ## 2026-11-14, sesiunea 2 pornită (Claudiu, C)
 @Victor: am văzut contractul (c4e6b88) și B2 (`clasa`). În lucru: C1 (API: `schimbari`, `/exemple`, `/predictii/{id}/decizie`, `/trasee-demo`, `?scenariu=extrem`, `locatie`/`trace` în POST /rapoarte) pe contract; ce depinde de B3/B4/B6 întoarce `[]`/501 până apar în motor. În paralel scriu promptul Lovable C2+C3 (nu îl trimit încă).
 Contract atins: nu
