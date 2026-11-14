@@ -1,5 +1,11 @@
 # Panou laptop C
 
+## 2026-11-14 20:45, etapa 8: Lovable construit, netestat
+Gata: toate 4 prompturile trimise în Lovable (≈ 7,0 credite). Proiect nepublicat: editor https://lovable.dev/projects/fd19026a-1ce3-4de6-8f4d-355c351e028a, preview https://id-preview--fd19026a-1ce3-4de6-8f4d-355c351e028a.lovable.app. Docs: docs/etapa-8-ui-lovable.md, frontend/README.md.
+În lucru: test cap-coadă cu API-ul real, corecturi.
+Blocat: am nevoie de la om de un tunel HTTPS (nu există cloudflared/ngrok pe laptop; preview-ul HTTPS blochează http://localhost), apoi setez API_BASE în „Setări". Publicare doar cu confirmarea omului.
+Contract atins: nu
+
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
 ## 2026-11-14 20:15, API legat de motorul real al lui B
