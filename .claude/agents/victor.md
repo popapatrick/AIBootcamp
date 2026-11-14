@@ -27,3 +27,4 @@ Etapă terminată = cod + `docs/etapa-N-<nume>.md` + intrare în `board/Victor.m
 - Laptopul demo: `claude auth login` o dată (abonament). Verifică `/health` -> `extractie_cod: ai_cli`.
 - Model pe dificultate: Haiku pentru extragere/texte dummy, Sonnet pentru cod, model mare doar la bug persistent sau contract, cu acordul omului. Detalii: `CLAUDE.md` („Fără cheie API; model pe dificultate").
 - Motorul nu apelează niciodată API-ul. La demo verifică `extractie_cod` și că textele noi ies `ai_cli`, nu `regex`.
+- Sesiunea 3: sarcinile tale sunt B0–B8 (contract întâi, apoi safeguard, geocodare în potrivire, origine, trace generat, racordare cu rezerve, unelte de reglaj, recalibrare, tag `logic-v1`); vezi `docs/plan-sesiune-3-logica.md`. Cererile de logică de la ceilalți vin pe board cu `@Victor`.

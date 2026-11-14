@@ -26,3 +26,4 @@ Etapă terminată = cod + `docs/etapa-2-date-dummy.md` / `docs/etapa-3-extractie
 - Laptopul demo: `claude auth login` o dată (abonament). Verifică `/health` -> `extractie_cod: ai_cli`.
 - Model pe dificultate: Haiku pentru extragere/texte dummy, Sonnet pentru cod, model mare doar la bug persistent sau contract, cu acordul omului. Detalii: `CLAUDE.md` („Fără cheie API; model pe dificultate").
 - Ești proprietarul `backend/extract/`: păstrează `cli_ai.py` (adăugat de B) și ordinea cache -> `ai_cli` -> `ai_api` -> `CacheMiss`. Cache nou: cu subagenți Haiku și `fill_cache`.
+- Sesiunea 3: sarcinile tale sunt A1–A7 (`backend/geo`, prompt cu `adresa_structurata`, `genereaza_traseu`, `data/simulare`, scara de rezerve în `backend/racordare`, `data/golden`); vezi `docs/plan-sesiune-3-logica.md`. AI-ul alege doar dintre străzile din cache; nu inventa coordonate.

@@ -15,6 +15,7 @@ Roluri: A = Patrick, B = Victor, C = Claudiu (agenți `.claude/agents/patrick.md
 - Commit-uri mici, minimum la ~20–30 min, cu prefix: `[A]`, `[B]`, `[C]` sau `contract:`.
 - Push direct pe `main`. Înainte: rulează smoke test-ul sau pornește serverul. Nu împinge cod care strică `main`.
 - Dacă push e respins: `git pull --rebase origin main`, rezolvă, push. Niciodată `--force`.
+- Excepție: commit `reglaj:` poate schimba DOAR valori numerice în `contracts/weights.yaml`, după `python -m backend.engine.verifica_reglaje` (vezi „Sesiunea 3"). Nu atinge alte fișiere în același commit.
 - Schimbare de contract = doar commit `contract:`, anunțat în `board/`, cu `contracts/interfaces.md` actualizat în același commit.
 - Secrete: nu scrie chei în fișiere, commit-uri sau chat. **Cheia API NU se mai folosește** (vezi „Fără cheie API" mai jos).
 
@@ -48,3 +49,13 @@ Dacă un bug nu se rezolvă după 2 încercări sau o eroare se repetă, spune e
 ## OpenSpec (features noi)
 Features noi se planifică cu OpenSpec: `openspec/changes/<feature>/` (propunere, spec, sarcini pe roluri), creat cu `/openspec-propose "idee"`; implementare cu `/openspec-apply-change`; la final `/openspec-archive-change`. Citește `openspec/changes/` și `openspec/specs/` la începutul blocului de lucru. Instalare: `brew install node`, `npm install -g @fission-ai/openspec@latest`, apoi `git pull`. Cine deține feature-ul scrie în `openspec/changes/<feature>/`; `openspec/specs/` se schimbă doar prin arhivare.
 Sesiunea 2: împărțirea sarcinilor pe roluri e în `docs/plan-sesiune-2-openspec.md`. Folderele noi `backend/trace/` și `backend/racordare/` sunt ale lui A (Patrick); B le integrează în motor.
+
+## Sesiunea 3: blocăm logica, apoi UI (planul: `docs/plan-sesiune-3-logica.md`)
+Citește `docs/plan-sesiune-3-logica.md` și `openspec/changes/` (geocodare-adresa-acuratete, traseu-generat-din-raport, safeguard-zona-prototip, retea-start-origine-model, racordare-fara-neaplicat, reglaje-logica-fara-cod) la începutul blocului. Sarcinile: B0–B8 (Victor), A1–A7 (Patrick), C1–C5 (Claudiu). Pasul 0 e contractul lui B; până apare în `git log -- contracts/`, ceilalți pregătesc fără cod dependent.
+- **Geocodare:** adresa/strada dă coordonate aproximative DOAR din cache-ul OSM local + AI (Haiku din abonament, fără cheie, fără serviciu extern). AI alege dintre străzile din cache, nu inventează coordonate. Acuratețea scade cu vagul textului; tabelul e în `weights.yaml`.
+- **Trace:** se generează automat la raport, lângă punct, ca semnal complementar; parametrii (zgomot, durată, acoperire, decalaj) cresc sau scad acuratețea. Etichetat „simulat".
+- **Safeguard:** niciun punct nu iese din 3 km față de centroidul rețelei de start (`zona.raza_max_m`); în afară = „eronat în cadrul prototipului", neaplicat, în jurnal. Fără excepții pe sursă.
+- **Origine:** rețeaua de start (KMZ/OSM + puncte simulate hardcodate) = `origine: retea_start`, acuratețe mare. Tot ce adaugă sistemul = `generat_model`. Nu mai scrie „Predicție AI": AI face doar standardizarea (extracție, geocodare); predicțiile sunt ale modelului nostru.
+- **Racordare:** nu mai e `neaplicat` din lipsă de date: scară de rezerve (locație: coordonate > clic > geocodare > trace > operator; lanț: raza normală > extinsă > linie dreaptă > doar casa) și „predicție slabă". `neaplicat` doar fără locație sau în afara zonei.
+- **Schimbări mici de logică:** (1) `reglaj:` = o valoare în `contracts/weights.yaml`, validată cu `python -m backend.engine.verifica_reglaje`, linia tipărită se lipește în `board/`; (2) orice altceva = „cerere de logică" în `board/` cu `@Victor` după `docs/cerere-logica.md`. Prompturile AI sunt ale lui A. Banc de test fără UI: `backend/api/banc_logica.py`.
+- **Înghețare:** după `scripts/verifica_tot.sh` verde și `data/golden/`, Victor pune tag-ul `logic-v1`; după el, schimbări de cod în motor doar prin cerere aprobată. UI-ul (Lovable) se face după; un singur prompt grupat, netrimis până decide omul.
