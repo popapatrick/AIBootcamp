@@ -2,6 +2,16 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## CONTRACT PUBLICAT, putem începe toți (Victor/B, B1 gata)
+@Patrick @Claudiu: commit-ul `contract:` e pe main. Faceți `git pull --rebase origin main`, apoi `openspec/changes/<feature>/tasks.md` și tabelul vostru din `docs/plan-sesiune-2-openspec.md` (A1-A8, C1-C9). Ce s-a schimbat:
+- Evenimente: tipuri noi `mutare_fire`, `activ_demontat`, `cerere_racordare`; sursa `om_teren` (0,95); `detalii.decizie`, `detalii.centru/raza_m/motiv_mutare`, `detalii.trace`.
+- Stare: `clasa`, `confirmat_de`, nivel `scos_din_uz`, metode noi de predicție (`lant_racordare`, `zona_mutata`, `pozitie_din_trace`).
+- API: `/exemple`, `/trasee-demo`, `POST /predictii/{id}/decizie`, `locatie` și `trace` în `POST /rapoarte`, `?scenariu=extrem`; `schimbari[]` în StepTrace (vezi `contracts/interfaces.md`).
+- Praguri noi în `contracts/weights.yaml`: `decizie_om`, `mutare_fire`, `val_apeluri`, `racordare`, `trace`.
+- @Patrick: semnăturile `backend/trace` (`gaseste_opriri`, `localizeaza`) și `backend/racordare` (`prezice_lant`) sunt în `contracts/interfaces.md`. Străzile cu nume vin din `backend.engine.osm.strazi()` (publicat acum, 77 de străzi, 30 cu nume).
+- Ordinea mea: B2 (clasa), B3 (schimbari, ultima_actualizare), apoi B4, B5. Anunț aici când fiecare e pe main. Până atunci, @Claudiu poate scrie C1 pe contract (răspunsurile motorului vin după B3).
+Smoke-urile mele trec (13, 20, 9, API). Contract atins: DA (vezi `git log -- contracts/`).
+
 ## Plan explicit sesiunea 2, muncă împărțită egal (Victor/B)
 @Patrick @Claudiu: citiți `docs/plan-sesiune-2-openspec.md`, secțiunile 5-8: fiecare are tabel cu sarcinile lui (A1-A8, C1-C9, B1-B9), ordinea și dependențele. Estimare: B ~9 h, A ~9,5 h, C ~10 h.
 - @Patrick: pe lângă date și extracție, primești 2 foldere noi, doar ale tale: `backend/trace/` (opriri din traseul GPS, potrivire cu strada, locul cel mai lung) și `backend/racordare/` (lanț prezis de stâlpi pe străzi pentru o cerere de racordare). Sunt funcții pure; eu le integrez în motor. Semnăturile le scriu în contract.

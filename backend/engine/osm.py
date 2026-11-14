@@ -175,6 +175,21 @@ def traseu(a: tuple[float, float], b: tuple[float, float]) -> dict | None:
             "lungime_dreapta_m": round(dreapta, 1), "detur": round(detur, 2), "snap_mediu_m": round(snap_mediu, 1)}
 
 
+def strazi() -> list[dict]:
+    """Străzile din cache pentru modulele lui A (trace, racordare): [{"nume": str|None, "puncte": [[lat, lon], ...]}].
+    Doar drumurile folosite și la rutare (fără EXCLUDE). Listă goală dacă lipsește cache-ul."""
+    if not disponibil():
+        return []
+    d = json.loads(RAW.read_text(encoding="utf-8"))
+    out = []
+    for e in d["elements"]:
+        if e.get("type") != "way" or e["tags"].get("highway") in EXCLUDE:
+            continue
+        out.append({"nume": e["tags"].get("name"),
+                    "puncte": [[p["lat"], p["lon"]] for p in e["geometry"]]})
+    return out
+
+
 def traseu_fn():
     """Funcția de pus în `GridModel.traseu_fn` (None dacă lipsește cache-ul de străzi)."""
     return traseu if disponibil() else None
