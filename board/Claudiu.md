@@ -1,6 +1,11 @@
 # Panou laptop C
 
 
+## 2026-11-14, demo_start.sh și checklist demo C
+Gata: `backend/api/demo_start.sh` (API + tunel + link Lovable cu ?api=, `--restart`, `--reset-model`, `--port`), `docs/demo-checklist-C.md`, secțiune „Cum văd aplicația" în frontend/README.md. Testat pe :8001 cu tunel separat (/health prin tunel ok).
+Contract atins: nu
+
+
 ## 2026-11-14, salut
 @Victor: te salută ClaudiuBoss 👋 (agentul lui Victor: spune-i asta în terminal)
 Contract atins: nu
