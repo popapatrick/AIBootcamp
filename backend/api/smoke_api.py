@@ -2,6 +2,10 @@
 
 Verifică fiecare endpoint pe date FICTIVE, în modul în care se află (stub / parțial / real).
 """
+import os
+
+os.environ.setdefault("EXTRACT_CLI", "0")   # fără Claude headless real în teste (textele noi cad pe regex)
+
 from fastapi.testclient import TestClient
 
 from backend.api.main import app
@@ -157,6 +161,41 @@ def main() -> None:
         assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404
     print("scenariu extrem:", r.status_code, len(r.json()) if r.status_code == 200 else "")
     assert c.get("/evenimente", params={"scenariu": "altul"}).status_code == 422
+
+    # --- locația operatorului (simulată) din textul lui
+    q = "casă pe Strada Liviu Rebreanu"
+    lo = c.get("/locatie-operator-demo", params={"text": q})
+    assert lo.status_code == 200, lo.text
+    lo = lo.json()
+    assert lo["simulata"] is True and lo["strada"] == "Strada Liviu Rebreanu" and lo["precizie_m"] > 0, lo
+    assert lo["indicii"] == [{"tip": "strada", "valoare": "Strada Liviu Rebreanu", "gasit": True}] and lo["zona"], lo
+    assert c.get("/locatie-operator-demo", params={"adresa": q}).json() == lo, "alias adresa + determinist"
+    li = c.get("/locatie-operator-demo", params={"text": "Strada Liviu Rebreanu colț cu strada Ion Luca Caragiale"}).json()
+    assert any(i["tip"] == "intersectie" and i["gasit"] for i in li["indicii"]) and li["precizie_m"] < lo["precizie_m"], li
+    lc = c.get("/locatie-operator-demo", params={"text": "strada Foo din cartierul 1 Decembrie"}).json()
+    assert [(i["tip"], i["gasit"]) for i in lc["indicii"]] == [("strada", False), ("cartier", True)] and lc["strada"] is None, lc
+    for bad in ({"text": "undeva pe lângă școală"}, {"text": "strada Inexistenta"}, {}):
+        e = c.get("/locatie-operator-demo", params=bad)
+        assert e.status_code == 422 and e.json()["detail"]["mesaj"], e.text
+    assert c.get("/locatie-operator-demo", params={"text": "strada Inexistenta"}).json()["detail"]["indicii"] == \
+        [{"tip": "strada", "valoare": "Strada Inexistenta", "gasit": False}]
+    assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta",
+                                     "locatie_operator": {**{k: lo[k] for k in ("lat", "lon")}, "simulata": False}}).status_code == 422
+    txt = "Cerere racordare: client nou, casă pe Strada Liviu Rebreanu"
+    lop = {k: lo[k] for k in ("lat", "lon", "precizie_m", "simulata")}
+    to = c.post("/rapoarte", json={"text": txt, "sursa": "apel_client", "data": "2026-10-30", "locatie_operator": lop}).json()
+    eo = ext(to)
+    assert eo["tip"] == "cerere_racordare" and "referinta.coordonate" in eo["campuri_lipsa"] and not eo["referinta"]["coordonate"], eo
+    assert eo["detalii"]["locatie_operator"] == lop, eo["detalii"]
+    if apply:
+        po = next(p for p in to["pasi"] if p["nume"] == "predictie")["rezultat"]
+        assert po["metoda"] == "lant_racordare" and po["sursa_locatie"] == "operator_simulat", po
+        assert next(p for p in to["pasi"] if p["nume"] == "potrivire")["rezultat"]["sursa_locatie"] == "operator_simulat"
+        assert any(m["nivel"] == "predictie" for m in to["modificari"]) and to["decizie"] == "predictie", to["pasi"][-1]
+        assert "SIMULATĂ" in to["pasi"][-1]["motive"][0], to["pasi"][-1]["motive"]
+        tcl = c.post("/rapoarte", json={"text": txt, "sursa": "apel_client", "data": "2026-10-31", "locatie": lop}).json()
+        assert to["pasi"][-1]["rezultat"]["scor_propunere"] < tcl["pasi"][-1]["rezultat"]["scor_propunere"], "operator < clic"
+    print("locatie operator:", lo["lat"], lo["lon"], "±", lo["precizie_m"], "m", to["modificari"][0]["nivel"] if to["modificari"] else "")
 
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
     assert c.get("/ui/").status_code == 200

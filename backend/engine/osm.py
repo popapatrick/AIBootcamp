@@ -176,7 +176,8 @@ def traseu(a: tuple[float, float], b: tuple[float, float]) -> dict | None:
 
 
 def strazi() -> list[dict]:
-    """Străzile din cache pentru modulele lui A (trace, racordare): [{"nume": str|None, "puncte": [[lat, lon], ...]}].
+    """Străzile din cache pentru modulele lui A (trace, racordare): [{"nume": str|None, "zona": str|None, "puncte": [[lat, lon], ...]}].
+    `zona` = eticheta OSM `is_in` (ex. „1 Decembrie"), None dacă lipsește (aditiv, adăugat de C la cererea omului).
     Doar drumurile folosite și la rutare (fără EXCLUDE). Listă goală dacă lipsește cache-ul."""
     if not disponibil():
         return []
@@ -185,7 +186,7 @@ def strazi() -> list[dict]:
     for e in d["elements"]:
         if e.get("type") != "way" or e["tags"].get("highway") in EXCLUDE:
             continue
-        out.append({"nume": e["tags"].get("name"),
+        out.append({"nume": e["tags"].get("name"), "zona": e["tags"].get("is_in"),
                     "puncte": [[p["lat"], p["lon"]] for p in e["geometry"]]})
     return out
 

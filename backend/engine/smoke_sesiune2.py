@@ -112,6 +112,33 @@ def main() -> None:
                             sursa="formular", forma="campuri"))
     verifica("racordare: casă prea departe -> neaplicat cu motiv", far["decizie"] == "neaplicat" and far["pasi"][-1]["motive"])
 
+    # --- locația operatorului (simulată): scor mai mic decât la clic, mereu predicție, sursa_locatie în pași
+    from backend.racordare import locatie_operator_demo
+    op = locatie_operator_demo("casă pe Strada Liviu Rebreanu", mr.net, osm.strazi(), mr.w)
+    ploc = {"lat": op["lat"], "lon": op["lon"]}
+    lo_op = {**ploc, "precizie_m": op["precizie_m"], "simulata": True}
+
+    def rac(i, ref, det, sursa="apel_client"):
+        t_ = mk().apply_event(ev(i, "2026-10-20", sursa if sursa == "apel_client" else "racordari", "cerere_racordare", "semnalat",
+                                 ref=ref, det=det, sursa=sursa, forma="campuri" if sursa == "formular" else "text_liber"))
+        return t_, next(p for p in t_["pasi"] if p["nume"] == "predictie")["rezultat"], t_["pasi"][-1]
+    tc, pc, sc_ = rac("RC-1", {"coordonate": ploc}, {"locatie": ploc})
+    to, po, so = rac("RO-1", {"adresa": "Strada Liviu Rebreanu"}, {"locatie_operator": lo_op})
+    verifica("operator: scor mai mic decât la clic, ambele predicție",
+             so["rezultat"]["scor_propunere"] < sc_["rezultat"]["scor_propunere"] and to["decizie"] == tc["decizie"] == "predictie",
+             f"operator {so['rezultat']['scor_propunere']} < clic {sc_['rezultat']['scor_propunere']}")
+    verifica("operator: sursa_locatie în predictie și potrivire", po["sursa_locatie"] == "operator_simulat" and pc["sursa_locatie"] == "clic"
+             and next(p for p in to["pasi"] if p["nume"] == "potrivire")["rezultat"]["sursa_locatie"] == "operator_simulat")
+    verifica("operator: jurnal „de ce” spune simulată + precizie", "SIMULATĂ" in so["motive"][0] and f"±{op['precizie_m']:g} m" in so["motive"][0])
+    verifica("operator: lanț prezis, elemente punctate", po["metoda"] == "lant_racordare" and any(
+        x["nivel"] == "predictie" for x in to["modificari"]))
+    tf_, _, sf_ = rac("RO-2", {}, {"locatie_operator": lo_op}, "formular")   # sursă bună, dar poziție simulată: tot predicție
+    verifica("operator: nu se aplică singur, nici la sursă bună", tf_["decizie"] == "predictie")
+    tp_, pp_, _ = rac("RO-3", {"coordonate": {"lat": ploc["lat"] + 0.0001, "lon": ploc["lon"]}}, {"locatie_operator": lo_op})
+    verifica("operator: coordonatele din text au prioritate", pp_["sursa_locatie"] == "text")
+    tq_, pq_, _ = rac("RO-4", {}, {"locatie": ploc, "locatie_operator": lo_op})
+    verifica("operator: clicul are prioritate", pq_["sursa_locatie"] == "clic")
+
     # --- locația din traseul tabletei
     trasee = json.loads((ROOT / "data" / "reports" / "trasee-dummy.json").read_text(encoding="utf-8"))
     tr = trasee[0]

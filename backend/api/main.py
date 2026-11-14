@@ -42,12 +42,22 @@ class Coord(BaseModel):
     lon: float
 
 
+class LocatieOperator(BaseModel):
+    """Poziția SIMULATĂ a operatorului (de la GET /locatie-operator-demo). `simulata` nu poate fi false."""
+    lat: float
+    lon: float
+    precizie_m: float | None = None
+    simulata: Literal[True] = True
+    zona: str | None = None
+
+
 class Raport(BaseModel):
     text: str
     sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]
     data: _date | None = None
     locatie: Coord | None = None          # clic pe hartă (cerere_racordare, mutare_fire)
     trace: list[dict] | None = None       # traseul tabletei: [{t, lat, lon}]
+    locatie_operator: LocatieOperator | None = None   # cerere_racordare fără coordonate și fără clic
 
 
 class Decizie(BaseModel):
@@ -73,7 +83,24 @@ def rapoarte(r: Raport) -> dict:
     if not r.text.strip():
         raise HTTPException(422, "text gol")
     return pipeline.proceseaza(r.text, r.sursa, r.data.isoformat() if r.data else None,
-                              r.locatie.model_dump() if r.locatie else None, r.trace)
+                              r.locatie.model_dump() if r.locatie else None, r.trace,
+                              r.locatie_operator.model_dump(exclude_none=True) if r.locatie_operator else None)
+
+
+@app.get("/locatie-operator-demo")
+def locatie_operator_demo(text: str | None = Query(None, description="descrierea operatorului (strada, colț, cartier)"),
+                          adresa: str | None = Query(None, description="alias pentru `text`"),
+                          lat: float | None = Query(None), lon: float | None = Query(None)) -> dict:
+    """Poziție GPS DUMMY a operatorului, din textul lui, în zona descrisă (determinist). `simulata` e mereu true.
+    Întoarce {lat, lon, precizie_m, simulata, strada, motiv, indicii: [{tip, valoare, gasit}], zona}.
+    422 dacă lipsește textul sau niciun indiciu nu se găsește în datele locale (`detail` = {mesaj, indicii})."""
+    t = (text or adresa or "").strip()
+    if not t:
+        raise HTTPException(422, {"mesaj": "lipsește `text` (descrierea operatorului)", "indicii": []})
+    try:
+        return pipeline.locatie_operator(t, lat, lon)
+    except pipeline.LocalizareEroare as e:
+        raise HTTPException(422, {"mesaj": str(e), "indicii": e.indicii})
 
 
 @app.get("/retea")

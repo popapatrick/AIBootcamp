@@ -211,11 +211,23 @@ class Sesiune2:
         w, data = self.w, event["data"]
         cfg = w["racordare"]
         det, ref = event.get("detalii") or {}, event.get("referinta") or {}
-        loc = ref.get("coordonate") or det.get("locatie")
+        op = det.get("locatie_operator")
+        # sursa locației: coordonate din text > clic pe hartă > poziția simulată a operatorului (doar dacă lipsesc celelalte)
+        if ref.get("coordonate"):
+            loc, sursa_loc = ref["coordonate"], ("clic" if ref["coordonate"] == det.get("locatie") else "text")
+        elif det.get("locatie"):
+            loc, sursa_loc = det["locatie"], "clic"
+        elif op and op.get("lat") is not None and op.get("lon") is not None:
+            loc, sursa_loc = op, "operator_simulat"
+        else:
+            loc, sursa_loc = None, None
+        for p in trace["pasi"]:     # pasul potrivire arată și sursa locației (nu doar predicția)
+            if p["nume"] == "potrivire" and sursa_loc:
+                p["rezultat"] = {**p["rezultat"], "sursa_locatie": sursa_loc}
         trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
         if not loc:
             return self._scor_pas(trace, "neaplicat", {"nivel": None},
-                                  ["Cerere de racordare fără locația casei (coordonate sau clic pe hartă): nu putem prezice lanțul."])
+                                  ["Cerere de racordare fără locația casei (coordonate, clic pe hartă sau poziția operatorului): nu putem prezice lanțul."])
         try:
             from backend.engine import osm
             from backend.racordare import prezice_lant
@@ -223,7 +235,7 @@ class Sesiune2:
             return self._scor_pas(trace, "neaplicat", {"nivel": None}, ["Modulul backend.racordare lipsește."])
         r = prezice_lant({"lat": loc["lat"], "lon": loc["lon"]}, self.net, osm.strazi(), w)
         trace["pasi"][-1] = {"nume": "predictie", "incredere": r.get("urmeaza_strada"),
-                             "rezultat": {"metoda": "lant_racordare", **{k: r.get(k) for k in
+                             "rezultat": {"metoda": "lant_racordare", "sursa_locatie": sursa_loc, **{k: r.get(k) for k in
                                           ("status", "nod_start", "distanta_m", "urmeaza_strada", "ambiguu", "motiv")},
                                           "stalpi": len(r.get("stalpi") or [])}}
         if r["status"] == "fara_nod" or not r.get("nod_start"):
@@ -249,10 +261,16 @@ class Sesiune2:
         sp, factori = S.scor_propunere(event, q, w, urm)
         if urm is None:
             sp = round(sp * cfg["factor_fara_strada"], 3)
-        niv = S.decizie(sp, w, planificat=event["status"] == "planificat")
+        if sursa_loc == "operator_simulat":
+            sp = round(sp * cfg["factor_locatie_operator"], 3)
+        niv = S.decizie(sp, w, planificat=event["status"] == "planificat" or sursa_loc == "operator_simulat")
         txt = (f"Cerere de racordare: lanț de {len(r['stalpi'])} stâlp(i) de la nodul {r['nod_start']} ({r['distanta_m']} m) spre casă, "
                f"scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
                f"potrivire {factori['calitate_potrivire']}" + (f", urmează strada {urm}" if urm is not None else ", fără stradă") + ").")
+        if sursa_loc == "operator_simulat":
+            prec = op.get("precizie_m")
+            txt += (f" Locația e din poziția SIMULATĂ a operatorului" + (f", ±{prec:g} m" if prec is not None else "") +
+                    f" (nu GPS real, nu coordonate exacte): scor × {cfg['factor_locatie_operator']}; rămâne predicție până confirmă omul.")
         if niv == "de_verificat":
             return self._scor_pas(trace, "neaplicat", {"scor_propunere": sp, "nivel": niv},
                                   [txt + f" Sub pragul {w['praguri']['predictie']}: nu se desenează."], sp)

@@ -96,3 +96,6 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dic
         pts = [p] + list(drum[i + 1:j + 1]) + [q]
         out["cabluri"].append({"de_la": ids[k], "la": ids[k + 1], "puncte": [[a, b] for a, b in pts]})
     return out
+
+
+from backend.racordare.operator_demo import LocalizareEroare, locatie_operator_demo  # noqa: E402,F401  (după definiții: importă _elemente)

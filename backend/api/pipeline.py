@@ -15,6 +15,7 @@ from datetime import date
 import yaml
 
 from backend.api import sources
+from backend.racordare import LocalizareEroare, locatie_operator_demo
 
 try:
     from backend.extract import CacheMiss
@@ -171,10 +172,20 @@ def _scor_provizoriu(ev: dict, pot: dict) -> dict:
     return {"scor_nou": round(scor, 3), "nivel": nivel, "motive": motive}
 
 
+def locatie_operator(text: str, lat: float | None = None, lon: float | None = None) -> dict:
+    """Poziția simulată a operatorului din textul lui (backend.racordare). Ridică LocalizareEroare dacă nu se localizează."""
+    from backend.engine import osm
+    net = sources.model_net()
+    if net is None:
+        raise LocalizareEroare("Modelul rețelei nu e disponibil.", [])
+    return locatie_operator_demo(text, net, osm.strazi(), _weights(), lat, lon)
+
+
 def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | None = None,
-               trace: list[dict] | None = None) -> dict:
+               trace: list[dict] | None = None, locatie_operator: dict | None = None) -> dict:
     """Rulează pipeline-ul pe un raport nou; întoarce StepTrace.
 
+    `locatie_operator` {lat, lon, precizie_m, simulata} (poziție simulată) intră în `detalii.locatie_operator`.
     `locatie` {lat, lon} (clic pe hartă) și `trace` (traseul tabletei) intră în `detalii` ale Event-ului
     (`detalii.locatie`, `detalii.centru`, `detalii.trace`); `locatie` completează și `referinta.coordonate`
     doar dacă extracția nu a găsit coordonate. Răspunsul are mereu `schimbari` (listă; goală dacă motorul nu le dă).
@@ -229,6 +240,8 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
         ev = extract_stub(text, sursa, data)
         metoda_ext = ev.get("metoda_extractie")
 
+    if locatie_operator:   # doar indiciu: NU intră în referinta.coordonate (motorul îl pune ultimul și îl marchează simulat)
+        ev.setdefault("detalii", {})["locatie_operator"] = locatie_operator
     if locatie or trace:
         det = ev.setdefault("detalii", {})
         if locatie:
