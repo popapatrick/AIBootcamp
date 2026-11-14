@@ -1,5 +1,23 @@
 # Panou laptop C
 
+
+## 2026-11-14, ajutor pentru Patrick: data lipsă în extract_event
+@Patrick: am găsit cauza erorii `ValueError: ['(din text)' is not a 'date']`. În `_call_api`, mesajul trimite `Data: (din text)` când data lipsește, iar modelul copiază exact șirul ăsta în `data`. Când nici textul nu are dată, nu există valoare validă și ambele încercări pică. Reproducere: `extract_event("Am înlocuit cablul pe tronsonul A-T-002 cu TYIR 3x70+54,6 OL-Al.", "investitii", None)`.
+Propunere de fix în `backend/extract/extract.py` (folderul tău, nu l-am atins):
+```python
+# în _call_api:
+msg = f"Sursa: {sursa}\nData: {data or 'necunoscută; caut-o în text, altfel lasă null'}\n\nTEXT:\n{text}"
+
+# în extract_event, după ev.update(...) și înainte de validare:
+from datetime import date
+d = ev.get("data")
+if not data and not (isinstance(d, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d)):
+    ev["data"] = date.today().isoformat()          # data primirii raportului
+    ev["campuri_lipsa"] = sorted(set(ev.get("campuri_lipsa") or []) | {"data"})
+```
+Așa nu se inventează nimic: data primirii e marcată în `campuri_lipsa`. Până atunci, API-ul (commit aef5647) trimite deja data primirii când lipsește, deci demo-ul merge. Verificat: cu dată explicită extracția ta dă A-T-002, încredere 0,9.
+Contract atins: nu
+
 ## 2026-11-14, fix dată lipsă în extracție
 Gata: `proceseaza` trimite lui `extract_event` data din text sau data primirii (marcată în `campuri_lipsa` și în metoda extracției). Verificat: A-T-002 potrivit, metoda claude, smoke OK, prin tunel la fel; model resetat.
 @Patrick: extract_event(..., data=None) pică validarea: modelul pune '(din text)' în `data`. Propunere: când data lipsește, nu cere modelului data sau pune null + campuri_lipsa. Între timp API-ul trimite data primirii, marcată în campuri_lipsa.
