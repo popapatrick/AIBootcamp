@@ -22,7 +22,7 @@ Toate sarcinile le face C (Claudiu) la cererea omului, inclusiv cele din foldere
 - [x] 4.1 Endpoint `GET /locatie-operator-demo` (200 / 422)
 - [x] 4.2 `POST /rapoarte` acceptă `locatie_operator`; regex „Cerere racordare: ..." fără coordonate
 - [x] 4.3 Teste în `smoke_api.py`
-- [ ] 4.4 Prompt Lovable: buton „Folosește locația operatorului (simulată)" (la cererea omului, separat)
+- [ ] 4.4 Prompt Lovable: buton „Folosește locația operatorului (simulată)" (la cererea omului, separat) (prompt Lovable trimis, în lucru; frontend/lovable-prompt-sesiune2-locatie-operator.md)
 
 ## 5. Documentație
 

@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-INV-2026-11-14",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": "Strada Viilor, langa scoala",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-14",
+  "text_original": "Investitie: stalp nou pe Strada Viilor, langa scoala. fara coordonate inca",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Stalp nou (investitie) pe Strada Viilor, langa scoala. Fara coordonate inca."
+  }
+}

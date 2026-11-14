@@ -1,0 +1,25 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "str. Orhideelor 16",
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "FISA RACORDARE: racord n, str. Orhideelor 16",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "nr_cadastral",
+    "id_client"
+  ],
+  "detalii": {}
+}

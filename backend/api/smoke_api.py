@@ -113,7 +113,7 @@ def main() -> None:
         and ext(tf)["detalii"]["motiv_mutare"] == "sens_giratoriu", ext(tf)
     if apply:
         assert next(p for p in tf["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "zona", tf["pasi"]
-    tt = c.post("/rapoarte", json={"text": f"Raport tabletă: control pe {tr1['adresa']}, lucrare finalizată.",
+    tt = c.post("/rapoarte", json={"text": f"Raport tabletă: stâlp nou necartat pe {tr1['adresa']}, lucrare executată. Am verificat și stâlpii din jur.",
                                    "sursa": "mentenanta", "data": tr1["data"], "trace": tr1["puncte"]}).json()
     assert ext(tt)["tip"] == "nod_lipsa", ext(tt)
     if apply:

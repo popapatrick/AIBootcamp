@@ -1,0 +1,27 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": null,
+    "coordonate": {
+      "lat": 44.281779,
+      "lon": 26.064323
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-08-04",
+  "text_original": "Cerere racordare: client nou, casă la coord 44.281779, 26.064323",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.8,
+  "detalii": {},
+  "campuri_lipsa": [
+    "event_id",
+    "adresa",
+    "nr_cadastral"
+  ]
+}

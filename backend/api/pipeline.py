@@ -36,7 +36,7 @@ RE_ADRESA = re.compile(r"\b((?:str\.|strada|șos\.|sos\.|bd\.|aleea)\s+(?:(?!\bn
                        re.I)
 RE_CERERE_RACORDARE = re.compile(r"^\s*cerere racordare\s*:", re.I)
 RE_FIRE_MUTATE = re.compile(r"^\s*fire mutate\s*:\s*(?P<motiv>[^,]+?)\s*,\s*centru\b", re.I)
-RE_TABLETA = re.compile(r"^\s*raport tablet[ăa]\s*:\s*control pe\b", re.I)
+RE_TABLETA = re.compile(r"^\s*raport tablet[ăa]\s*:\s*(?:control pe|st[âa]lp nou necartat pe)\b", re.I)
 RE_CLIENT = re.compile(r"\b(?:client|cod client|id client)\s*[:\-]?\s*([A-Z0-9-]{4,})", re.I)
 
 TIPURI = [  # (cuvinte cheie, tip, status implicit)
@@ -96,6 +96,7 @@ def extract_stub(text: str, sursa: str, data: str | None) -> dict:
         lipsa.append("raza_m")   # textul nu o dă; motorul folosește raza implicită
     elif RE_TABLETA.match(text):   # localizarea vine din trace (detalii.trace), nu din text
         tip, status = "nod_lipsa", "executat"
+        lipsa.append("coordonate")
     elif sursa == "apel_client":
         tip, status = "avarie_semnalata", "semnalat"
     else:
