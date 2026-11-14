@@ -31,6 +31,7 @@ Opțiuni banc: `--fisier F`, `--json`, `--doar-diferente`, `--cu-ai` (implicit `
 - Intrare: `data/golden/*.json` (fără `calibrare-referinta.json`); dacă folderul lipsește, fallback pe `data/reports/exemple-dummy.json` cu notă „ATENȚIE: data/golden/ nu există".
 - Format propus pentru `data/golden` (de confirmat de @Patrick, A6): listă JSON `{id, sursa, text, data?, asteptat?}`. `asteptat` poate avea: `tip`, `decizie`, `nivel`, `origine`, `slaba`, `treapta`, `eronat_prototip`, `element_id`. Se compară doar cheile prezente și nenule.
 - Ieșire: coloanele `id, sursa, tip, metoda_cod, decizie, scor, origine, slaba, treapta, eronat, ok`; `-` = lipsă; `ok` = da/nu/- (fără `asteptat`).
+- Coloana `element_id` (doar comparată, nu afișată) = elementul referit: `pasi[potrivire].element_id`, apoi `referinta.element_id` din extracție, apoi `modificari[0].element_id`; elementul creat de motor e în `element_modificat` (JSON).
 - De unde citește: `modificari[0].origine`, `predictie.slaba/treapta`, `eronat_prototip` din rezultat, `pasi[extractie].metoda_cod`.
 
 ## Decizii
@@ -48,3 +49,14 @@ Opțiuni banc: `--fisier F`, `--json`, `--doar-diferente`, `--cu-ai` (implicit `
 - **@Victor** (contract): `api.openapi.yaml` nu descrie `trace_params` în `POST /rapoarte`, nici `GET /geocodeaza`, nici `GET /reguli`; `zona` e doar în summary-ul `/retea`. Contractul zice „/stare", dar endpoint-ul real e `/retea` (zona e pusă acolo). Banca citește `modificari[0].origine`, `predictie.slaba/treapta` și `out.eronat_prototip`; spune dacă le pui altundeva.
 - **@Patrick**: formatul `data/golden` de mai sus; spune dacă diferă.
 - Lovable: promptul sesiunii 3 rămâne netrimis.
+
+## C3 runda 1 (2026-11-15)
+Comenzi: `python3 -m backend.api.banc_logica` (și `--json`, `--doar-diferente`); `.venv/bin/python -m backend.api.smoke_api` (și cu `API_EXTRACTIE=stub`); `python3 -m backend.engine.smoke_engine` (36 verificări). Toate verzi.
+Rezultat banc (fallback exemple-dummy, B3 + A zona_ok intrate): 29 cazuri, **28 ok, 1 diferit** (era 22/7). `origine` apare (`retea_start` / `generat_model`) din `modificari[0].origine`, cum a pus-o B3; nu a trebuit ajustare.
+Cauzele celor 7:
+- `mnt-04, rac-04, apl-04` (ID inexistent 9999xxx): **banc greșit**. Citea `modificari[0].element_id` (nu există, motorul nu aplică); `asteptat.element_id` e ID-ul din text. Reparat: element referit = potrivire, apoi `referinta.element_id`.
+- `om-01, om-02` (NOU-0001/0002): același defect de banc; potrivirea e corectă (`decizie_om`), dar nu există predicția în memorie -> `neaplicat` (așteptat, tinta e „exemplu").
+- `cer-02`: banc; motorul creează `NOU-EV-LIVE-004-S1` (lanț din nodul 7101969), așteptatul e nodul de start. Acum ok. Rămâne divergența de logică: nota așteptatului zice „actualizare directă", motorul dă predicție 0,787 (de arătat lui B).
+- `inv-05`: **extracție/cache**: „stâlp nou pe Strada Viilor, lângă școală, fără coordonate" -> `linie_planificata` (încredere 0,4), așteptat `nod_lipsa`. Neatins (A2/A6).
+`GET /geocodeaza` (TestClient, cu `backend.geo`): „Strada Liviu Rebreanu" -> gasit, osm_cache, 150 m, 0,4; „Strada Regina Maria 5" -> gasit, interpolat, 25 m, 0,55; „strada" și „Strada Inexistenta 99" -> necunoscut; „Rebreanu" -> ai_estimare 0,32; „Calea Victoriei 10 Bucuresti" -> gasit pe „Strada București" (fals pozitiv, 150 m). Semnătura din main.py e corectă; niciun caz in_afara_zonei obținut din text (geo marchează doar coordonate din afara zonei).
+Pasul `geocodare` din pipeline: apare doar dacă Event-ul are `detalii.geocodare`; motorul nu cheamă încă `geocodeaza` (doar `match.py` pomenește geocodarea), deci nu apare la niciun caz. Doar raportat.

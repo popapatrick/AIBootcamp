@@ -57,7 +57,10 @@ def ruleaza_caz(caz: dict) -> dict:
          "scor": _g(pasi.get("scor"), "rezultat", "scor_nou") or mod.get("scor"),
          "origine": mod.get("origine") or pred.get("origine"),
          "slaba": pred.get("slaba"), "treapta": pred.get("treapta"),
-         "eronat": out.get("eronat_prototip"), "element_id": mod.get("element_id")}
+         "eronat": out.get("eronat_prototip"),
+         # element referit (potrivire, apoi ID din text); `modificari[0].element_id` e doar elementul creat de motor (ex. NOU-...)
+         "element_id": _g(pasi.get("potrivire"), "rezultat", "element_id") or _g(ev, "referinta", "element_id") or mod.get("element_id"),
+         "element_modificat": mod.get("element_id")}
     ast = caz.get("asteptat")
     if ast:
         gresit = [k for k, v in ast.items()
