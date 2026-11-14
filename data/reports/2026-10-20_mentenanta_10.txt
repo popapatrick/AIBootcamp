@@ -1,0 +1,8 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0471
+Data: 2026-10-20
+Cod element: nod 0287329 (plecare A)
+Coordonate: -
+Constatare: nod curat, fără supraîncălzire, control termografic.
+Status: executat

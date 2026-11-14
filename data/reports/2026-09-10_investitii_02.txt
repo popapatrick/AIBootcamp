@@ -1,0 +1,14 @@
+DATE FICTIVE
+FIȘĂ DE INVESTIȚIE – ÎNLOCUIRE CABLU
+Nr. fișă: I-2026-0233
+Data: 2026-09-10
+Echipa: investitii
+Cod element: A-T-002
+Coordonate: 44.2758716, 26.0627136 (capăt 6168883)
+Adresa: -
+Nr. cadastral: -
+Secțiune veche (în GIS): TYIR 3x35+54,6 OL-Al
+Secțiune nouă (montată): TYIR 3x70+54,6 OL-Al
+Lungime: 37.8 m
+Capete: 6168883 – 6580180
+Status: executat

@@ -1,0 +1,10 @@
+DATE FICTIVE
+Apel client – fișă apel
+Data: 2026-10-02 ora 07:40
+ID client: CL-40117
+Locație: coordonate 44.28232, 26.06210 (aplicație telefon)
+Transcriere:
+Operator: Bună, cu ce vă pot ajuta?
+Client: Nu am curent din noaptea asta, e toată strada fără lumină.
+Operator: Vă rog adresa.
+Client: Strada fictivă, lângă blocul 5.

@@ -1,0 +1,102 @@
+[
+  {
+    "event_id": "EV-S01",
+    "echipa_sursa": "mentenanta",
+    "tip": "nod_lipsa",
+    "referinta": {
+      "element_id": null,
+      "coordonate": {"lat": 44.2830311, "lon": 26.063942},
+      "adresa": null,
+      "nr_cadastral": null,
+      "id_client": null
+    },
+    "status": "executat",
+    "data": "2026-08-12",
+    "forma_sursa": "text_liber",
+    "tip_sursa_pondere": "text_liber",
+    "text_original": "Date fictive. Pe strada curbată, între noduri vecine 6513200 și 7824201, lipsește nodul de joncțiune la coordonatele 44.2830311, 26.063942. Tronsoanele de legătură nu apar în model. Echipa a refăcut legătura aeriană în timpul intervenției. Nu cunoaștem codul nodului.",
+    "incredere_extractie": 0.55,
+    "campuri_lipsa": ["element_id", "adresa"],
+    "detalii": {"observatii": "Traseul real urmează strada curbată, nu linia dreaptă"}
+  },
+  {
+    "event_id": "EV-S02",
+    "echipa_sursa": "investitii",
+    "tip": "activ_inlocuit",
+    "referinta": {
+      "element_id": "A-T-002",
+      "coordonate": {"lat": 44.2758716, "lon": 26.0627136},
+      "adresa": null,
+      "nr_cadastral": null,
+      "id_client": null
+    },
+    "status": "executat",
+    "data": "2026-08-25",
+    "forma_sursa": "campuri",
+    "tip_sursa_pondere": "formular",
+    "text_original": "Date fictive. Formular investiții: tronsonul A-T-002 (între nodurile 6168883 și 6580180) a fost înlocuit cu conductor nou TYIR 3x70+54,6 OL-Al. Secțiunea din model este TYIR 3x35+54,6 OL-Al. Lucrare executată.",
+    "incredere_extractie": 0.85,
+    "campuri_lipsa": ["nr_cadastral", "adresa"],
+    "detalii": {"sectiune_noua": "TYIR 3x70+54,6 OL-Al", "sectiune_veche": "TYIR 3x35+54,6 OL-Al"}
+  },
+  {
+    "event_id": "EV-S03",
+    "echipa_sursa": "racordari",
+    "tip": "racord_nou",
+    "referinta": {
+      "element_id": "0287329",
+      "coordonate": {"lat": 26.0677049, "lon": 44.2805552},
+      "adresa": null,
+      "nr_cadastral": null,
+      "id_client": null
+    },
+    "status": "executat",
+    "data": "2026-09-03",
+    "forma_sursa": "campuri",
+    "tip_sursa_pondere": "formular",
+    "text_original": "Date fictive. Formular racordare: racord nou la nodul 0287329. Coordonate înregistrate: lat 26.0677049, lon 44.2805552. Verificare: valorile par inversate (lat și lon).",
+    "incredere_extractie": 0.5,
+    "campuri_lipsa": ["adresa", "nr_cadastral"],
+    "detalii": {"observatii": "coordonate posibil inversate, de verificat"}
+  },
+  {
+    "event_id": "EV-S04",
+    "echipa_sursa": "apel_client",
+    "tip": "avarie_semnalata",
+    "referinta": {
+      "element_id": null,
+      "coordonate": {"lat": 44.2785806, "lon": 26.0650903},
+      "adresa": null,
+      "nr_cadastral": null,
+      "id_client": null
+    },
+    "status": "semnalat",
+    "data": "2026-09-18",
+    "forma_sursa": "text_liber",
+    "tip_sursa_pondere": "apel_client",
+    "text_original": "Date fictive. Apel client din zona tronsonului cu cablu subteran: nu am curent de aproximativ două ore. Clientul nu a indicat adresa exactă.",
+    "incredere_extractie": 0.3,
+    "campuri_lipsa": ["element_id", "adresa", "id_client"],
+    "detalii": {"observatii": "poate fi cădere de tensiune, nu neapărat lipsă de rețea"}
+  },
+  {
+    "event_id": "EV-S05",
+    "echipa_sursa": "mentenanta",
+    "tip": "linie_planificata",
+    "referinta": {
+      "element_id": "R-T-001",
+      "coordonate": {"lat": 44.2787101, "lon": 26.0654569},
+      "adresa": null,
+      "nr_cadastral": null,
+      "id_client": null
+    },
+    "status": "planificat",
+    "data": "2026-10-07",
+    "forma_sursa": "campuri",
+    "tip_sursa_pondere": "formular",
+    "text_original": "Date fictive. Formular mentenanță: lucrare planificată pe ramura aeriană R-T-001. Înlocuire conductor, programată pentru 7 octombrie 2026.",
+    "incredere_extractie": 0.7,
+    "campuri_lipsa": ["nr_cadastral", "adresa"],
+    "detalii": {"observatii": "lucrare planificată, neexecutată"}
+  }
+]

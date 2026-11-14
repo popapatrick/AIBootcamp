@@ -1,0 +1,5 @@
+DATE FICTIVE
+Referat investiție – lucrare de înlocuire
+Săptămâna trecută am schimbat cablul aerian pe tronsonul T-002, între stâlpii 6168883 și 6580180. Cablul vechi era TYIR 3x35+54,6 OL-Al, iar cel nou este TYIR 3x70+54,6 OL-Al. Lungime circa 38 m.
+Lucrarea nu a fost trecută în GIS. Rog refacerea secțiunii în model.
+Executat și recepționat la 2026-09-22.

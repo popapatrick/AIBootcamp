@@ -1,0 +1,10 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0402
+Data: 2026-08-20
+Cod element: DX10-2-099812 (PTAB 7812)
+Coordonate: 44.2806944, 26.0676334
+Adresa: stație fictivă (adresă fictivă)
+Nr. cadastral: -
+Constatare: post verificat, fără defecte, ulei în parametri
+Status: executat

@@ -1,0 +1,10 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0455
+Data: 2026-09-15
+Cod element: -
+Coordonate: -
+Adresa: str. Fictivă nr. 9 (adresă fictivă)
+Nr. cadastral: CF-fictiv 418902
+Constatare: branșament ars, fără alimentare la imobil
+Status: semnalat

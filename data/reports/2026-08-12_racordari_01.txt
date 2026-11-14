@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ RACORDARE – RACORD NOU
+Nr. fișă: R-2026-0077
+Data: 2026-08-12
+Echipa: racordari
+Cod element: -
+Coordonate: lat 26.066262, lon 44.279575
+Adresa: str. Fictivă nr. 22 (adresă fictivă)
+Nr. cadastral: CF-fictiv 301177
+Observații: racord pe stâlpul din colț
+Status: executat

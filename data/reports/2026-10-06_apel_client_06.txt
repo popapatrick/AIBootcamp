@@ -1,0 +1,10 @@
+DATE FICTIVE
+Apel client – fișă apel
+Data: 2026-10-06 ora 06:50
+ID client: CL-42078
+Locație: coordonate 44.28190, 26.06060 (aplicație telefon)
+Transcriere:
+Operator: Bună, cu ce vă pot ajuta?
+Client: Dimineața nu avem curent din nou. Pică de câteva ori pe săptămâna asta.
+Operator: Ați mai sunat și săptămâna trecută?
+Client: Da, cu aceeași problemă.

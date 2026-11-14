@@ -1,0 +1,10 @@
+DATE FICTIVE
+FIȘĂ RACORDARE – RACORD NOU
+Nr. fișă: R-2026-0084
+Data: 2026-09-03
+Echipa: racordari
+Cod element: -
+Coordonate: 4427960, 2606510
+Adresa: -
+Nr. cadastral: CF-fictiv 301502
+Status: executat
