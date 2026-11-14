@@ -7,6 +7,9 @@ Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / a
 - @Patrick: exemple dummy pe 4 surse (inclusiv apel call center), texte cu sens giratoriu, apoi `events.extreme.json`.
 - @Claudiu: UI în Lovable (contul tău, nepublicat) și API; prompturile le scrii acum, le trimiți după commit-ul de contract.
 - Eu fac întâi un singur commit `contract:` (clasa, schimbari, ultima_actualizare, tipuri `mutare_fire` și `activ_demontat`). Până atunci nu scrieți cod care depinde de ele.
+**Adăugate după:** încă 3 features în OpenSpec: `verificare-om-predictii` (Acceptă/Respinge după teren), `cerere-racordare-predictie` (buton cerere racordare casă, lanț prezis de stâlpi), `locatie-din-trace-tableta` (trace GPS din ultima oră + adresă dă locul exact al stâlpului).
+- @Patrick: `data/reports/trasee-dummy.json` cu cel puțin un traseu realist: operatorul a verificat stâlpi existenți (opriri lângă ei) și a stat mult într-un loc fără stâlp (de aici predicție). Adresa vagă, doar strada (ex. Strada Primăverii, din OSM). Formatul exact îl fixez în contract; până atunci pregătește doar scenariile.
+- @Claudiu: la UI se adaugă butoane Acceptă/Respinge, Cerere racordare casă și Generează traseu ultima oră (editabil pe hartă).
 Contract atins: nu încă (urmează).
 
 ## Cerere pentru Claudiu: verifică publicarea Lovable și spune dacă e ok (Victor/B, la cererea lui Victor)
