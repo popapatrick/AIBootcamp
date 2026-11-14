@@ -23,11 +23,25 @@ paths:
                 sursa: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}
                 data: {type: string, format: date}
                 locatie: {type: object, description: "lat/lon dintr-un clic pe hartă (cerere_racordare, mutare_fire)", properties: {lat: {type: number}, lon: {type: number}}}
+                locatie_operator: {type: object, description: "poziția SIMULATĂ a operatorului (din GET /locatie-operator-demo), pentru cerere_racordare fără coordonate și fără clic; `simulata` trebuie să fie true (altfel 422)", required: [lat, lon], properties: {lat: {type: number}, lon: {type: number}, precizie_m: {type: number}, simulata: {type: boolean, enum: [true]}, zona: {type: string}}}
                 trace: {type: array, description: "traseul tabletei din ultima oră", items: {type: object, properties: {t: {type: string}, lat: {type: number}, lon: {type: number}}}}
       responses:
         "200":
           description: StepTrace (vezi contracts/interfaces.md), cu `schimbari` structurate
           content: {application/json: {schema: {type: object}}}
+  /locatie-operator-demo:
+    get:
+      summary: "Poziție GPS DUMMY a operatorului, generată determinist din textul lui, în zona descrisă (stradă, colț, cartier). Mereu `simulata: true`; nu inventează puncte"
+      parameters:
+        - {name: text, in: query, required: false, schema: {type: string}, description: "descrierea operatorului, ex. „strada X colț cu strada Y” sau „strada X din cartierul Z”; obligatoriu dacă lipsește `adresa`"}
+        - {name: adresa, in: query, required: false, schema: {type: string}, description: "alias pentru `text`"}
+        - {name: lat, in: query, required: false, schema: {type: number}, description: "indiciu opțional: se alege punctul posibil cel mai apropiat de el"}
+        - {name: lon, in: query, required: false, schema: {type: number}}
+      responses:
+        "200":
+          description: "{lat, lon, precizie_m, simulata: true, strada, motiv, indicii: [{tip: strada|intersectie|cartier|reper, valoare, gasit}], zona}"
+          content: {application/json: {schema: {type: object, properties: {lat: {type: number}, lon: {type: number}, precizie_m: {type: number}, simulata: {type: boolean, enum: [true]}, strada: {type: string, nullable: true}, motiv: {type: string}, zona: {type: string}, indicii: {type: array, items: {type: object, properties: {tip: {type: string, enum: [strada, intersectie, cartier, reper]}, valoare: {type: string}, gasit: {type: boolean}}}}}}}}
+        "422": {description: "textul lipsește sau niciun indiciu nu se găsește în datele locale; `detail` = {mesaj, indicii: [{tip, valoare, gasit: false}]}. UI-ul cere clic pe hartă"}
   /retea:
     get:
       summary: Starea rețelei la o dată (GeoJSON, properties = ElementState)

@@ -63,6 +63,14 @@ racordare:               # eveniment tip cerere_racordare
   raza_nod_m: 150        # cel mai apropiat nod în care se poate racorda
   max_stalpi_prezisi: 8
   factor_fara_strada: 0.6   # scorul propunerii când nu există stradă OSM (linie dreaptă)
+  # Locația operatorului (simulată, din textul lui): indiciu, nu măsurătoare. Scorul se înmulțește cu factorul;
+  # rezultatul nu trece niciodată de „predicție" fără decizia omului.
+  factor_locatie_operator: 0.8
+  operator_distanta_min_m: 20     # punctul simulat e la cel puțin atât de cel mai apropiat nod (altfel nu e ce prezice)
+  precizie_intersectie_m: 10      # precizia (± m) raportată după cât de vagă e zona descrisă
+  precizie_strada_min_m: 15       # stradă: lungimea/20, între min și max
+  precizie_strada_max_m: 40
+  precizie_cartier_m: 60
 
 trace:                   # locația din traseul tabletei (backend/trace, proprietar A)
   fereastra_min: 60
