@@ -4,7 +4,7 @@
 
 Intrare: `referinta.adresa_structurata {strada, numar, localitate, reper}` sau `referinta.adresa` (text liber; număr detectat cu „nr. N" sau cifre la final). Ieșire: `{status: gasit|necunoscut, lat, lon, precizie_m, metoda: osm_cache|ai_estimare, acuratete, motiv}`.
 
-Ordine: (1) nume normalizat (`backend.trace._norm`: fără diacritice/prefixe) cu toate cuvintele numelui în text; (2) „X colț cu Y" / „X & Y" = vârfurile cele mai apropiate (dacă la > 2*precizie_intersectie+30 m, cade pe strada X); (3) dacă (1) eșuează, `cli_ai.call_cli` alege DOAR din lista de nume din cache; răspuns în afara listei sau CLI oprit = `necunoscut`. Cache AI doar în proces.
+Ordine: (1) nume normalizat (`backend.trace._norm`: fără diacritice/prefixe) cu toate cuvintele numelui în text; (2) „X colț cu Y" / „X & Y" = vârfurile cele mai apropiate (dacă la > 2*precizie_intersectie+30 m, cade pe strada X); (3) dacă (1) eșuează, `cli_ai.call_cli` alege DOAR din lista de nume din cache; răspuns în afara listei sau CLI oprit = `necunoscut`. Cache AI persistent: `data/cache/geo_ai.json` (`{text de stradă normalizat: nume exact din listă | null}`, commit-uit, determinist fără CLI); intrare cu nume ieșit din listă = ignorată; răspuns CLI real se scrie înapoi. `cerere_ai(text, strazi)` -> `{cheie, candidati}` (5 nume apropiate, difflib) și `scrie_ai(cheie, nume)` (validat) pentru completare externă.
 
 Acuratețe = `cfg.geocodare.acuratete[intersectie|strada_numar|strada|reper]`, x `factor_ai_fuzzy` dacă a ales AI. Precizie: stradă = lungime/2 în [min, max]; număr, intersecție, reper = valori fixe din cfg.
 

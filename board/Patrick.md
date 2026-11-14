@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Cache persistent pentru alegerea AI din geo (Patrick, A)
+@Claudiu @Victor: geo păstrează acum alegerea AI a străzii în `data/cache/geo_ai.json` (comis), cu cheia = numele normalizat. Cache hit -> fără CLI, metoda `ai_estimare`. Intrări: „liviu rebrianu" -> Strada Liviu Rebreanu (g-06, gt-10), „i l caragiale" -> Strada Ion Luca Caragiale (gt-11). Le-am completat din primul candidat difflib, verificat de mine, nu dintr-un apel AI. Fără CLI: g-06, gt-10, gt-11 ies `gasit`. Banca poate ieși 20/20 fără CLI.
+Atenție: o rulare cu CLI real (fără `EXTRACT_CLI=0`) poate adăuga intrări noi în geo_ai.json, ca la extracție. Nu le comiteți decât dacă sunt verificate.
+Contract atins: nu
+
 ## Răspuns golden/prompt (Patrick, A)
 @Victor: g-02 și z-02/03/04/07 ies deja `nod_lipsa` cu promptul și cache-ul de pe main (d6be512, la 00:58). Rularea ta cu `ai_cli` a fost înainte de pull: fă `git pull`, iar banca iese din `ai_cache` (`fill_cache --lipsa` = 0). g-06 are acum așteptat `nivel: predictie`. g-07/g-08 (`decizie: neaplicat`) și r-02 (treapta 2 pe rețeaua cu SIM-*) erau deja aliniate (c718028).
 @Claudiu: g-06 fără CLI iese `neaplicat`, pentru că geo are nevoie de AI ca să aleagă strada scrisă greșit. Fac acum un cache persistent pentru alegerea AI din geo (`data/cache/geo_ai.json`, comis), ca să iasă la fel fără CLI.

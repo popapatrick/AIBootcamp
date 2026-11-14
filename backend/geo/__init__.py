@@ -2,11 +2,13 @@
 
 `geocodeaza(referinta, strazi, cfg)` -> {status, lat, lon, precizie_m, metoda, acuratete, motiv}.
 Ordine: potrivire deterministă a numelui (fără diacritice/prefixe) -> intersecție -> AI (cli_ai) care alege DOAR
-dintre numele din cache; răspuns în afara listei = necunoscut. Un `gasit` la peste `zona.raza_max_m` de centroidul
+dintre numele din cache (alegerea e păstrată în `data/cache/geo_ai.json`, commit-uit); răspuns în afara listei = necunoscut. Un `gasit` la peste `zona.raza_max_m` de centroidul
 rețelei de start devine `in_afara_zonei` (`engine.zona.zona_ok`; lat/lon păstrate, metoda `in_afara_zonei`).
 """
+import difflib
 import json
 import re
+from pathlib import Path
 import unicodedata
 
 from backend.engine.network import dist_m, load_network
@@ -16,7 +18,8 @@ from backend.trace import _norm  # normalizare nume stradă (diacritice, prefixe
 
 _SEP = re.compile(r"\s*(?:&|\bcol[tț]\s+cu\b|\bintersec[tț]ia\s+cu\b|\bintersec[tț]ie\s+cu\b)\s*", re.I)
 _NR = re.compile(r"\b(?:nr|numarul|numar|no)\.?\s*(\d+)|(?<=\s)(\d{1,3})\s*$", re.I)
-_AI_CACHE: dict = {}
+_AI_CACHE: dict = {}  # cache în proces (peste cel de pe disc)
+_AI_FILE = Path(__file__).resolve().parents[2] / "data/cache/geo_ai.json"  # cache persistent {cheie normalizată: nume|null}; suprascriibil în teste
 _NET: dict = {}  # rețeaua de start, încărcată o dată (doar pentru centroidul zonei)
 
 
@@ -95,18 +98,62 @@ def _alta(text: str, g: dict, exclus: str) -> str | None:
     return max(c, key=lambda k: len(k.split())) if c else None
 
 
+def _lista(g: dict) -> list[str]:
+    return sorted(e["nume"] for e in g.values())
+
+
+def _citeste() -> dict:
+    try:
+        return json.loads(_AI_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _scrie(cheie: str, nume: str | None) -> None:
+    d = _citeste()
+    d[cheie] = nume
+    _AI_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _AI_FILE.write_text(json.dumps(d, ensure_ascii=False, sort_keys=True, indent=1) + "\n", encoding="utf-8")
+
+
+def cerere_ai(text_strada: str, strazi: list[dict]) -> dict:
+    """{cheie, candidati}: cheia din `geo_ai.json` pentru textul de stradă + cele mai apropiate 5 nume din listă (difflib)."""
+    cheie, g = _norm(text_strada), _grupe(strazi)
+    apropiate = difflib.get_close_matches(cheie, list(g), n=5, cutoff=0.0)
+    return {"cheie": cheie, "candidati": [g[k]["nume"] for k in apropiate]}
+
+
+def scrie_ai(cheie: str, nume: str | None, strazi: list[dict] | None = None) -> None:
+    """Scrie în `geo_ai.json` alegerea pentru `cheie` (nume exact din lista de străzi sau None). Nume în afara listei = ValueError."""
+    if nume is not None and nume not in _lista(_grupe(strazi if strazi is not None else _strazi())):
+        raise ValueError(f"nume în afara listei: {nume!r}")
+    _scrie(cheie, nume)
+
+
+def _strazi():
+    from backend.engine.osm import strazi
+    return strazi()
+
+
 def _ai(text: str, g: dict, cfg: dict) -> str | None:
-    """AI alege un nume din lista din cache sau „necunoscută". Validat: în afara listei = None. Cache în proces pe text."""
-    nume = sorted(e["nume"] for e in g.values())
-    cheie = (_norm(text), tuple(nume))
-    if cheie not in _AI_CACHE:
-        r = cli_ai.call_cli(
-            "Alegi strada din listă care corespunde cel mai probabil textului (ortografie diferită, formulare vagă). "
-            "Alege EXACT un nume din listă sau „necunoscuta” dacă niciunul nu se potrivește. Nu inventa nume.",
-            {"type": "object", "properties": {"strada": {"type": "string"}}, "required": ["strada"]},
-            f"Text: {text}\nStrăzi: {json.dumps(nume, ensure_ascii=False)}")
-        _AI_CACHE[cheie] = r.get("strada") if isinstance(r, dict) else None
-    ales = _AI_CACHE[cheie]
+    """Alege un nume din lista din cache sau None. Ordine: cache persistent `geo_ai.json` (valoare invalidă = ignorată) -> CLI AI
+    (rezultat scris în cache). Fără CLI și fără intrare = None."""
+    nume, cheie = _lista(g), _norm(text)
+    d = _citeste()
+    if cheie in d and (d[cheie] is None or d[cheie] in nume):
+        ales = d[cheie]
+    else:
+        k = (cheie, tuple(nume))
+        if k not in _AI_CACHE:
+            r = cli_ai.call_cli(
+                "Alegi strada din listă care corespunde cel mai probabil textului (ortografie diferită, formulare vagă). "
+                "Alege EXACT un nume din listă sau „necunoscuta” dacă niciunul nu se potrivește. Nu inventa nume.",
+                {"type": "object", "properties": {"strada": {"type": "string"}}, "required": ["strada"]},
+                f"Text: {text}\nStrăzi: {json.dumps(nume, ensure_ascii=False)}")
+            _AI_CACHE[k] = r.get("strada") if isinstance(r, dict) else None
+            if isinstance(r, dict):  # răspuns real (nu CLI oprit): îl păstrăm și pe disc
+                _scrie(cheie, _AI_CACHE[k] if _AI_CACHE[k] in nume else None)
+        ales = _AI_CACHE[k]
     return next((k for k, e in g.items() if e["nume"] == ales), None)
 
 

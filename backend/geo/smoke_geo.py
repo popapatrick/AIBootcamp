@@ -8,7 +8,13 @@ from backend.engine.config import load_weights
 from backend.engine.network import load_network
 from backend.engine.osm import strazi
 from backend.extract import cli_ai
-from backend.geo import geocodeaza, _AI_CACHE
+import tempfile
+from pathlib import Path
+
+import backend.geo as geo
+from backend.geo import geocodeaza, _AI_CACHE, cerere_ai, scrie_ai
+
+geo._AI_FILE = Path(tempfile.mkdtemp()) / "geo_ai.json"  # izolat de cache-ul commit-uit
 
 cfg, S = load_weights(), strazi()
 A = cfg["geocodare"]["acuratete"]
@@ -45,11 +51,28 @@ ok(rp["status"] == "gasit" and rp["acuratete"] == A["reper"] and rp["precizie_m"
 # calea AI: alege din listă (acceptat) sau în afara listei (respins)
 for ales, status in (("Strada Liviu Rebreanu", "gasit"), ("Strada Inventata", "necunoscut")):
     _AI_CACHE.clear()
+    geo._AI_FILE = Path(tempfile.mkdtemp()) / "geo_ai.json"
     with mock.patch.object(cli_ai, "call_cli", return_value={"strada": ales}) as m:
         a = g(strada="str liviu rebrianu")
     ok(m.called and a["status"] == status, a)
     if status == "gasit":
         ok(a["metoda"] == "ai_estimare" and a["acuratete"] == round(A["strada"] * cfg["geocodare"]["factor_ai_fuzzy"], 3), a)
+# cache persistent: fără CLI, intrare validă -> ai_estimare; nume în afara listei -> ignorat; scrie_ai validează
+_AI_CACHE.clear()
+ci = cerere_ai("str liviu rebrianu", S)
+ok(ci["cheie"] == "liviu rebrianu" and "Strada Liviu Rebreanu" in ci["candidati"] and len(ci["candidati"]) <= 5, ci)
+ok(g(strada="str liviu rebrianu")["status"] == "necunoscut", "fără cache și fără CLI")
+scrie_ai(ci["cheie"], "Strada Liviu Rebreanu")
+c1 = g(strada="str liviu rebrianu")
+ok(c1["status"] == "gasit" and c1["metoda"] == "ai_estimare", c1)
+try:
+    scrie_ai("x", "Strada Inventata")
+    ok(False, "trebuia ValueError")
+except ValueError:
+    ok(True, "")
+geo._AI_FILE.write_text('{"liviu rebrianu": "Strada Inventata"}', encoding="utf-8")
+ok(g(strada="str liviu rebrianu")["status"] == "necunoscut", "nume invalid în cache ignorat")
+geo._AI_FILE = Path(tempfile.mkdtemp()) / "geo_ai.json"
 ok(geocodeaza({}, S, cfg)["status"] == "necunoscut" and geocodeaza({"adresa": "x"}, [], cfg)["status"] == "necunoscut", "gol")
 # în afara zonei: stradă din cache, dar cu raza_max_m mică (centroid fix -> punctul e „departe”)
 ofz = geocodeaza({"adresa_structurata": {"strada": "Strada Liviu Rebreanu"}}, S, {**cfg, "zona": {"raza_max_m": 1}}, net=load_network())
