@@ -9,3 +9,7 @@ Date FICTIVE derivate din `data/network/Retea_JT_PTAB_7812.kmz`.
 - `events.fallback.json`: evenimente sintetice de rezervă dacă lipsesc cele ale lui A.
 - `osm/streets_raw.json`: cache cu străzile OSM (© OpenStreetMap contributors, ODbL). Se reface cu `python -m backend.engine.osm --fetch`.
 - `snapshots/`, `timeline.json`, `jurnal.json`: ieșiri exportate de `GridModel.export()`, dacă au fost generate.
+
+## Sesiunea 3
+- Rețeaua de start include acum și cele 55 de puncte simulate din `data/simulare/puncte-simulare.json` (A), încărcate de `backend/engine/network.py::incarca_puncte_simulare` când `GridModel()` pornește fără rețea dată; `origine: retea_start`, scor inițial 0,90. Elementele adăugate de sistem au `origine: generat_model`. Zona prototipului (3 km față de centroid) e în `backend/engine/zona.py`. Vezi `docs/etapa-20-safeguard-zona.md` și `docs/etapa-21-retea-start-origine.md`.
+- `network.geojson` din acest folder e exportul rețelei KMZ originale, fără punctele simulate (snapshot-urile și `/retea` le conțin).
