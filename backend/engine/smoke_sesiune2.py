@@ -190,6 +190,15 @@ def main() -> None:
     pred = [p for p in sn1.values() if p.get("predictie")]
     verifica("origine: predicțiile au predictie.origine generat_model", all(p["predictie"]["origine"] == "generat_model" for p in pred))
 
+    # --- puncte simulate hardcodate = parte din rețeaua de start
+    mp = mk()
+    sim = [e for e in mp.net["noduri"] if e.startswith("SIM-")]
+    verifica("puncte simulate: 55 de noduri SIM-* în rețeaua de start, toate retea_start și în zonă",
+             len(sim) == 55 and all(mp.istoric[e][0]["origine"] == "retea_start" for e in sim)
+             and all(zona_ok(mp.net["noduri"][e]["lat"], mp.net["noduri"][e]["lon"], mp.net, mp.w)["ok"] for e in sim), str(len(sim)))
+    verifica("puncte simulate: tronsoanele SIM-L* au capete în rețea",
+             all(c in mp.net["noduri"] for t_ in mp.net["tronsoane"].values() if t_["id"].startswith("SIM-L") for c in t_["capete"]))
+
     # --- geocodare în potrivire (adresă -> coordonate) și plafon de standardizare
     import backend.engine.osm as osm_g
     nume_str = next((x["nume"] for x in osm_g.strazi() if x.get("nume")), None)

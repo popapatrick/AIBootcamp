@@ -70,20 +70,40 @@ def oracol() -> list[dict]:
     return sorted(out, key=lambda e: (e["data"], e["event_id"]))
 
 
-def main() -> None:
+def evenimente(oracol_fortat: bool = False) -> tuple[list[dict], str]:
+    """Evenimentele de calibrare: events.json (extracție) dacă există, altfel „oracol"."""
     cale = ROOT / "data" / "events" / "events.json"
-    if "--oracol" not in sys.argv and cale.exists():
-        ev, sursa = json.loads(cale.read_text(encoding="utf-8")), "events.json (extracție Claude)"
+    if not oracol_fortat and cale.exists():
+        ev = json.loads(cale.read_text(encoding="utf-8"))
         ev.sort(key=lambda e: (e["data"], e["event_id"]))
-    else:
-        ev, sursa = oracol(), "oracol (adevărul lui A + regex)"
+        return ev, "events.json (extracție Claude)"
+    return oracol(), "oracol (adevărul lui A + regex)"
+
+
+def ruleaza(weights: dict | None = None) -> list[dict]:
+    """Rulează evenimentele de calibrare pe un model nou: [{event_id, data, tip, decizie, scor}]; folosit de verifica_reglaje."""
+    ev, _ = evenimente()
+    m = GridModel(weights=weights)
+    m.traseu_fn = osm.traseu_fn()
+    out = []
+    for e in ev:
+        t = m.apply_event(e)
+        sc = t["pasi"][-1]["rezultat"]
+        s = sc.get("scor_propunere") if sc.get("scor_propunere") is not None else sc.get("scor_nou")
+        out.append({"event_id": e["event_id"], "data": e["data"], "tip": e["tip"], "decizie": t["decizie"],
+                    "scor": None if s is None else round(s, 3)})
+    return out
+
+
+def main() -> None:
+    ev, sursa = evenimente("--oracol" in sys.argv)
     print(f"Evenimente: {len(ev)}, sursa: {sursa}\n")
     m = GridModel()
     m.traseu_fn = osm.traseu_fn()
     rez = Counter()
     for e in ev:
         t = m.apply_event(e)
-        pot = t["pasi"][1]["rezultat"]
+        pot = next(p for p in t["pasi"] if p["nume"] == "potrivire")["rezultat"] if any(p["nume"] == "potrivire" for p in t["pasi"]) else {"status": "-"}
         sc = t["pasi"][-1]["rezultat"]
         s = sc.get("scor_propunere") if sc.get("scor_propunere") is not None else sc.get("scor_nou")
         rez[t["decizie"]] += 1

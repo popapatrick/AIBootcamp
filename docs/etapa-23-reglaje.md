@@ -2,7 +2,7 @@
 
 Metoda din `docs/plan-sesiune-3-logica.md`, secțiunea 9. Un reglaj = schimbarea unui număr în `contracts/weights.yaml`, fără alt cod. Orice laptop poate face asta, inclusiv C.
 
-**Depinde de B6** (marcat mai jos): `backend/engine/verifica_reglaje.py`, `contracts/weights.limits.yaml`, `scripts/verifica_tot.sh`, regula `reglaj:` în CLAUDE.md și `docs/cerere-logica.md` nu există încă la data scrierii. Până atunci pașii 3-4 nu se pot rula; nu împinge reglaje fără ele.
+B6 e gata: `backend/engine/verifica_reglaje.py`, `contracts/weights.limits.yaml`, `scripts/verifica_tot.sh`, regula `reglaj:` în CLAUDE.md și șablonul `docs/cerere-logica.md`. `verifica_reglaje` arată ce valori ai schimbat față de HEAD, ce evenimente de calibrare își schimbă decizia sau scorul, rulează toate smoke-urile și tipărește linia pentru board.
 
 ## Pași
 1. `git pull --rebase origin main`. Citește `board/*.md`.

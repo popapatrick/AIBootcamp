@@ -30,3 +30,5 @@ Ponderile și pragurile vin doar din `contracts/weights.yaml`. Contractele se sc
 
 ## Sesiunea 3
 - `zona.py`: safeguard-ul zonei prototipului (`centru_retea`, `zona_ok`, `motiv_afara`); vezi `docs/etapa-20-safeguard-zona.md`.
+- `verifica_reglaje.py`: verifică un reglaj în `contracts/weights.yaml` (limite din `weights.limits.yaml`, diferență de calibrare, smoke-uri, linie pentru board). `scripts/verifica_tot.sh` rulează toate verificările. Vezi `docs/etapa-23-reglaje.md` și `docs/cerere-logica.md`.
+- `calibrare.py`: `evenimente()` și `ruleaza(weights)` sunt reutilizate de `verifica_reglaje`.

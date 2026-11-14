@@ -2,8 +2,8 @@
 
 ## 1. Unelte (B)
 
-- [ ] 1.1 (B6) `contracts/weights.limits.yaml` (min/max pentru fiecare valoare) și `backend/engine/verifica_reglaje.py` (chei, tipuri, limite, diferență calibrare, smoke-uri, linie pentru board)
-- [ ] 1.2 (B6) `scripts/verifica_tot.sh`: toate smoke-urile și testele; `docs/cerere-logica.md` (șablon)
+- [x] 1.1 (B6) `contracts/weights.limits.yaml` (min/max pentru fiecare valoare) și `backend/engine/verifica_reglaje.py` (chei, tipuri, limite, diferență calibrare, smoke-uri, linie pentru board)
+- [x] 1.2 (B6) `scripts/verifica_tot.sh`: toate smoke-urile și testele; `docs/cerere-logica.md` (șablon)
 - [ ] 1.3 (B7) Referința `data/golden/calibrare-referinta.json` și tag `logic-v1` după verde
 
 ## 2. Date de aur (A)
@@ -17,7 +17,7 @@
 
 ## 4. Reguli de lucru
 
-- [ ] 4.1 (B6) CLAUDE.md și fișierele agenților: excepția `reglaj:` (doar `weights.yaml`, doar valori) și procedura de cerere
+- [x] 4.1 (B6) CLAUDE.md și fișierele agenților: excepția `reglaj:` (doar `weights.yaml`, doar valori) și procedura de cerere
 
 ## 5. Documentație
 
