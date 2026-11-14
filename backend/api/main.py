@@ -37,7 +37,11 @@ class Raport(BaseModel):
 @app.get("/health")
 def health() -> dict:
     """{"status": "ok", "mod": {...}} — `mod` arată dacă fiecare parte e stub sau reală."""
-    return {"status": "ok", "mod": sources.mod(), "nota": NOTA}
+    out = {"status": "ok", "mod": sources.mod(), "nota": NOTA}
+    f = sources.engine_func("sursa_evenimente")
+    if f:
+        out["sursa_evenimente"] = f()
+    return out
 
 
 @app.post("/rapoarte")

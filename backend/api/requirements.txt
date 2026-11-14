@@ -2,3 +2,6 @@ fastapi
 uvicorn[standard]
 pyyaml
 httpx  # doar pentru smoke test (TestClient)
+anthropic
+jsonschema
+python-dotenv

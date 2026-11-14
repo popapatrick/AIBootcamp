@@ -158,8 +158,13 @@ def proceseaza(text: str, sursa: str, data: str | None = None) -> dict:
     """
     ext = sources.extract_func()
     if ext:
-        ev = ext(text, sursa, data)
-        metoda_ext = "claude (A)"
+        try:
+            ev = ext(text, sursa, data)
+            metoda_ext = "claude (A)"
+        except Exception as e:  # cheie lipsă, rețea, ValueError: demo-ul nu pică
+            ev = extract_stub(text, sursa, data)
+            metoda_ext = f"stub_regex (rezervă: {type(e).__name__})"
+            ev["metoda_extractie"] = metoda_ext
     else:
         ev = extract_stub(text, sursa, data)
         metoda_ext = ev.get("metoda_extractie")

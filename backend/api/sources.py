@@ -65,6 +65,16 @@ def _snapshot_files() -> dict[str, Path]:
     return {}
 
 
+def _are_cheie() -> bool:
+    """Există ANTHROPIC_API_KEY în mediu sau în .env (valoarea nu se citește mai departe)."""
+    import os
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return True
+    env = Path(__file__).resolve().parents[2] / ".env"
+    return env.is_file() and any(l.startswith("ANTHROPIC_API_KEY=") and l.strip().split("=", 1)[1]
+                                 for l in env.read_text().splitlines())
+
+
 def mod() -> dict:
     """Ce sursă folosește fiecare parte: motor | fisiere | stub."""
     if engine_func("snapshot"):
@@ -77,7 +87,7 @@ def mod() -> dict:
         "retea": retea,
         "evenimente": "motor" if engine_func("timeline") else
                       ("fisiere" if (MODEL_DIR / "timeline.json").exists() else "stub"),
-        "extractie": "claude" if extract_func() else "stub",
+        "extractie": ("claude" if _are_cheie() else "stub (rezervă: cheie API lipsă)") if extract_func() else "stub",
         "motor": "real" if engine_func("apply_event") else
                  ("partial_match_event" if engine_func("match_event") else "stub"),
     }

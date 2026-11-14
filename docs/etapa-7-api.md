@@ -51,3 +51,9 @@ UI plan B (Leaflet): `http://localhost:8000/ui/` (sau `/ui/?api=https://alt-host
 ## Ce trebuie să știe ceilalți
 - @B: exportați `apply_event`, `snapshot`, `timeline` din `backend/engine/__init__.py` (sau unul din modulele `engine`, `model`, `score`, `decision`, `timeline`, `pipeline`) și API-ul le preia singur. `snapshot(None)` nu trebuie suportat; API-ul trimite mereu o dată.
 - @A: exportați `extract_event(text, sursa, data)` din `backend/extract/__init__.py` (sau `extract.py`).
+
+## Extracție reală și rezervă; `sursa_evenimente`
+- `extract_event` (A) e preluat automat. Necesită `anthropic`, `jsonschema`, `python-dotenv` (în `backend/api/requirements.txt`) și `ANTHROPIC_API_KEY` în `.env` local (nu în repo).
+- Dacă `extract_event` ridică orice excepție (cheie lipsă, rețea, `ValueError`), `pipeline.proceseaza` cade pe `extract_stub`; `metoda` din pasul „extracție" și `mod.extractie_metoda` devin `stub_regex (rezervă: <TipEroare>)`. Nu se inventează date.
+- `/health.mod.extractie` = `claude` doar dacă există cheia; altfel `stub (rezervă: cheie API lipsă)`.
+- `/health.sursa_evenimente` = `engine.sursa_evenimente()` (ex. `events.json`, `events.stub.json` sau rezerva lui B).

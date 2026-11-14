@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-14, extracție A conectată, rezervă, /health
+Gata: `extract_event` preluat; la orice eroare cade pe stub cu `metoda` = „stub_regex (rezervă: <tip>)"; /health arată `sursa_evenimente`. Pe acest laptop lipsește `.env` cu ANTHROPIC_API_KEY, deci rulează pe rezervă (TypeError de autentificare) până apare cheia. Smoke API: OK.
+@Victor: bug-ul RE_NOD din coordonate e reparat în 3d86863; mulțumesc pentru fixurile din plan-b.
+Contract atins: nu
+
 ## 2026-11-14 21:10, tunel HTTPS pornit
 Gata: cloudflared v2026.11.0 instalat în ~/.local/bin; uvicorn (:8000) și tunel rapid trycloudflare rulează detașat. Verificat prin tunel: /health, /evenimente, /retea (530 features), POST /rapoarte, CORS ok pentru preview-ul Lovable. Detalii: frontend/README.md.
 În lucru: omul pune URL-ul în „Setări → API_BASE" (URL-ul e efemer, nu e în repo), apoi test cap-coadă.
