@@ -2,13 +2,13 @@
 
 ## 1. Contract (B, commit `contract:`, pasul 0)
 
-- [ ] 1.1 `zona.raza_max_m: 3000` în `weights.yaml`; `eronat_prototip` în StepTrace și semnalul `in_afara_zonei_prototip` în `interfaces.md`; zona (centru, rază) în `/stare` în `api.openapi.yaml`
+- [x] 1.1 `zona.raza_max_m: 3000` în `weights.yaml`; `eronat_prototip` în StepTrace și semnalul `in_afara_zonei_prototip` în `interfaces.md`; zona (centru, rază) în `/stare` în `api.openapi.yaml`
 
 ## 2. Motor (B)
 
-- [ ] 2.1 (B1) `backend/engine/zona.py`: centroid, `zona_ok`; înlocuiește bbox +500 m din `match.py`
+- [x] 2.1 (B1) `backend/engine/zona.py`: centroid, `zona_ok`; înlocuiește bbox +500 m din `match.py`
 - [ ] 2.2 (B1) Aplicat în potrivire, mutare_fire, cerere_racordare, trace; stâlpi prezicși tăiați la zonă
-- [ ] 2.3 (B1) Teste în `smoke_engine.py` și `smoke_sesiune2.py` (40 km, 3,1 km, 2,9 km, om_teren, apel)
+- [x] 2.3 (B1) Teste în `smoke_engine.py` și `smoke_sesiune2.py` (40 km, 3,1 km, 2,9 km, om_teren, apel)
 
 ## 3. Folderele lui A
 

@@ -23,6 +23,7 @@ from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m
 from backend.engine.sesiune2 import Sesiune2
+from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițială
@@ -45,6 +46,7 @@ class GridModel(Sesiune2):
         self._val_flag = False
         self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
+        centru_retea(self.net)      # centroidul rețelei de start, înainte să se adauge ceva (safeguard)
         init = self.w["scor"]["initial_element_kmz"]
         for eid, el in self._elemente().items():
             self._pune(eid, el["tip_element"], start, nivel="in_model", scor=init, ultima_verificare=None,
@@ -115,6 +117,11 @@ class GridModel(Sesiune2):
             m = {**m, "calitate": round(m["calitate"] * rez_trace.get("calitate", 1.0), 3),
                  "semnale": m["semnale"] + ["coordonate_din_trace"]}
         trace["pasi"].append({"nume": "potrivire", "rezultat": m, "incredere": m["calitate"]})
+        if "coordonate_in_afara_zonei" in m["semnale"] and m["status"] != "potrivit":
+            c = (event.get("referinta") or {}).get("coordonate") or {}
+            if c.get("lat") is not None and c.get("lon") is not None:
+                self._eronat(event, trace, m, c["lat"], c["lon"])    # safeguard: punct în afara zonei prototipului
+                return self._inchide(event, event["tip"], trace, m, inainte)
 
         tip = event["tip"]
         # un raport de teren care pomenește un nod numeric inexistent în model, cu coordonate, descrie de fapt
@@ -227,6 +234,16 @@ class GridModel(Sesiune2):
         trace["decizie"] = decizie
         trace["pasi"].append({"nume": "scor", "rezultat": {**rezultat, "decizie": decizie},
                               "incredere": incredere, "motive": motive})
+
+    def _eronat(self, event: dict, trace: dict, m: dict | None, lat: float, lon: float):
+        """Safeguard (zona prototipului): punct la peste `zona.raza_max_m` de centrul rețelei = eronat, neaplicat."""
+        z = zona_ok(lat, lon, self.net, self.w)
+        trace["eronat_prototip"] = True
+        if m is not None and "in_afara_zonei_prototip" not in m["semnale"]:
+            m["semnale"].append("in_afara_zonei_prototip")
+        if not any(p["nume"] == "predictie" for p in trace["pasi"]):
+            trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
+        self._scor_pas(trace, "neaplicat", {"nivel": None, "eronat_prototip": True, "zona": z}, [motiv_afara(z)])
 
     def _neaplicat(self, event: dict, trace: dict, motiv: str):
         trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})

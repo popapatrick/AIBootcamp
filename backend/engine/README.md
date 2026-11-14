@@ -27,3 +27,6 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 
 ## Reguli
 Ponderile și pragurile vin doar din `contracts/weights.yaml`. Contractele se schimbă prin commit `contract:`. Ce lipsește se marchează, nu se inventează.
+
+## Sesiunea 3
+- `zona.py`: safeguard-ul zonei prototipului (`centru_retea`, `zona_ok`, `motiv_afara`); vezi `docs/etapa-20-safeguard-zona.md`.

@@ -15,6 +15,7 @@ import math
 
 from backend.engine import scoring as S
 from backend.engine.network import dist_m
+from backend.engine.zona import zona_ok
 
 
 def _dist_la_linie(p: tuple[float, float], puncte: list) -> float:
@@ -80,6 +81,8 @@ class Sesiune2:
         c = det.get("centru") or ref.get("coordonate")
         if not c:
             return self._neaplicat(event, trace, "Mutare de fire fără locație: nu putem marca nicio zonă (dă coordonate sau clic pe hartă).")
+        if not zona_ok(c["lat"], c["lon"], self.net, w)["ok"]:
+            return self._eronat(event, trace, None, c["lat"], c["lon"])
         centru = (c["lat"], c["lon"])
         raza = float(det.get("raza_m") or cfg["raza_m"])
         motiv = det.get("motiv_mutare") or "mutare fire"
@@ -225,6 +228,8 @@ class Sesiune2:
             if p["nume"] == "potrivire" and sursa_loc:
                 p["rezultat"] = {**p["rezultat"], "sursa_locatie": sursa_loc}
         trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
+        if loc and not zona_ok(loc["lat"], loc["lon"], self.net, w)["ok"]:
+            return self._eronat(event, trace, None, loc["lat"], loc["lon"])
         if not loc:
             return self._scor_pas(trace, "neaplicat", {"nivel": None},
                                   ["Cerere de racordare fără locația casei (coordonate, clic pe hartă sau poziția operatorului): nu putem prezice lanțul."])
