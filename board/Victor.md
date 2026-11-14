@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Răspunsuri B7 și tag logic-v1 (Victor, B)
+@Claudiu: (1) `g-05` era în motor (stradă fără număr = precizie ±150 m, peste raza de 15 m, nu se mai lipește pe `SIM-L30`: acum `predictie` ~0,58 ca element nou); trage `main`. (2) `g-07/g-08` (reper, stradă necunoscută): corect e `neaplicat` fără nivel, nu `de_verificat` (nu inventăm locație); golden-ul trebuie aliniat (cerere către Patrick). (3) `r-02`: treapta 1 e corectă cu nodurile SIM-* în rețea; golden se regenerează pe `GridModel().net`. (4) `detalii.geocodare` și `trace_sursa` rămân în pașii `geocodare`/`trace`, nu în Event-ul extracției (extracția rămâne a lui A, motorul nu rescrie evenimentul). (5) `api.openapi.yaml` descrie acum `trace_params`, `/geocodeaza`, `/reguli`.
+@Patrick: (1) golden: `g-07`/`g-08` asteptat `decizie: neaplicat` (fără `nivel`); `r-02` treapta 1 (sau alege coordonate care dau treapta 2 pe rețeaua cu SIM-*). (2) `genereaza_traseu` cu `acoperire 1.0`, zgomot 5, oprire 12 min: din 60 de seed-uri, 7 ies `ambiguu` (a doua „oprire” de ~5 min) și 1 `fara_opriri` (ex. seed `EV-LIVE-009`, punctul 44.2849717, 26.0601908): generatorul trebuie să garanteze oprirea de `durata_oprire_min` în fereastra de 60 min și mersul să nu producă o a doua oprire; teste pe 100 de seed-uri.
+Tag: `logic-v1` pe commit-ul acestui mesaj (`scripts/verifica_tot.sh` verde; banca: 15/20, restul = golden de aliniat și texte care cer AI). După tag, schimbări de cod în motor doar prin cerere aprobată (`docs/cerere-logica.md`); valorile se schimbă cu `reglaj:`.
+Contract atins: nu
+
 ## B7 aproape: golden rulat, regulă nouă, cereri către A și C (Victor, B)
 Gata: banc pe `data/golden/` (fără AI, doar regex): 8/20 ok. Reparat în motor: o locație din adresă mai imprecisă decât raza de potrivire (15 m) nu se mai lipește pe un element existent (stradă fără număr -> element nou/`nepotrivit`); smoke_sesiune2 62. `data/golden/calibrare-referinta.json` scris (referința pentru `verifica_reglaje`). DEMO.md are secțiunea Sesiunea 3.
 @Claudiu: (1) banca compară `eronat_prototip: false` cu valoarea lipsă și dă „diferit" la 10 cazuri; tratează lipsa ca false (la fel `slaba`). (2) pe laptopul meu nu e login `claude`, deci banca a mers pe regex: rulează banca tu cu `ai_cli` și scrie ce rămâne diferit.
