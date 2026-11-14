@@ -324,7 +324,10 @@ class Sesiune2:
         op = det.get("locatie_operator")
         # sursa locației: coordonate din text > clic pe hartă > poziția simulată a operatorului (doar dacă lipsesc celelalte)
         if ref.get("coordonate"):
-            loc, sursa_loc = ref["coordonate"], ("clic" if ref["coordonate"] == det.get("locatie") else "text")
+            geo = det.get("geocodare")
+            sursa_loc = ("clic" if ref["coordonate"] == det.get("locatie") else
+                         "adresa" if geo and (geo.get("lat"), geo.get("lon")) == (ref["coordonate"]["lat"], ref["coordonate"]["lon"]) else "text")
+            loc = ref["coordonate"]
         elif det.get("locatie"):
             loc, sursa_loc = det["locatie"], "clic"
         elif op and op.get("lat") is not None and op.get("lon") is not None:
@@ -350,9 +353,8 @@ class Sesiune2:
                              "rezultat": {"metoda": "lant_racordare", "sursa_locatie": sursa_loc, **{k: r.get(k) for k in
                                           ("status", "nod_start", "distanta_m", "urmeaza_strada", "ambiguu", "motiv")},
                                           "stalpi": len(r.get("stalpi") or [])}}
-        if r["status"] == "fara_nod" or not r.get("nod_start"):
-            return self._scor_pas(trace, "neaplicat", {"nivel": None},
-                                  [f"Niciun nod al rețelei în raza de {cfg['raza_nod_m']} m de casă: {r.get('motiv', '')}"])
+        treapta = int(r.get("treapta") or (4 if r["status"] == "fara_nod" or not r.get("nod_start") else 1))
+        trace["pasi"][-1]["rezultat"]["treapta"] = treapta
         ev = event["event_id"]
         nume = {f"stalp-{s['ordine']}": f"NOU-{ev}-S{s['ordine']}" for s in r["stalpi"]}
         nume["casa"] = f"NOU-{ev}-casa"
@@ -370,9 +372,12 @@ class Sesiune2:
                 "puncte": pts, "metoda": "traseu_strada_osm" if urm is not None else "linie_dreapta", "capete": (a, b),
                 "urmeaza": urm, "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}))
         q = w["potrivire"]["calitate_dupa_coordonate"] * (0.8 if r.get("ambiguu") else 1.0)
+        if sursa_loc == "adresa":
+            q = min(q, det["geocodare"]["acuratete"])       # locația casei vine din adresă: acuratețea geocodării
         sp, factori = S.scor_propunere(event, q, w, urm)
-        if urm is None:
+        if urm is None and treapta <= 2:
             sp = round(sp * cfg["factor_fara_strada"], 3)
+        sp = round(sp * {1: 1.0, 2: cfg["factor_raza_extinsa"], 3: cfg["factor_linie_dreapta_lunga"], 4: cfg["factor_doar_casa"]}[treapta], 3)
         if sursa_loc == "operator_simulat":
             sp = round(sp * cfg["factor_locatie_operator"], 3)
         niv = S.decizie(sp, w, planificat=event["status"] == "planificat" or sursa_loc == "operator_simulat")
@@ -383,9 +388,17 @@ class Sesiune2:
             prec = op.get("precizie_m")
             txt += (f" Locația e din poziția SIMULATĂ a operatorului" + (f", ±{prec:g} m" if prec is not None else "") +
                     f" (nu GPS real, nu coordonate exacte): scor × {cfg['factor_locatie_operator']}; rămâne predicție până confirmă omul.")
+        txt += f" Treapta {treapta} din 4 (1 nod în rază, 2 rază extinsă, 3 linie dreaptă, 4 doar casa)."
+        slaba = False
         if niv == "de_verificat":
-            return self._scor_pas(trace, "neaplicat", {"scor_propunere": sp, "nivel": niv},
-                                  [txt + f" Sub pragul {w['praguri']['predictie']}: nu se desenează."], sp)
+            # fără „neaplicat” din lipsă de date: predicție slabă (punctată), niciodată aplicată fără om
+            slaba = True
+            if sp < cfg["prag_afisare"]:
+                specs = [x for x in specs if x[0] == nume["casa"]]
+                txt += (f" Scor {sp} sub pragul de afișare {cfg['prag_afisare']}: rămâne doar punctul casei, ca predicție slabă, fără lanț.")
+            else:
+                txt += f" Scor sub pragul {w['praguri']['predictie']}: predicție slabă (punctată), nu se aplică."
+            niv = "predictie"
         if niv == "in_model":
             self._adauga_in_model(specs, event, sp, [txt + f" Peste pragul {w['praguri']['aplicat']}: adăugat în model, în timp real."], None)
             dec = "adaugat"
@@ -394,14 +407,16 @@ class Sesiune2:
                 self.predictii[sid] = s
                 pr = {"metoda": "lant_racordare" if urm is not None or tip_el == "nod" else "linie_dreapta",
                       "urmeaza_strada": urm if tip_el == "tronson" else None,
-                      "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp}
+                      "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp,
+                      "slaba": slaba, "treapta": treapta}
                 self._pune(sid, tip_el, data, nivel="predictie", scor=sp, ultima_verificare=None, predictie=pr,
                            motive=[{"text": txt + f" Sub pragul {w['praguri']['aplicat']}: predicție, neaplicată; fiecare stâlp poate fi "
                                                   "acceptat sau respins separat.", "efect": 0.0, "eveniment": ev, "data": data}])
             dec = "predictie"
         for sid, _, _ in specs:
             trace["modificari"].append(self._publica(sid, self._curent(sid)))
-        self._scor_pas(trace, dec, {"scor_propunere": sp, "factori": factori, "nivel": "in_model" if dec == "adaugat" else "predictie"}, [txt], sp)
+        self._scor_pas(trace, dec, {"scor_propunere": sp, "factori": factori, "treapta": treapta, "slaba": slaba,
+                                    "nivel": "in_model" if dec == "adaugat" else "predictie"}, [txt], sp)
 
     # ------------------------------------------------------------ val de apeluri
     def _val_apeluri(self, eid: str, data: str, delta: float, motive: list[str]) -> float:
