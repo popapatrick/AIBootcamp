@@ -49,6 +49,47 @@ def timeline() -> list[dict]:
 ```
 Fișiere: `data/model/snapshots/<YYYY-MM-DD>.geojson`, `data/model/timeline.json`. Eșantion fals dar valid: `data/model/sample/` (înlocuit de cel real când e gata).
 
+## Sesiunea 2: extinderi de contract (commit `contract:`, B)
+
+### StepTrace: `schimbari`
+```json
+"schimbari": [ {"element_id": "NOU-…", "ce": "adaugat|actualizat|predictie|neaplicat|conflict|retras|scos_din_uz|de_verificat",
+                "scor_inainte": 0.6, "scor_dupa": 0.85, "de_ce": "text"} ]
+```
+`statistici(data)` primește și `ultima_actualizare` (data ultimului eveniment aplicat sau actualizat).
+
+### Tipuri noi de eveniment (event.schema.json)
+- `mutare_fire`: `detalii.centru {lat,lon}`, `detalii.raza_m`, `detalii.motiv_mutare`. Elementele din rază trec „de verificat" (cel mult `mutare_fire.max_elemente`), cu traseu propus pe străzi, neaplicat.
+- `activ_demontat`: element scos din uz doar dacă scorul propunerii trece pragul de aplicare; altfel semnal negativ.
+- `cerere_racordare`: locația în `referinta.coordonate`. Actualizare directă dacă există date, altfel lanț prezis de stâlpi (`backend.racordare`).
+- decizia omului = `tip: verificare`, `echipa_sursa: om_teren`, `tip_sursa_pondere: om_teren`, `detalii.decizie {tinta_id, decizie, motiv}`. O singură decizie pe predicție. Acceptare: predicția devine element real cu `confirmat_de: om`. Respingere: retrasă, penalizare pe metoda propunătoare.
+
+### `clasa` (ElementState)
+Noduri: serie 7 = `casa`; serie 5 și 6 = `important`; origine plecare JT = `origine`; post = `post`. Tronsoane: `aerian`, `ramura`, `subteran` după categorie. Elementele noi: nod din `racord_nou`/`cerere_racordare` = `casa`, restul `important`; tronson nou = clasa tronsonului la care se leagă.
+
+### Module noi ale lui A (folderele `backend/trace/` și `backend/racordare/`, doar A scrie)
+`strazi` = lista întoarsă de `backend.engine.osm.strazi()`: `[{"nume": str|None, "puncte": [[lat, lon], ...]}]` (B o publică). `cfg` = `contracts/weights.yaml` încărcat.
+```python
+# backend/trace/
+def gaseste_opriri(puncte: list[dict], cfg: dict) -> list[dict]:
+    """puncte = [{t: ISO datetime, lat, lon}]. Întoarce opriri în ordine cronologică:
+    [{lat, lon, durata_min, inceput, sfarsit, n_puncte}]. Rază cfg.trace.raza_oprire_m, minim cfg.trace.durata_min_min."""
+
+def localizeaza(trace: list[dict], adresa: str | None, net: dict, strazi: list[dict], cfg: dict) -> dict:
+    """Întoarce {status: gasit|ambiguu|fara_opriri, opriri, strada: {nume, distanta_m}|None,
+    alegere: {lat, lon, durata_min, element_id|None, distanta_element_m}|None,
+    vizitate: [{element_id, durata_min}], ambiguitate: bool, calitate: 0-1, motiv}.
+    Adresa dă strada (potrivire pe nume), traseul dă locul: oprirea cea mai lungă la cel mult cfg.trace.distanta_strada_m de stradă.
+    Funcție pură, fără rețea externă."""
+
+# backend/racordare/
+def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dict:
+    """locatie = {lat, lon} a casei. Întoarce {status: lant|linie_dreapta|fara_nod, nod_start: element_id, distanta_m,
+    stalpi: [{ordine, lat, lon}], cabluri: [{de_la, la, puncte}], urmeaza_strada: 0-1|None, ambiguu: bool, motiv}.
+    Stâlpii se așază la distanța mediană dintre stâlpii existenți (calculată din net). Funcție pură."""
+```
+Până la `osm.strazi()`, A poate lucra cu `data/model/osm/streets_raw.json`.
+
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
 

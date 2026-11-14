@@ -22,9 +22,11 @@ paths:
                 text: {type: string}
                 sursa: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}
                 data: {type: string, format: date}
+                locatie: {type: object, description: "lat/lon dintr-un clic pe hartă (cerere_racordare, mutare_fire)", properties: {lat: {type: number}, lon: {type: number}}}
+                trace: {type: array, description: "traseul tabletei din ultima oră", items: {type: object, properties: {t: {type: string}, lat: {type: number}, lon: {type: number}}}}
       responses:
         "200":
-          description: StepTrace (vezi contracts/interfaces.md)
+          description: StepTrace (vezi contracts/interfaces.md), cu `schimbari` structurate
           content: {application/json: {schema: {type: object}}}
   /retea:
     get:
@@ -46,3 +48,32 @@ paths:
       responses:
         "200": {description: ElementState + istoric, content: {application/json: {schema: {type: object}}}}
         "404": {description: necunoscut}
+  /exemple:
+    get:
+      summary: Texte dummy pentru butonul Generează exemplu (din data/reports/exemple-dummy.json)
+      parameters:
+        - {name: sursa, in: query, required: true, schema: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}}
+      responses:
+        "200": {description: lista de texte, content: {application/json: {schema: {type: array, items: {type: object}}}}}
+  /trasee-demo:
+    get:
+      summary: Trasee GPS dummy gata făcute (data/reports/trasee-dummy.json)
+      responses:
+        "200": {description: lista de trasee, content: {application/json: {schema: {type: array, items: {type: object}}}}}
+  /predictii/{id}/decizie:
+    post:
+      summary: Decizia omului asupra unei predicții (eveniment verificare, sursa om_teren)
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, required: [decizie], properties: {decizie: {type: string, enum: [accepta, respinge]}, motiv: {type: string}, data: {type: string, format: date}}}}}
+      responses:
+        "200": {description: StepTrace, content: {application/json: {schema: {type: object}}}}
+        "409": {description: predicția are deja o decizie}
+        "404": {description: predicție necunoscută}
+  /evenimente?scenariu:
+    get:
+      summary: "Parametrul opțional ?scenariu=extrem încarcă scenariul din data/events/events.extreme.json; fără el, scenariul de bază"
+      responses:
+        "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}

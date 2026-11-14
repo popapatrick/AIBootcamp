@@ -6,8 +6,8 @@
   "required": ["event_id", "echipa_sursa", "tip", "referinta", "status", "data", "text_original"],
   "properties": {
     "event_id": {"type": "string", "description": "ex. EV-001"},
-    "echipa_sursa": {"enum": ["mentenanta", "investitii", "racordari", "apel_client"]},
-    "tip": {"enum": ["racord_nou", "activ_inlocuit", "linie_planificata", "nod_lipsa", "avarie_semnalata", "verificare"], "description": "verificare = inspecție în teren fără modificări; confirmă elementul și îi reîmprospătează scorul"},
+    "echipa_sursa": {"enum": ["mentenanta", "investitii", "racordari", "apel_client", "om_teren"], "description": "om_teren = decizia unui om (accepta/respinge o predicție) după verificarea în teren"},
+    "tip": {"enum": ["racord_nou", "activ_inlocuit", "linie_planificata", "nod_lipsa", "avarie_semnalata", "verificare", "mutare_fire", "activ_demontat", "cerere_racordare"], "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate)"},
     "referinta": {
       "type": "object",
       "description": "Cel puțin un câmp ar trebui completat; ce lipsește rămâne null.",
@@ -27,12 +27,36 @@
     "data": {"type": "string", "format": "date"},
     "forma_sursa": {"enum": ["campuri", "text_liber"]},
     "tip_sursa_pondere": {
-      "enum": ["tableta_coordonate", "formular", "text_liber", "apel_client"],
+      "enum": ["tableta_coordonate", "formular", "text_liber", "apel_client", "om_teren"],
       "description": "cheia folosită în contracts/weights.yaml"
     },
     "text_original": {"type": "string"},
     "incredere_extractie": {"type": "number", "minimum": 0, "maximum": 1},
     "campuri_lipsa": {"type": "array", "items": {"type": "string"}},
-    "detalii": {"type": "object", "description": "ex. sectiune_noua, lungime_m, observatii"}
+    "detalii": {
+      "type": "object",
+      "description": "ex. sectiune_noua, lungime_m, observatii, id_partial. Chei pentru tipurile noi mai jos.",
+      "properties": {
+        "decizie": {
+          "type": "object",
+          "description": "Doar pentru tip=verificare cu echipa_sursa=om_teren: decizia omului asupra unei predicții.",
+          "required": ["tinta_id", "decizie"],
+          "properties": {
+            "tinta_id": {"type": "string", "description": "element_id al predicției (ex. NOU-…)"},
+            "decizie": {"enum": ["accepta", "respinge"]},
+            "motiv": {"type": ["string", "null"]}
+          }
+        },
+        "centru": {"type": "object", "description": "mutare_fire: centrul zonei", "required": ["lat", "lon"], "properties": {"lat": {"type": "number"}, "lon": {"type": "number"}}},
+        "raza_m": {"type": ["number", "null"], "description": "mutare_fire: raza zonei; implicit weights.yaml mutare_fire.raza_m"},
+        "motiv_mutare": {"type": ["string", "null"], "description": "ex. sens_giratoriu"},
+        "trace": {
+          "type": "array",
+          "description": "Traseul tabletei din ultima oră (doar rapoarte de tabletă).",
+          "items": {"type": "object", "required": ["t", "lat", "lon"], "properties": {"t": {"type": "string", "format": "date-time"}, "lat": {"type": "number"}, "lon": {"type": "number"}}}
+        },
+        "trace_rezumat": {"type": "object", "description": "Scris de motor după procesarea trace-ului: opriri, strada potrivită, alegerea, ambiguitatea."}
+      }
+    }
   }
 }

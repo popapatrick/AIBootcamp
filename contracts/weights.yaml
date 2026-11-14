@@ -6,6 +6,7 @@ fiabilitate_sursa:        # intră în scorul oricărei propuneri și multiplic�
   formular: 0.75
   text_liber: 0.55
   apel_client: 0.25       # „nu am curent/net" poate însemna cădere, nu lipsă de rețea
+  om_teren: 0.95          # decizia unui om dupa verificarea in teren (accepta/respinge o predictie)
 
 scor:
   initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0
@@ -40,3 +41,30 @@ potrivire:
   calitate_dupa_id: 1.0
   calitate_dupa_coordonate: 0.7
   calitate_dupa_adresa: 0.4
+
+# --- Sesiunea 2 (valori de pornire, necalibrate; proprietar B) ---
+decizie_om:
+  penalizare_metoda_la_respingere: 0.05   # scade încrederea în metoda care a propus predicția respinsă
+
+mutare_fire:             # eveniment tip mutare_fire (sens giratoriu etc.)
+  raza_m: 40
+  max_elemente: 25       # plafon de elemente marcate „de verificat" pe eveniment
+
+val_apeluri:             # mai multe apeluri din aceeași zonă pe aceeași fereastră cântăresc mai mult decât unul
+  numar_min: 3
+  fereastra_zile: 7
+  plafon_semnal: 0.40    # semnalul negativ agregat nu depășește asta
+
+racordare:               # eveniment tip cerere_racordare
+  raza_nod_m: 150        # cel mai apropiat nod în care se poate racorda
+  max_stalpi_prezisi: 8
+  factor_fara_strada: 0.6   # scorul propunerii când nu există stradă OSM (linie dreaptă)
+
+trace:                   # locația din traseul tabletei (backend/trace, proprietar A)
+  fereastra_min: 60
+  raza_oprire_m: 12
+  durata_min_min: 3      # sub asta nu e oprire
+  distanta_strada_m: 40  # opririle candidate sunt la cel mult atât de strada potrivită cu adresa
+  prag_ambiguitate_min: 3   # dacă primele două opriri diferă cu mai puțin, scorul scade
+  factor_ambiguitate: 0.6
+  factor_fara_strada: 0.7

@@ -26,9 +26,10 @@
       "enum": [
         "in_model",
         "predictie",
-        "de_verificat"
+        "de_verificat",
+        "scos_din_uz"
       ],
-      "description": "in_model = aplicat; predictie = nesigur, neaplicat (linie punctată în UI); de_verificat = semnal contradictoriu sau scor scăzut"
+      "description": "in_model = aplicat; predictie = nesigur, neaplicat (linie punctată în UI); de_verificat = semnal contradictoriu sau scor scăzut; scos_din_uz = demontat (tip activ_demontat), doar peste pragul de aplicare"
     },
     "scor": {
       "type": "number",
@@ -88,7 +89,10 @@
           "enum": [
             "linie_dreapta",
             "traseu_strada_osm",
-            "propunere_proprietate"
+            "propunere_proprietate",
+            "lant_racordare",
+            "zona_mutata",
+            "pozitie_din_trace"
           ]
         },
         "urmeaza_strada": {
@@ -113,6 +117,25 @@
           "description": "scorul propunerii (diferit de scorul elementului)"
         }
       }
+    },
+    "clasa": {
+      "enum": [
+        "casa",
+        "important",
+        "origine",
+        "post",
+        "aerian",
+        "ramura",
+        "subteran"
+      ],
+      "description": "Clasa vizuală din KMZ, derivată de motor: noduri serie 7 = casa, serie 5/6 = important, origine plecare JT = origine, post = post; tronsoane după categorie: aerian, ramura, subteran. Elementele noi primesc clasa din regula din interfaces.md."
+    },
+    "confirmat_de": {
+      "enum": [
+        "om",
+        null
+      ],
+      "description": "om = predicția a fost acceptată de un om (sursa om_teren); null = nu"
     }
   }
 }
