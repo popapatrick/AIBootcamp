@@ -1,5 +1,13 @@
 # Panou laptop C
 
+## 2026-11-14, metoda_cod în API + regex pentru butoanele C5-C7; Lovable C4+C8 și C5-C7 (Claudiu, C)
+@Victor: făcut (1) din cererea ta (05d0d49): `pasi[extractie].metoda_cod` (`ai_cache` | `ai_api` | `regex`) + `/health.extractie_cod`; `CacheMiss` prins explicit -> regex, cu motivul „text nou, fără cache: extracție simplificată (regex)". (2) Lovable (etichetele AI/Regex/Predicție AI) urmează într-un prompt mic, după corectura de unire.
+Fără cheie, textele generate de butoanele noi (coordonatele clicului) nu au cache. Le-am dat reguli regex fixe în `backend/api`: „Cerere racordare: ..." -> `cerere_racordare`, „Fire mutate: ..." -> `mutare_fire` (centru, sens_giratoriu), „Raport tabletă: control pe ..." + `trace` -> `nod_lipsa` executat. Încrederea regex rămâne max 0,6; nu am atins ponderi.
+@Victor, de verificat: pe regex, traseul `trace-1` izolat dă stâlpul la **0,774 -> `in_model`** (cu AI era 0,71 -> predicție); racordarea 0,60-0,71 (predicție), fire mutate 19 de verificat + 4 trasee (ca la AI). E ok ca o extracție regex să bată pragul de aplicare prin trace? Dacă nu, spune ce factor ajustezi (nu umblu la praguri).
+@Patrick: am văzut CacheMiss + cheia `agent-haiku`; cache-ul meu bce63df (cheie veche) poate fi scos odată cu celelalte ~91 vechi, nu mă deranjează.
+Lovable: C2+C3 (5,2 credite) și C4+C8 (5,3) pe main; C5-C7 (11,6) făcut în draft paralel, unit în main acum (aprobat de Claudiu), urmează o corectură (conflicte + butoanele C5-C7 dezactivate în scenariul extrem). Nepublicat.
+Contract atins: nu
+
 ## 2026-11-14, API pe contractul B5-B8 + test cap-coadă cu extracția Claude (Claudiu, C)
 Gata: C1c (30ce218): `model_scenariu("extrem")` în API (shortcut scos), câmpurile noi trec neatinse (`tip`/`eticheta`, `verificat_recent`, `scos_din_uz`, pas `trace`, `potrivire.status: zona`). `smoke_api` nu mai depinde de extracție (predicția se pregătește cu un Event `nod_lipsa` direct); trece cu Claude și cu `API_EXTRACTIE=stub`. Decizia rămâne pe `apply_event` + `trace.eroare.cod` (`aplica_decizie` ridică același ValueError pentru 409 și 400).
 Test cap-coadă pe API local (port 8011, Claude real): giratoriu cu clic OK (zonă 40 m, 19 elemente de verificat, 4 trasee propuse); cerere racordare fără GIS OK (lanț 2 stâlpi + casă, 0,66-0,69); trace-1 + „Strada Liviu Rebreanu" OK (pas `trace`, oprire 21,7 min, 3 stâlpi vizitați actualizați, stâlp prezis 0,71); apel + Acceptă 200, a doua 409; extrem 68 ev. cu `eticheta`. Cache Claude comis (fb422a1).
