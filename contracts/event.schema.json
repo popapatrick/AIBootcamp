@@ -7,7 +7,7 @@
   "properties": {
     "event_id": {"type": "string", "description": "ex. EV-001"},
     "echipa_sursa": {"enum": ["mentenanta", "investitii", "racordari", "apel_client"]},
-    "tip": {"enum": ["racord_nou", "activ_inlocuit", "linie_planificata", "nod_lipsa", "avarie_semnalata"]},
+    "tip": {"enum": ["racord_nou", "activ_inlocuit", "linie_planificata", "nod_lipsa", "avarie_semnalata", "verificare"], "description": "verificare = inspecție în teren fără modificări; confirmă elementul și îi reîmprospătează scorul"},
     "referinta": {
       "type": "object",
       "description": "Cel puțin un câmp ar trebui completat; ce lipsește rămâne null.",
