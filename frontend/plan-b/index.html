@@ -57,9 +57,9 @@
   <aside>
     <div id="panouHarta">
       <div class="legend">
-        <span><i class="sw" style="background:var(--ok)"></i>scor ≥ 0,75</span>
-        <span><i class="sw" style="background:var(--mid)"></i>0,4–0,75</span>
-        <span><i class="sw" style="background:var(--bad)"></i>&lt; 0,4 / de verificat</span>
+        <span><i class="sw" style="width:70px;background:linear-gradient(90deg,hsl(0,78%,42%),hsl(60,78%,42%),hsl(120,78%,42%))"></i>scor 0,3 → 0,8</span>
+        
+        <span><i class="sw" style="background:var(--bad)"></i>de verificat</span>
         <span><i class="sw" style="border-top:3px dashed var(--pred);height:0"></i>predicție</span>
       </div>
       <h2>De ce?</h2>
@@ -97,8 +97,10 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 let layer = null, evs = [], zile = [], idx = 0, timer = null, fitted = false, selectat = null, fcCur = null;
 window.addEventListener("resize", () => map.invalidateSize());
 
+// culoare continuă după scor: 0,30 roșu -> 0,55 galben -> 0,80+ verde, ca scăderea în timp și confirmările să se vadă
+const hue = sc => Math.round(120 * Math.max(0, Math.min(1, (sc - 0.3) / 0.5)));
 const culoare = p => p.nivel === "predictie" ? "var(--pred)" : p.nivel === "de_verificat" ? "#dc2626"
-  : p.scor >= 0.75 ? "#16a34a" : p.scor >= 0.4 ? "#eab308" : "#dc2626";
+  : `hsl(${hue(p.scor)}, 78%, 42%)`;
 const fmt = x => (x > 0 ? "+" : "") + Number(x).toFixed(2);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 

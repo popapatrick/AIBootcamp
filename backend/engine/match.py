@@ -132,6 +132,19 @@ def match_event(event: dict, net: dict, weights: dict | None = None) -> dict:
         if TRONSON_FARA_PREFIX.match(eid):
             semnale.append("cod_fara_prefix")
             posibile = [f"{p}-{eid}" for p in "ARS" if f"{p}-{eid}" in els]
+            # nodurile menționate în raport desemnează categoria: tronsonul căutat are un capăt într-unul din ele
+            noduri_text = set(re.findall(r"\b\d{7}\b", event.get("text_original") or ""))
+            noduri_text |= {str(x) for x in [(event.get("detalii") or {}).get("nod_referinta")] if x}
+            if noduri_text:
+                atinge = [x for x in posibile if set(els[x].get("capete", ())) & noduri_text]
+                if len(atinge) == 1:
+                    return rez("potrivit", atinge[0], "id", w["calitate_dupa_id"] * 0.9,
+                               f"Cod {eid} fără prefix: doar {atinge[0]} are un capăt în nodurile din raport")
+                if not atinge and posibile:
+                    return rez("absent_din_model", None, "id", 0.0,
+                               f"Cod {eid} fără prefix: niciun tronson cu acest cod nu atinge nodurile din raport "
+                               f"({', '.join(sorted(noduri_text))}); poate lipsi din model")
+                posibile = atinge or posibile
             if pt and posibile:
                 posibile.sort(key=lambda i: _dist_la_punct(pt, els[i]))
                 if _dist_la_punct(pt, els[posibile[0]]) <= w["distanta_max_m"]:

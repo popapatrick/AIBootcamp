@@ -93,10 +93,24 @@ class GridModel:
                               "rezultat": {"echipa_sursa": event["echipa_sursa"], "tip": event["tip"],
                                            "status": event["status"],
                                            "campuri_lipsa": event.get("campuri_lipsa", [])}})
+        ref0, det0 = event.get("referinta") or {}, event.get("detalii") or {}
+        if not ref0.get("element_id") and det0.get("id_partial"):
+            # extracția a lăsat codul brut (ex. T-002, fără prefix de categorie); potrivirea îl dezambiguizează
+            event = {**event, "referinta": {**ref0, "element_id": det0["id_partial"]}}
         m = match_event(event, self.net, w)
         trace["pasi"].append({"nume": "potrivire", "rezultat": m, "incredere": m["calitate"]})
 
         tip = event["tip"]
+        # un raport de teren care pomenește un nod numeric inexistent în model, cu coordonate, descrie de fapt
+        # un nod lipsă, oricum ar fi etichetat tipul (extracția poate zice „avarie" sau „verificare")
+        eid0 = ((event.get("referinta") or {}).get("element_id") or "").strip()
+        if (m["status"] == "absent_din_model" and tip not in ("nod_lipsa", "racord_nou", "linie_planificata")
+                and event["echipa_sursa"] in S.ECHIPE_TEREN and eid0.isdigit() and len(eid0) >= 5
+                and m.get("coordonate_folosite")):
+            tip = "nod_lipsa"
+            event = {**event, "tip": "nod_lipsa"}
+            trace["pasi"][0]["rezultat"]["tip_tratat_ca"] = "nod_lipsa"
+            trace["pasi"][0]["rezultat"]["nota"] = f"Nodul {eid0} nu există în model: raportul e tratat ca nod lipsă."
         m = self._ajusteaza_element_nou(event, m, trace)
         if tip == "linie_planificata" and m["status"] == "potrivit":
             self._efect_pe_element(event, m, trace)      # planificat pe un element existent: doar notă, fără schimbare
@@ -325,7 +339,7 @@ class GridModel:
             else:
                 eid = pid
         niv = S.decizie(sp, w)
-        planificat = event["status"] != "executat"
+        planificat = event["status"] == "planificat"      # „semnalat" = observație din teren, nu lucrare viitoare
         if planificat and niv == "in_model":
             niv = "predictie"
         if pozitie_dedusa and niv == "in_model":

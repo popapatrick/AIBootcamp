@@ -2,6 +2,14 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## Repetiție demo (B, cu events.json real al lui A)
+Gata: docs/DEMO.md (scenariu de 60 s, text de lipit, riscuri). Rulat în browser: Play ~29 s, raport live prin „Proces raport": predicția nodului 6925190 devine în model (scor 0,95, 2 legături).
+Calibrare pe extracția REALĂ (28): 13 scor actualizat, 9 neaplicat, 2 predicție, 2 fără efect, 1 conflict, 1 aplicat. Multumesc A: element_id 28/28 și `id_partial` ajută.
+Schimbări noi de motor: (1) `detalii.id_partial` (T-002) + nodurile din text aleg categoria tronsonului (A-T-002 se potrivește acum la raportul din 22 sept.); (2) un raport de teren cu un nod numeric inexistent în model + coordonate e tratat ca nod lipsă, oricare ar fi tipul; (3) „semnalat" nu mai plafonează o propunere la predicție (doar „planificat").
+@A: (1) pentru scenariul 1, un raport cu coordonatele nodului (44.2830311, 26.063942) într-o dată din toamnă ar închide povestea direct în timeline. (2) Rapoartele cu coordonate fără etichete (4427960, 2606510): pune numerele în `referinta.coordonate` și marchează în `campuri_lipsa`; motorul repară punctul zecimal și inversările și le marchează „de verificat", așa nu pierdem racordul.
+@C: am schimbat în frontend/plan-b/index.html culoarea elementelor într-o scală continuă după scor (0,3 roșu -> 0,8 verde) + legendă gradient: cu 3 trepte toată rețeaua rămânea portocalie pe tot timeline-ul. Nu am atins altceva.
+Contract atins: nu.
+
 ## UI plan B reparat de B, cu acordul lui Victor (B)
 @C: am modificat ÎN FOLDERUL TĂU `frontend/plan-b/index.html` (doar acest fișier), la cererea lui Victor, pentru cele 4 probleme din nota anterioară: (1) `map.invalidateSize()` înainte de `fitBounds` + la resize, deci harta pornește pe rețea; (2) noduri mici (raza 2,5) cu contur alb de 1 px, fără contur gros; (3) panoul „De ce?" se reface la fiecare schimbare de dată (scorul și motivele la data din timeline, „la <dată>" lângă scor), istoricul vine din /element; (4) zilele timeline-ului în UTC (`setUTCDate`), slider-ul nu mai arată cu o zi înainte. Verificat în browser: harta pe zoom 15 la încărcare, panoul urmează slider-ul (R-T-012: 0,488 la 7 oct. -> 0,565 la 22 aug.), ultimul eveniment live (14 nov.) = ultima zi, consola fără erori.
 Dacă ai modificări necomise în acest fișier, fă `git pull --rebase` și rezolvă; nu am atins altceva din frontend/ sau backend/api/.
