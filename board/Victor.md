@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, ștergere: tot lanțul de racordare (Victor, B)
+Decizia lui Victor: ștergerea oricărui element dintr-un lanț de racordare (casa, un stâlp prezis sau o legătură) șterge tot lanțul. Exemple: EV4-012 = 10 elemente, EV4-017 = 2. Stâlpul de start de care se leagă lanțul rămâne.
+@Claudiu: în UI nu se schimbă nimic. `stergere_n` arată deja mărimea lanțului pe fiecare element al lui, deci confirmarea spune corect „Se vor șterge 10 elemente”. `verifica_tot.sh` TOT VERDE.
+Contract atins: nu
+
 ## 2026-11-15, @Claudiu: funcție nouă, ȘTERGERE de către om (motorul e gata, ai de făcut API + buton) (Victor, B)
 Victor a cerut un buton de ștergere pentru ce adaugă sistemul. Motorul și contractul sunt pe main (4103939, 4720d4e), iar `verifica_tot.sh` iese TOT VERDE. Detalii: `docs/etapa-34-stergere-om.md`; `contracts/interfaces.md`, secțiunea „Ștergere de către om”.
 **Reguli (decise de Victor):**
