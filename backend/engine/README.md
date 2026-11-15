@@ -22,7 +22,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_engine     # 39 verificări
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 23 verificări (acuratețe)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 47 verificări (acuratețe V1/V2 + căutare pe stradă V6)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 
@@ -40,3 +40,12 @@ Ponderile și pragurile vin doar din `contracts/weights.yaml`. Contractele se sc
   `t0`, `sursa_locatie`, `verificat_om` în `snapshot`/`_publica`; `banda_inainte`/`banda_dupa` în `schimbari`; `procent_banda` în `statistici`.
 - `sesiune2.py`: `_eff`, `_plafoneaza`, `_sursa_eveniment`, `_sursa_din_geocodare`, `_executat_teren`; plafon la racordare și mutare fire.
 - `smoke_sesiune4.py`: verificările V1/V2.
+
+## Căutare pe stradă (V6, partea 2; `docs/etapa-31-cautare-strada.md`)
+Adresă fără ID/coordonate -> `fereastra_strada` (backend.geo) -> candidați din fereastră -> potrivit / predicție / de verificat / element nou / pin.
+- `sesiune2.py`: `_foloseste_geocodare` (ancore + `_fereastra` internă), `_cautare_strada` (pasul `cautare_strada`), `_candidati_fereastra`,
+  `_rezultat_cautare` (predicție „probabil acest element”, de verificat pe fereastră, pin `VER-<event_id>`), `_inregistreaza_ancora`,
+  `_text_indiciu`, `_sursa_fereastra`, `_fara_marker`; constantele `TIPURI_CAUTARE` și `TIPURI_NOI`.
+- `model.py`: `self.ancore`, `self.pinuri`, ramura din `apply_event` (înlocuiește regula „precizie > 15 m -> nepotrivit” pentru `TIPURI_CAUTARE`).
+- `smoke_sesiune4.py`: `teste_cautare_strada()` (24 verificări: 1 candidat, 2–4, peste maxim, 0 candidați, pin, element numit, ancore, doar stradă, determinism).
+

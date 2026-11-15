@@ -23,7 +23,7 @@ from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
-from backend.engine.sesiune2 import Sesiune2
+from backend.engine.sesiune2 import TIPURI_CAUTARE, Sesiune2
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,6 +45,8 @@ class GridModel(Sesiune2):
         self.retrase: dict[str, dict] = {}         # predicții înlocuite de un element cu ID real (pentru istoric)
         self.jurnal: list[dict] = []
         self.decizii: dict[str, dict] = {}         # tinta_id -> decizia omului (o singură decizie pe predicție)
+        self.ancore: list[dict] = []               # căutare pe stradă: adrese cunoscute {strada, numar, lat, lon}, din rapoarte cu locație sigură
+        self.pinuri: dict[str, dict] = {}          # VER-<event_id> -> {geometrie}: pin „de verificat” (stradă fără elementul căutat)
         self.demontari: dict[str, list] = {}       # element_id -> rapoarte de demontare (activ_demontat)
         self.apeluri: dict[str, list] = {}         # element_id -> [(data, efect)] apeluri recente (val de apeluri)
         self._val_flag = False
@@ -146,7 +148,13 @@ class GridModel(Sesiune2):
             m = {**m, "calitate": round(min(m["calitate"], geo["acuratete"]) if m["status"] == "potrivit" else geo["acuratete"], 3),
                  "metoda": "adresa", "semnale": m["semnale"] + ["coordonate_din_adresa"],
                  "geocodare": geo, "motiv": m["motiv"] + f" (locație din adresă, ±{geo['precizie_m']} m, acuratețe {geo['acuratete']})"}
-        if geo and m["status"] in ("potrivit", "absent_din_model") and m["metoda"] == "adresa" and geo["precizie_m"] > w["potrivire"]["distanta_max_m"]:
+        fer = event.get("_fereastra")
+        cs = None
+        if fer and geo and event["tip"] in TIPURI_CAUTARE and not event.get("_eronat"):
+            # V6: adresă cu stradă (fără ID/coordonate): se caută elementele în fereastra de pe stradă, nu se cere precizie de 15 m
+            m, cs = self._cautare_strada(event, m, trace)
+            event = {**event, "detalii": {**(event.get("detalii") or {}), "cautare_strada": cs["detalii"]}}
+        elif geo and m["status"] in ("potrivit", "absent_din_model") and m["metoda"] == "adresa" and geo["precizie_m"] > w["potrivire"]["distanta_max_m"]:
             # o locație din adresă, mai imprecisă decât raza de potrivire, nu poate desemna un element existent (nu inventăm potrivirea)
             motiv_imp = (f"Locația din adresă are precizia ±{geo['precizie_m']:g} m, peste raza de potrivire "
                          f"{w['potrivire']['distanta_max_m']} m: nu desemnează un element existent.")
@@ -189,7 +197,9 @@ class GridModel(Sesiune2):
             trace["pasi"][0]["rezultat"]["tip_tratat_ca"] = "nod_lipsa"
             trace["pasi"][0]["rezultat"]["nota"] = f"Nodul {eid0} nu există în model: raportul e tratat ca nod lipsă."
         m = self._ajusteaza_element_nou(event, m, trace)
-        if tip == "mutare_fire":
+        if cs and cs["actiune"]:
+            self._rezultat_cautare(event, m, cs, trace)      # predicție / de verificat pe fereastră / pin (căutare pe stradă)
+        elif tip == "mutare_fire":
             self._mutare_fire(event, trace)
         elif tip == "cerere_racordare":
             self._cerere_racordare(event, m, trace)
@@ -206,6 +216,7 @@ class GridModel(Sesiune2):
         else:
             self._neaplicat(event, trace, f"Potrivire {m['status']}: {m['motiv']}")
         self._confirma_vizitate(event, trace)
+        self._inregistreaza_ancora(event, m, cs)
         return self._inchide(event, tip, trace, m, inainte)
 
     def _inchide(self, event: dict, tip: str, trace: dict, m: dict, inainte: dict) -> dict:
@@ -424,8 +435,8 @@ class GridModel(Sesiune2):
         else:
             motive.insert(0, text)
         ver = event["data"] if efect == "confirmare" else cur["ultima_verificare"]
-        st = self._pune(eid, el["tip_element"], data, **obs_kw, **extra_st, nivel=nivel, scor=scor, ultima_verificare=ver,
-                        motive=self._motiv(eid, " ".join(motive), delta, event))
+        st = self._pune(eid, el["tip_element"], data, **obs_kw, **extra_st, **self._fara_marker(cur), nivel=nivel, scor=scor,
+                        ultima_verificare=ver, motive=self._motiv(eid, " ".join(motive), delta, event))
         trace["modificari"].append(self._publica(eid, st))
         self._scor_pas(trace, "scor_actualizat" if efect != "fara_efect" else "fara_efect",
                        {"scor_nou": scor, "nivel": nivel, "efect": efect}, motive)
@@ -753,7 +764,7 @@ class GridModel(Sesiune2):
     def _geometrie(self, eid: str) -> dict | None:
         el = self._elemente().get(eid)
         if el is None:
-            p = self.predictii.get(eid) or self.retrase.get(eid)
+            p = self.predictii.get(eid) or self.retrase.get(eid) or self.pinuri.get(eid)
             return p["geometrie"] if p else None
         if el["tip_element"] == "tronson":
             return {"type": "LineString", "coordinates": [[o, a] for a, o in el["puncte"]]}

@@ -6,6 +6,10 @@
 - `cerere_racordare`: lanț de stâlpi prezis spre o casă nouă (modulul `backend.racordare`, scris de A).
 - locația din traseul tabletei (`backend.trace`, scris de A) când raportul nu are ID sau coordonate.
 - val de apeluri: mai multe apeluri pe același element în aceeași fereastră cântăresc mai mult decât unul.
+- căutare pe stradă (sesiunea 4, V6): o adresă fără ID/coordonate (stradă + număr/indiciu/doar stradă) dă o fereastră pe stradă
+  (`backend.geo.fereastra_strada`); motorul caută elementele din ea (1 = potrivit, 2..N = predicție „probabil acest element”,
+  peste N = de verificat, 0 = element nou sau pin „de verificat”), cu pasul `cautare_strada` în StepTrace și ancore pentru
+  rapoartele următoare.
 
 Toate pragurile vin din `contracts/weights.yaml`. Contracte: `contracts/interfaces.md`.
 """
@@ -17,6 +21,14 @@ import re
 from backend.engine import scoring as S
 from backend.engine.network import dist_m
 from backend.engine.zona import zona_ok
+
+
+# tipurile de eveniment care caută pe stradă; cele de mai jos creează element nou când fereastra nu are niciun candidat
+TIPURI_CAUTARE = ("avarie_semnalata", "activ_inlocuit", "verificare", "activ_demontat", "nod_lipsa", "racord_nou")
+TIPURI_NOI = ("nod_lipsa", "racord_nou")
+_CABLU = re.compile(r"\b(tronson\w*|cablu\w*|cabluri\w*|conductor\w*|linia|linie)\b", re.I)
+_STALP = re.compile(r"\b(st[aâ]lp\w*|nod\w*|post\w*)\b", re.I)
+_CU_NUMAR = ("numar", "langa", "vizavi", "intre", "dupa", "inainte")
 
 
 def _dist_la_linie(p: tuple[float, float], puncte: list) -> float:
@@ -146,7 +158,7 @@ class Sesiune2:
         try:
             from backend.engine import osm
             from backend.geo import geocodeaza
-            g = geocodeaza(ref, osm.strazi(), self.w)
+            g = geocodeaza(ref, osm.strazi(), self.w, self.net, self.ancore)
         except Exception as e:      # fără cache OSM sau modul: ca înainte, nepotrivit
             trace["pasi"].append({"nume": "geocodare", "incredere": 0.0, "rezultat": {"status": "necunoscut", "motiv": f"geocodare indisponibilă: {e}"}})
             return event
@@ -157,9 +169,221 @@ class Sesiune2:
         if not z["ok"]:
             g["status"] = "in_afara_zonei"
             return {**event, "_eronat": (g["lat"], g["lon"])}
+        fer = g.get("fereastra") or None
+        if fer and fer.get("status") == "in_afara_zonei" and fer.get("punct"):
+            return {**event, "_eronat": (fer["punct"]["lat"], fer["punct"]["lon"])}
         det = event.get("detalii") or {}
-        return {**event, "referinta": {**ref, "coordonate": {"lat": g["lat"], "lon": g["lon"]}},
-                "detalii": {**det, "geocodare": {k: g.get(k) for k in ("lat", "lon", "precizie_m", "metoda", "acuratete", "motiv", "tip") if g.get(k) is not None}}}
+        geo = {k: g.get(k) for k in ("lat", "lon", "precizie_m", "metoda", "acuratete", "motiv", "tip") if g.get(k) is not None}
+        if fer and fer.get("status") == "gasit":
+            geo["tip"] = self._sursa_fereastra(fer, g)     # sursa locației (adresa_numar | strada | intersectie | reper) pentru plafon
+        out = {**event, "referinta": {**ref, "coordonate": {"lat": g["lat"], "lon": g["lon"]}},
+               "detalii": {**det, "geocodare": geo}}
+        if fer and fer.get("status") == "gasit":
+            out["_fereastra"] = fer      # cheie internă: căutarea pe stradă (apply_event), nu iese din motor
+        return out
+
+    # ------------------------------------------------------------ căutare pe stradă (V6, D11)
+    @staticmethod
+    def _sursa_fereastra(fer: dict, geo: dict | None = None) -> str:
+        """Sursa locației dintr-o fereastră pe stradă: intersectie (colț) | adresa_numar (indiciu cu număr) | reper | strada."""
+        ind = fer.get("indiciu") or {}
+        tip = ind.get("tip")
+        if tip == "colt":
+            return "intersectie"
+        if tip in _CU_NUMAR and ind.get("numar"):
+            return "adresa_numar"
+        if ((geo or {}).get("motiv") or "").lower().startswith("reper"):
+            return "reper"
+        return "strada"
+
+    @staticmethod
+    def _text_indiciu(ind: dict | None) -> str:
+        """Textul scurt, în română, al indiciului de loc (pentru UI și jurnal)."""
+        if not ind or not ind.get("tip"):
+            return "doar strada"
+        t, n, n2 = ind["tip"], ind.get("numar"), ind.get("numar_2")
+        return {"numar": f"nr. {n}", "langa": f"lângă nr. {n}", "vizavi": f"vizavi de nr. {n}",
+                "intre": f"între nr. {n} și {n2 or n}", "dupa": f"după nr. {n}", "inainte": f"înainte de nr. {n}",
+                "capat": "la capătul străzii", "inceput": "la începutul străzii",
+                "colt": f"colț cu {ind.get('strada_2') or 'altă stradă'}",
+                "element": f"lângă stâlpul {ind.get('element_id')}",
+                "parte": f"partea cu numere {ind.get('paritate') or ''}".strip()}.get(t, "doar strada")
+
+    def _tip_cautat(self, event: dict) -> str:
+        """`tronson` dacă evenimentul vizează un cablu/tronson (secțiune dată sau text despre cablu fără stâlp), altfel `nod`."""
+        if event["tip"] in TIPURI_NOI:
+            return "nod"
+        det, text = event.get("detalii") or {}, event.get("text_original") or ""
+        if det.get("sectiune_noua") or det.get("sectiune_observata"):
+            return "tronson"
+        return "tronson" if _CABLU.search(text) and not _STALP.search(text) else "nod"
+
+    def _candidati_fereastra(self, fer: dict, tip_el: str, punct: tuple[float, float]) -> list[dict]:
+        """Elementele existente (nod sau tronson, fără retrase) din fereastra de pe stradă, ordonate după distanța la `punct`:
+        [{element_id, distanta_m, pozitie_m}]. Un element e în fereastră dacă se află la cel mult `latime_laterala_m` de porțiunea
+        de stradă dintre `de_la_m` și `pana_la_m` (`fer["linie"]`); capetele ferestrei se extind deci cu cel mult atât. Tronsoanele: orice punct."""
+        from backend.engine.match import _dist_la_punct
+        from backend.geo.fereastra import Cale
+        lat_max = float(self.w["cautare_strada"]["latime_laterala_m"])
+        linie = fer.get("linie") or []
+        if len(linie) < 2:
+            return []
+        cale, de_la = Cale(linie), float(fer["de_la_m"])
+        marj = lat_max / 111_320 * 1.2
+        la0, la1 = min(p[0] for p in linie) - marj, max(p[0] for p in linie) + marj
+        lo0, lo1 = min(p[1] for p in linie) - marj * 2, max(p[1] for p in linie) + marj * 2
+        out = []
+        for eid, el in (self.net["tronsoane"] if tip_el == "tronson" else self.net["noduri"]).items():
+            if eid.endswith("-casa") or (self.istoric.get(eid) or [{}])[-1].get("retras"):
+                continue
+            if tip_el == "nod":
+                pcte = [(el["lat"], el["lon"])]
+            else:
+                pcte = []
+                for a, b in zip(el["puncte"], el["puncte"][1:]):
+                    n = max(1, int(dist_m(a, b) // 5))
+                    pcte += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(n + 1)]
+            if not any(la0 <= p[0] <= la1 and lo0 <= p[1] <= lo1 for p in pcte):
+                continue
+            best = None
+            for p in pcte:
+                s_, d_ = cale.proiecteaza(p)
+                if d_ <= lat_max and (best is None or d_ < best[1]):
+                    best = (s_, d_)
+            if best:
+                out.append({"element_id": eid, "distanta_m": round(_dist_la_punct(punct, el), 1), "pozitie_m": round(de_la + best[0], 1)})
+        return sorted(out, key=lambda c: (c["distanta_m"], c["element_id"]))
+
+    def _cautare_strada(self, event: dict, m: dict, trace: dict) -> tuple[dict, dict]:
+        """Caută pe stradă elementul din raport: fereastra (`event["_fereastra"]`) -> candidați -> potrivire.
+
+        Adaugă pasul `cautare_strada` în `trace["pasi"]` (înaintea `potrivire`) și întoarce `(m_nou, cs)`:
+        - 1 candidat: `m` potrivit (metoda `cautare_strada`, calitatea `calitate_cautare_unic`), `cs["actiune"]` None: raportul se aplică pe el;
+        - 2..`max_candidati_predictie`: `cs["actiune"]` = `predictie` (elementul cel mai apropiat primește „probabil acest element”);
+        - mai mulți: `cs["actiune"]` = `de_verificat` (pe fereastră, niciun element atins);
+        - niciunul: element nou la `fereastra.punct` pentru nod_lipsa/racord_nou (actiune None), altfel `cs["actiune"]` = `pin`."""
+        fer, c = event["_fereastra"], self.w["cautare_strada"]
+        punct = (fer["punct"]["lat"], fer["punct"]["lon"])
+        tip_el = self._tip_cautat(event)
+        cands = self._candidati_fereastra(fer, tip_el, punct)
+        ind = fer.get("indiciu")
+        text = self._text_indiciu(ind)
+        n = len(cands)
+        sursa = self._sursa_fereastra(fer, (event.get("detalii") or {}).get("geocodare"))
+        ales, actiune = None, None
+        if n == 1:
+            ales = cands[0]["element_id"]
+            motiv_rez = f"Un singur {'stâlp' if tip_el == 'nod' else 'tronson'} în fereastră ({text}): {ales}."
+        elif 2 <= n <= int(c["max_candidati_predictie"]):
+            ales, actiune = cands[0]["element_id"], "predictie"
+            motiv_rez = f"{n} candidați în fereastră ({text}): cel mai apropiat de punctul estimat e {ales}; propunere, neaplicată."
+        elif n > int(c["max_candidati_predictie"]):
+            actiune = "de_verificat"
+            motiv_rez = f"{n} candidați în fereastră ({text}), peste {c['max_candidati_predictie']}: de verificat pe fereastră."
+        elif event["tip"] in TIPURI_NOI:
+            motiv_rez = f"Niciun element în fereastră ({text}): element nou la punctul estimat."
+        else:
+            actiune = "pin"
+            motiv_rez = (f"Nu există {'stâlp' if tip_el == 'nod' else 'tronson'} în fereastra de pe {fer['strada']} ({text}): "
+                         "pin de verificat la punctul estimat.")
+        rez = {"strada": fer["strada"], "de_la_m": fer["de_la_m"], "pana_la_m": fer["pana_la_m"], "punct": fer["punct"],
+               "precizie_m": fer["precizie_m"], "metoda": fer["metoda"],
+               "indiciu": {**(ind or {"tip": None, "numar": None, "numar_2": None, "strada_2": None, "element_id": None,
+                                     "distanta_stalpi": None, "paritate": None}), "text": text},
+               "ancore": fer.get("ancore_folosite") or [], "tip_cautat": tip_el, "sursa_locatie": sursa,
+               "candidati": cands, "ales": ales, "linie": fer.get("linie") or [],
+               "motiv": f"{fer['motiv']} {motiv_rez}"}
+        trace["pasi"].append({"nume": "cautare_strada", "incredere": fer["acuratete"], "rezultat": rez})
+        det_cs = {k: rez[k] for k in ("strada", "de_la_m", "pana_la_m", "punct", "precizie_m", "metoda", "candidati", "ales")}
+        top3 = [{"element_id": x["element_id"], "distanta_m": x["distanta_m"]} for x in cands[:3]]
+        base = {"element_id": None, "metoda": "cautare_strada", "calitate": 0.0, "candidati": top3,
+                "coordonate_folosite": {"lat": punct[0], "lon": punct[1]}, "semnale": list(m["semnale"]) + ["cautare_strada"]}
+        if n == 1:
+            m2 = {**base, "status": "potrivit", "element_id": ales, "calitate": round(float(c["calitate_cautare_unic"]), 3),
+                  "motiv": rez["motiv"]}
+        elif actiune in ("predictie", "de_verificat"):
+            m2 = {**base, "status": "ambiguu", "motiv": rez["motiv"]}
+        else:
+            m2 = {**base, "status": "absent_din_model", "motiv": rez["motiv"]}
+        return m2, {"detalii": det_cs, "actiune": actiune, "fer": fer, "rez": rez, "cands": cands, "tip_el": tip_el, "sursa": sursa, "text": text}
+
+    def _rezultat_cautare(self, event: dict, m: dict, cs: dict, trace: dict):
+        """Ce se întâmplă când căutarea pe stradă nu dă un element unic: predicție, de verificat pe fereastră sau pin."""
+        w, data, c = self.w, event["data"], self.w["cautare_strada"]
+        fer, cands, text, sursa = cs["fer"], cs["cands"], cs["text"], cs["sursa"]
+        trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
+        if cs["actiune"] == "de_verificat":
+            t = (f"{len(cands)} elemente în fereastra de pe {fer['strada']} ({text}, {fer['de_la_m']:g}–{fer['pana_la_m']:g} m), "
+                 f"peste {c['max_candidati_predictie']}: nu alegem unul. De verificat în teren; nimic aplicat.")
+            return self._scor_pas(trace, "de_verificat", {"nivel": None, "fereastra": {k: fer[k] for k in ("strada", "de_la_m", "pana_la_m")},
+                                                          "candidati": len(cands)}, [t])
+        if cs["actiune"] == "pin":
+            pid = f"VER-{event['event_id']}"
+            pt = (fer["punct"]["lat"], fer["punct"]["lon"])
+            scor = round(S.plafon(sursa, w) * 0.5, 3)
+            t = (f"Nu există {'stâlp' if cs['tip_el'] == 'nod' else 'tronson'} în fereastra de pe {fer['strada']} ({text}): "
+                 f"pin de verificat la punctul estimat, scor {S.fmt(scor)} (jumătate din plafonul sursei {sursa}). Nimic existent nu e atins.")
+            self.pinuri[pid] = {"geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}}
+            st = self._pune(pid, "nod", data, nivel="de_verificat", scor=scor, ultima_verificare=None, origine="generat_model", t0=False,
+                            sursa_locatie=sursa, verificat_om=False, verificat_om_data=None, predictie=None,
+                            motive=[{"text": t, "efect": 0.0, "eveniment": event["event_id"], "data": data}])
+            trace["modificari"].append(self._publica(pid, st))
+            return self._scor_pas(trace, "de_verificat", {"scor_nou": scor, "nivel": "de_verificat", "pin": pid}, [t])
+        # predicție: 2..max candidați; cel mai apropiat de punct e ales, ponderile ∝ 1/(d+10)
+        sp, factori = S.scor_propunere(event, fer["acuratete"], w)
+        sp = min(sp, round(S.plafon(sursa, w), 3))
+        if sp < w["praguri"]["predictie"]:
+            t = (f"{len(cands)} candidați în fereastra de pe {fer['strada']} ({text}), dar scorul propunerii {sp} e sub "
+                 f"{w['praguri']['predictie']}: doar de verificat; nimic aplicat.")
+            return self._scor_pas(trace, "de_verificat", {"nivel": None, "scor_propunere": sp, "candidati": len(cands)}, [t], sp)
+        pond = [1.0 / (x["distanta_m"] + 10.0) for x in cands]
+        tot = sum(pond)
+        pond = [round(p / tot, 3) for p in pond]
+        ales = cands[0]["element_id"]
+        alt = [{"element_id": x["element_id"], "distanta_m": x["distanta_m"], "pondere": p, "scor_propunere": round(sp * p, 3),
+                "motiv": f"la {x['distanta_m']:g} m de punctul estimat; pondere {p:g}"} for x, p in zip(cands[1:], pond[1:])]
+        cur = self._curent(ales)
+        eff = self._eff(cur, data)
+        sp_ales = round(sp * pond[0], 3)
+        t = (f"Probabil acest element: {ales}, la {cands[0]['distanta_m']:g} m de punctul estimat pe {fer['strada']} ({text}); "
+             f"{len(cands)} candidați în fereastră, pondere {pond[0]:g} din propunerea {sp} (scor propunere {sp_ales}). "
+             "Raportul nu se aplică direct; starea elementului rămâne neschimbată.")
+        marker = {"metoda": "cautare_strada", "urmeaza_strada": None, "propunere": {"proprietate": "element_probabil", "valoare": ales},
+                  "scor_propunere": sp_ales, "pondere": pond[0], "alternative": alt, "strada": fer["strada"], "indiciu": text}
+        st = self._pune(ales, cur["tip_element"], data, nivel=cur["nivel"], scor=eff, predictie=marker,
+                        motive=self._motiv(ales, t, 0.0, event))
+        trace["modificari"].append(self._publica(ales, st))
+        trace.setdefault("_ce", {})[ales] = "predictie"
+        trace["pasi"][-1] = {"nume": "predictie", "incredere": sp_ales, "rezultat": {
+            "metoda": "cautare_strada", "element_ales": ales, "alternative": alt, "scor_propunere": sp_ales}}
+        self._scor_pas(trace, "predictie", {"scor_propunere": sp_ales, "factori": factori, "nivel": "predictie", "element": ales}, [t], sp_ales)
+
+    @staticmethod
+    def _fara_marker(cur: dict) -> dict:
+        """Argument pentru `_pune`: șterge marcajul „probabil acest element” (cautare_strada) când un raport sigur atinge elementul."""
+        return {"predictie": None} if (cur.get("predictie") or {}).get("metoda") == "cautare_strada" else {}
+
+    def _inregistreaza_ancora(self, event: dict, m: dict, cs: dict | None):
+        """Adresă + număr la o locație sigură => ancoră pentru rapoartele următoare (`self.ancore`): potrivit cu ID, coordonate
+        explicite în același raport, sau 1 candidat unic în fereastră (doar indiciul `numar`)."""
+        ref, det = event.get("referinta") or {}, event.get("detalii") or {}
+        ad = ref.get("adresa_structurata") or {}
+        strada, nr = (ad.get("strada") or "").strip(), str(ad.get("numar") or "").strip()
+        if not strada or not nr.isdigit():
+            return
+        loc = None
+        if m.get("status") == "potrivit" and m.get("metoda") == "id":
+            el = self.net["noduri"].get(m.get("element_id"))
+            loc = (el["lat"], el["lon"]) if el else None
+        elif ref.get("coordonate") and not det.get("geocodare") and not det.get("trace_rezumat") and m.get("metoda") == "coordonate":
+            loc = (ref["coordonate"]["lat"], ref["coordonate"]["lon"])
+        elif cs and cs["actiune"] is None and len(cs["cands"]) == 1 and (cs["fer"].get("indiciu") or {}).get("tip") == "numar":
+            el = self.net["noduri"].get(cs["cands"][0]["element_id"])
+            loc = (el["lat"], el["lon"]) if el else None
+            strada = cs["fer"]["strada"]
+        if not loc or any(a["numar"] == int(nr) and a["strada"].lower() == strada.lower() for a in self.ancore):
+            return
+        self.ancore.append({"strada": strada, "numar": int(nr), "lat": round(loc[0], 6), "lon": round(loc[1], 6)})
 
     def _trace_generat(self, event: dict, trace: dict) -> dict:
         """Traseu simulat al tabletei lângă punctul din raport (feature traseu-generat-din-raport).
@@ -370,7 +594,7 @@ class Sesiune2:
         t = (f"Semnal de demontare ({len(lista)} raport(e) de la {len(echipe)} echipă/echipe, scor combinat {comb}): "
              f"trebuie cel puțin {cfg['rapoarte_min']} echipe și scor peste {w['praguri']['aplicat']} ca să fie scos din uz. "
              f"Elementul rămâne în model, scor {delta:+.3f}.")
-        st = self._pune(eid, el["tip_element"], data, nivel=nivel, scor=scor, motive=self._motiv(eid, t, delta, event))
+        st = self._pune(eid, el["tip_element"], data, nivel=nivel, scor=scor, motive=self._motiv(eid, t, delta, event), **self._fara_marker(cur))
         trace["modificari"].append(self._publica(eid, st))
         self._scor_pas(trace, "scor_actualizat", {"scor_nou": scor, "nivel": nivel, "efect": "semnal_demontare"}, [t])
 

@@ -1,7 +1,9 @@
 """Verificări pentru modelul de acuratețe din sesiunea 4 (V1 + V2): GIS stabil, SIM-* din rapoarte mai vechi,
-plafon după sursa locației, prag 0,50 la rapoarte executate, benzi de culoare.
+plafon după sursa locației, prag 0,50 la rapoarte executate, benzi de culoare; și căutarea pe stradă (V6, partea 2: motorul).
 Rulează: EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4. Date FICTIVE."""
 from __future__ import annotations
+
+import json
 
 from backend.engine import osm
 from backend.engine import scoring as S
@@ -47,6 +49,151 @@ def geo_strada_numar(lat, lon, w):
     """Rezultat de geocodare „stradă + număr” (cum îl produce backend.geo), pentru un raport de test."""
     return {"lat": lat, "lon": lon, "precizie_m": 200, "metoda": "osm_cache", "acuratete": w["geocodare"]["acuratete"]["strada_numar"],
             "motiv": "Strada Viilor nr. 12, interpolat pe stradă (potrivire exactă a numelui)"}
+
+
+def r_adr(strada, numar=None, indiciu=None, reper=None, **extra):
+    """Referință cu adresă structurată (fără ID, fără coordonate), cum o produce extracția."""
+    ad = {"strada": strada, "numar": numar, "localitate": None, "reper": reper}
+    if indiciu:
+        ad["indiciu"] = indiciu
+    return {"adresa_structurata": ad, **extra}
+
+
+def pas(t, nume):
+    return next((p for p in t["pasi"] if p["nume"] == nume), None)
+
+
+def teste_cautare_strada() -> None:
+    """V6, partea 2: fereastra pe stradă -> candidați -> potrivit / predicție / de verificat / element nou / pin; ancore."""
+    # --- 1 candidat în fereastră: potrivit pe nod, nu neaplicat
+    m = mk()
+    t = m.apply_event(ev("CS-1", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Crinului", "60", {"tip": "numar", "numar": "60"})))
+    cs, pm = pas(t, "cautare_strada"), pas(t, "potrivire")["rezultat"]
+    nod1 = cs["rezultat"]["ales"] if cs else None
+    verifica("căutare: 1 nod în fereastră (Strada Crinului nr. 60) -> potrivit pe el, metoda cautare_strada, nu neaplicat",
+             cs and len(cs["rezultat"]["candidati"]) == 1 and nod1 and pm["status"] == "potrivit" and pm["element_id"] == nod1
+             and pm["metoda"] == "cautare_strada" and pm["calitate"] == m.w["cautare_strada"]["calitate_cautare_unic"]
+             and t["decizie"] != "neaplicat" and [p["nume"] for p in t["pasi"]].index("cautare_strada") < [p["nume"] for p in t["pasi"]].index("potrivire"),
+             f"{t['decizie']} {nod1}")
+    r = cs["rezultat"]
+    verifica("căutare: pasul cautare_strada are câmpurile promise (strada, de_la_m, pana_la_m, punct, precizie_m, metoda, indiciu.text, ancore, candidati, ales)",
+             all(k in r for k in ("strada", "de_la_m", "pana_la_m", "punct", "precizie_m", "metoda", "indiciu", "ancore", "candidati", "ales", "linie", "motiv"))
+             and r["indiciu"]["text"] == "nr. 60" and r["metoda"] == "conventie" and r["strada"] == "Strada Crinului"
+             and {"element_id", "distanta_m", "pozitie_m"} <= set(r["candidati"][0]), json.dumps({k: v for k, v in r.items() if k != "linie"}, ensure_ascii=False)[:400])
+    print("    exemplu pas cautare_strada:", json.dumps({k: v for k, v in r.items() if k != "linie"}, ensure_ascii=False))
+    mod = t["modificari"][0]
+    verifica("căutare: nodul GIS potrivit rămâne GIS (sursa gis, banda verde), fără marcaj de predicție", mod["sursa_locatie"] == "gis" and mod["banda"] == "verde"
+             and not mod.get("predictie"), str(mod["banda"]))
+    verifica("căutare: ancoră nouă după 1 candidat unic cu număr (Strada Crinului nr. 60 la nodul ales)",
+             len(m.ancore) == 1 and m.ancore[0]["numar"] == 60 and m.ancore[0]["strada"] == "Strada Crinului", str(m.ancore))
+    # al doilea raport pe aceeași stradă: ancora dă metoda ancore, precizie 40 m
+    t2 = m.apply_event(ev("CS-2", "2026-09-11", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Crinului", "64", {"tip": "numar", "numar": "64"})))
+    r2 = pas(t2, "cautare_strada")["rezultat"]
+    verifica("căutare: al doilea raport pe aceeași stradă folosește ancora (metoda ancore, precizie 40 m, o ancoră în pas)",
+             r2["metoda"] == "ancore" and r2["precizie_m"] == 40.0 and len(r2["ancore"]) == 1 and r2["ancore"][0]["numar"] == 60, f"{r2['metoda']} {r2['precizie_m']} {r2['ancore']}")
+    # ancoră din coordonate explicite + adresă cu număr (același raport), apoi din ID
+    ma = mk()
+    el = ma.net["noduri"][nod1]
+    ma.apply_event(ev("CS-3", "2026-09-10", "mentenanta", "verificare", ref={**r_adr("Strada Crinului", "60"), "coordonate": {"lat": el["lat"], "lon": el["lon"]}}))
+    verifica("ancoră: coordonate explicite + adresă cu număr -> ancoră", len(ma.ancore) == 1 and ma.ancore[0]["numar"] == 60, str(ma.ancore))
+    mi = mk()
+    mi.apply_event(ev("CS-4", "2026-09-10", "mentenanta", "verificare", ref={**r_adr("Strada Crinului", "60"), "element_id": nod1}))
+    verifica("ancoră: potrivit cu ID + adresă cu număr -> ancoră", len(mi.ancore) == 1 and mi.ancore[0]["numar"] == 60, str(mi.ancore))
+    mn = mk()
+    mn.apply_event(ev("CS-5", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Viilor", "12")))
+    verifica("ancoră: o predicție/de verificat nu devine ancoră (locație nesigură)", mn.ancore == [], str(mn.ancore))
+
+    # --- 2..4 candidați: predicție pe cel mai apropiat, cu alternative; elementul existent nu își strică starea
+    mp = mk()
+    inainte = snap(mp, "2026-09-10", "6273923")
+    t = mp.apply_event(ev("CS-6", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Ion Luca Caragiale", "6", {"tip": "numar", "numar": "6"})))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    mod = t["modificari"][0]
+    pr = mod["predictie"] or {}
+    verifica("căutare: 2..4 candidați -> decizie predicție, ales = cel mai apropiat de punct, ceilalți în alternative",
+             t["decizie"] == "predictie" and 2 <= len(cs["candidati"]) <= 4 and cs["ales"] == cs["candidati"][0]["element_id"] == mod["element_id"]
+             and pr.get("metoda") == "cautare_strada" and len(pr["alternative"]) == len(cs["candidati"]) - 1
+             and all({"element_id", "distanta_m", "motiv"} <= set(a) for a in pr["alternative"])
+             and t["schimbari"][0]["ce"] == "predictie" and pas(t, "scor")["rezultat"]["decizie"] == "predictie", f"{t['decizie']} {pr.get('alternative')}")
+    verifica("căutare: ponderea scade cu distanța (cel mai apropiat > celelalte), scorul propunerii împărțit",
+             all(pr["pondere"] >= a["pondere"] for a in pr["alternative"]) and abs(pr["pondere"] + sum(a["pondere"] for a in pr["alternative"]) - 1) < 0.01
+             and pr["scor_propunere"] < 0.75, str(pr["pondere"]))
+    dupa = snap(mp, "2026-09-10", "6273923")
+    verifica("căutare: predicția nu strică elementul existent (nivel și sursă neschimbate, scor neschimbat), apare în snapshot cu predictie.metoda",
+             dupa["nivel"] == inainte["nivel"] == "in_model" and dupa["sursa_locatie"] == "gis" and dupa["predictie"]["metoda"] == "cautare_strada"
+             and abs(dupa["scor"] - inainte["scor"]) < 1e-9, f"{inainte['nivel']} {dupa['nivel']}")
+    # un raport sigur ulterior pe același element șterge marcajul
+    t_s = mp.apply_event(ev("CS-7", "2026-09-12", "mentenanta", "verificare", ref={"element_id": "6273923"}))
+    verifica("căutare: un raport cu ID pe elementul prezis șterge marcajul de predicție", not snap(mp, "2026-09-12", "6273923")["predictie"])
+
+    # --- peste max_candidati_predictie: de verificat pe fereastră, nimic atins
+    mv = mk()
+    t = mv.apply_event(ev("CS-8", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Viilor", "12")))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    verifica("căutare: peste max_candidati_predictie (Strada Viilor nr. 12) -> de_verificat pe fereastră, niciun element atins, nu neaplicat",
+             t["decizie"] == "de_verificat" and len(cs["candidati"]) > mv.w["cautare_strada"]["max_candidati_predictie"] and cs["ales"] is None
+             and t["modificari"] == [] and "Strada Viilor" in pas(t, "scor")["motive"][0], f"{t['decizie']} {len(cs['candidati'])}")
+
+    # --- 0 candidați: nod_lipsa executat „între nr. 10 și 20” -> element nou, aplicat, galben/portocaliu, sursa adresa_numar
+    mz = mk()
+    t = mz.apply_event(ev("CS-9", "2026-09-10", "mentenanta", "nod_lipsa", "executat", ref=r_adr("Strada Liviu Rebreanu", None, {"tip": "intre", "numar": "10", "numar_2": "20"}), inc=0.95))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    nod = next(x for x in t["modificari"] if x["tip_element"] == "nod")
+    verifica("căutare: 0 candidați + nod_lipsa executat (între nr. 10 și 20) -> element nou la mijloc, aplicat (P1), galben/portocaliu, sursa adresa_numar",
+             cs["candidati"] == [] and cs["indiciu"]["text"] == "între nr. 10 și 20" and t["decizie"] == "adaugat" and nod["nivel"] == "in_model"
+             and nod["banda"] in ("galben", "portocaliu") and nod["sursa_locatie"] == "adresa_numar" and nod["scor"] <= 0.70
+             and abs(mz.net["noduri"][nod["element_id"]]["lat"] - cs["punct"]["lat"]) < 1e-5, f"{t['decizie']} {nod['scor']} {nod['banda']}")
+    # --- 0 candidați, tip despre element existent: pin „de verificat” vizibil
+    mpin = mk()
+    t = mpin.apply_event(ev("CS-10", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Liviu Rebreanu", "12", {"tip": "numar", "numar": "12"})))
+    pin = next((x for x in t["modificari"] if x["element_id"] == "VER-CS-10"), None)
+    sp = snap(mpin, "2026-09-10", "VER-CS-10")
+    verifica("căutare: avarie pe stradă cu 0 noduri în fereastră -> pin de verificat VER-<event_id>, scor = plafon x 0,5, vizibil în snapshot",
+             t["decizie"] == "de_verificat" and pin and pin["nivel"] == "de_verificat" and abs(pin["scor"] - 0.70 * 0.5) < 1e-9
+             and sp and sp["nivel"] == "de_verificat" and "nu există stâlp" in pin["motive"][0]["text"].lower()
+             and "Strada Liviu Rebreanu" in pin["motive"][0]["text"], str(pin and (pin["scor"], pin["motive"][0]["text"][:80])))
+    ft = next(f for f in mpin.snapshot("2026-09-10")["features"] if f["properties"]["element_id"] == "VER-CS-10")
+    verifica("căutare: pinul are geometrie Point la punctul estimat", ft["geometry"]["type"] == "Point", str(ft["geometry"]))
+
+    # --- „lângă stâlpul <ID existent>”: fereastra pornește de la elementul numit
+    me = mk()
+    t = me.apply_event(ev("CS-11", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Crinului", None, {"tip": "element", "element_id": nod1, "distanta_stalpi": 1})))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    verifica("căutare: „lângă stâlpul <ID>” -> fereastră de ±40 m în jurul lui, elementul numit e candidat, indiciu.text corect",
+             cs["indiciu"]["text"] == f"lângă stâlpul {nod1}" and cs["precizie_m"] == 40.0 and cs["metoda"] == "indiciu"
+             and nod1 in [c["element_id"] for c in cs["candidati"]] and t["decizie"] != "neaplicat", f"{cs['precizie_m']} {[c['element_id'] for c in cs['candidati']]}")
+
+    # --- doar stradă (fără număr) -> rezultat, nu neaplicat
+    md = mk()
+    t = md.apply_event(ev("CS-12", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Crinului")))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    verifica("căutare: doar stradă, fără număr -> de_verificat/predicție, nu neaplicat; indiciu.text „doar strada”",
+             t["decizie"] in ("predictie", "de_verificat") and cs["indiciu"]["text"] == "doar strada" and cs["metoda"] == "indiciu", f"{t['decizie']}")
+    # text liber „Strada Crinului nr. 60” (fără adresă structurată) deduce indiciul prin regex
+    tl = mk().apply_event(ev("CS-13", "2026-09-10", "mentenanta", "avarie_semnalata", ref={"adresa": "Strada Crinului, lângă nr. 60"}))
+    verifica("căutare: adresă text liber „lângă nr. 60” -> indiciu din regex, rezultat nu neaplicat",
+             pas(tl, "cautare_strada")["rezultat"]["indiciu"]["text"] == "lângă nr. 60" and tl["decizie"] != "neaplicat", tl["decizie"])
+
+    # --- fără niciun indiciu de loc -> tot neaplicat; stradă necunoscută -> neaplicat; în afara zonei -> eronat
+    tn = mk().apply_event(ev("CS-14", "2026-09-10", "mentenanta", "avarie_semnalata", ref={}))
+    verifica("fără niciun indiciu de loc -> neaplicat, fără pas cautare_strada", tn["decizie"] == "neaplicat" and pas(tn, "cautare_strada") is None, tn["decizie"])
+    tx = mk().apply_event(ev("CS-15", "2026-09-10", "mentenanta", "avarie_semnalata", ref={"adresa": "Strada Inexistenta Zzz nr. 4"}))
+    verifica("stradă necunoscută (nu e în cache) -> neaplicat ca azi", tx["decizie"] == "neaplicat" and pas(tx, "cautare_strada") is None, tx["decizie"])
+    tf_ = mk().apply_event(ev("CS-16", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Șoseaua Principală", None, {"tip": "capat"})))
+    verifica("capătul Șoselei Principale (4 km) -> eronat în prototip, neaplicat", tf_["decizie"] == "neaplicat" and tf_.get("eronat_prototip") is True, tf_["decizie"])
+    tc = mk().apply_event(ev("CS-17", "2026-09-10", "mentenanta", "avarie_semnalata", ref={"element_id": nod1}))
+    verifica("ID în text: neschimbat (potrivit cu ID, fără căutare pe stradă)", pas(tc, "cautare_strada") is None and pas(tc, "potrivire")["rezultat"]["metoda"] == "id")
+
+    # --- determinism: același set de rapoarte, de două ori, același rezultat
+    def ruleaza():
+        mm = mk()
+        out = []
+        for i, (st, nr, ind) in enumerate([("Strada Crinului", "60", {"tip": "numar", "numar": "60"}), ("Strada Crinului", "64", {"tip": "numar", "numar": "64"}),
+                                            ("Strada Ion Luca Caragiale", "6", {"tip": "numar", "numar": "6"}), ("Strada Viilor", "12", None)]):
+            tt = mm.apply_event(ev(f"D-{i}", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr(st, nr, ind)))
+            out.append((tt["decizie"], [(x["element_id"], x["scor"], x["nivel"]) for x in tt["modificari"]], pas(tt, "cautare_strada")["rezultat"]))
+        return json.dumps(out, sort_keys=True, ensure_ascii=False), mm.ancore
+    verifica("determinism: două rulări identice dau aceleași decizii, scoruri, ferestre, candidați și ancore", ruleaza() == ruleaza())
 
 
 def main() -> None:
@@ -163,6 +310,8 @@ def main() -> None:
     e0 = next(e for e in m0.istoric if sim(e))
     verifica("retea_start.sim_din_rapoarte = 0: SIM-* sunt GIS (retea_start, 0,95)",
              m0.istoric[e0][0]["origine"] == "retea_start" and m0.istoric[e0][0]["scor"] == 0.95)
+
+    teste_cautare_strada()
 
     ok, tot = sum(OK), len(OK)
     print(f"\nsmoke_sesiune4: {ok}/{tot} OK")
