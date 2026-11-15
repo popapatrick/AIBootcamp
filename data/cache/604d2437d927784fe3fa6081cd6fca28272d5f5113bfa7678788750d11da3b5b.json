@@ -1,0 +1,24 @@
+{
+  "event_id": "EV-MENT-2026-11-15-A-T-014",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": null,
+    "element_id": "A-T-014",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "verificat tronson A-T-014 langa PTAB 7812, totul in regula. 13.11.2026",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 1,
+  "detalii": {
+    "observatii": "verificat tronson A-T-014 langa PTAB 7812, totul in regula; data din text: 13.11.2026"
+  },
+  "campuri_lipsa": [],
+  "event_id_placeholder": "null"
+}

@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Crinului, lângă nr. 7",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": "7",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "7",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Stâlp nou montat pe Strada Crinului, lângă nr. 7, executat, de trecut în GIS.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou montat, executat; de trecut în GIS. Fără cod element în text."
+  }
+}

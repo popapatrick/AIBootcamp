@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Strada Carpati nr. 15",
+    "adresa_structurata": {
+      "strada": "Strada Carpati",
+      "numar": "15",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": {
+      "lat": 44.281967,
+      "lon": 26.065858
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Racord executat, GPS 44.281967 26.065858, Strada Carpati nr. 15, status executat.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.85,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {}
+}

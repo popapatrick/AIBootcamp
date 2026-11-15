@@ -1,0 +1,42 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "la colț cu Strada Tineretului, pe Strada Speranței",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": "Strada Tineretului",
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "cablu cazut la colt cu Strada Tineretului, pe Strada Speranței, de verificat",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate",
+    "numar"
+  ],
+  "detalii": {
+    "observatii": "cablu căzut; de verificat în teren"
+  }
+}

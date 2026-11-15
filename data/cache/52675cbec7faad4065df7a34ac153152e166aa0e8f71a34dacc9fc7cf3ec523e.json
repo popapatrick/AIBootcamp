@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Viilor nr. 9",
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": "9",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Montat stalp nou pe Strada Viilor nr. 9, nu apare in GIS. echipa 1, 11/11/2026",
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "noduri_vecine"
+  ],
+  "incredere_extractie": 0.6,
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "detalii": {
+    "observatii": "Stalp nou montat (executat), nu apare in GIS. Echipa 1. Data din text: 11/11/2026."
+  }
+}

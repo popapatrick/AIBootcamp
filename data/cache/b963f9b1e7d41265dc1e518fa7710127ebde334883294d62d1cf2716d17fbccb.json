@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-b963f9b1",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu cu Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "strada_2": "Strada Crinului",
+        "numar": null,
+        "numar_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Demontare stalp la intersectia Strada Liviu Rebreanu cu Strada Crinului, executat.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp demontat la intersecția Strada Liviu Rebreanu cu Strada Crinului; codul elementului nu apare în text."
+  }
+}

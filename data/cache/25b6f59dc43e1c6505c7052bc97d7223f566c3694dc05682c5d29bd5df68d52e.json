@@ -1,0 +1,42 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Soarelui, la capat, la 300 m de ultimul stalp",
+    "adresa_structurata": {
+      "strada": "Strada Soarelui",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "capat",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-11-15",
+  "text_original": "Cerere racord, casa pe Strada Soarelui, la capat, la 300 m de ultimul stalp.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "coordonate",
+    "numar",
+    "nr_cadastral",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Casă pe Strada Soarelui, la capăt de stradă, la 300 m de ultimul stâlp. Stâlpul de referință nu are cod în text."
+  }
+}
