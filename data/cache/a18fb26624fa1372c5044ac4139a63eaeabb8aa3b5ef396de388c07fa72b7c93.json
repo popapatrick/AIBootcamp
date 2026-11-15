@@ -1,0 +1,34 @@
+{
+  "event_id": "M-2026-0415",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+    "adresa": "Șoseaua Principală",
+    "adresa_structurata": {
+      "strada": "Șoseaua Principală",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": "5481763",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-19",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0415\nData: 2026-09-19\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: 5481763 → 6374339\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "tip_sursa_pondere": "formular",
+  "campuri_lipsa": [
+    "coordonate",
+    "centru",
+    "raza_m"
+  ],
+  "detalii": {
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos. Nod nou: 6374339."
+  }
+}

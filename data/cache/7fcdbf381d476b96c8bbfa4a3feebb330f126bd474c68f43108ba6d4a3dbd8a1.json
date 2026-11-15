@@ -1,0 +1,27 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-05",
+  "text_original": "Nu avem curent, vă rog trimiteți pe cineva.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.1,
+  "campuri_lipsa": [
+    "event_id",
+    "id_client",
+    "adresa",
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {}
+}

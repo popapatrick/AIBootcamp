@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liliacului",
+    "adresa_structurata": {
+      "strada": "Strada Liliacului",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-12",
+  "text_original": "Lumina pâlpâie pe Strada Liliacului.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "id_client",
+    "numar",
+    "localitate"
+  ],
+  "detalii": {}
+}

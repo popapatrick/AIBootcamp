@@ -1,0 +1,42 @@
+{
+  "event_id": "I-2026-0120",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": "Strada Orizont, vizavi de nr. 8",
+    "adresa_structurata": {
+      "strada": "Strada Orizont",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "vizavi",
+        "numar": "8",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-10-26",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0120\nData: 2026-10-26\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: -\nAdresa: Strada Orizont, vizavi de nr. 8\nConstatare: Linie de 120 m propusă, în așteptare de buget.\nStatus: planificat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "noduri"
+  ],
+  "detalii": {
+    "lungime_m": 120,
+    "observatii": "Linie de 120 m propusă, în așteptare de buget. Nr. fișă I-2026-0120."
+  }
+}

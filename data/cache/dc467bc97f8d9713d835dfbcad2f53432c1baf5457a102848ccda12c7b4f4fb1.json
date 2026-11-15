@@ -1,0 +1,40 @@
+{
+  "event_id": "I-2026-0121",
+  "echipa_sursa": "investitii",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Strada Primăverii, la capătul străzii",
+    "adresa_structurata": {
+      "strada": "Strada Primăverii",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "capat",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Tronson nou executat, racord la rețea.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "sectiune_noua": null,
+    "observatii": "Fișa I-2026-0121: tronson nou executat, racord la rețea. Tip lucrare: linie nouă. Cod element lipsă ('-'), coordonate lipsă ('-'); locația este doar stradă și capăt de stradă. Tipul racord_nou este ales pentru racordul la rețea executat; nu există cerere de client în text."
+  }
+}

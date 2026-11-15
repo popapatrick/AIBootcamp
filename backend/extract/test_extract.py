@@ -176,6 +176,8 @@ def main() -> None:
     ev_a["referinta"]["adresa_structurata"]["numar"] = 12
     assert list(ex._validator.iter_errors(ev_a))
     assert "adresa_structurata" in ex.SYSTEM and "incredere_extractie după" in ex.SYSTEM
+    assert "verificare_om" in ex.SYSTEM and "indiciu" in ex.SYSTEM  # sesiunea 4
+    assert "verificare_om" in ex.tool_schema()["properties"]["tip"]["enum"]
     geo = json.loads((ex.ROOT / "data" / "reports" / "geo-test.json").read_text(encoding="utf-8"))["adrese"]
     assert len(geo) >= 10 and all({"id", "text", "sursa", "data", "asteptat"} <= set(x) for x in geo)
     # forma exemple-dummy.json

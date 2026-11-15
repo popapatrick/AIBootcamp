@@ -1,0 +1,42 @@
+{
+  "event_id": "I-2026-0113",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": "Strada Speranței, între nr. 10 și 20",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "intre",
+        "numar": "10",
+        "numar_2": "20",
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-08-21",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0113\nData: 2026-08-21\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței, între nr. 10 și 20\nConstatare: Linie de 150 m propusă, aprobată în planul 2027.\nStatus: planificat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "noduri"
+  ],
+  "detalii": {
+    "lungime_m": 150,
+    "observatii": "Linie de 150 m propusă, aprobată în planul 2027. Fișa de lucrare nr. I-2026-0113."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "event_id": "R-2026-0065",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Ulmului nr. 7",
+    "adresa_structurata": {
+      "strada": "Strada Ulmului",
+      "numar": "7",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-09-15",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0065\nData: 2026-09-15\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Ulmului nr. 7\nConstatare: Cerere din aplicația clientului, 1 fază.\nStatus: semnalat\n",
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "detalii": {
+    "observatii": "Nr. fișă R-2026-0065. Cerere din aplicația clientului, 1 fază."
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "event_id": "EV-MNT-2026-10-07-01",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "colțul dintre Strada Viilor și Strada Carpati",
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": "Strada Carpati",
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-07",
+  "text_original": "Inspecție la colțul dintre Strada Viilor și Strada Carpati, cablu vizibil uzat.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Inspecție la colțul dintre Strada Viilor și Strada Carpati: cablu vizibil uzat."
+  },
+  "event_id_placeholder": "null"
+}

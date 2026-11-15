@@ -1,0 +1,30 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.31355,
+      "lon": 26.10909
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "FISA INVESTITIE: stalp nou la 44.31355, 26.10909, executat",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id",
+    "adresa",
+    "event_id"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou executat la coordonatele indicate; fără cod de element în text."
+  }
+}

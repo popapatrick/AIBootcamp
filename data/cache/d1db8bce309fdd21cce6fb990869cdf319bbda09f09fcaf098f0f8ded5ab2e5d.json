@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-d1db8bce",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Viilor, lângă nr. 9",
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": "9",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "9",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": "CL-39910",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-08-22",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-08-22 ora 19:10\nID client: CL-39910\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Lumina pâlpâie de o oră pe Strada Viilor, lângă nr. 9.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "detalii": {
+    "observatii": "Lumina pâlpâie de o oră. Apel la ora 19:10."
+  },
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "element_id"
+  ]
+}

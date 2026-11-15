@@ -1,0 +1,40 @@
+{
+  "event_id": "R-2026-0062",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "status": "planificat",
+  "data": "2026-08-24",
+  "referinta": {
+    "adresa": "Strada Crinului, casa de la capătul străzii",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "capat",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null
+  },
+  "campuri_lipsa": [
+    "coordonate",
+    "numar",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Casă nouă, 1 fază, 5 kW."
+  },
+  "incredere_extractie": 0.4,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0062\nData: 2026-08-24\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Crinului, casa de la capătul străzii\nConstatare: Casă nouă, 1 fază, 5 kW.\nStatus: semnalat\n"
+}

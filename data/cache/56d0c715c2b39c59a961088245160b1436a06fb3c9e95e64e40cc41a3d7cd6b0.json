@@ -1,0 +1,32 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "str liviu rebrianu nr 5",
+    "adresa_structurata": {
+      "strada": "liviu rebrianu",
+      "numar": "5",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-19",
+  "text_original": "Defect cablu pe str liviu rebrianu nr 5.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "id_client",
+    "localitate"
+  ],
+  "detalii": {}
+}

@@ -1,0 +1,31 @@
+{
+  "event_id": "M-2026-0404",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Bălții",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": "6199650",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-08-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0404\nData: 2026-08-10\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 6199650\nCoordonate: -\nAdresa: Strada Bălții\nConstatare: Izolator crăpat pe stâlpul 6199650, cablu atârnă un metru.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Fișă de lucrare M-2026-0404, tip lucrare: avarie. Izolator crăpat pe stâlpul 6199650, cablu atârnă un metru."
+  }
+}

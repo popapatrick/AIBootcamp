@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-9860d14e",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu nr. 12, Popești",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": "12",
+      "localitate": "Popești",
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "Fără curent la Strada Liviu Rebreanu nr. 12, Popești.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "event_id",
+    "id_client",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Fără curent la adresa indicată. ID eveniment și ID client nu apar în text."
+  }
+}

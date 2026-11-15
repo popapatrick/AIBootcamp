@@ -1,0 +1,42 @@
+{
+  "event_id": "EV-PENDING",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Speranței colț cu Strada Bălții",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": "Strada Bălții",
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "stalp nou la coltul Strada Speranței colț cu Strada Bălții, nu e in GIS",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "coordonate",
+    "noduri_vecine"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou la colț, nu apare în GIS (necartat)."
+  }
+}

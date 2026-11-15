@@ -1,0 +1,41 @@
+{
+  "event_id": "R-2026-0066",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Liliacului, vizavi de nr. 8",
+    "adresa_structurata": {
+      "strada": "Strada Liliacului",
+      "numar": "8",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "vizavi",
+        "numar": "8",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0066\nData: 2026-10-03\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Liliacului, vizavi de nr. 8\nConstatare: Casă nouă, 1 fază.\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Casă nouă, 1 fază."
+  }
+}

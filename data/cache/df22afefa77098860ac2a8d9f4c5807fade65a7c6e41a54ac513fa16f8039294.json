@@ -1,0 +1,35 @@
+{
+  "event_id": "EV-APEL-CL-51001-20261114",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "str Orhideelor de la 6",
+    "adresa_structurata": {
+      "strada": "str Orhideelor",
+      "numar": "6",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": {
+      "lat": 44.27824,
+      "lon": 26.06153
+    },
+    "element_id": null,
+    "id_client": "CL-51001",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "Operator: Alo? Client (CL-51001): Nu avem lumina pe str Orhideelor de la 6. Coord tel 44.27824, 26.06153. status semnalat",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.75,
+  "campuri_lipsa": [
+    "element_id",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Clientul raportează lipsă de curent pe strada Orhideelor, nr. 6. Coordonatele sunt date explicit în apel."
+  }
+}

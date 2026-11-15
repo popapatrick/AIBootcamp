@@ -1,0 +1,33 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Liliacului",
+    "adresa_structurata": {
+      "strada": "Strada Liliacului",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-03",
+  "text_original": "Cerere racord pe Strada Liliacului.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "numar",
+    "nr_cadastral",
+    "localitate"
+  ],
+  "detalii": {}
+}

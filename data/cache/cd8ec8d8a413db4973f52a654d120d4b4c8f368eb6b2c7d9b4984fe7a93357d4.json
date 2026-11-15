@@ -1,0 +1,40 @@
+{
+  "event_id": "M-2026-0402",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Viilor, între nr. 11 și 17",
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "intre",
+        "numar": "11",
+        "numar_2": "17",
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0402\nData: 2026-08-06\nEchipa: mentenanta\nTip lucrare: stâlp nou, nod lipsă\nCod element: -\nCoordonate: -\nAdresa: Strada Viilor, între nr. 11 și 17\nConstatare: Stâlp nou montat, nu apare în harta GIS.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou montat, nu apare în harta GIS."
+  }
+}

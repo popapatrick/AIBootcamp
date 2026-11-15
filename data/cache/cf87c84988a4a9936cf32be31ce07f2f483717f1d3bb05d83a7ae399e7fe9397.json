@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-CL-51002",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu, lângă nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": "14",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "14",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": "CL-51002",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:24\nID client: CL-51002\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Și la noi, pe Strada Liviu Rebreanu, lângă nr. 14, pâlpâie.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Clientul raportează că iluminatul pâlpâie pe Strada Liviu Rebreanu, lângă nr. 14. Formularea „Și la noi” sugerează o problemă similară semnalată și în altă parte; nu e precizat detaliul."
+  }
+}

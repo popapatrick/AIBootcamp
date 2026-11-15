@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-APEL-2026-10-21",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "sos principala",
+    "adresa_structurata": {
+      "strada": "sos principala",
+      "numar": null,
+      "localitate": null,
+      "reper": "aproape de Carpati",
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-21",
+  "text_original": "Scântei pe sos principala, aproape de Carpati.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.35,
+  "campuri_lipsa": [
+    "id_client",
+    "element_id",
+    "coordonate",
+    "numar"
+  ],
+  "detalii": {}
+}

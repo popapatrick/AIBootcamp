@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.30021,
+      "lon": 26.09046
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "Tableta GPS 44.30021, 26.09046: stalp nou montat",
+  "tip_sursa_pondere": "tableta_coordonate",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id",
+    "adresa"
+  ],
+  "detalii": {}
+}

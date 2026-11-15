@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-R-2026-0070",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Strada Liliacului nr. 11",
+    "adresa_structurata": {
+      "strada": "Strada Liliacului",
+      "numar": "11",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-30",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0070\nData: 2026-10-30\nEchipa: racordari\nTip lucrare: racord executat\nCod element: -\nCoordonate: -\nAdresa: Strada Liliacului nr. 11\nConstatare: Racord executat, status executat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Nr. fișă R-2026-0070; racord executat, status executat"
+  }
+}

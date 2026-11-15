@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-M-2026-0419",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": "7966503",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0419\nData: 2026-10-14\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 7966503\nCoordonate: -\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp înclinat, risc de cădere, de reparat urgent.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate",
+    "numar"
+  ],
+  "detalii": {
+    "observatii": "Stâlp înclinat, risc de cădere, de reparat urgent. Tip lucrare: avarie. Nr. fișă: M-2026-0419."
+  }
+}

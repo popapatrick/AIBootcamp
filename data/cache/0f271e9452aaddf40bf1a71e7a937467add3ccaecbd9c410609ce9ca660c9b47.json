@@ -1,0 +1,42 @@
+{
+  "event_id": "R-2026-0067",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Soarelui, la capătul străzii",
+    "adresa_structurata": {
+      "strada": "Strada Soarelui",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "capat",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-09",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0067\nData: 2026-10-09\nEchipa: racordari\nTip lucrare: cerere racord casă departe de rețea\nCod element: -\nCoordonate: -\nAdresa: Strada Soarelui, la capătul străzii\nConstatare: Casă la cca 300 m de ultimul stâlp, traseu pe Strada Soarelui.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "lungime_m": 300,
+    "observatii": "Casă la cca 300 m de ultimul stâlp, traseu pe Strada Soarelui. Cod element necompletat (\"-\")."
+  }
+}

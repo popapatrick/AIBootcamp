@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-APEL-2026-11-04",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Mihai Eminescu nr. 3",
+    "adresa_structurata": {
+      "strada": "Strada Mihai Eminescu",
+      "numar": "3",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-04",
+  "text_original": "Fără curent pe Strada Mihai Eminescu nr. 3.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "id_client",
+    "localitate",
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {}
+}

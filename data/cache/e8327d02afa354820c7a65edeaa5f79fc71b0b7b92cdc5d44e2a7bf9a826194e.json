@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-APEL-CL-51001-20261002",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu, lângă nr. 12",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": "12",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "12",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": "CL-51001",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:10\nID client: CL-51001\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Nu avem curent pe Strada Liviu Rebreanu, lângă nr. 12.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Client raportează lipsă curent pe Strada Liviu Rebreanu, lângă nr. 12. Operatorul a înregistrat apelul, echipa verifică. Ora apelului: 19:10."
+  }
+}

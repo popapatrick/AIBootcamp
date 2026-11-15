@@ -1,0 +1,39 @@
+{
+  "event_id": "R-2026-0071",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Primăverii, între nr. 4 și 10",
+    "adresa_structurata": {
+      "strada": "Strada Primăverii",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă poarta cu gard verde",
+      "indiciu": {
+        "tip": "intre",
+        "numar": "4",
+        "numar_2": "10",
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-07",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0071\nData: 2026-11-07\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, între nr. 4 și 10\nConstatare: Casă nouă, lângă poarta cu gard verde.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Casă nouă, lângă poarta cu gard verde."
+  }
+}

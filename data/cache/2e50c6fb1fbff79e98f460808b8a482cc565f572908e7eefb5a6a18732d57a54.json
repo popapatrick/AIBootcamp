@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-2e50c6fb",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.280555,
+      "lon": 26.067705
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-09-14",
+  "text_original": "Control în teren la coordonatele 44.280555, 26.067705: stâlp înclinat.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "adresa"
+  ],
+  "detalii": {
+    "observatii": "stâlp înclinat"
+  }
+}

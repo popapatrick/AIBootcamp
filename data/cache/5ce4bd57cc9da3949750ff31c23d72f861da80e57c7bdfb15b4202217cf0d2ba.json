@@ -1,0 +1,35 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă școală",
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-27",
+  "text_original": "Nu e curent lângă școală.",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.25,
+  "campuri_lipsa": [
+    "coordonate",
+    "strada",
+    "numar",
+    "id_client",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Apel client: lipsa curentului raportată; locația doar ca reper vag („lângă școală”), fără stradă sau coordonate."
+  }
+}

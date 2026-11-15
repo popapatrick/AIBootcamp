@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Orhideelor, in dreptul curtii",
+    "adresa_structurata": {
+      "strada": "Strada Orhideelor",
+      "numar": null,
+      "localitate": null,
+      "reper": "in dreptul curtii",
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "stalp nou pe Strada Orhideelor, in dreptul curtii, nu e in GIS",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.45,
+  "detalii": {
+    "observatii": "Stâlp nou montat pe Strada Orhideelor, în dreptul curții; nu apare în GIS."
+  },
+  "campuri_lipsa": [
+    "element_id",
+    "numar",
+    "coordonate"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "event_id": "EV-fe76d067",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": "Strada Tineretului nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": "14",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-02",
+  "text_original": "Planificat: linie noua pe Strada Tineretului nr. 14, 120 m, buget 2027.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "event_id",
+    "noduri",
+    "localitate",
+    "coordonate"
+  ],
+  "detalii": {
+    "lungime_m": 120,
+    "observatii": "buget 2027"
+  }
+}
