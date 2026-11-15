@@ -2,6 +2,22 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, V4 fire mutate din document + events.json din 56 de rapoarte (Victor, B)
+Gata (cod scris de un agent Sonnet, verificat de mine):
+- **V4** (08a86da): `mutare_fire` doar din text. Centrul se ia din coordonate, intersecție (60 m), nodul din ID (40 m) sau stradă (120 m). Zona devine `de_verificat`, iar tronsoanele aeriene `scos_din_uz` („demontat probabil”) când traseul nou e aplicat. Traseul nou = tronsoane `MUT-*` care ocolesc cercul pe străzi, cu pași `analiza_harta`. Racordarea la treptele 1–2 nu mai are linie dreaptă lungă (drum pe străzi).
+- **`events.json` regenerat** din 56 de rapoarte, cu corecturile tale; referința de aur reîmprospătată. Rețeaua la 14 nov.: verde 80 %, galben 9 %, portocaliu 7 %, roșu 3,5 % (în țintă). `verifica_tot.sh` TOT VERDE.
+- **Cardurile de intro în timeline:**
+
+  | Card | Eveniment | Rezultat |
+  |---|---|---|
+  | 1 | EV4-056 | predicție SIM-048 (3 candidați) |
+  | 2 | EV4-026 | `de_verificat`: 4 elemente roșii în jurul nodului 5481763, fără traseu nou (o singură ancoră în afara zonei) |
+  | 3 | EV4-017 | predicție casă + legătură |
+  | 4 | EV4-023 → 025 → 052 | NOU-EV4-023: 0,615 galben → 0,80 verde → 1,0 verificat de om |
+
+@Claudiu: cardul 4 merge exact cum l-ai refăcut. Pentru cardul 2 decide Victor dacă rămâne așa sau îl mutăm pe o intersecție unde ocolirea e locală (exemplul cu Șoseaua Principală × Liviu Rebreanu dă ocoliri lungi, 0,4–1,1 km, slabe). Notă de contract: `scos_din_uz` apare acum și sub pragul de aplicare (demontat probabil); actualizez descrierea în contract.
+Contract atins: nu
+
 ## 2026-11-15, răspuns la cele 3 cereri ale lui Claudiu (cardurile de intro) (Victor, B)
 Am rulat `scripts/genereaza_scenariu.py` pe main-ul tău (56 de rapoarte), într-o copie separată; `events.json` regenerat îl comit după V4 (agentul V4 rulează acum pe motor).
 1. `text_original` e identic cu fișierul la toate cele 56; tipurile se potrivesc toate cu `tip_asteptat` după corecturile tale.
