@@ -131,3 +131,67 @@ trace_generat:           # traseu simulat generat la raport (backend.trace.gener
   penalizare_acoperire: 0.1
   toleranta_adresa_m: 40 # oprire–adresă geocodată; peste = contradicție
   penalizare_contradictie: 0.25
+
+# --- Sesiunea 4 (docs/plan-sesiune-4-prezentare.md; proprietar B). Valorile noi sunt de pornire, calibrate în faza 2. ---
+acuratete:               # D6: GIS stabil, elementele din rapoarte plafonate după cum au fost localizate
+  initial_gis: 0.95                    # rețeaua din KMZ (pusă de om în GIS)
+  scadere_gis_per_30_zile: -0.01
+  minim_gis: 0.85                      # scăderea în timp nu coboară GIS sub asta (contradicțiile pot)
+  aplicat_raport_executat: 0.50        # P1: raport de teren executat (mentenanță/investiții) aplică de la acest scor
+
+retea_start:             # P2: punctele simulate SIM-* = „din rapoarte mai vechi”, cu scoruri amestecate deterministe
+  sim_din_rapoarte: 1                  # 1 = da, 0 = SIM-* tratate ca GIS
+  fractie_galben: 0.45
+  fractie_portocaliu: 0.35             # restul = roșu
+  scor_galben: 0.68
+  scor_portocaliu: 0.50
+  scor_rosu: 0.34
+
+plafon_locatie:          # D6: scorul maxim al unui element din raport, după sursa locației
+  coordonate: 0.85
+  id: 0.85
+  adresa_numar: 0.70
+  intersectie: 0.60
+  strada: 0.55
+  analiza_harta: 0.40
+  reper: 0.35
+
+culori:                  # D5: benzi de culoare; motorul scrie `banda`, UI-ul doar o afișează
+  verde: 0.80
+  galben: 0.60
+  portocaliu: 0.40                     # sub = roșu
+
+verificat_om:            # D10: „Marchează verificat de om” pe orice element
+  scor: 1.0
+  scadere_per_30_zile: -0.01
+  minim: 0.95
+
+cautare_strada:          # D11/V6: stradă + indiciu parțial („lângă nr. 15”) → fereastră pe stradă → elementele din ea
+  metri_per_numar: 6                   # ~12 m la 2 numere (o parte a străzii)
+  decalaj_paritate_m: 8
+  precizie_ancore_m: 40
+  precizie_conventie_m: 100
+  fereastra_dupa_m: 60
+  precizie_capat_m: 50
+  latime_laterala_m: 15                # cât de departe de axul străzii se caută elemente
+  calitate_cautare_unic: 0.6
+  max_candidati_predictie: 4           # peste: „de verificat” pe fereastră, nu predicție
+  factor_numere_conventie: 0.8         # înmulțește plafonul adresa_numar când nu avem ancore
+
+analiza_harta:           # D4/V3: predicție pe graful de străzi OSM local, nu în linie dreaptă
+  raza_cautare_m: 800
+  candidati: 5
+  pas_stalp_m: 40
+  reutilizare_stalp_m: 10
+  max_bransament_m: 40
+  lungime_referinta_m: 400             # f = max(factor_min, exp(-L/lungime_referinta_m))
+  factor_min: 0.30
+  fara_drum: 0.25
+
+mutare_fire_document:    # V4: fire mutate descrise doar în text (sens giratoriu), fără clic
+  raza_intersectie_m: 60
+  ocolire: 1                           # 1 = traseul nou ocolește centrul zonei pe străzi
+  cost_strada_noua: 0.5                # drumurile pe strada numită în text costă mai puțin (preferate)
+
+demo:                    # D7
+  trace_generat_activ: 0               # 0 = motorul nu mai generează traseu la raport

@@ -92,7 +92,9 @@
             "propunere_proprietate",
             "lant_racordare",
             "zona_mutata",
-            "pozitie_din_trace"
+            "pozitie_din_trace",
+            "traseu_pe_strazi",
+            "cautare_strada"
           ]
         },
         "urmeaza_strada": {
@@ -132,6 +134,29 @@
             "null"
           ],
           "description": "racordare: 1 nod în rază, 2 rază extinsă, 3 linie dreaptă la cel mai apropiat nod din zonă, 4 doar casa."
+        },
+        "traseu": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "Sesiunea 4 (V3): drumul pe străzi, listă [lat, lon].",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "alternative": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "Sesiunea 4: candidații/drumurile respinse {element_id?, de_la?, lungime_m?, distanta_m?, motiv}.",
+          "items": {
+            "type": "object"
+          }
         }
       }
     },
@@ -163,7 +188,45 @@
         "retea_start",
         "generat_model"
       ],
-      "description": "retea_start = rețeaua considerată reală (KMZ + puncte simulate hardcodate); generat_model = adăugat de sistem (element nou, predicție, lanț, traseu propus). Independent de confirmat_de."
+      "description": "retea_start = rețeaua pusă de om în GIS (KMZ; UI: „GIS”); generat_model = din rapoarte (element nou, predicție, lanț, traseu propus; UI: „Din raport”). Sesiunea 4: punctele simulate SIM-* sunt generat_model cu t0=true (rapoarte mai vechi, retea_start.sim_din_rapoarte). Independent de confirmat_de."
+    },
+    "t0": {
+      "type": "boolean",
+      "description": "Sesiunea 4: elementul exista la data de start (KMZ sau SIM-*), indiferent de origine."
+    },
+    "verificat_om": {
+      "type": "boolean",
+      "description": "Sesiunea 4 (D10): un om l-a marcat verificat în teren (eveniment verificare_om); scor weights.verificat_om.scor. Devine false dacă un raport ulterior îl contrazice."
+    },
+    "verificat_om_data": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "banda": {
+      "enum": [
+        "verde",
+        "galben",
+        "portocaliu",
+        "rosu"
+      ],
+      "description": "Sesiunea 4 (D5): banda de culoare a scorului, din weights.culori (verde >= culori.verde, galben >= culori.galben, portocaliu >= culori.portocaliu, altfel roșu). UI-ul o afișează, nu recalculează pragurile."
+    },
+    "sursa_locatie": {
+      "enum": [
+        "gis",
+        "id",
+        "coordonate",
+        "adresa_numar",
+        "intersectie",
+        "strada",
+        "analiza_harta",
+        "reper",
+        null
+      ],
+      "description": "Sesiunea 4: cum a fost localizat elementul; dă plafonul de scor weights.plafon_locatie (gis = rețeaua din KMZ, fără plafon)."
     }
   }
 }

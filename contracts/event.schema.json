@@ -37,9 +37,10 @@
         "verificare",
         "mutare_fire",
         "activ_demontat",
-        "cerere_racordare"
+        "cerere_racordare",
+        "verificare_om"
       ],
-      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate)"
+      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate); verificare_om (sesiunea 4) = un om marchează în teren orice element ca verificat (detalii.tinta_id), scorul devine weights.verificat_om.scor"
     },
     "referinta": {
       "type": "object",
@@ -119,6 +120,71 @@
                 "string",
                 "null"
               ]
+            },
+            "indiciu": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Sesiunea 4 (D11/V6): indiciul parțial de loc pe stradă, extras de AI.",
+              "properties": {
+                "tip": {
+                  "enum": [
+                    "numar",
+                    "langa",
+                    "vizavi",
+                    "intre",
+                    "dupa",
+                    "inainte",
+                    "capat",
+                    "inceput",
+                    "colt",
+                    "element",
+                    "parte"
+                  ]
+                },
+                "numar": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "numar_2": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "doar tip=intre"
+                },
+                "strada_2": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "doar tip=colt"
+                },
+                "element_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "doar tip=element (lângă stâlpul X)"
+                },
+                "distanta_stalpi": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "description": "tip=element: „la 2 stâlpi de X”"
+                },
+                "paritate": {
+                  "enum": [
+                    "par",
+                    "impar",
+                    null
+                  ]
+                }
+              }
             }
           }
         }
@@ -325,6 +391,53 @@
             "real"
           ],
           "description": "Origine trace: simulat (generat) sau real (de pe tabletă)."
+        },
+        "tinta_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "verificare_om: elementul verificat"
+        },
+        "intersectie": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "mutare_fire din document (V4): intersecția unde s-a construit (ex. sens giratoriu)",
+          "properties": {
+            "strada_1": {
+              "type": "string"
+            },
+            "strada_2": {
+              "type": "string"
+            }
+          }
+        },
+        "strada_noua": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "mutare_fire: strada pe care au fost mutate firele, dacă textul o spune"
+        },
+        "latura": {
+          "enum": [
+            "nord",
+            "sud",
+            "est",
+            "vest",
+            null
+          ],
+          "description": "mutare_fire: latura ocolirii, dacă textul o spune"
+        },
+        "cautare_strada": {
+          "type": "object",
+          "description": "Scris de motor (V6): fereastra de pe stradă și candidații {strada, de_la_m, pana_la_m, punct, precizie_m, metoda: ancore|conventie|indiciu, candidati, ales}."
+        },
+        "analiza_harta": {
+          "type": "object",
+          "description": "Scris de motor (V3): drumul pe străzi ales și alternativele."
         }
       }
     }

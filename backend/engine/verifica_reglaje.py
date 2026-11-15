@@ -56,7 +56,12 @@ def verifica_valori(w: dict, limite: dict) -> list[str]:
         elif not (lo <= v <= hi):
             err.append(f"{k} = {v} în afara limitelor [{lo}, {hi}]")
     g = lambda k: plat.get(k)
-    rel = [("praguri.predictie", "praguri.aplicat"), ("racordare.prag_afisare", "praguri.predictie")]
+    rel = [("praguri.predictie", "praguri.aplicat"), ("racordare.prag_afisare", "praguri.predictie"),
+           # sesiunea 4
+           ("culori.portocaliu", "culori.galben"), ("culori.galben", "culori.verde"),
+           ("acuratete.minim_gis", "acuratete.initial_gis"), ("acuratete.aplicat_raport_executat", "praguri.aplicat"),
+           ("plafon_locatie.analiza_harta", "plafon_locatie.strada"), ("plafon_locatie.strada", "plafon_locatie.adresa_numar"),
+           ("plafon_locatie.adresa_numar", "plafon_locatie.coordonate"), ("verificat_om.minim", "verificat_om.scor")]
     for a, b in rel:
         if g(a) is not None and g(b) is not None and not g(a) < g(b):
             err.append(f"relație încălcată: {a} ({g(a)}) trebuie să fie < {b} ({g(b)})")

@@ -22,13 +22,11 @@ paths:
                 text: {type: string}
                 sursa: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}
                 data: {type: string, format: date}
-                locatie: {type: object, description: "lat/lon dintr-un clic pe hartă (cerere_racordare, mutare_fire)", properties: {lat: {type: number}, lon: {type: number}}}
+                locatie: {type: object, description: "lat/lon dintr-un clic pe hartă; sesiunea 4: NEUTILIZAT în UI (plasarea prin clic e scoasă), păstrat pentru teste", properties: {lat: {type: number}, lon: {type: number}}}
                 locatie_operator: {type: object, description: "poziția SIMULATĂ a operatorului (din GET /locatie-operator-demo), pentru cerere_racordare fără coordonate și fără clic; `simulata` trebuie să fie true (altfel 422)", required: [lat, lon], properties: {lat: {type: number}, lon: {type: number}, precizie_m: {type: number}, simulata: {type: boolean, enum: [true]}, zona: {type: string}}}
-                trace_params: {type: object, description: "Sesiunea 3: parametri ai traseului simulat generat la raport (suprascriu weights.trace_generat); `dezactivat: true` oprește generarea", properties: {puncte: {type: number}, zgomot_m: {type: number}, durata_oprire_min: {type: number}, acoperire: {type: number}, decalaj_m: {type: number}, dezactivat: {type: boolean}}}
-                trace: {type: array, description: "traseul tabletei din ultima oră", items: {type: object, properties: {t: {type: string}, lat: {type: number}, lon: {type: number}}}}
       responses:
         "200":
-          description: StepTrace (vezi contracts/interfaces.md), cu `schimbari` structurate
+          description: "StepTrace (vezi contracts/interfaces.md), cu `schimbari` structurate. Sesiunea 4: și `standardizare` {metoda, campuri[{camp, eticheta, valoare, din: text|dedus|lipsa}], lipsa[], localizare{sursa, metoda, indiciu, precizie_m, plafon, text}, decizie{cod, text, scor, banda}} și `focus` {lat, lon, zoom, bbox}; pași noi posibili: `cautare_strada`, `analiza_harta`"
           content: {application/json: {schema: {type: object}}}
   /locatie-operator-demo:
     get:
@@ -57,17 +55,15 @@ paths:
         "200": {description: weights.yaml ca JSON, content: {application/json: {schema: {type: object}}}}
   /retea:
     get:
-      summary: Starea rețelei la o dată (GeoJSON, properties = ElementState; Sesiunea 3 - cheia `zona` {centru:{lat,lon}, raza_m} în răspuns, `origine` pe elemente)
+      summary: Starea rețelei la o dată (GeoJSON, properties = ElementState; Sesiunea 3 - cheia `zona` {centru:{lat,lon}, raza_m} în răspuns, `origine` pe elemente; sesiunea 4 - pe fiecare feature `banda`, `verificat_om`, `verificat_om_data`, `sursa_locatie`, `t0`, `eticheta_origine` (GIS | Din raport); fără scenariul extrem)
       parameters:
         - {name: data, in: query, required: false, schema: {type: string, format: date}}
-        - {name: scenariu, in: query, required: false, schema: {type: string, enum: [extrem]}, description: "starea rețelei în scenariul extrem (404 dacă lipsește fișierul)"}
       responses:
         "200": {description: GeoJSON FeatureCollection, content: {application/json: {schema: {type: object}}}}
   /evenimente:
     get:
-      summary: "Lista pentru timeline. Fiecare element are `tip` (tipul evenimentului) și `eticheta` (mutare_fire, demontat, val_apeluri, racordare, decizie_om sau egală cu tipul). ?scenariu=extrem: scenariul din data/events/events.extreme.json (404 dacă lipsește)"
+      summary: "Lista pentru timeline. Fiecare element are `tip` (tipul evenimentului) și `eticheta` (mutare_fire, demontat, val_apeluri, racordare, decizie_om sau egală cu tipul). Sesiunea 4: fără scenariul extrem; fiecare intrare are și `text_original`, `echipa` (etichetă română), `standardizare`, `banda_inainte`, `banda_dupa`, `focus`"
       parameters:
-        - {name: scenariu, in: query, required: false, schema: {type: string, enum: [extrem]}}
       responses:
         "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}
   /element/{id}:
@@ -82,14 +78,9 @@ paths:
     get:
       summary: Texte dummy pentru butonul Generează exemplu (din data/reports/exemple-dummy.json)
       parameters:
-        - {name: sursa, in: query, required: true, schema: {type: string, enum: [mentenanta, investitii, racordari, apel_client]}}
+        - {name: sursa, in: query, required: true, schema: {type: string, enum: [mentenanta, investitii, racordari]}, description: "sesiunea 4: doar cele 3 echipe (D9)"}
       responses:
         "200": {description: lista de texte, content: {application/json: {schema: {type: array, items: {type: object}}}}}
-  /trasee-demo:
-    get:
-      summary: Trasee GPS dummy gata făcute (data/reports/trasee-dummy.json)
-      responses:
-        "200": {description: lista de trasee, content: {application/json: {schema: {type: array, items: {type: object}}}}}
   /predictii/{id}/decizie:
     post:
       summary: Decizia omului asupra unei predicții (eveniment verificare, sursa om_teren)
@@ -104,3 +95,29 @@ paths:
         "404": {description: predicție necunoscută (eroare.cod necunoscut)}
         "422": {description: corp invalid (decizie diferită de accepta/respinge)}
         "501": {description: motorul real nu e disponibil (mod stub)}
+  /element/{id}/verificare:
+    post:
+      summary: "Sesiunea 4 (D10): un om marchează elementul verificat în teren (eveniment verificare_om); scor weights.verificat_om.scor, insignă; pe o predicție o și aplică"
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string}}
+      requestBody:
+        required: false
+        content: {application/json: {schema: {type: object, properties: {motiv: {type: string}, data: {type: string, format: date}}}}}
+      responses:
+        "200": {description: StepTrace, content: {application/json: {schema: {type: object}}}}
+        "404": {description: element necunoscut}
+  /demo/exemple:
+    get:
+      summary: "Sesiunea 4: cardurile paginii de intro (data/reports/demo-intro.json)"
+      responses:
+        "200": {description: "listă {id, titlu, descriere, sursa, text, data_moment, focus {lat, lon, zoom}}", content: {application/json: {schema: {type: array, items: {type: object}}}}}
+  /demo/reset:
+    post:
+      summary: "Sesiunea 4 (P4): modelul revine la starea de start + scenariul timeline, fără repornirea serverului"
+      responses:
+        "200": {description: "{status: ok, evenimente: N}", content: {application/json: {schema: {type: object}}}}
+  /legenda:
+    get:
+      summary: "Sesiunea 4: benzile de culoare (din weights.culori), stilurile de linie și insignele, cu texte în română"
+      responses:
+        "200": {description: "{benzi: [{banda, de_la, culoare, text}], linii: [{stil, text}], insigne: [{cod, text}]}", content: {application/json: {schema: {type: object}}}}

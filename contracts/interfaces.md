@@ -127,7 +127,31 @@ def zona_ok(lat: float, lon: float, net: dict, cfg: dict) -> dict:
 `prezice_lant` întoarce și `treapta` (1-4); `cfg.racordare.raza_extinsa_m` activează treapta 2.
 
 ## Timeline derulabil (commit `contract:`, B, aditiv)
-Fiecare element din `timeline()` (și din `GET /evenimente`) are acum și `schimbari[]` (aceleași ca în StepTrace: `{element_id, ce, scor_inainte, scor_dupa, de_ce}`), `pasi[]` (pașii StepTrace: extracție, geocodare, trace, potrivire, predicție, scor, cu `rezultat` și `motive`) și `eronat_prototip`. UI-ul își construiește lista derulabilă din ele: data, `eticheta`, `decizie`, scor înainte -> după, elemente atinse (`elemente_atinse`) și „De ce?" (`pasi`) la clic; harta la data evenimentului vine din `GET /retea?data=` (sau `&scenariu=extrem`).
+Fiecare element din `timeline()` (și din `GET /evenimente`) are acum și `schimbari[]` (aceleași ca în StepTrace: `{element_id, ce, scor_inainte, scor_dupa, de_ce}`), `pasi[]` (pașii StepTrace: extracție, geocodare, trace, potrivire, predicție, scor, cu `rezultat` și `motive`) și `eronat_prototip`. UI-ul își construiește lista derulabilă din ele: data, `eticheta`, `decizie`, scor înainte -> după, elemente atinse (`elemente_atinse`) și „De ce?" (`pasi`) la clic; harta la data evenimentului vine din `GET /retea?data=` (sesiunea 4: fără `&scenariu=extrem`).
+
+## Sesiunea 4: prototip gata de prezentat (commit `contract:`, B; planul: `docs/plan-sesiune-4-prezentare.md`)
+Patrick nu participă: `backend/extract`, `backend/geo`, `backend/trace`, `backend/racordare`, `data/simulare`, `data/golden`, `data/cache` trec la B; `data/reports` trece la C.
+
+**Acuratețe (D5, D6, P1, P2; `weights.yaml`: `acuratete`, `retea_start`, `plafon_locatie`, `culori`).**
+- Rețeaua GIS (KMZ) pornește la `acuratete.initial_gis` 0,95 și scade cu `scadere_gis_per_30_zile`, nu sub `minim_gis` (contradicțiile pot coborî mai jos).
+- Punctele simulate SIM-* sunt „din rapoarte mai vechi”: `origine: generat_model`, `t0: true`, scor ales determinist pe ID din `retea_start.scor_galben|portocaliu|rosu`, în proporțiile `fractie_*`.
+- Orice element creat sau mutat dintr-un raport are scorul ≤ `plafon_locatie[sursa_locatie]`; un raport ulterior cu sursă mai bună ridică plafonul.
+- Raport de teren executat (mentenanță/investiții, `status: executat`): aplicat de la `acuratete.aplicat_raport_executat` 0,50 (linie plină, culoare după scor). Restul: `praguri.aplicat` 0,75.
+- `banda` (ElementState și jurnal): verde ≥ `culori.verde`, galben ≥ `culori.galben`, portocaliu ≥ `culori.portocaliu`, altfel roșu. Calculată de motor; UI-ul doar o afișează.
+
+**Verificat de om (D10).** Eveniment nou `verificare_om` (`echipa_sursa: om_teren`, `detalii.tinta_id`, `motiv`), din `POST /element/{id}/verificare`: scor `verificat_om.scor` 1,0, `verificat_om: true`, `verificat_om_data`, `confirmat_de: om`; pe o predicție o și aplică. Scade cu `verificat_om.scadere_per_30_zile`, nu sub `minim`. Un raport ulterior care contrazice: `verificat_om` → false, scor recalculat + contradicție, jurnalul notează. „Acceptă” pe o predicție se comportă la fel.
+
+**Căutare pe stradă (D11, V6; `cautare_strada`).** Extracția pune în `referinta.adresa_structurata.indiciu` `{tip: numar|langa|vizavi|intre|dupa|inainte|capat|inceput|colt|element|parte, numar, numar_2, strada_2, element_id, distanta_stalpi, paritate}`. `backend.geo` întoarce o fereastră pe stradă (ancore din rapoarte anterioare, altfel convenția de numerotare). Motorul caută elementele de tipul cerut în fereastră: 1 candidat = potrivit (calitate `calitate_cautare_unic`), 2–`max_candidati_predictie` = predicție pe cel mai apropiat cu `predictie.alternative`, 0 = element nou (dacă tipul îl cere) sau „de verificat” la punctul estimat. Pas nou în StepTrace: `cautare_strada` `{strada, de_la_m, pana_la_m, punct, precizie_m, metoda: ancore|conventie|indiciu, indiciu, ancore[], candidati[], ales}`. `neaplicat` rămâne doar fără niciun indiciu de loc sau în afara zonei.
+
+**Analiza hărții (D4, V3; `analiza_harta`).** Predicțiile de legătură (racordare, nod lipsă departe, mutare fire) merg pe graful de străzi OSM local, nu în linie dreaptă: `predictie.metoda: traseu_pe_strazi`, `predictie.traseu`, `predictie.alternative`. Pas nou în StepTrace: `analiza_harta` `{tinta, bransament_m, ales{de_la, lungime_m, strazi[], stalpi_noi, stalpi_reutilizati, traseu}, alternative[], acuratete, explicatie[]}`. Fără drum pe străzi: linie dreaptă, scor `fara_drum`.
+
+**Fire mutate din document (V4; `mutare_fire_document`).** `mutare_fire` fără `detalii.centru`: centrul vine din `detalii.intersectie {strada_1, strada_2}` geocodată (rază `raza_intersectie_m`); traseul nou ocolește centrul pe străzi, preferând `detalii.strada_noua`.
+
+**Scoase (D7, D9).** Scenariul extrem (`?scenariu=extrem`, `events.extreme.json` → `data/events/arhiva/`), `GET /trasee-demo`, `trace_params` și `trace` din `POST /rapoarte`; `demo.trace_generat_activ: 0` oprește traseul generat în motor (codul rămâne). `locatie` (clic) rămâne în API pentru teste, neutilizat în UI. `GET /exemple` doar pentru `mentenanta`, `investitii`, `racordari`.
+
+**API nou (C).** `POST /element/{id}/verificare`, `GET /demo/exemple`, `POST /demo/reset`, `GET /legenda`; `standardizare` și `focus` în `POST /rapoarte`; `banda`, `verificat_om`, `sursa_locatie`, `t0`, `eticheta_origine` în `GET /retea`; `text_original`, `echipa`, `standardizare`, `banda_inainte`, `banda_dupa`, `focus` în `GET /evenimente`. Detalii: `api.openapi.yaml`.
+
+**UI (Lovable).** Nu afișează coduri (`in_model`, `predictie`, `generat_model`): culoare din `banda`, linie plină (în rețea) / punctată (predicție) / gri punctat (demontat probabil), insigne „GIS”, „Din raport”, „Verificat de om”. Fără bannerul „DATE FICTIVE” pe hartă.
 
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
