@@ -11,6 +11,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `model.py` | `GridModel`: apply_event, snapshot, timeline, statistici, decizia omului | `docs/etapa-5-scor-decizie.md`, `etapa-14-verificare-om.md` |
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
 | `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
+| `tracking.py` | mixin `Tracking` (sesiunea 4b, B2): `_tracking_tura` = tura unei tablete GPS (`tracking_tura`): opriri (`gaseste_opriri`, prag 1 min) clasificate `validare` / `stalp_presupus` / `scurta` / `neclara`; validare = confirmare `× tracking_gps × calitate`, stâlp presupus `TRK-<event>-<n>` + legătură pe străzi (predicție); aceeași tură de două ori = `fara_efect` | `docs/etapa-32-tracking-echipe.md` (secțiunea „Motor (B2)”) |
 | `linie_planificata.py` | mixin `LiniePlanificata`: `_planificata` = scara 2 noduri / 2 GPS / ancoră + stradă / fereastră de stradă -> predicție punctată `PLAN-<event>` pe străzi (niciodată aplicat), `neaplicat` fără loc | `docs/etapa-27-analiza-harta.md` (secțiunea „Linie planificată”) |
 | `analiza_harta.py` | analiza hărții (V3): `traseu_pe_strazi(tinta, net, cfg, evita, preferate, exclus)` = drum pe graful de străzi OSM de la stâlpii existenți, stâlpi noi la ~40 m, alternative, acuratețe | `docs/etapa-27-analiza-harta.md` |
 | `osm.py` | traseu pe străzi, `strazi()` pentru modulele lui A (cache `data/model/osm/`) | `docs/etapa-6-traseu-osm.md` |
@@ -26,6 +27,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 100 verificări (acuratețe V1/V2, analiza hărții V3, căutare pe stradă V6, verificat de om V5)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_tracking_motor   # 40 verificări (tracking echipe, B2)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 

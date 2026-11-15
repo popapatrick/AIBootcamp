@@ -26,6 +26,7 @@ from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
 from backend.engine.linie_planificata import LiniePlanificata
 from backend.engine.sesiune2 import TIPURI_CAUTARE, TIPURI_NOI, Sesiune2
+from backend.engine.tracking import Tracking
 from backend.engine.verificare_om import VerificareOm
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
@@ -34,7 +35,7 @@ START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițial�
 MAX_MOTIVE = 8
 
 
-class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
+class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
         if net is None:
@@ -49,6 +50,7 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
         self.jurnal: list[dict] = []
         self.decizii: dict[str, dict] = {}         # tinta_id -> decizia omului (o singură decizie pe predicție)
         self.ancore: list[dict] = []               # căutare pe stradă: adrese cunoscute {strada, numar, lat, lon}, din rapoarte cu locație sigură
+        self.ture_aplicate: dict[str, str] = {}    # tura_id -> event_id: aceeași tură aplicată a doua oară nu dublează efectul (tracking)
         self.pinuri: dict[str, dict] = {}          # VER-<event_id> -> {geometrie}: pin „de verificat” (stradă fără elementul căutat)
         self.demontari: dict[str, list] = {}       # element_id -> rapoarte de demontare (activ_demontat)
         self.apeluri: dict[str, list] = {}         # element_id -> [(data, efect)] apeluri recente (val de apeluri)
@@ -129,6 +131,12 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
                  "decizie": None}
         if ajustata:
             trace["nota"] = f"Data {ajustata} e anterioară ultimului eveniment aplicat; folosită {event['data']}."
+        if event["tip"] == "tracking_tura":
+            # sesiunea 4b: tura unei tablete GPS, deja structurată (fără extracție/potrivire); vezi backend/engine/tracking.py
+            self._tracking_tura(event, trace, inainte)
+            tr = self._inchide(event, "tracking_tura", trace, {"element_id": None, "motiv": ""}, inainte)
+            self.jurnal[-1]["rezumat"] = trace.pop("_rezumat", "")
+            return tr
         trace["pasi"].append({"nume": "extractie", "incredere": float(event.get("incredere_extractie", 1.0)),
                               "rezultat": {"echipa_sursa": event["echipa_sursa"], "tip": event["tip"],
                                            "status": event["status"],
@@ -259,7 +267,8 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
             return "decizie_om"
         if self._val_flag:
             return "val_apeluri"
-        return {"mutare_fire": "mutare_fire", "activ_demontat": "demontat", "cerere_racordare": "racordare"}.get(tip, tip)
+        return {"mutare_fire": "mutare_fire", "activ_demontat": "demontat", "cerere_racordare": "racordare",
+                "tracking_tura": "tracking"}.get(tip, tip)
 
     def _schimbari(self, trace: dict, m: dict, inainte: dict) -> list[dict]:
         """Lista structurată a schimbărilor produse de eveniment (contracts/interfaces.md, `schimbari`).
@@ -799,7 +808,7 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
         """ElementState (contracts/state.schema.json) pentru StepTrace."""
         out = {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
                                   "ultima_verificare", "motive", "predictie", "confirmat_de", "origine",
-                                  "sursa_locatie", "t0", "verificat_om", "verificat_om_data") if k in st}
+                                  "sursa_locatie", "t0", "verificat_om", "verificat_om_data", "ultima_validare_tracking") if k in st}
         out["banda"] = S.banda(st["scor"], self.w)
         return out
 
@@ -861,6 +870,8 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
             props["banda"] = st["banda"]
             props["t0"] = bool(st.get("t0", False))
             props["sursa_locatie"] = st.get("sursa_locatie")
+            if st.get("ultima_validare_tracking"):
+                props["ultima_validare_tracking"] = st["ultima_validare_tracking"]
             props["verificat_om"] = bool(st.get("verificat_om", False))
             props["verificat_om_data"] = st.get("verificat_om_data")
             props["origine"] = st.get("origine", "generat_model")
@@ -877,7 +888,7 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
         for j in self.jurnal:
             out.append({"data": j["data"], "event_id": j["event_id"], "decizie": j["decizie"],
                         "tip": j["tip"], "eticheta": j.get("eticheta", j["tip"]),
-                        "rezumat": f"{j['echipa_sursa']}: {j['tip']} -> {j['decizie']}",
+                        "rezumat": j.get("rezumat") or f"{j['echipa_sursa']}: {j['tip']} -> {j['decizie']}",
                         "elemente_atinse": j["elemente"], "schimbari": j.get("schimbari", []),
                         "pasi": j.get("pasi", []), "eronat_prototip": j.get("eronat_prototip", False)})
         return out
