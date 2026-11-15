@@ -11,7 +11,7 @@
   "data": "2026-08-06",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 0.661
+  "scor": 0.651
  },
  {
   "event_id": "EV4-003",
@@ -46,14 +46,14 @@
   "data": "2026-08-13",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 0.577
+  "scor": 0.568
  },
  {
   "event_id": "EV4-008",
   "data": "2026-08-14",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 0.567
+  "scor": 0.557
  },
  {
   "event_id": "EV4-009",
@@ -221,14 +221,14 @@
   "data": "2026-10-02",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.504
+  "scor": 0.494
  },
  {
   "event_id": "EV4-033",
   "data": "2026-10-02",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.474
+  "scor": 0.464
  },
  {
   "event_id": "EV4-034",
@@ -249,7 +249,7 @@
   "data": "2026-10-05",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 0.53
+  "scor": 0.517
  },
  {
   "event_id": "EV4-037",
@@ -291,7 +291,7 @@
   "data": "2026-10-17",
   "tip": "racord_nou",
   "decizie": "adaugat",
-  "scor": 0.582
+  "scor": 0.57
  },
  {
   "event_id": "EV4-043",
@@ -305,7 +305,7 @@
   "data": "2026-10-22",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 0.564
+  "scor": 0.555
  },
  {
   "event_id": "EV4-045",
@@ -333,7 +333,7 @@
   "data": "2026-10-30",
   "tip": "racord_nou",
   "decizie": "adaugat",
-  "scor": 0.582
+  "scor": 0.57
  },
  {
   "event_id": "EV4-049",
@@ -347,7 +347,7 @@
   "data": "2026-11-06",
   "tip": "racord_nou",
   "decizie": "adaugat",
-  "scor": 0.53
+  "scor": 0.517
  },
  {
   "event_id": "EV4-051",
