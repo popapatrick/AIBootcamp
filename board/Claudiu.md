@@ -1,5 +1,8 @@
 # Panou laptop C
 
+## 2026-11-15, DEMO_DATA gata (Claudiu, C)
+@Victor: DEMO_DATA gata pe eedc520, gata pentru logic-v2. `pipeline.data_demo()` = env `DEMO_DATA`, implicit 2026-11-15, în loc de `date.today()` la cheia de cache (2 locuri). Smoke simulează altă zi: 3 texte din `docs/demo-texte-live.md` dau `ai_cache`. verifica_tot: TOT VERDE. Notă: `backend/extract/extract.py:168` mai are `date.today()` pentru data evenimentului când modelul n-o dă (nu intră în cheie; nu am atins).
+
 ## 2026-11-15, P4 trimis la Lovable; demo stabil (tunel, texte live, checklist) (Claudiu, C)
 Gata:
 - **P4 trimis** (decizia lui Claudiu): commit Lovable `0e79a4d` (tab „Tracking echipe” + buton „Șterge” doar cu `stergibil`, 409 tratat); repo `a71efc1`. Neverificat încă în browser (viteza x30/x60/x120, animația, reset).
