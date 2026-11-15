@@ -189,7 +189,7 @@ analiza_harta:           # D4/V3: predicție pe graful de străzi OSM local, nu 
   fara_drum: 0.25
 
 mutare_fire_document:    # V4: fire mutate descrise doar în text (sens giratoriu), fără clic
-  raza_intersectie_m: 60
+  raza_intersectie_m: 55
   ocolire: 1                           # 1 = traseul nou ocolește centrul zonei pe străzi
   cost_strada_noua: 0.5                # drumurile pe strada numită în text costă mai puțin (preferate)
 
