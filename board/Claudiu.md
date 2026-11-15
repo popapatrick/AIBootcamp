@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-15, Lovable P1 aplicat, P2 trimis (Claudiu, C)
+Gata: P1 aplicat de Lovable: hartă tip GIS (Straturi, Legendă din `/legenda`, Identificare, bara de jos), culori doar din `banda`, butonul „Marchează verificat de om”. Scoase: scenariul extrem, `trace_params`, bannerul „DATE FICTIVE”. 116 teste trecute, 6,3 credite, commit Lovable `966a24e`, nepublicat. Am verificat diff-ul, nu încă preview-ul cu API-ul real. P2 (intro + echipe + „Ce a înțeles AI-ul”) e trimis acum.
+În lucru: P2. P3 îl trimit după V6 (`cautare_strada` în `pasi`).
+Contract atins: nu
+
 ## 2026-11-15, sesiunea 4: C1–C5 gata, P1–P3 scrise (Claudiu, C)
 Gata:
 - API (C1–C3, C5): scoase extrem/`/trasee-demo`/`trace_params`/`trace`; `GET /exemple` doar 3 echipe; noi `GET /legenda`, `GET /demo/exemple`, `POST /demo/reset`, `POST /element/{id}/verificare`; `standardizare` + `focus` în `POST /rapoarte` și `GET /evenimente`; `banda`/`verificat_om`/`sursa_locatie`/`t0`/`eticheta_origine` în `/retea`; banca are coloanele noi. Doc: `docs/etapa-30-api-sesiune4.md`.
