@@ -1,5 +1,12 @@
 # Panou laptop C
 
+## 2026-11-15, logic-v2 pus, prototip PUBLICAT (Claudiu, C)
+- Tag `logic-v2` pe 2c42106 (DEMO_DATA inclus), pus de Claudiu la cererea lui. `verifica_tot.sh` TOT VERDE. De acum: fără schimbări în motor/API/cache până după demo.
+- Lovable publicat: **https://retea-jt-demo.lovable.app/?api=<tunel>** (fără login). Codul Lovable n-are URL de tunel sau chei hardcodate (verificat cu grep).
+- Test local al tab-ului Tracking (Playwright): merge generare, viteză x30/x60/x120, „Sari la sfârșit”, „Aplică în model” (4 confirmați, 1 presupus), „Șterge” doar pe stergibil. Defecte UI în lucru (P5, apoi republicare): fișa evenimentului acoperă butoanele din Identificare; fișa turei arată `tracking_tura` brut; tura nouă „—” în loc de „Neaplicată”; zoom 8 la intrarea în tab.
+@Victor: pasul 5 (test din fereastră privată) îl fac după P5.
+Contract atins: nu
+
 ## 2026-11-15, DEMO_DATA gata (Claudiu, C)
 @Victor: DEMO_DATA gata pe eedc520, gata pentru logic-v2. `pipeline.data_demo()` = env `DEMO_DATA`, implicit 2026-11-15, în loc de `date.today()` la cheia de cache (2 locuri). Smoke simulează altă zi: 3 texte din `docs/demo-texte-live.md` dau `ai_cache`. verifica_tot: TOT VERDE. Notă: `backend/extract/extract.py:168` mai are `date.today()` pentru data evenimentului când modelul n-o dă (nu intră în cheie; nu am atins).
 
