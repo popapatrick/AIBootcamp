@@ -22,7 +22,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_engine     # 39 verificări
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 47 verificări (acuratețe V1/V2 + căutare pe stradă V6)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 52 verificări (acuratețe V1/V2 + căutare pe stradă V6)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 
@@ -47,5 +47,6 @@ Adresă fără ID/coordonate -> `fereastra_strada` (backend.geo) -> candidați d
   `_rezultat_cautare` (predicție „probabil acest element”, de verificat pe fereastră, pin `VER-<event_id>`), `_inregistreaza_ancora`,
   `_text_indiciu`, `_sursa_fereastra`, `_fara_marker`; constantele `TIPURI_CAUTARE` și `TIPURI_NOI`.
 - `model.py`: `self.ancore`, `self.pinuri`, ramura din `apply_event` (înlocuiește regula „precizie > 15 m -> nepotrivit” pentru `TIPURI_CAUTARE`).
-- `smoke_sesiune4.py`: `teste_cautare_strada()` (24 verificări: 1 candidat, 2–4, peste maxim, 0 candidați, pin, element numit, ancore, doar stradă, determinism).
+- **Tipuri noi (`nod_lipsa`, `racord_nou`; decizia lui Victor, 15 nov.):** mereu element nou la `fereastra.punct`, indiferent câți stâlpi sunt în fereastră (0, 1, 2–4, > 4); stâlpii existenți nu se potrivesc și nu dau `de_verificat`, ci apar informativ (`candidati` cu `ales` null în pas, `predictie.alternative` sau „De ce?” + `stalpi_existenti_in_fereastra` pe elementul nou). Regulile pentru tipurile despre elemente existente rămân (1 / 2–4 / > 4 / 0).
+- `smoke_sesiune4.py`: `teste_cautare_strada()` (29 verificări: 1 candidat, 2–4, peste maxim, 0 candidați, pin, element numit, ancore, doar stradă, determinism).
 

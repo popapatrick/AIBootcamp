@@ -68,6 +68,7 @@ Sesiunea 4, rol B. Cod în `backend/engine/sesiune2.py` (căutarea) și `backend
 | 2..`max_candidati_predictie` (4) | decizie `predictie`: cel mai apropiat de `punct` primește „probabil acest element” (marcaj, vezi mai jos); raportul **nu** se aplică. |
 | peste 4 | decizie `de_verificat` pe fereastră, niciun element atins; motivul spune strada și fereastra (`de_la_m`–`pana_la_m`). |
 | 0, tip care creează element (`nod_lipsa`, `racord_nou`) | element nou la `fereastra.punct`, prin `_propune_element_nou`; `sursa_locatie` = `adresa_numar` (număr sau indiciu cu număr), `intersectie` (colț), `reper` sau `strada`. |
+| **Tipuri noi (`nod_lipsa`, `racord_nou`), orice număr de candidați** | **Decizia lui Victor, 15 nov.:** mereu element nou la `fereastra.punct` (rândurile 1, 2–4 și > 4 de mai sus se aplică doar tipurilor despre elemente existente). Stâlpii existenți din fereastră NU se potrivesc și NU dau `de_verificat`; apar doar informativ (vezi mai jos). |
 | 0, tip despre un element existent (`avarie_semnalata`, `activ_inlocuit`, `verificare`, `activ_demontat`) | **pin „de verificat”**: element nou `VER-<event_id>`, `nivel de_verificat`, scor = plafon(sursa) × 0,5, motiv „Nu există stâlp în fereastra de pe <strada>”. |
 
 Tipurile `cerere_racordare`, `mutare_fire`, `linie_planificata` și `verificare_om` nu caută pe stradă (comportament neschimbat). ID sau coordonate în text: neschimbat (nu trec prin geocodare). `neaplicat` rămâne doar fără niciun indiciu de loc, la stradă necunoscută în cache (fără indiciu, ca azi) sau în afara zonei de 3 km (`eronat_prototip`).
@@ -81,6 +82,8 @@ Tipurile `cerere_racordare`, `mutare_fire`, `linie_planificata` și `verificare_
 **Ancore.** `self.ancore` (inițial goală, determinist) primește `{strada, numar, lat, lon}` când un raport cu `adresa_structurata.strada` + `numar` întreg ajunge la o locație sigură: potrivit cu ID (nod), coordonate explicite în același raport (nu din geocodare/trace), sau 1 candidat unic în fereastră cu indiciul `numar`. Predicțiile, „de verificat” și elementele noi nu devin ancore. Același număr pe aceeași stradă: rămâne prima. Rapoartele următoare pe stradă primesc fereastra cu `metoda ancore`, ±40 m.
 
 **Corecție de sursă.** `detalii.geocodare.tip` e acum setat din fereastră (`adresa_numar` | `intersectie` | `strada` | `reper`). Înainte, motivul geocodării cu număr nu mai conținea „interpolat”, deci `_sursa_din_geocodare` cădea pe `strada` și plafonul `adresa_numar` (0,70) nu se aplica unui element nou din adresă cu număr.
+
+**Informativ la tipurile noi.** Pasul `cautare_strada`: `candidati` rămâne completat, `ales` = null, motivul spune că elementul nou e la punctul estimat și enumeră stâlpii din fereastră. `potrivire`: `absent_din_model`. Elementul nou: dacă e predicție (planificat sau sub prag), `predictie.alternative` = `[{element_id, distanta_m, motiv: "poate fi unul dintre aceștia (stâlp existent în fereastră), la X m ..."}]` (fără pondere); dacă e aplicat (P1: executat de teren de la 0,50, plafon după sursă), lista e în motivul „De ce?” și în `rezultat.stalpi_existenti_in_fereastra` al pasului `predictie`. Aplicat/predicție se decide ca până acum (`_propune_element_nou`). Elementul nou din fereastră nu devine ancoră. Cod: `cs["actiune"]` rămâne None pentru tipurile noi; `event["_stalpi_fereastra"]` (intern) duce lista la `_propune_element_nou`.
 
 ## Ieșiri
 Pas nou în `trace["pasi"]`, înaintea `potrivire` (și în `event["detalii"]["cautare_strada"]`, varianta compactă fără `ancore`/`indiciu`/`linie`):
@@ -96,7 +99,7 @@ Exemplu real (Strada Crinului nr. 60, 1 candidat; `linie` omisă):
 
 ## Cum se verifică
 ```
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # ultima linie: „smoke_sesiune4: 47/47 OK” (24 verificări noi de căutare pe stradă)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # ultima linie: „smoke_sesiune4: 52/52 OK” (29 verificări de căutare pe stradă, 5 pentru tipurile noi)
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune2   # „OK: 65 verificări”
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_engine     # „OK: 38 verificări”
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_match      # „OK: 13 cazuri”
@@ -106,18 +109,18 @@ Aserțiuni schimbate intenționat în `smoke_sesiune2.py` (3, la „geocodare”
 
 ## Decizii
 - Fereastra se calculează o singură dată, în `_foloseste_geocodare`, și circulă ca cheie internă `event["_fereastra"]` (nu iese din motor, nu ajunge în jurnal).
-- Nod lipsă / racord nou cu candidați în fereastră urmează aceleași reguli ca restul (1 candidat = potrivit pe el, 2–4 = predicție, peste 4 = de verificat): numai fereastra goală creează element nou.
+- Nod lipsă / racord nou: mereu element nou, indiferent de candidați (decizia lui Victor, 15 nov.; înainte urmau regulile elementelor existente). Candidații rămân informativ.
 - Traseul simulat (`trace_factor`) nu se aplică pe calea căutării pe stradă (e oprit oricum prin `demo.trace_generat_activ: 0`).
 - Aprobarea omului pe pin nu există: se verifică printr-un raport nou sau prin `verificare_om` pe un element real.
 
 ## Limite
 - Nodurile adăugate din rapoarte (`NOU-*`) devin candidați la fel ca stâlpii GIS; pe străzi dense (Bălții, Carpati, Șoseaua Principală) aproape orice fereastră are peste 4 candidați, deci rezultatul e `de_verificat`.
-- Un `nod_lipsa` cu exact 1 candidat în fereastră se potrivește pe acel nod (confirmare), nu creează un nod nou: fereastra e vagă, deci nu putem ști dacă e același nod. De discutat dacă vrem altfel.
+- Un `nod_lipsa` cu stâlpi în fereastră creează totuși un nod nou (decizie): dacă omul se referea la un stâlp existent, apare un duplicat lângă el; stâlpii posibili sunt listați informativ ca alternative.
 - Pe străzi fără noduri în cache (Liviu Rebreanu, Plopilor, Fagului, Liliacului, Oituz etc.) orice avarie dă pin, orice nod lipsă dă element nou.
 - Capetele ferestrei se extind cu `latime_laterala_m` (disc, nu tăiere dreaptă).
 - Ancora unui candidat unic e poziția nodului, nu a casei cu numărul respectiv.
 - Fără promptul cu `indiciu` activ (Faza 2), indiciul vine din regex: formulări necunoscute = doar strada.
-- Calibrarea: `data/golden/calibrare-referinta.json` (28 de rapoarte, toate cu ID/coordonate) nu se schimbă. Pe cele 39 de evenimente din `data/cache/` care au doar adresă, 19 își schimbă decizia față de înainte (6 `neaplicat` -> `de_verificat`, 2 `neaplicat` -> `predictie`, 5 `adaugat` -> `de_verificat`, etc.).
+- Calibrarea: `data/golden/calibrare-referinta.json` (28 de rapoarte, toate cu ID/coordonate) nu se schimbă. Schimbarea din 15 nov. (tipuri noi mereu element nou) mută 8 din cele 48 de evenimente din cache cu doar adresă (4 `nod_lipsa`, 4 `racord_nou`: toate devin `adaugat`). Înainte, pe cele 39 de evenimente din `data/cache/` care au doar adresă, 19 își schimbă decizia față de înainte (6 `neaplicat` -> `de_verificat`, 2 `neaplicat` -> `predictie`, 5 `adaugat` -> `de_verificat`, etc.).
 
 ## Pentru Claudiu (API/UI)
 - `backend/api/prezentare.py` citește deja pasul: `strada`, `de_la_m`, `pana_la_m`, `precizie_m`, `metoda`, `indiciu.text`, `candidati`, `ales`. `indiciu` e mereu obiect cu `text` (la „doar strada”: `tip: null`).

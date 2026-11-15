@@ -143,6 +143,43 @@ def teste_cautare_strada() -> None:
              cs["candidati"] == [] and cs["indiciu"]["text"] == "între nr. 10 și 20" and t["decizie"] == "adaugat" and nod["nivel"] == "in_model"
              and nod["banda"] in ("galben", "portocaliu") and nod["sursa_locatie"] == "adresa_numar" and nod["scor"] <= 0.70
              and abs(mz.net["noduri"][nod["element_id"]]["lat"] - cs["punct"]["lat"]) < 1e-5, f"{t['decizie']} {nod['scor']} {nod['banda']}")
+    # --- tipuri NOI (decizia lui Victor, 15 nov.): mereu element nou la fereastra.punct, indiferent de câți stâlpi sunt în fereastră
+    mn1 = mk()
+    t = mn1.apply_event(ev("CS-N1", "2026-09-10", "mentenanta", "nod_lipsa", "executat", ref=r_adr("Strada Crinului", "60", {"tip": "numar", "numar": "60"}), inc=0.95))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    nou = next((x for x in t["modificari"] if x["element_id"] == "NOU-CS-N1"), None)
+    verifica("tip nou, 1 stâlp în fereastră: nod_lipsa executat -> element NOU (nu cel existent), existentul doar în candidați/motiv, `ales` null",
+             len(cs["candidati"]) == 1 and cs["ales"] is None and nou and nou["element_id"] != nod1 and t["decizie"] == "adaugat"
+             and pas(t, "potrivire")["rezultat"]["status"] == "absent_din_model" and nod1 in nou["motive"][0]["text"]
+             and nod1 in [a["element_id"] for a in pas(t, "predictie")["rezultat"]["stalpi_existenti_in_fereastra"]]
+             and abs(mn1.net["noduri"]["NOU-CS-N1"]["lat"] - cs["punct"]["lat"]) < 1e-5 and mn1.ancore == [], f"{t['decizie']} {cs['candidati']}")
+    mn1b = mk()
+    t = mn1b.apply_event(ev("CS-N1b", "2026-09-10", "mentenanta", "nod_lipsa", "planificat", ref=r_adr("Strada Crinului", "60", {"tip": "numar", "numar": "60"}), inc=0.95))
+    nou = next(x for x in t["modificari"] if x["element_id"] == "NOU-CS-N1b")
+    alt = (nou["predictie"] or {}).get("alternative") or []
+    verifica("tip nou planificat (predicție) cu 1 stâlp în fereastră: alternativele elementului nou conțin stâlpul existent, cu motivul cerut",
+             t["decizie"] == "predictie" and [a["element_id"] for a in alt] == [nod1] and "poate fi unul dintre aceștia (stâlp existent în fereastră)" in alt[0]["motiv"], str(alt))
+    mn2 = mk()
+    t = mn2.apply_event(ev("CS-N2", "2026-09-10", "mentenanta", "nod_lipsa", "executat", ref=r_adr("Strada Viilor", "12"), inc=0.95))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    nou = next((x for x in t["modificari"] if x["element_id"] == "NOU-CS-N2"), None)
+    verifica("tip nou, > 4 candidați (Strada Viilor nr. 12): element nou, NU de_verificat; toți candidații rămân informativ, `ales` null",
+             len(cs["candidati"]) > mn2.w["cautare_strada"]["max_candidati_predictie"] and cs["ales"] is None and t["decizie"] == "adaugat" and nou
+             and nou["sursa_locatie"] == "adresa_numar" and nou["scor"] <= 0.70
+             and len(pas(t, "predictie")["rezultat"]["stalpi_existenti_in_fereastra"]) == len(cs["candidati"]), f"{t['decizie']} {len(cs['candidati'])}")
+    print("    exemplu tip nou, >4 candidați:", t["decizie"], json.dumps({k: cs[k] for k in ("strada", "indiciu", "candidati", "ales", "motiv")}, ensure_ascii=False)[:700])
+    mn2b = mk()
+    t = mn2b.apply_event(ev("CS-N2b", "2026-09-10", "mentenanta", "nod_lipsa", "planificat", ref=r_adr("Strada Viilor", "12"), inc=0.95))
+    nou = next(x for x in t["modificari"] if x["element_id"] == "NOU-CS-N2b")
+    verifica("tip nou planificat, > 4 candidați: predicție pe elementul nou, toți candidații în `predictie.alternative`",
+             t["decizie"] == "predictie" and len(nou["predictie"]["alternative"]) == len(pas(t, "cautare_strada")["rezultat"]["candidati"])
+             and all("stâlp existent în fereastră" in a["motiv"] for a in nou["predictie"]["alternative"]))
+    mr = mk()
+    t = mr.apply_event(ev("CS-N3", "2026-09-10", "racordari", "racord_nou", "executat", ref=r_adr("Strada Viilor", "12"), inc=0.95))
+    cs = pas(t, "cautare_strada")["rezultat"]
+    verifica("racord_nou pe stradă cu stâlpi în fereastră: element nou, nu de_verificat și nu potrivit pe existent",
+             cs["candidati"] and cs["ales"] is None and t["decizie"] in ("adaugat", "predictie") and any(x["element_id"].startswith("NOU-CS-N3") for x in t["modificari"])
+             and pas(t, "potrivire")["rezultat"]["status"] == "absent_din_model", t["decizie"])
     # --- 0 candidați, tip despre element existent: pin „de verificat” vizibil
     mpin = mk()
     t = mpin.apply_event(ev("CS-10", "2026-09-10", "mentenanta", "avarie_semnalata", ref=r_adr("Strada Liviu Rebreanu", "12", {"tip": "numar", "numar": "12"})))

@@ -258,10 +258,11 @@ class Sesiune2:
         """Caută pe stradă elementul din raport: fereastra (`event["_fereastra"]`) -> candidați -> potrivire.
 
         Adaugă pasul `cautare_strada` în `trace["pasi"]` (înaintea `potrivire`) și întoarce `(m_nou, cs)`:
+        - tipuri noi (nod_lipsa, racord_nou): mereu element nou la `fereastra.punct`; candidații rămân informativ (`ales` null);
         - 1 candidat: `m` potrivit (metoda `cautare_strada`, calitatea `calitate_cautare_unic`), `cs["actiune"]` None: raportul se aplică pe el;
         - 2..`max_candidati_predictie`: `cs["actiune"]` = `predictie` (elementul cel mai apropiat primește „probabil acest element”);
         - mai mulți: `cs["actiune"]` = `de_verificat` (pe fereastră, niciun element atins);
-        - niciunul: element nou la `fereastra.punct` pentru nod_lipsa/racord_nou (actiune None), altfel `cs["actiune"]` = `pin`."""
+        - niciunul (tipuri existente): `cs["actiune"]` = `pin`."""
         fer, c = event["_fereastra"], self.w["cautare_strada"]
         punct = (fer["punct"]["lat"], fer["punct"]["lon"])
         tip_el = self._tip_cautat(event)
@@ -271,7 +272,13 @@ class Sesiune2:
         n = len(cands)
         sursa = self._sursa_fereastra(fer, (event.get("detalii") or {}).get("geocodare"))
         ales, actiune = None, None
-        if n == 1:
+        if event["tip"] in TIPURI_NOI:
+            # decizia lui Victor (15 nov.): element NOU/lipsă => mereu element nou la `fereastra.punct`, indiferent câți stâlpi există în
+            # fereastră; ei rămân doar informativ (`candidati`, `ales` null; alternative/motiv pe elementul nou)
+            motiv_rez = (f"Element nou la punctul estimat ({text}); niciun element existent din fereastră nu se potrivește"
+                         + (f", dar {n} stâlp{'i' if n > 1 else ''} din fereastră ar putea fi același (informativ): "
+                            + ", ".join(x["element_id"] for x in cands[:5]) + (" ..." if n > 5 else "") + "." if n else "."))
+        elif n == 1:
             ales = cands[0]["element_id"]
             motiv_rez = f"Un singur {'stâlp' if tip_el == 'nod' else 'tronson'} în fereastră ({text}): {ales}."
         elif 2 <= n <= int(c["max_candidati_predictie"]):
@@ -280,8 +287,6 @@ class Sesiune2:
         elif n > int(c["max_candidati_predictie"]):
             actiune = "de_verificat"
             motiv_rez = f"{n} candidați în fereastră ({text}), peste {c['max_candidati_predictie']}: de verificat pe fereastră."
-        elif event["tip"] in TIPURI_NOI:
-            motiv_rez = f"Niciun element în fereastră ({text}): element nou la punctul estimat."
         else:
             actiune = "pin"
             motiv_rez = (f"Nu există {'stâlp' if tip_el == 'nod' else 'tronson'} în fereastra de pe {fer['strada']} ({text}): "
@@ -298,7 +303,7 @@ class Sesiune2:
         top3 = [{"element_id": x["element_id"], "distanta_m": x["distanta_m"]} for x in cands[:3]]
         base = {"element_id": None, "metoda": "cautare_strada", "calitate": 0.0, "candidati": top3,
                 "coordonate_folosite": {"lat": punct[0], "lon": punct[1]}, "semnale": list(m["semnale"]) + ["cautare_strada"]}
-        if n == 1:
+        if n == 1 and event["tip"] not in TIPURI_NOI:
             m2 = {**base, "status": "potrivit", "element_id": ales, "calitate": round(float(c["calitate_cautare_unic"]), 3),
                   "motiv": rez["motiv"]}
         elif actiune in ("predictie", "de_verificat"):
@@ -377,7 +382,7 @@ class Sesiune2:
             loc = (el["lat"], el["lon"]) if el else None
         elif ref.get("coordonate") and not det.get("geocodare") and not det.get("trace_rezumat") and m.get("metoda") == "coordonate":
             loc = (ref["coordonate"]["lat"], ref["coordonate"]["lon"])
-        elif cs and cs["actiune"] is None and len(cs["cands"]) == 1 and (cs["fer"].get("indiciu") or {}).get("tip") == "numar":
+        elif cs and cs["actiune"] is None and event["tip"] not in TIPURI_NOI and len(cs["cands"]) == 1 and (cs["fer"].get("indiciu") or {}).get("tip") == "numar":
             el = self.net["noduri"].get(cs["cands"][0]["element_id"])
             loc = (el["lat"], el["lon"]) if el else None
             strada = cs["fer"]["strada"]

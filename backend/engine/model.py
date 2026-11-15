@@ -23,7 +23,7 @@ from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
-from backend.engine.sesiune2 import TIPURI_CAUTARE, Sesiune2
+from backend.engine.sesiune2 import TIPURI_CAUTARE, TIPURI_NOI, Sesiune2
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -154,6 +154,8 @@ class GridModel(Sesiune2):
             # V6: adresă cu stradă (fără ID/coordonate): se caută elementele în fereastra de pe stradă, nu se cere precizie de 15 m
             m, cs = self._cautare_strada(event, m, trace)
             event = {**event, "detalii": {**(event.get("detalii") or {}), "cautare_strada": cs["detalii"]}}
+            if event["tip"] in TIPURI_NOI and cs["cands"]:
+                event["_stalpi_fereastra"] = cs["cands"]      # informativ: stâlpii existenți din fereastră (nu se potrivesc, nu dau de_verificat)
         elif geo and m["status"] in ("potrivit", "absent_din_model") and m["metoda"] == "adresa" and geo["precizie_m"] > w["potrivire"]["distanta_max_m"]:
             # o locație din adresă, mai imprecisă decât raza de potrivire, nu poate desemna un element existent (nu inventăm potrivirea)
             motiv_imp = (f"Locația din adresă are precizia ±{geo['precizie_m']:g} m, peste raza de potrivire "
@@ -546,15 +548,20 @@ class GridModel(Sesiune2):
         if pozitie_dedusa and niv == "in_model":
             niv = "predictie"       # poziția e doar un ghid (mijlocul dintre vecini): nu se aplică în model
             motive.append("Poziția nodului e dedusă din vecini (fără coordonate în raport): rămâne predicție.")
+        info = event.get("_stalpi_fereastra") or []
+        alt_info = [{"element_id": x["element_id"], "distanta_m": x["distanta_m"],
+                     "motiv": f"poate fi unul dintre aceștia (stâlp existent în fereastră), la {x['distanta_m']:g} m de punctul estimat"} for x in info]
         txt = (f"Propunere: {'nod lipsă' if cu_tronsoane else 'racord nou'} {eid}"
                + (f" între {vecini[0]} și {vecini[1]}" + (" (vecini deduși)" if dedusi else "") if vecini else "")
                + f", scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
-                 f"potrivire {factori['calitate_potrivire']}" + (f", urmează strada {urmeaza}" if urmeaza is not None else "") + ").")
+                 f"potrivire {factori['calitate_potrivire']}" + (f", urmează strada {urmeaza}" if urmeaza is not None else "") + ")."
+               + (" Poate fi unul dintre stâlpii existenți din fereastră (informativ, nepotrivit): "
+                  + ", ".join(f"{a['element_id']} ({a['distanta_m']:g} m)" for a in alt_info) + "." if alt_info else ""))
         trace["pasi"].append({"nume": "predictie", "incredere": urmeaza if urmeaza is not None else q,
                               "rezultat": {"metoda": metoda, "element_nou": eid, "vecini": vecini,
                                            "vecini_dedusi": dedusi, "pozitie_dedusa": pozitie_dedusa,
                                            "urmeaza_strada": urmeaza,
-                                           "legaturi": info_leg}})
+                                           "legaturi": info_leg, **({"stalpi_existenti_in_fereastra": alt_info} if alt_info else {})}})
         rez = {"scor_propunere": sp, "factori": factori, "nivel": niv}
 
         if niv == "de_verificat":
@@ -581,6 +588,8 @@ class GridModel(Sesiune2):
                 self.predictii[sid] = sp_
                 pr = {"metoda": sp_.get("metoda", metoda), "urmeaza_strada": sp_["urmeaza"] if "urmeaza" in sp_ else urmeaza,
                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp}
+                if alt_info and sid == eid:
+                    pr["alternative"] = alt_info
                 if sid in self.istoric:
                     mot = self._motiv(sid, txt + " Sub prag: rămâne predicție.", 0.0, event)
                 else:
