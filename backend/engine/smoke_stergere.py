@@ -159,6 +159,7 @@ def scenariu(m: GridModel):
     verifica("`stergibil` false pe GIS (nod și tronson) și pe SIM-*",
              all(prop(m, INAINTE, x)["stergibil"] is False for x in (gis, sim, tronson_gis)), f"{gis} {tronson_gis} {sim}")
     n_net = (len(m.net["noduri"]), len(m.net["tronsoane"]))
+    nt, nj, ud = len(m.timeline()), len(m.jurnal), m.ultima_data
     for i, (x, cod) in enumerate([(gis, "nu_se_sterge_retea_start"), (tronson_gis, "nu_se_sterge_retea_start"),
                                   (sim, "nu_se_sterge_retea_start"), ("NU-EXISTA-999", "necunoscut"), ("", "necunoscut")]):
         t = m.apply_event(stergere(f"DEL-R{i}", x, data="2026-11-25"))
@@ -166,8 +167,8 @@ def scenariu(m: GridModel):
                  t["decizie"] == "neaplicat" and t["eroare"]["cod"] == cod and t["modificari"] == []
                  and (len(m.net["noduri"]), len(m.net["tronsoane"])) == n_net and (not x or x in ids(m, "2026-11-25") or x == "NU-EXISTA-999"),
                  str(t.get("eroare")))
-    verifica("refuz: eticheta tot `stergere`, rezumat „Ștergere neaplicată”",
-             m.timeline()[-1]["eticheta"] == "stergere" and m.timeline()[-1]["rezumat"].startswith("Ștergere neaplicată"))
+    verifica("refuz: nu intră în jurnal/timeline, `ultima_data` neschimbată",
+             (len(m.timeline()), len(m.jurnal), m.ultima_data) == (nt, nj, ud), f"{nt},{nj},{ud}")
 
     # --- „Respinge” existent: penalizare doar la el; un element respins nu se mai șterge (deja_sters, mesaj „retras”)
     pr = next(k for k in sorted(m.predictii) if k.startswith("NOU-EV4-006-S1"))
@@ -179,11 +180,17 @@ def scenariu(m: GridModel):
     verifica("Respinge: neschimbat (decizie `respins`, ce = retras, penalizarea metodei crește)",
              tr["decizie"] == "respins" and all(s["ce"] == "retras" for s in tr["schimbari"]) and m.penalizare_metoda != pen,
              f"{pen} -> {m.penalizare_metoda}")
+    nt2, nj2, ud2 = len(m.timeline()), len(m.jurnal), m.ultima_data
     t = m.apply_event(stergere("DEL-R9", pr, data="2026-11-27"))
+    verifica("deja_sters: fără intrare nouă în jurnal/timeline, `ultima_data` neschimbată",
+             (len(m.timeline()), len(m.jurnal), m.ultima_data) == (nt2, nj2, ud2))
     verifica("element respins: ștergere = deja_sters (mesaj „retras”)",
              t["eroare"]["cod"] == "deja_sters" and "retras" in t["eroare"]["mesaj"], t["eroare"]["mesaj"])
     pen2 = dict(m.penalizare_metoda)
+    nt3 = len(m.timeline())
     m.apply_event(stergere("DEL-6", "NOU-EV4-038-L1", data="2026-11-28"))
+    verifica("ștergere reușită apare în timeline (eticheta `stergere`)",
+             len(m.timeline()) == nt3 + 1 and m.timeline()[-1]["eticheta"] == "stergere" and m.timeline()[-1]["decizie"] == "sters")
     verifica("ștergerea NU penalizează metoda (spre deosebire de Respinge)", m.penalizare_metoda == pen2)
 
     # --- legătură: stâlpii prezisi rămași fără alte legături cad cu ea; stergibil pe NOU/PLAN/MUT

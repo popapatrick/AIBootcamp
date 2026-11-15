@@ -127,6 +127,7 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking, Stergere):
         if event["data"] < self.ultima_data:       # evenimentele se aplică în ordine cronologică
             ajustata = event["data"]
             event = {**event, "data": self.ultima_data}
+        ultima_inainte = self.ultima_data
         self.ultima_data = max(self.ultima_data, event["data"])
         trace = {"event_id": event["event_id"], "data": event["data"], "pasi": [], "modificari": [],
                  "decizie": None}
@@ -138,6 +139,10 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking, Stergere):
             self._stergere_om(event, trace)
             tr = self._inchide(event, "stergere_om", trace, {"element_id": ((event.get("detalii") or {}).get("tinta_id") or "").strip() or None, "motiv": ""}, inainte)
             self.jurnal[-1]["rezumat"] = trace.pop("_rezumat", "")
+            if trace.get("eroare"):
+                # ștergere refuzată: nu intră în jurnal/timeline și nu schimbă starea modelului (nici `ultima_data`)
+                self.jurnal.pop()
+                self.ultima_data = ultima_inainte
             return tr
         if event["tip"] == "tracking_tura":
             # sesiunea 4b: tura unei tablete GPS, deja structurată (fără extracție/potrivire); vezi backend/engine/tracking.py
