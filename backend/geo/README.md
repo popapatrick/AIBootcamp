@@ -1,4 +1,4 @@
-# backend/geo (A)
+# backend/geo (A; în sesiunea 4 al lui B)
 
 `geocodeaza(referinta, strazi, cfg)`: locație aproximativă din adresă, doar din cache-ul OSM local (`engine.osm.strazi()`). Fără servicii externe, fără chei. Date FICTIVE.
 
@@ -16,3 +16,6 @@ Verificare: `.venv/bin/python -m backend.geo.smoke_geo`
 Intersecție din `reper`: dacă `adresa_structurata.reper` numește a doua stradă din cache („intersecția cu X”, „aproape de X”), rezultatul e intersecția (toate căile, nu doar cea mai lungă). `id`/`coordonate` nu trec prin geo (spec: nu se apelează), le tratează motorul.
 Tip de stradă: dacă textul are strada/calea/bulevardul/soseaua/aleea/intrarea, se potrivește doar numele de după el (până la cifră/virgulă) și doar o stradă de același tip; „Calea Victoriei 10 București” nu mai potrivește „Strada București” (orașul nu e stradă).
 Test: `smoke_geo` rulează toate cazurile din `data/reports/geo-test.json` (cazurile AI cu CLI simulat).
+
+## Căutare pe stradă (Sesiunea 4, V6; `fereastra.py`)
+`fereastra_strada(referinta, strazi, cfg, ancore=None, net=None)` -> fereastră pe stradă `{status, strada, de_la_m, pana_la_m, punct, precizie_m, metoda: ancore|conventie|indiciu, indiciu, ancore_folosite, latura, acuratete, motiv, linie}`. Indiciul (`numar|langa|vizavi|intre|dupa|inainte|capat|inceput|colt|element|parte`) vine din `adresa_structurata.indiciu` sau din text (`fereastra.deduce_indiciu`, regex). Fără ancore: convenția de numerotare (de la capătul dinspre Șoseaua Principală, ~12 m la 2 numere, par stânga/impar dreapta la 8 m); cu ancore: interpolare. `geocodeaza(..., net, ancore)` are cheia nouă `fereastra` și ia poziția numerelor de aici (nu mai fracția N/100; precizie 100 m, acuratețe x0,8, sau 40 m cu ancore). Doc: `docs/etapa-31-cautare-strada.md`. Teste: `smoke_geo` (166 verificări).

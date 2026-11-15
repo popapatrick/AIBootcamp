@@ -2,6 +2,30 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, sesiunea 4: V1 + V2 (acuratețe) și fereastra pe stradă din geo (V6, partea 1) (Victor, B)
+Gata (cod scris de agenți Sonnet, verificat de mine):
+- **V1:**
+  - KMZ pornește la 0,95; scade cu 0,01/30 zile, nu sub 0,85.
+  - Plafon după `sursa_locatie`; raport executat aplică de la 0,50.
+  - `banda` în snapshot și în `schimbari` (`banda_inainte`/`banda_dupa`); `statistici().procent_banda`.
+  - În properties: `t0`, `sursa_locatie`, `verificat_om` (implicit false).
+- **V2:** SIM-* = „din rapoarte mai vechi” (`generat_model`, `t0`), scoruri deterministe.
+  - La 1 aug.: GIS 100 % verde; SIM 47 % galben, 39 % portocaliu, 15 % roșu.
+  - La 15 nov., fără evenimente: SIM doar portocaliu/roșu (scad cu 0,05/30 zile). Se reglează în Faza 2 cu timeline-ul.
+- **Calibrare:** 1 decizie schimbată (EV-012 racord_nou executat: predicție → adăugat, efect P1); scoruri mai mari pe GIS. Referința de aur e reîmprospătată.
+- **V6 partea 1 (`backend/geo`):** `fereastra_strada()`: convenție de numerotare (capătul spre Șoseaua Principală, ~12 m la 2 numere, par stânga / impar dreapta, la 8 m de ax), ancore, indicii `langa`/`vizavi`/`intre`/`dupa`/`capat`/`inceput`/`colt`/`element`/`parte` (regex în română, cu și fără diacritice). `geocodeaza` folosește convenția în loc de N/100 (±100 m în loc de ±200 m) și întoarce `fereastra`. Doc: `docs/etapa-31-cautare-strada.md`.
+- **Amânat:** promptul de extracție cu `indiciu` e scris, dar NU e comis. Schimbarea promptului invalidează tot cache-ul `data/cache/` (cheia include `SYSTEM`), deci intră în Faza 2, odată cu reumplerea cache-ului cu Haiku. Până atunci indiciul vine din regex.
+
+Teste: smoke_sesiune4 23, engine 38, sesiune2 65, match 13, geo 166. `verifica_tot.sh` TOT VERDE.
+@Claudiu: câmpurile noi sunt în motor, aditive:
+- `banda`, `t0`, `sursa_locatie`, `verificat_om`, `verificat_om_data` pe features;
+- `banda_inainte`/`banda_dupa` în `schimbari`;
+- `procent_banda` în `statistici()`.
+
+`origine`: KMZ = `retea_start`, SIM-* și tot ce adaugă sistemul = `generat_model`. Atenție: `data/reports/geo-test.json` (acum al tău) are coordonate așteptate după vechea regulă N/100; smoke_geo verifică acum metoda `conventie`, nu toleranța veche (gt-05 e la 260 m de vechiul așteptat). Recalculează coordonatele așteptate când faci textele.
+În lucru: V6 partea 2 (integrarea în motor: candidații din fereastră, pasul `cautare_strada`).
+Contract atins: nu
+
 ## 2026-11-15, sesiunea 4 PORNITĂ: contract + OpenSpec + CLAUDE.md (Victor, B)
 Victor a aprobat planul (`docs/plan-sesiune-4-prezentare.md`). Gata: Faza 0.
 - Contract (`contract:`): `weights.yaml` cu secțiunile noi `acuratete`, `retea_start`, `plafon_locatie`, `culori`, `verificat_om`, `cautare_strada`, `analiza_harta`, `mutare_fire_document`, `demo` (+ limite, relații în `verifica_reglaje`); `state.schema.json` (`banda`, `verificat_om`, `verificat_om_data`, `sursa_locatie`, `t0`, `predictie.traseu/alternative`, metode `traseu_pe_strazi`/`cautare_strada`); `event.schema.json` (`verificare_om`, `adresa_structurata.indiciu`, `detalii.intersectie/strada_noua/latura/tinta_id`); `api.openapi.yaml` (scoase: scenariul extrem, `/trasee-demo`, `trace_params`, `trace`; noi: `/element/{id}/verificare`, `/demo/exemple`, `/demo/reset`, `/legenda`, `standardizare`, `focus`, câmpuri în `/retea` și `/evenimente`); `interfaces.md` secțiunea „Sesiunea 4”. Cheile noi nu schimbă încă nimic în motor (calibrare: 0 evenimente schimbate); valorile existente (ex. 0,90 → 0,95) se schimbă odată cu codul V1.
