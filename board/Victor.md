@@ -2,6 +2,39 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu: cardul 2 mutat (sens giratoriu cu ocolire locală) + test real prin API (Victor, B)
+Victor a decis mutarea cardului 2. Simulare pe toate intersecțiile din cache: cea mai bună e **Strada Crinului × Strada Liviu Rebreanu**. Cu `reglaj: mutare_fire_document.raza_intersectie_m 60 -> 55` (768dc10, deja pe main) ies 3 legături scurte, aplicate: 24 m și 33 m pe Strada 1 Mai, 41 m pe Liviu Rebreanu.
+**Test real prin API** (uvicorn local, `POST /rapoarte` cu textul de mai jos, extracție LIVE cu Haiku/`ai_cli`, 7,5 s):
+- decizie `aplicat`;
+- 12 tronsoane „demontat probabil” (`scos_din_uz`), 13 elemente „de verificat”, 3 legături noi `MUT-*` portocalii;
+- pași: extractie, geocodare, potrivire, 3 × analiza_harta, predictie, scor.
+
+**Te rog adaugă** (folderul tău):
+1. `data/reports/2026-10-10_mentenanta_29.txt`:
+```
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0424
+Data: 2026-10-10
+Echipa: mentenanta
+Tip lucrare: mutare fire, sens giratoriu
+Cod element: -
+Coordonate: -
+Adresa: intersecția Strada Crinului cu Strada Liviu Rebreanu
+Constatare: Ca urmare a construirii sensului giratoriu de la intersecția Strada Crinului cu Strada Liviu Rebreanu, rețeaua aeriană JT a fost mutată pe Strada 1 Mai.
+Status: executat
+```
+2. În `index.json`, după `2026-10-08_mentenanta_20.txt`: `{"fisier": "2026-10-10_mentenanta_29.txt", "sursa": "mentenanta", "data": "2026-10-10", "scenariu": null, "element_id_asteptat": null, "tip_asteptat": "mutare_fire"}`.
+3. `demo-intro.json`, `intro-2`:
+   - `text` = fișa de mai sus;
+   - `data_moment` „2026-10-10”;
+   - `focus` `{"lat": 44.283675, "lon": 26.062802, "zoom": 17}`;
+   - descriere: „Fire mutate doar din text, la sensul giratoriu Crinului × Liviu Rebreanu: zona de 55 m se marchează, firele vechi apar «demontat probabil», iar traseul nou pe Strada 1 Mai și Liviu Rebreanu se aplică.”
+4. Cache Haiku pentru text, apoi spune-mi: regenerez `events.json` și verific cardul în timeline.
+
+**Problemă de afișare găsită în test** (`backend/api/prezentare.py`, al tău): în răspuns sunt 2 pași `geocodare`, iar `standardizare.localizare` / câmpul „Coordonate (dedus)” iau primul: mijlocul străzii, „±150 m”. Corect e intersecția (±15 m, centrul zonei din pasul `potrivire`). Ia ultimul pas `geocodare` sau, la `mutare_fire`, centrul din `potrivire.rezultat.centru`.
+Contract atins: nu (reglaj de valoare)
+
 ## 2026-11-15, V4 fire mutate din document + events.json din 56 de rapoarte (Victor, B)
 Gata (cod scris de un agent Sonnet, verificat de mine):
 - **V4** (08a86da): `mutare_fire` doar din text. Centrul se ia din coordonate, intersecție (60 m), nodul din ID (40 m) sau stradă (120 m). Zona devine `de_verificat`, iar tronsoanele aeriene `scos_din_uz` („demontat probabil”) când traseul nou e aplicat. Traseul nou = tronsoane `MUT-*` care ocolesc cercul pe străzi, cu pași `analiza_harta`. Racordarea la treptele 1–2 nu mai are linie dreaptă lungă (drum pe străzi).
