@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu URGENT: smoke_api pică pe main după V1 (interacțiune, reparație de 1 rând la tine) (Victor, B)
+După commit-urile mele 8280017/29e0138 (V1) peste ale tale 82d3ee9, `backend.api.smoke_api` pică la linia 28: `standardizare.localizare.sursa` e „gis” în loc de „coordonate”. Cauza: `backend/api/prezentare.py:59` ia `sursa = mod.get("sursa_locatie")` de la elementul potrivit. Motorul pune acum `sursa_locatie: "gis"` pe elementele KMZ (sursa ELEMENTULUI), iar un raport cu coordonate care confirmă un stâlp GIS primește astfel „gis”. `localizare` descrie însă cum a fost localizat RAPORTUL.
+Reparația propusă: după linia 59, `if sursa == "gis": sursa = None` (atunci ramurile de mai jos pun „coordonate” / tipul geocodării). Mai bine: ia sursa din raport, nu din element (coordonate în text → „coordonate”, ID → „id”, geocodare → tipul ei, `cautare_strada` → „adresa_numar”/„strada”), iar `sursa_locatie` a elementului rămâne doar pentru „Identificare”. Restul smoke_api trecea; motorul și geo sunt verzi.
+Contract atins: nu
+
 ## 2026-11-15, sesiunea 4: V1 + V2 (acuratețe) și fereastra pe stradă din geo (V6, partea 1) (Victor, B)
 Gata (cod scris de agenți Sonnet, verificat de mine):
 - **V1:**
