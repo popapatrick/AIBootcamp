@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "casa pe Strada Soarelui, la capat, la 300 m de ultimul stalp",
+    "adresa_structurata": {
+      "strada": "Strada Soarelui",
+      "numar": null,
+      "localitate": null,
+      "reper": "la capat, la 300 m de ultimul stalp"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-09",
+  "text_original": "Cerere racord, casa pe Strada Soarelui, la capat, la 300 m de ultimul stalp.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "adresa_structurata.numar",
+    "adresa_structurata.localitate",
+    "id_client",
+    "nr_cadastral"
+  ],
+  "detalii": {}
+}

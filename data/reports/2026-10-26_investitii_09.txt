@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0120
+Data: 2026-10-26
+Echipa: investitii
+Tip lucrare: linie nouă planificată
+Cod element: -
+Coordonate: -
+Adresa: Strada Orizont, vizavi de nr. 8
+Constatare: Linie de 120 m propusă, în așteptare de buget.
+Status: planificat

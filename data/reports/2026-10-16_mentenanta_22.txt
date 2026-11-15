@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0420
+Data: 2026-10-16
+Echipa: mentenanta
+Tip lucrare: mutare fire, sens giratoriu
+Cod element: -
+Coordonate: -
+Adresa: Strada Speranței, colț cu Strada Tineretului
+Constatare: Firele mutate pe Strada Tineretului, traseul vechi scos.
+Status: executat

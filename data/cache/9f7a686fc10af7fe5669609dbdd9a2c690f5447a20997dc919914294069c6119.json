@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă școală"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "stalp nou langa scoala, lipseste din GIS",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.2,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa"
+  ],
+  "detalii": {
+    "observatii": "stâlp nou, lipsește din GIS"
+  }
+}

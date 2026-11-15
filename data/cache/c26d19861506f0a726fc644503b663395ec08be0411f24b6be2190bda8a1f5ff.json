@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-c26d1986",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "tip_sursa_pondere": "om_teren",
+  "forma_sursa": "text_liber",
+  "status": "executat",
+  "data": "2026-08-29",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-08-29\nElement: 6640398\nAdresa: Strada Bălții\nConstatare: stâlpul există, confirmat la fața locului, poziție corectă.\nStatus: executat\n",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "numar",
+    "coordonate"
+  ],
+  "referinta": {
+    "adresa": "Strada Bălții",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6640398",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "detalii": {
+    "observatii": "Stâlpul există, confirmat la fața locului, poziție corectă."
+  }
+}

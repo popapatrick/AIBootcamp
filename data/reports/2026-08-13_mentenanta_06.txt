@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0406
+Data: 2026-08-13
+Echipa: mentenanta
+Tip lucrare: stâlp înlocuit
+Cod element: -
+Coordonate: -
+Adresa: Strada Speranței nr. 22
+Constatare: Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție.
+Status: executat

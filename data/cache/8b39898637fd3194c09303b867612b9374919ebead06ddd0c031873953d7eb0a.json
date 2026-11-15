@@ -1,0 +1,33 @@
+{
+  "event_id": "null",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "Strada Carpati",
+    "adresa_structurata": {
+      "strada": "Carpati",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6793869",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-10",
+  "text_original": "DATE FICTIVE\nVerificat de om, pe teren, cu operatorul – 2026-11-10\nElement: 6793869\nAdresa: Strada Carpati\nConstatare: nodul confirmat la fața locului, nimic de corectat.\nStatus: executat\n",
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "numar",
+    "localitate"
+  ],
+  "incredere_extractie": 0.9,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "detalii": {
+    "observatii": "Nodul confirmat la fața locului, nimic de corectat. Verificat de om, pe teren, cu operatorul."
+  }
+}

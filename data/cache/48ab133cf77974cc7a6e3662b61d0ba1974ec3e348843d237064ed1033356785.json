@@ -1,0 +1,30 @@
+{
+  "event_id": "M-2026-0405",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6240749",
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-11",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0405\nData: 2026-08-11\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6240749\nCoordonate: -\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp 6240749 există, fără defecte vizibile.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Fișă M-2026-0405. Tip lucrare: verificare rutină, stâlp existent. Stâlp 6240749 există, fără defecte vizibile."
+  }
+}

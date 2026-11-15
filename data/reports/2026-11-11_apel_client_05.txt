@@ -1,0 +1,8 @@
+DATE FICTIVE
+Apel client – fișă apel
+Data: 2026-11-11 ora 08:05
+ID client: CL-61204
+Transcriere:
+Operator: Bună dimineața, cu ce vă pot ajuta?
+Client: Stâlp înclinat pe Strada Crinului. Locație din telefon: 44.283453, 26.062913.
+Operator: Vă înregistrez, echipa verifică.

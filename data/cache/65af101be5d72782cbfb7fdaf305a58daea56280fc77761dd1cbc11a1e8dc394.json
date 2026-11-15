@@ -1,0 +1,27 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-14",
+  "text_original": "cerere de racordare pentru o casa noua, consum 5 kW. nu stiu adresa exacta",
+  "campuri_lipsa": [
+    "coordonate",
+    "adresa",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "Cerere de racordare pentru o casa noua, consum 5 kW. Clientul nu cunoaste adresa exacta."
+  },
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.2
+}

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0404
+Data: 2026-08-10
+Echipa: mentenanta
+Tip lucrare: avarie
+Cod element: 6199650
+Coordonate: -
+Adresa: Strada Bălții
+Constatare: Izolator crăpat pe stâlpul 6199650, cablu atârnă un metru.
+Status: semnalat

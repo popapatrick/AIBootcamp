@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "langa PTAB 7812"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "text_original": "Stalp nou langa PTAB 7812, executat, de trecut in GIS.",
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa"
+  ],
+  "detalii": {},
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.2
+}

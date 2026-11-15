@@ -1,0 +1,8 @@
+DATE FICTIVE
+Apel client – fișă apel
+Data: 2026-10-02 ora 19:40
+ID client: CL-51003
+Transcriere:
+Operator: Bună seara, cu ce vă pot ajuta?
+Client: Strada Liviu Rebreanu, între nr. 10 și 20, două case fără curent.
+Operator: Vă înregistrez, echipa verifică.

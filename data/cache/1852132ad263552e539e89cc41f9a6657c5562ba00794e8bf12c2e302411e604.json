@@ -1,0 +1,30 @@
+{
+  "event_id": "M-2026-0401",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6784406",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0401\nData: 2026-08-03\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6784406\nCoordonate: -\nAdresa: Strada Crinului\nConstatare: Stâlp 6784406 există, izolator ok, nimic de făcut.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp 6784406 există, izolator ok, nimic de făcut. Tip lucrare: verificare rutină, stâlp existent."
+  }
+}

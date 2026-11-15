@@ -1,0 +1,36 @@
+{
+  "event_id": "EV-5b38330c",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": "Strada Tineretului",
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": {
+      "lat": 44.281,
+      "lon": 26.06417
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "stalp nou montat la 44.28100, 26.06417 pe Strada Tineretului, echipa 2",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "numar",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "stalp nou montat, echipa 2; tipul exact (activ_inlocuit) nu e clar din text, textul spune doar stalp nou montat"
+  }
+}

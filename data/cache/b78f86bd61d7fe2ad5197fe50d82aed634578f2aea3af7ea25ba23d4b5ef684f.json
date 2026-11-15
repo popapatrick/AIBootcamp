@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.3001,
+      "lon": 26.09044
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "Tableta GPS 44.30010, 26.09044: stalp nou montat",
+  "tip_sursa_pondere": "tableta_coordonate",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "stalp nou montat (raportat de tableta GPS); tipul activ_inlocuit ales din lipsa unui tip pentru stalp nou, textul nu mentioneaza inlocuire"
+  },
+  "echipa_sursa_check": "mentenanta"
+}

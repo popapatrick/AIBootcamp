@@ -1,0 +1,36 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": {
+      "lat": 44.282386,
+      "lon": 26.062073
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-10",
+  "text_original": "Linie noua executata pe Strada Crinului, start GPS 44.282386 26.062073, 2 stalpi, executat. 10/10/2026",
+  "campuri_lipsa": [
+    "element_id",
+    "noduri_vecine",
+    "numar",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Linie nouă executată pe Strada Crinului, start GPS, 2 stâlpi, executat."
+  },
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.7
+}

@@ -1,0 +1,38 @@
+{
+  "event_id": "EV-I-2026-0116",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+    "adresa": "Strada Tineretului, colț cu Șoseaua Principală",
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "strada_2": "Șoseaua Principală"
+      }
+    },
+    "coordonate": {
+      "lat": 44.280665,
+      "lon": 26.064629
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-09-24",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0116\nData: 2026-09-24\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: 44.280665, 26.064629\nAdresa: Strada Tineretului, colț cu Șoseaua Principală\nConstatare: Linie propusă, planificată pentru 2027.\nStatus: planificat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "element_id",
+    "noduri"
+  ],
+  "detalii": {
+    "observatii": "Linie propusă, planificată pentru 2027. Nr. fișă I-2026-0116."
+  }
+}

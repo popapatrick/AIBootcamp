@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0405
+Data: 2026-08-11
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6240749
+Coordonate: -
+Adresa: Strada Liviu Rebreanu
+Constatare: Stâlp 6240749 există, fără defecte vizibile.
+Status: executat

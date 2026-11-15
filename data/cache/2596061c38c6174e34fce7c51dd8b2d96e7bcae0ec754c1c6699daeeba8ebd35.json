@@ -1,0 +1,30 @@
+{
+  "event_id": "I-2026-0122",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+    "adresa": "Strada Speranței",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6510484",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0122\nData: 2026-11-12\nEchipa: investitii\nTip lucrare: demontare stâlp\nCod element: 6510484\nCoordonate: -\nAdresa: Strada Speranței\nConstatare: Stâlp scos din uz, executat 12.11.2026.\nStatus: executat\n",
+  "detalii": {
+    "observatii": "Stâlp scos din uz, executat 12.11.2026."
+  },
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "incredere_extractie": 0.9,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular"
+}

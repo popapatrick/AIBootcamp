@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-CL-51003",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu, între nr. 10 și 20",
+    "adresa_structurata": {
+      "strada": "Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "intre",
+        "numar": "10",
+        "numar_2": "20",
+        "paritate": null,
+        "strada_2": null,
+        "distanta_stalpi": null,
+        "element_id": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": "CL-51003"
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:40\nID client: CL-51003\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Strada Liviu Rebreanu, între nr. 10 și 20, două case fără curent.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "detalii": {
+    "observatii": "Două case fără curent, pe strada Liviu Rebreanu, între nr. 10 și 20. Apel înregistrat la ora 19:40."
+  },
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "incredere_extractie": 0.6,
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client"
+}

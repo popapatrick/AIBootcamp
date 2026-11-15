@@ -1,0 +1,32 @@
+{
+  "event_id": "M-2026-0411",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6605236",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-09-04",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0411\nData: 2026-09-04\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 6605236\nCoordonate: -\nAdresa: Strada Crinului\nConstatare: Ruptură de conductor la stâlpul 6605236, tronsonul e deconectat.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "coordonate",
+    "numar"
+  ],
+  "detalii": {
+    "sectiune_noua": null,
+    "observatii": "Ruptură de conductor la stâlpul 6605236, tronsonul e deconectat. Tip lucrare: avarie. Nr. fișă M-2026-0411."
+  }
+}

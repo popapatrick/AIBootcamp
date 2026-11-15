@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "nr 12 pe Strada Tineretului",
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": "12",
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "Avem un stalp nou la nr 12 pe Strada Tineretului, lipseste din GIS. echipa 3",
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou, există pe teren, lipsește din GIS"
+  },
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "tip_sursa_pondere": "text_liber"
+}

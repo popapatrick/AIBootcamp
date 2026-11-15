@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0423
+Data: 2026-11-03
+Echipa: mentenanta
+Tip lucrare: avarie
+Cod element: -
+Coordonate: -
+Adresa: Strada Soarelui, între nr. 4 și 10
+Constatare: Cablu căzut pe carosabil, zona e delimitată.
+Status: semnalat

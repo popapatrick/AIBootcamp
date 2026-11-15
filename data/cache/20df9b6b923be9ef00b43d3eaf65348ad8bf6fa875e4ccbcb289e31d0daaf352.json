@@ -1,0 +1,36 @@
+{
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "centru",
+    "raza_m",
+    "intersectie",
+    "numar"
+  ],
+  "data": "2026-09-19",
+  "detalii": {
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "Nr. fișă M-2026-0415. Firul de la nodul 5481763 a fost mutat pe nodul 6374339 la sensul giratoriu; traseul vechi a fost scos."
+  },
+  "echipa_sursa": "mentenanta",
+  "event_id": "null",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "referinta": {
+    "adresa": "Șoseaua Principală",
+    "adresa_structurata": {
+      "strada": "Șoseaua Principală",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "5481763",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0415\nData: 2026-09-19\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: 5481763 → 6374339\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos.\nStatus: executat\n",
+  "tip": "mutare_fire",
+  "tip_sursa_pondere": "formular"
+}

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0417
+Data: 2026-10-05
+Echipa: mentenanta
+Tip lucrare: nod lipsă din GIS
+Cod element: -
+Coordonate: -
+Adresa: Strada Oituz, colț cu Strada 1 Mai
+Constatare: Nod existent pe teren, lipsă din harta GIS.
+Status: executat

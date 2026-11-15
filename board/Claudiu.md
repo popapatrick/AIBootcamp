@@ -1,5 +1,19 @@
 # Panou laptop C
 
+## 2026-11-15, sesiunea 4: C1–C5 gata, P1–P3 scrise (Claudiu, C)
+Gata:
+- API (C1–C3, C5): scoase extrem/`/trasee-demo`/`trace_params`/`trace`; `GET /exemple` doar 3 echipe; noi `GET /legenda`, `GET /demo/exemple`, `POST /demo/reset`, `POST /element/{id}/verificare`; `standardizare` + `focus` în `POST /rapoarte` și `GET /evenimente`; `banda`/`verificat_om`/`sursa_locatie`/`t0`/`eticheta_origine` în `/retea`; banca are coloanele noi. Doc: `docs/etapa-30-api-sesiune4.md`.
+- Texte (C4): 55 de rapoarte noi în `data/reports/` după rețeta 7.1 (cele 41 vechi înlocuite), doar cele 24 de străzi; 21/55 doar stradă + indiciu; `exemple-dummy.json` 5/echipă; `demo-intro.json` 4 carduri. Cache AI umplut cu `ai_cli` (Haiku, abonament): 70 texte, 0 lipsă.
+- Prompturi Lovable P1, P2, P3 în `frontend/lovable-prompt-sesiune4-P*.md`. Claudiu a decis să le trimit fără să aștept (le trimit pe rând, după verificare prin tunel).
+`scripts/verifica_tot.sh`: TOT VERDE; banca 20/20.
+@Victor:
+1. Până le dă motorul, API-ul trece null pentru `banda`, `verificat_om`, `sursa_locatie`, `t0` și `banda_inainte`/`banda_dupa`. `POST /element/{id}/verificare` dă 501 până apare `verificare_om` în motor (V5); după aceea merge fără schimbări în API.
+2. Cele 4 texte „verificat de om” din scenariu: extracția Haiku nu le dă încă `tip: verificare_om` (promptul nu știe tipul). Trebuie adăugat în prompt la V5, apoi refăcut cache-ul doar pentru ele.
+3. `events.json` nu e regenerat din textele noi (pasul tău 7.3/3, `genereaza_scenariu.py`).
+4. P3 are nevoie în pasul `cautare_strada` de: `indiciu{tip,numar,numar_2,text}`, `ancore[{numar,lat,lon}]`, `candidati[{element_id,distanta_m}]`, `ales`, `punct{lat,lon}`. Ideal și o polilinie `fereastra_traseu` pentru fereastra pe stradă (altfel UI-ul desenează un cerc). În `analiza_harta`: `alternative[{de_la,lungime_m,motiv,traseu}]` și pozițiile stâlpilor noi.
+5. „Elemente de verificat” în UI = `banda` portocaliu sau roșu. Spune dacă vrei alt criteriu.
+Contract atins: nu
+
 ## 2026-11-15, Lovable timeline derulabil trimis și aplicat (Claudiu, C)
 Gata: `frontend/lovable-prompt-timeline-derulabil.md` trimis. Lovable: Play/slider scoase, panou vertical „Evenimente”, scroll mută harta (debounce 150 ms, cache pe scenariu+dată), contur portocaliu pe elemente atinse, „De ce?” din `pasi`; 108 teste trecute, build OK; 4,7 credite; commit Lovable `7bc0a2e`. Nepublicat; preview neverificat de mine cu API-ul real.
 Contract atins: nu

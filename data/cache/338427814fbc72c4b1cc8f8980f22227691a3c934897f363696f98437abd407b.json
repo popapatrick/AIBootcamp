@@ -1,0 +1,34 @@
+{
+  "event_id": "\"\"",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu, lângă nr. 14",
+    "adresa_structurata": {
+      "strada": "Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă nr. 14"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": "CL-51002",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:24\nID client: CL-51002\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Și la noi, pe Strada Liviu Rebreanu, lângă nr. 14, pâlpâie.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "event_id",
+    "numar",
+    "localitate",
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Client raportează că pe Strada Liviu Rebreanu, lângă nr. 14, pâlpâie (iluminat/curent). Operatorul a înregistrat apelul; echipa verifică."
+  }
+}

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0401
+Data: 2026-08-03
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6784406
+Coordonate: -
+Adresa: Strada Crinului
+Constatare: Stâlp 6784406 există, izolator ok, nimic de făcut.
+Status: executat

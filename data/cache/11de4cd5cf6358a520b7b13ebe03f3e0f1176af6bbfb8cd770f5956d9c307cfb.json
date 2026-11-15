@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-11de4cd5",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "Strada Bălții",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6418317",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-18",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-10-18\nElement: 6418317\nAdresa: Strada Bălții\nConstatare: nodul există pe teren, confirmat, GPS corect.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "adresa_structurata.numar"
+  ],
+  "detalii": {
+    "observatii": "Nodul există pe teren, confirmat, GPS corect. Verificat de om, în teren."
+  }
+}

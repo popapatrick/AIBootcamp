@@ -1,0 +1,40 @@
+{
+  "event_id": "M-2026-0417",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Oituz, colț cu Strada 1 Mai",
+    "adresa_structurata": {
+      "strada": "Strada Oituz",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "colt",
+        "strada_2": "Strada 1 Mai",
+        "numar": null,
+        "numar_2": null,
+        "paritate": null,
+        "distanta_stalpi": null,
+        "element_id": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-05",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0417\nData: 2026-10-05\nEchipa: mentenanta\nTip lucrare: nod lipsă din GIS\nCod element: -\nCoordonate: -\nAdresa: Strada Oituz, colț cu Strada 1 Mai\nConstatare: Nod existent pe teren, lipsă din harta GIS.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Nod existent pe teren, lipsă din harta GIS. Fișă M-2026-0417, tip lucrare: nod lipsă din GIS."
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "intro-1",
+    "titlu": "Stâlp căzut lângă nr. 15",
+    "descriere": "Raport fără coordonate: sistemul caută pe Strada Viilor, găsește candidații și alege cel mai apropiat.",
+    "sursa": "mentenanta",
+    "text": "Stâlp căzut lângă nr. 15 pe Strada Viilor, cablul atârnă pe trotuar. Nu am coordonate.",
+    "data_moment": "2026-11-14",
+    "focus": null
+  },
+  {
+    "id": "intro-2",
+    "titlu": "Sens giratoriu, fire mutate",
+    "descriere": "Firele mutate la sensul giratoriu de pe Șoseaua Principală: traseul nou apare, cel vechi se scoate.",
+    "sursa": "mentenanta",
+    "text": "Sens giratoriu: firul de la nodul 5481763 mutat pe nodul 6374339 pe Șoseaua Principală, traseul vechi scos.",
+    "data_moment": "2026-09-19",
+    "focus": null
+  },
+  {
+    "id": "intro-3",
+    "titlu": "Casă departe de rețea",
+    "descriere": "Cerere de racordare la o casă departe de ultimul stâlp: lanțul se trasează pe străzi.",
+    "sursa": "racordari",
+    "text": "Cerere racord, casa din Strada Regina Maria nr. 40, la cca 180 m de ultimul stâlp.",
+    "data_moment": "2026-09-02",
+    "focus": null
+  },
+  {
+    "id": "intro-4",
+    "titlu": "Stâlp înlocuit, raportat cu adresă",
+    "descriere": "Raport cu adresă, aplicat galben; după confirmarea GPS devine verde, apoi verificat de om.",
+    "sursa": "mentenanta",
+    "text": "Stâlp înlocuit pe Strada Carpati nr. 12, stâlpul vechi scos din uz, stâlp nou montat.",
+    "data_moment": "2026-09-14",
+    "focus": null
+  }
+]

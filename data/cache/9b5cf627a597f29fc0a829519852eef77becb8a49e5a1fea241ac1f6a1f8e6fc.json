@@ -1,0 +1,34 @@
+{
+  "event_id": "I-2026-0118",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": {
+      "lat": 44.282386,
+      "lon": 26.062073
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-01",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0118\nData: 2026-10-01\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: 44.282386, 26.062073 (început tronson)\nAdresa: Strada Crinului\nConstatare: Două stâlpi montați, tronson executat.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id",
+    "numar"
+  ],
+  "detalii": {
+    "observatii": "Fișa I-2026-0118, tip lucrare linie nouă. Două stâlpi montați, tronson executat. Coordonatele sunt de început tronson. Cod element lipsă ('-')."
+  }
+}

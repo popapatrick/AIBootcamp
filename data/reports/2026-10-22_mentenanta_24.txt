@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0421
+Data: 2026-10-22
+Echipa: mentenanta
+Tip lucrare: stâlp nou
+Cod element: -
+Coordonate: -
+Adresa: Intrarea Plopilor, lângă nr. 4
+Constatare: Stâlp nou montat, de adăugat în GIS.
+Status: executat

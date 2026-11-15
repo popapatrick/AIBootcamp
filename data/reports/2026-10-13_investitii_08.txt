@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0119
+Data: 2026-10-13
+Echipa: investitii
+Tip lucrare: demontare segment
+Cod element: -
+Coordonate: -
+Adresa: Strada Fagului, între nr. 5 și 9
+Constatare: Segment scos din uz, executat.
+Status: executat

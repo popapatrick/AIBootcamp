@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-e2a0220a",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.26902,
+      "lon": 26.05827
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-14",
+  "text_original": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.26902, 26.05827.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.8,
+  "detalii": {
+    "observatii": "casa noua, consum 5 kW"
+  },
+  "campuri_lipsa": [
+    "event_id",
+    "adresa",
+    "nr_cadastral"
+  ]
+}

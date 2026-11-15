@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0121
+Data: 2026-11-06
+Echipa: investitii
+Tip lucrare: linie nouă
+Cod element: -
+Coordonate: -
+Adresa: Strada Primăverii, la capătul străzii
+Constatare: Tronson nou executat, racord la rețea.
+Status: executat

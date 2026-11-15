@@ -1,10 +1,11 @@
 DATE FICTIVE
-FIȘĂ RACORDARE – RACORD NOU
-Nr. fișă: R-2026-0084
+FIȘĂ DE LUCRARE – RACORDĂRI
+Nr. fișă: R-2026-0064
 Data: 2026-09-03
 Echipa: racordari
+Tip lucrare: racord executat
 Cod element: -
-Coordonate: 4427960, 2606510
-Adresa: -
-Nr. cadastral: CF-fictiv 301502
+Coordonate: -
+Adresa: Strada Bălții nr. 14
+Constatare: Racord executat, mufă montată.
 Status: executat

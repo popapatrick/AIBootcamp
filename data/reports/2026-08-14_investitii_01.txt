@@ -1,8 +1,11 @@
 DATE FICTIVE
-FIȘĂ DE INVESTIȚIE – PLANIFICARE
-Nr. fișă: I-2026-0219
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0112
 Data: 2026-08-14
-Cod element: R-T-006
+Echipa: investitii
+Tip lucrare: linie nouă, tronson TYIR 3x35+54,6
+Cod element: -
 Coordonate: -
-Constatare: tronson de ramură aeriană, de înlocuit în planul 2027.
-Status: planificat
+Adresa: Strada Liviu Rebreanu, între nr. 2 și 12
+Constatare: Tronson nou executat, doi stâlpi montați.
+Status: executat

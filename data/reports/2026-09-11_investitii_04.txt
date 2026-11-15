@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0115
+Data: 2026-09-11
+Echipa: investitii
+Tip lucrare: demontare stâlp
+Cod element: 6623968
+Coordonate: -
+Adresa: Aleea Bălții
+Constatare: Stâlp scos din uz, executat.
+Status: executat

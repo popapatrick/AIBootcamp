@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0118
+Data: 2026-10-01
+Echipa: investitii
+Tip lucrare: linie nouă
+Cod element: -
+Coordonate: 44.282386, 26.062073 (început tronson)
+Adresa: Strada Crinului
+Constatare: Două stâlpi montați, tronson executat.
+Status: executat

@@ -1,0 +1,34 @@
+{
+  "event_id": "EV-NEATRIBUIT",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Viilor",
+    "adresa_structurata": {
+      "strada": "Viilor",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă PTAB 7812"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-28",
+  "text_original": "Cerere racord langa PTAB 7812, pe Strada Viilor.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "numar",
+    "element_id",
+    "nr_cadastral"
+  ],
+  "detalii": {
+    "observatii": "Cerere de racord nou lângă PTAB 7812, pe Strada Viilor. Codul PTAB 7812 nu are format de cod nod sau tronson, deci nu a fost trecut în element_id."
+  }
+}

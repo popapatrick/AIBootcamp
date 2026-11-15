@@ -1,0 +1,31 @@
+{
+  "event_id": "M-2026-0421",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "status": "executat",
+  "data": "2026-10-22",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0421\nData: 2026-10-22\nEchipa: mentenanta\nTip lucrare: stâlp nou\nCod element: -\nCoordonate: -\nAdresa: Intrarea Plopilor, lângă nr. 4\nConstatare: Stâlp nou montat, de adăugat în GIS.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "referinta": {
+    "adresa": "Intrarea Plopilor, lângă nr. 4",
+    "adresa_structurata": {
+      "strada": "Intrarea Plopilor",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă nr. 4"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "detalii": {
+    "observatii": "Stâlp nou montat, de adăugat în GIS. Nr. fișă M-2026-0421, tip lucrare: stâlp nou."
+  }
+}

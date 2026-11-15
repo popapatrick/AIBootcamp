@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0419
+Data: 2026-10-14
+Echipa: mentenanta
+Tip lucrare: avarie
+Cod element: 7966503
+Coordonate: -
+Adresa: Strada Liviu Rebreanu
+Constatare: Stâlp înclinat, risc de cădere, de reparat urgent.
+Status: semnalat

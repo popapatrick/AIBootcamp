@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – RACORDĂRI
+Nr. fișă: R-2026-0072
+Data: 2026-11-13
+Echipa: racordari
+Tip lucrare: racord executat
+Cod element: 6872907
+Coordonate: -
+Adresa: Strada Carpati nr. 15
+Constatare: Racord executat 13.11, lanț trecut pe stâlpul 6872907.
+Status: executat

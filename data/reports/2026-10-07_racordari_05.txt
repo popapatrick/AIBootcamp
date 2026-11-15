@@ -1,4 +1,0 @@
-DATE FICTIVE
-Proces-verbal racordare nouă, 7 octombrie 2026.
-Racordul nou a fost montat pe stâlpul de lângă strada fictivă, la coordonatele 26.0598, 44.2820. În procesul-verbal apar scrise invers, ca lon, lat. Client nou, putere 17 kW.
-Nu am găsit ID de nod pe teren; am folosit coordonatele. Rog verificare.

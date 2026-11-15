@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0418
+Data: 2026-10-08
+Echipa: mentenanta
+Tip lucrare: verificare rutină, nod
+Cod element: 6513200
+Coordonate: -
+Adresa: Strada Liviu Rebreanu
+Constatare: Nod 6513200 verificat, în regulă.
+Status: executat

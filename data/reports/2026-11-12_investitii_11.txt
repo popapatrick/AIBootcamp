@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0122
+Data: 2026-11-12
+Echipa: investitii
+Tip lucrare: demontare stâlp
+Cod element: 6510484
+Coordonate: -
+Adresa: Strada Speranței
+Constatare: Stâlp scos din uz, executat 12.11.2026.
+Status: executat

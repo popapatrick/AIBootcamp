@@ -1,0 +1,31 @@
+{
+  "event_id": "M-2026-0408",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": "Șoseaua Principală",
+    "adresa_structurata": {
+      "strada": "Șoseaua Principală",
+      "numar": null,
+      "localitate": null,
+      "reper": "sensul giratoriu"
+    },
+    "coordonate": null,
+    "element_id": "5481763",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-25",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0408\nData: 2026-08-25\nEchipa: mentenanta\nTip lucrare: verificare rutină, nod\nCod element: 5481763\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Nod 5481763 verificat la sensul giratoriu, în regulă.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Verificare de rutină a nodului la sensul giratoriu, în regulă, fără defecte și fără modificări."
+  }
+}

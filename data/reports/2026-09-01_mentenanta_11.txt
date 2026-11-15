@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0410
+Data: 2026-09-01
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6168883
+Coordonate: 44.275872, 26.062714
+Adresa: Strada Bălții
+Constatare: Stâlp 6168883 confirmat, GPS corect, izolator ok.
+Status: executat

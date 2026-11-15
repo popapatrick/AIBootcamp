@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0114
+Data: 2026-09-10
+Echipa: investitii
+Tip lucrare: linie nouă
+Cod element: -
+Coordonate: -
+Adresa: Aleea Bălții, lângă nr. 9
+Constatare: Tronson nou executat, 40 m de linie.
+Status: executat

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0116
+Data: 2026-09-24
+Echipa: investitii
+Tip lucrare: linie nouă planificată
+Cod element: -
+Coordonate: 44.280665, 26.064629
+Adresa: Strada Tineretului, colț cu Șoseaua Principală
+Constatare: Linie propusă, planificată pentru 2027.
+Status: planificat

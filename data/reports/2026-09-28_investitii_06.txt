@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0117
+Data: 2026-09-28
+Echipa: investitii
+Tip lucrare: demontare stâlp
+Cod element: 6879546
+Coordonate: -
+Adresa: Strada Bălții nr. 8
+Constatare: Stâlp scos din uz, executat.
+Status: executat

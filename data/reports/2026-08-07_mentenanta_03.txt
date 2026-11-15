@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0403
+Data: 2026-08-07
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6870734
+Coordonate: 44.283469, 26.067581 (GPS aplicație)
+Adresa: Strada Viilor
+Constatare: Stâlp verificat, poziția confirmată cu GPS, izolator ok.
+Status: executat

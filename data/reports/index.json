@@ -1,330 +1,442 @@
 [
   {
-    "fisier": "2026-08-04_mentenanta_01.txt",
+    "fisier": "2026-08-03_mentenanta_01.txt",
     "sursa": "mentenanta",
-    "data": "2026-08-04",
-    "scenariu": 1,
-    "element_id_asteptat": "6925190",
-    "tip_asteptat": "nod_lipsa"
-  },
-  {
-    "fisier": "2026-08-05_mentenanta_02.txt",
-    "sursa": "mentenanta",
-    "data": "2026-08-05",
-    "scenariu": 6,
-    "element_id_asteptat": "A-T-030",
+    "data": "2026-08-03",
+    "scenariu": null,
+    "element_id_asteptat": "6784406",
     "tip_asteptat": "verificare"
   },
   {
-    "fisier": "2026-08-12_mentenanta_03.txt",
+    "fisier": "2026-08-06_mentenanta_02.txt",
     "sursa": "mentenanta",
-    "data": "2026-08-12",
-    "scenariu": 6,
-    "element_id_asteptat": "A-T-040",
+    "data": "2026-08-06",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
+  },
+  {
+    "fisier": "2026-08-07_mentenanta_03.txt",
+    "sursa": "mentenanta",
+    "data": "2026-08-07",
+    "scenariu": null,
+    "element_id_asteptat": "6870734",
+    "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-08-10_mentenanta_04.txt",
+    "sursa": "mentenanta",
+    "data": "2026-08-10",
+    "scenariu": null,
+    "element_id_asteptat": "6199650",
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-08-11_mentenanta_05.txt",
+    "sursa": "mentenanta",
+    "data": "2026-08-11",
+    "scenariu": null,
+    "element_id_asteptat": "6240749",
     "tip_asteptat": "verificare"
   },
   {
     "fisier": "2026-08-12_racordari_01.txt",
     "sursa": "racordari",
     "data": "2026-08-12",
-    "scenariu": 3,
-    "element_id_asteptat": "6834468",
-    "tip_asteptat": "racord_nou"
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
+  },
+  {
+    "fisier": "2026-08-13_mentenanta_06.txt",
+    "sursa": "mentenanta",
+    "data": "2026-08-13",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "activ_inlocuit"
   },
   {
     "fisier": "2026-08-14_investitii_01.txt",
     "sursa": "investitii",
     "data": "2026-08-14",
     "scenariu": null,
-    "element_id_asteptat": "R-T-006",
-    "tip_asteptat": "activ_inlocuit"
-  },
-  {
-    "fisier": "2026-08-18_mentenanta_04.txt",
-    "sursa": "mentenanta",
-    "data": "2026-08-18",
-    "scenariu": 1,
-    "element_id_asteptat": "6925190",
+    "element_id_asteptat": null,
     "tip_asteptat": "nod_lipsa"
   },
   {
-    "fisier": "2026-08-20_mentenanta_05.txt",
+    "fisier": "2026-08-18_mentenanta_07.txt",
     "sursa": "mentenanta",
-    "data": "2026-08-20",
+    "data": "2026-08-18",
     "scenariu": null,
-    "element_id_asteptat": "DX10-2-099812",
+    "element_id_asteptat": "6382856",
     "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-08-21_investitii_02.txt",
+    "sursa": "investitii",
+    "data": "2026-08-21",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "linie_planificata"
   },
   {
     "fisier": "2026-08-22_apel_client_01.txt",
     "sursa": "apel_client",
     "data": "2026-08-22",
     "scenariu": null,
-    "element_id_asteptat": "6784406",
-    "tip_asteptat": "avarie_semnalata"
+    "element_id_asteptat": null,
+    "tip_asteptat": null
   },
   {
-    "fisier": "2026-08-26_mentenanta_06.txt",
+    "fisier": "2026-08-24_racordari_02.txt",
+    "sursa": "racordari",
+    "data": "2026-08-24",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
+  },
+  {
+    "fisier": "2026-08-25_mentenanta_08.txt",
     "sursa": "mentenanta",
-    "data": "2026-08-26",
-    "scenariu": 5,
-    "element_id_asteptat": "A-T-021",
-    "tip_asteptat": "avarie_semnalata"
+    "data": "2026-08-25",
+    "scenariu": null,
+    "element_id_asteptat": "5481763",
+    "tip_asteptat": "verificare"
   },
   {
-    "fisier": "2026-08-29_racordari_02.txt",
-    "sursa": "racordari",
-    "data": "2026-08-29",
-    "scenariu": 5,
-    "element_id_asteptat": "A-T-021",
-    "tip_asteptat": "activ_inlocuit"
+    "fisier": "2026-08-27_mentenanta_09.txt",
+    "sursa": "mentenanta",
+    "data": "2026-08-27",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
   },
   {
-    "fisier": "2026-08-29_racordari_03.txt",
-    "sursa": "racordari",
+    "fisier": "2026-08-29_mentenanta_10.txt",
+    "sursa": "mentenanta",
     "data": "2026-08-29",
     "scenariu": null,
-    "element_id_asteptat": "6419627",
-    "tip_asteptat": "racord_nou"
+    "element_id_asteptat": "6640398",
+    "tip_asteptat": "verificare_om"
+  },
+  {
+    "fisier": "2026-09-01_mentenanta_11.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-01",
+    "scenariu": null,
+    "element_id_asteptat": "6168883",
+    "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-09-02_racordari_03.txt",
+    "sursa": "racordari",
+    "data": "2026-09-02",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
   },
   {
     "fisier": "2026-09-03_racordari_04.txt",
     "sursa": "racordari",
     "data": "2026-09-03",
-    "scenariu": 3,
-    "element_id_asteptat": "7845984",
+    "scenariu": null,
+    "element_id_asteptat": null,
     "tip_asteptat": "racord_nou"
   },
   {
-    "fisier": "2026-09-08_mentenanta_07.txt",
+    "fisier": "2026-09-04_mentenanta_12.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-04",
+    "scenariu": null,
+    "element_id_asteptat": "6605236",
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-09-08_mentenanta_13.txt",
     "sursa": "mentenanta",
     "data": "2026-09-08",
+    "scenariu": null,
+    "element_id_asteptat": "6474725",
+    "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-09-10_investitii_03.txt",
+    "sursa": "investitii",
+    "data": "2026-09-10",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
+  },
+  {
+    "fisier": "2026-09-11_investitii_04.txt",
+    "sursa": "investitii",
+    "data": "2026-09-11",
+    "scenariu": null,
+    "element_id_asteptat": "6623968",
+    "tip_asteptat": "activ_demontat"
+  },
+  {
+    "fisier": "2026-09-14_mentenanta_14.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-14",
+    "scenariu": null,
+    "element_id_asteptat": "6642890",
+    "tip_asteptat": "activ_inlocuit"
+  },
+  {
+    "fisier": "2026-09-15_racordari_05.txt",
+    "sursa": "racordari",
+    "data": "2026-09-15",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
+  },
+  {
+    "fisier": "2026-09-17_mentenanta_15.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-17",
+    "scenariu": null,
+    "element_id_asteptat": "6872907",
+    "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-09-19_mentenanta_16.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-19",
+    "scenariu": null,
+    "element_id_asteptat": "5481763",
+    "tip_asteptat": "mutare_fire"
+  },
+  {
+    "fisier": "2026-09-23_mentenanta_17.txt",
+    "sursa": "mentenanta",
+    "data": "2026-09-23",
     "scenariu": null,
     "element_id_asteptat": null,
     "tip_asteptat": "avarie_semnalata"
   },
   {
-    "fisier": "2026-09-10_investitii_02.txt",
+    "fisier": "2026-09-24_investitii_05.txt",
     "sursa": "investitii",
-    "data": "2026-09-10",
-    "scenariu": 2,
-    "element_id_asteptat": "A-T-002",
-    "tip_asteptat": "activ_inlocuit"
+    "data": "2026-09-24",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "linie_planificata"
   },
   {
-    "fisier": "2026-09-15_mentenanta_08.txt",
+    "fisier": "2026-09-26_mentenanta_18.txt",
     "sursa": "mentenanta",
-    "data": "2026-09-15",
-    "scenariu": 7,
-    "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
+    "data": "2026-09-26",
+    "scenariu": null,
+    "element_id_asteptat": "7322194",
+    "tip_asteptat": "verificare_om"
   },
   {
-    "fisier": "2026-09-22_investitii_03.txt",
+    "fisier": "2026-09-28_investitii_06.txt",
     "sursa": "investitii",
-    "data": "2026-09-22",
-    "scenariu": 2,
-    "element_id_asteptat": null,
-    "tip_asteptat": "activ_inlocuit"
+    "data": "2026-09-28",
+    "scenariu": null,
+    "element_id_asteptat": "6879546",
+    "tip_asteptat": "activ_demontat"
   },
   {
-    "fisier": "2026-09-29_investitii_04.txt",
+    "fisier": "2026-10-01_investitii_07.txt",
     "sursa": "investitii",
-    "data": "2026-09-29",
-    "scenariu": 7,
+    "data": "2026-10-01",
+    "scenariu": null,
     "element_id_asteptat": null,
-    "tip_asteptat": "activ_inlocuit"
+    "tip_asteptat": "nod_lipsa"
   },
   {
     "fisier": "2026-10-02_apel_client_02.txt",
     "sursa": "apel_client",
     "data": "2026-10-02",
-    "scenariu": 4,
-    "element_id_asteptat": "6513593",
-    "tip_asteptat": "avarie_semnalata"
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": null
   },
   {
     "fisier": "2026-10-02_apel_client_03.txt",
     "sursa": "apel_client",
     "data": "2026-10-02",
-    "scenariu": 4,
-    "element_id_asteptat": "6605236",
-    "tip_asteptat": "avarie_semnalata"
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": null
   },
   {
-    "fisier": "2026-10-03_apel_client_04.txt",
+    "fisier": "2026-10-02_apel_client_04.txt",
     "sursa": "apel_client",
+    "data": "2026-10-02",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": null
+  },
+  {
+    "fisier": "2026-10-03_racordari_06.txt",
+    "sursa": "racordari",
     "data": "2026-10-03",
-    "scenariu": 4,
+    "scenariu": null,
     "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
+    "tip_asteptat": "cerere_racordare"
   },
   {
-    "fisier": "2026-10-05_apel_client_05.txt",
-    "sursa": "apel_client",
+    "fisier": "2026-10-05_mentenanta_19.txt",
+    "sursa": "mentenanta",
     "data": "2026-10-05",
-    "scenariu": 4,
-    "element_id_asteptat": "7427602",
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-10-06_apel_client_06.txt",
-    "sursa": "apel_client",
-    "data": "2026-10-06",
-    "scenariu": 4,
-    "element_id_asteptat": "6940335",
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-10-07_racordari_05.txt",
-    "sursa": "racordari",
-    "data": "2026-10-07",
-    "scenariu": 3,
-    "element_id_asteptat": "6940335",
-    "tip_asteptat": "racord_nou"
-  },
-  {
-    "fisier": "2026-10-12_racordari_06.txt",
-    "sursa": "racordari",
-    "data": "2026-10-12",
     "scenariu": null,
-    "element_id_asteptat": "6628781",
-    "tip_asteptat": "racord_nou"
-  },
-  {
-    "fisier": "2026-10-16_mentenanta_09.txt",
-    "sursa": "mentenanta",
-    "data": "2026-10-16",
-    "scenariu": 7,
     "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-10-20_mentenanta_10.txt",
-    "sursa": "mentenanta",
-    "data": "2026-10-20",
-    "scenariu": null,
-    "element_id_asteptat": "0287329",
-    "tip_asteptat": "verificare"
-  },
-  {
-    "fisier": "2026-10-21_racordari_07.txt",
-    "sursa": "racordari",
-    "data": "2026-10-21",
-    "scenariu": 7,
-    "element_id_asteptat": null,
-    "tip_asteptat": "racord_nou"
-  },
-  {
-    "fisier": "2026-10-23_mentenanta_11.txt",
-    "sursa": "mentenanta",
-    "data": "2026-10-23",
-    "scenariu": 1,
-    "element_id_asteptat": "6925190",
     "tip_asteptat": "nod_lipsa"
   },
   {
-    "fisier": "2026-10-27_investitii_05.txt",
-    "sursa": "investitii",
-    "data": "2026-10-27",
+    "fisier": "2026-10-08_mentenanta_20.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-08",
     "scenariu": null,
-    "element_id_asteptat": "R-T-012",
-    "tip_asteptat": "linie_planificata"
+    "element_id_asteptat": "6513200",
+    "tip_asteptat": "verificare"
   },
   {
-    "fisier": "2026-09-07_investitii_06.txt",
-    "sursa": "investitii",
-    "data": "2026-09-07",
-    "scenariu": null,
-    "element_id_asteptat": "7261864",
-    "tip_asteptat": "linie_planificata"
-  },
-  {
-    "fisier": "2026-09-30_racordari_08.txt",
+    "fisier": "2026-10-09_racordari_07.txt",
     "sursa": "racordari",
-    "data": "2026-09-30",
+    "data": "2026-10-09",
     "scenariu": null,
     "element_id_asteptat": null,
-    "tip_asteptat": "racord_nou"
+    "tip_asteptat": "cerere_racordare"
   },
   {
-    "fisier": "2026-10-14_mentenanta_12.txt",
+    "fisier": "2026-10-13_investitii_08.txt",
+    "sursa": "investitii",
+    "data": "2026-10-13",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "activ_demontat"
+  },
+  {
+    "fisier": "2026-10-14_mentenanta_21.txt",
     "sursa": "mentenanta",
     "data": "2026-10-14",
     "scenariu": null,
-    "element_id_asteptat": "7900101",
-    "tip_asteptat": "nod_lipsa"
+    "element_id_asteptat": "7966503",
+    "tip_asteptat": "avarie_semnalata"
   },
   {
-    "fisier": "2026-10-19_investitii_07.txt",
-    "sursa": "investitii",
-    "data": "2026-10-19",
-    "scenariu": null,
-    "element_id_asteptat": "A-T-012",
-    "tip_asteptat": "activ_demontat"
-  },
-  {
-    "fisier": "2026-11-04_mentenanta_13.txt",
+    "fisier": "2026-10-16_mentenanta_22.txt",
     "sursa": "mentenanta",
-    "data": "2026-11-04",
-    "scenariu": null,
-    "element_id_asteptat": "A-T-012",
-    "tip_asteptat": "activ_demontat"
-  },
-  {
-    "fisier": "2026-11-05_mentenanta_14.txt",
-    "sursa": "mentenanta",
-    "data": "2026-11-05",
-    "scenariu": null,
-    "element_id_asteptat": "7900101",
-    "tip_asteptat": "verificare"
-  },
-  {
-    "fisier": "2026-11-09_apel_client_07.txt",
-    "sursa": "apel_client",
-    "data": "2026-11-09",
-    "scenariu": null,
-    "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-11-10_apel_client_08.txt",
-    "sursa": "apel_client",
-    "data": "2026-11-10",
-    "scenariu": null,
-    "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-11-11_apel_client_09.txt",
-    "sursa": "apel_client",
-    "data": "2026-11-11",
-    "scenariu": null,
-    "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-11-12_apel_client_10.txt",
-    "sursa": "apel_client",
-    "data": "2026-11-12",
-    "scenariu": null,
-    "element_id_asteptat": null,
-    "tip_asteptat": "avarie_semnalata"
-  },
-  {
-    "fisier": "2026-11-06_mentenanta_15.txt",
-    "sursa": "mentenanta",
-    "data": "2026-11-06",
+    "data": "2026-10-16",
     "scenariu": null,
     "element_id_asteptat": null,
     "tip_asteptat": "mutare_fire"
   },
   {
-    "fisier": "2026-11-08_mentenanta_16.txt",
-    "sursa": "mentenanta",
-    "data": "2026-11-08",
+    "fisier": "2026-10-17_racordari_08.txt",
+    "sursa": "racordari",
+    "data": "2026-10-17",
     "scenariu": null,
-    "element_id_asteptat": "6513200",
+    "element_id_asteptat": null,
+    "tip_asteptat": "racord_nou"
+  },
+  {
+    "fisier": "2026-10-18_mentenanta_23.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-18",
+    "scenariu": null,
+    "element_id_asteptat": "6418317",
+    "tip_asteptat": "verificare_om"
+  },
+  {
+    "fisier": "2026-10-22_mentenanta_24.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-22",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
+  },
+  {
+    "fisier": "2026-10-26_investitii_09.txt",
+    "sursa": "investitii",
+    "data": "2026-10-26",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "linie_planificata"
+  },
+  {
+    "fisier": "2026-10-28_racordari_09.txt",
+    "sursa": "racordari",
+    "data": "2026-10-28",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
+  },
+  {
+    "fisier": "2026-10-29_mentenanta_25.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-29",
+    "scenariu": null,
+    "element_id_asteptat": "6650412",
     "tip_asteptat": "verificare"
+  },
+  {
+    "fisier": "2026-10-30_racordari_10.txt",
+    "sursa": "racordari",
+    "data": "2026-10-30",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "racord_nou"
+  },
+  {
+    "fisier": "2026-11-03_mentenanta_26.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-03",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
+  },
+  {
+    "fisier": "2026-11-06_investitii_10.txt",
+    "sursa": "investitii",
+    "data": "2026-11-06",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
+  },
+  {
+    "fisier": "2026-11-07_racordari_11.txt",
+    "sursa": "racordari",
+    "data": "2026-11-07",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "cerere_racordare"
+  },
+  {
+    "fisier": "2026-11-10_mentenanta_27.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-10",
+    "scenariu": null,
+    "element_id_asteptat": "6793869",
+    "tip_asteptat": "verificare_om"
+  },
+  {
+    "fisier": "2026-11-11_apel_client_05.txt",
+    "sursa": "apel_client",
+    "data": "2026-11-11",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": null
+  },
+  {
+    "fisier": "2026-11-12_investitii_11.txt",
+    "sursa": "investitii",
+    "data": "2026-11-12",
+    "scenariu": null,
+    "element_id_asteptat": "6510484",
+    "tip_asteptat": "activ_demontat"
+  },
+  {
+    "fisier": "2026-11-13_racordari_12.txt",
+    "sursa": "racordari",
+    "data": "2026-11-13",
+    "scenariu": null,
+    "element_id_asteptat": "6872907",
+    "tip_asteptat": "racord_nou"
   }
 ]

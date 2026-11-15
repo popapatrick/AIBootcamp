@@ -1,0 +1,30 @@
+{
+  "event_id": "R-2026-0072",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Strada Carpati nr. 15",
+    "adresa_structurata": {
+      "strada": "Carpati",
+      "numar": "15",
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": "6872907",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-13",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0072\nData: 2026-11-13\nEchipa: racordari\nTip lucrare: racord executat\nCod element: 6872907\nCoordonate: -\nAdresa: Strada Carpati nr. 15\nConstatare: Racord executat 13.11, lanț trecut pe stâlpul 6872907.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Fișă R-2026-0072, racord executat 13.11; lanț trecut pe stâlpul 6872907."
+  }
+}

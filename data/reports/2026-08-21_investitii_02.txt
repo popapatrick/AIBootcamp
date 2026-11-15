@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – INVESTIȚII
+Nr. fișă: I-2026-0113
+Data: 2026-08-21
+Echipa: investitii
+Tip lucrare: linie nouă planificată
+Cod element: -
+Coordonate: -
+Adresa: Strada Speranței, între nr. 10 și 20
+Constatare: Linie de 150 m propusă, aprobată în planul 2027.
+Status: planificat

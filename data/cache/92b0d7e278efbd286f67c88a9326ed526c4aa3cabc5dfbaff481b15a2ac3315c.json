@@ -1,0 +1,35 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Crinului",
+    "adresa_structurata": {
+      "strada": "Strada Crinului",
+      "numar": null,
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": {
+      "lat": 44.283453,
+      "lon": 26.062913
+    },
+    "element_id": null,
+    "id_client": "CL-61204",
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-11",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-11-11 ora 08:05\nID client: CL-61204\nTranscriere:\nOperator: Bună dimineața, cu ce vă pot ajuta?\nClient: Stâlp înclinat pe Strada Crinului. Locație din telefon: 44.283453, 26.062913.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+    "element_id",
+    "adresa_structurata.numar",
+    "adresa_structurata.localitate"
+  ],
+  "detalii": {
+    "observatii": "Client raportează stâlp înclinat pe Strada Crinului; locația din telefonul clientului."
+  }
+}

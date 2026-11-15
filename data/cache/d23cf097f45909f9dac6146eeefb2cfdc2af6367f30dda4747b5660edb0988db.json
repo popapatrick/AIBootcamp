@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "status": "executat",
+  "data": "2026-11-13",
+  "incredere_extractie": 0.95,
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "langa PTAB 7812"
+    },
+    "coordonate": null,
+    "element_id": "A-T-014",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "detalii": {
+    "observatii": "Tronson verificat langa PTAB 7812; textul indica ca totul este in regula (fara defecte, fara modificari)."
+  },
+  "campuri_lipsa": [
+    "coordonate"
+  ],
+  "text_original": "verificat tronson A-T-014 langa PTAB 7812, totul in regula. 13.11.2026"
+}

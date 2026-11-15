@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-INV-2026-11-14",
+  "echipa_sursa": "investitii",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.28168,
+      "lon": 26.06471
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-14",
+  "text_original": "FISA INVESTITIE: stalp nou la 44.28168, 26.06471, executat",
+  "campuri_lipsa": [
+    "element_id",
+    "adresa"
+  ],
+  "detalii": {
+    "observatii": "FISA INVESTITIE: stalp nou, executat. Tipul exact nu e precizat in text."
+  },
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6
+}

@@ -1,10 +1,8 @@
 DATE FICTIVE
 Apel client – fișă apel
-Data: 2026-10-02 ora 18:15
-ID client: CL-40982
-Locație: coordonate 44.28301, 26.06240 (aplicație telefon)
+Data: 2026-10-02 ora 19:24
+ID client: CL-51002
 Transcriere:
-Operator: Bună, cu ce vă pot ajuta?
-Client: Iar nu avem curent, a căzut din nou pe la șase.
-Operator: Din ce oră a picat prima oară?
-Client: Pe la 14:30, a revenit o dată și a picat iar.
+Operator: Bună seara, cu ce vă pot ajuta?
+Client: Și la noi, pe Strada Liviu Rebreanu, lângă nr. 14, pâlpâie.
+Operator: Vă înregistrez, echipa verifică.

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0409
+Data: 2026-08-27
+Echipa: mentenanta
+Tip lucrare: nod lipsă din GIS
+Cod element: -
+Coordonate: 44.279862, 26.066133
+Adresa: Strada Tineretului, lângă nr. 8
+Constatare: Nod existent pe teren, lipsă din harta GIS.
+Status: executat

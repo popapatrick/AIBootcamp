@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0414
+Data: 2026-09-17
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6872907
+Coordonate: 44.281967, 26.065858
+Adresa: Strada Carpati
+Constatare: Stâlp verificat, poziție confirmată cu GPS.
+Status: executat

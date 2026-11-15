@@ -1,5 +1,0 @@
-DATE FICTIVE
-Raport de teren – verificare rețea JT, 18 august 2026
-Am verificat tronsonul de pe strada cu curbă dinspre stația PTAB 7812. În GIS, între nodurile 6513200 și 7824201 există doar o linie dreaptă. Pe teren cablul face o curbă, iar în curbă există un nod de derivație, 6925190, de unde pornesc două tronsoane către stâlp: A-T-054 și A-T-057. Nodul și cele două tronsoane lipsesc din model.
-Recomand actualizarea GIS și verificarea secțiunii cablului. Lucrarea a fost făcută fără întreruperi.
-Ing. fictiv (date fictive)

@@ -2,7 +2,7 @@
 
 ## 1. Texte (C)
 
-- [ ] 1.1 (C4) ~55 de rapoarte după rețeta din plan (7.1), doar cu străzi din `osm.strazi()`; 5 texte/echipă în `exemple-dummy.json`; `demo-intro.json` (4 carduri)
+- [x] 1.1 (C4) ~55 de rapoarte după rețeta din plan (7.1), doar cu străzi din `osm.strazi()`; 5 texte/echipă în `exemple-dummy.json`; `demo-intro.json` (4 carduri)
 
 ## 2. Scenariu (B)
 

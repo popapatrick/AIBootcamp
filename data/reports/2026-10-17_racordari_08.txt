@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – RACORDĂRI
+Nr. fișă: R-2026-0068
+Data: 2026-10-17
+Echipa: racordari
+Tip lucrare: racord executat
+Cod element: -
+Coordonate: -
+Adresa: Strada Crinului, lângă nr. 17
+Constatare: Racord executat, contor montat.
+Status: executat

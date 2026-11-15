@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-8dda746c",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.28168,
+      "lon": 26.1011
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-14",
+  "text_original": "CERERE RACORDARE: casa noua, consum 5 kW, coordonate 44.28168, 26.10110.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.8,
+  "detalii": {
+    "observatii": "casa noua, consum 5 kW"
+  },
+  "campuri_lipsa": [
+    "event_id",
+    "adresa",
+    "nr_cadastral",
+    "element_id"
+  ]
+}

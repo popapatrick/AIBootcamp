@@ -1,0 +1,35 @@
+{
+  "event_id": "EV-1536375b",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": {
+      "lat": 44.284979,
+      "lon": 26.058728
+    },
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Fire mutate: sens giratoriu, centru 44.284979, 26.058728. S-au mutat firele aeriene.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "raza_m",
+    "event_id"
+  ],
+  "detalii": {
+    "centru": {
+      "lat": 44.284979,
+      "lon": 26.058728
+    },
+    "raza_m": null,
+    "motiv_mutare": "sens_giratoriu",
+    "observatii": "S-au mutat firele aeriene."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-dda56fca",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Bălții nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": "14",
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-08-12",
+  "text_original": "Cerere racord, Strada Bălții nr. 14, casa, 1 faza 5 kW.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "detalii": {
+    "observatii": "Cerere de racordare a unei case: 1 fază, 5 kW."
+  },
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate",
+    "localitate"
+  ]
+}

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0402
+Data: 2026-08-06
+Echipa: mentenanta
+Tip lucrare: stâlp nou, nod lipsă
+Cod element: -
+Coordonate: -
+Adresa: Strada Viilor, între nr. 11 și 17
+Constatare: Stâlp nou montat, nu apare în harta GIS.
+Status: executat

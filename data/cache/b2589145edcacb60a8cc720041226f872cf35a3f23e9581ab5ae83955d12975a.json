@@ -1,0 +1,33 @@
+{
+  "event_id": "I-2026-0121",
+  "echipa_sursa": "investitii",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "Strada Primăverii, la capătul străzii",
+    "adresa_structurata": {
+      "strada": "Strada Primăverii",
+      "numar": null,
+      "localitate": null,
+      "reper": "la capătul străzii"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Tronson nou executat, racord la rețea.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa_numar",
+    "localitate"
+  ],
+  "detalii": {
+    "observatii": "Tip lucrare: linie nouă. Constatare: tronson nou executat, racord la rețea. Nr. fișă I-2026-0121. Textul nu numește un client, deci tipul racord_nou e doar cea mai apropiată potrivire pentru un tronson executat; de confirmat."
+  }
+}

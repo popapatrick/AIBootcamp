@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "status": "executat",
+  "data": "2026-09-26",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-09-26\nElement: 7322194\nAdresa: Strada Liviu Rebreanu, lângă nr. 24\nConstatare: stâlpul există și e la locul indicat în GIS. Confirm, nu e nimic de corectat.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "referinta": {
+    "adresa": "Strada Liviu Rebreanu, lângă nr. 24",
+    "adresa_structurata": {
+      "strada": "Strada Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": "lângă nr. 24"
+    },
+    "coordonate": null,
+    "element_id": "7322194",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "campuri_lipsa": [
+    "coordonate",
+    "localitate",
+    "numar"
+  ],
+  "detalii": {
+    "observatii": "Stâlpul există și e la locul indicat în GIS. Confirmat în teren, nu e nimic de corectat."
+  }
+}

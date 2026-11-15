@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0412
+Data: 2026-09-08
+Echipa: mentenanta
+Tip lucrare: verificare rutină, stâlp existent
+Cod element: 6474725
+Coordonate: -
+Adresa: Strada Crinului
+Constatare: Stâlp 6474725 verificat, fără defecte.
+Status: executat

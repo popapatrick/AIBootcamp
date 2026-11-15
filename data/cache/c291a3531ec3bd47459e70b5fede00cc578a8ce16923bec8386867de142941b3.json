@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-R-2026-0061",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "status": "planificat",
+  "data": "2026-08-12",
+  "referinta": {
+    "adresa": "Strada Bălții nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": "14",
+      "localitate": null,
+      "reper": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "detalii": {
+    "observatii": "Nr. fișă R-2026-0061. Client nou, casă, 1 fază, 5 kW."
+  },
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id",
+    "localitate"
+  ],
+  "incredere_extractie": 0.6,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0061\nData: 2026-08-12\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Bălții nr. 14\nConstatare: Client nou, casă, 1 fază, 5 kW.\nStatus: semnalat\n"
+}

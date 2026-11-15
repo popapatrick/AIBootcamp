@@ -1,9 +1,0 @@
-DATE FICTIVE
-FIȘĂ RACORDARE – RACORD NOU
-Nr. fișă: R-2026-0080
-Data: 2026-08-29
-Cod element: nod 6419627
-Coordonate: 44.278581, 26.065090
-Adresa: str. fictivă nr. 5 (adresă fictivă)
-Nr. cadastral: CF-fictiv 300888
-Status: executat

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – RACORDĂRI
+Nr. fișă: R-2026-0070
+Data: 2026-10-30
+Echipa: racordari
+Tip lucrare: racord executat
+Cod element: -
+Coordonate: -
+Adresa: Strada Liliacului nr. 11
+Constatare: Racord executat, status executat.
+Status: executat

@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0411
+Data: 2026-09-04
+Echipa: mentenanta
+Tip lucrare: avarie
+Cod element: 6605236
+Coordonate: -
+Adresa: Strada Crinului
+Constatare: Ruptură de conductor la stâlpul 6605236, tronsonul e deconectat.
+Status: semnalat
