@@ -32,7 +32,8 @@ SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend
 # Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2), interval [min, max] în %.
 # Se măsoară DOAR pe rețea (decizia lui Victor): elementele care fac parte din rețea la acea dată = ID prezent în
 # `model._elemente()` (GIS, SIM-*, plus ce a fost adăugat/aplicat din rapoarte, căci `net` crește la aplicare), cu
-# nivelul `in_model` sau `de_verificat`. NU intră: predicțiile punctate (nivel `predictie`, `model.predictii`: element_nou,
+# nivelul `in_model` sau `de_verificat`. NU intră: elementele `scos_din_uz` (demontate sau „demontat probabil”, ex. traseul
+# vechi la o mutare de fire: nu mai sunt rețea, se afișează separat „scoase din uz: N”), predicțiile punctate (nivel `predictie`, `model.predictii`: element_nou,
 # stâlpi prezisi, PLAN-*, MUT-*), pinurile VER-* (`model.pinuri`) și elementele retrase; sunt marcaje, nu rețea.
 # Predicțiile se raportează separat, informativ.
 TINTA_DISTRIBUTIE = {"verde": (70.0, 82.0), "galben": (8.0, 15.0), "portocaliu": (5.0, 10.0), "rosu": (2.0, 6.0)}
@@ -116,8 +117,9 @@ def distributie_culori(w: dict, data: str | None = None) -> tuple[str, dict, boo
     """Rulează scenariul (calibrare.evenimente) cu ponderile `w`; la `data` (implicit ultima dată a scenariului).
 
     Întoarce (data, procente pe benzi DOAR pe rețea, în_țintă, predicții). Criteriul de rețea: vezi `TINTA_DISTRIBUTIE`
-    (ID în `model._elemente()` și nivel != `predictie`). `predicții` = {"n": N, "verde": .., "galben": .., "portocaliu": .., "rosu": ..}
-    (numere absolute: tot ce e în snapshot și nu e rețea: predicții punctate, pinuri, elemente neaplicate)."""
+    (ID în `model._elemente()` și nivel nici `predictie`, nici `scos_din_uz`). `predicții` = {"n": N, "verde": .., "galben": ..,
+    "portocaliu": .., "rosu": .., "scoase_din_uz": K} (numere absolute: tot ce e în snapshot și nu e rețea: predicții punctate,
+    pinuri; K = elementele `scos_din_uz`, numărate separat și NU în n/benzi)."""
     from backend.engine import osm
     from backend.engine.calibrare import evenimente
     from backend.engine.model import GridModel
@@ -130,13 +132,17 @@ def distributie_culori(w: dict, data: str | None = None) -> tuple[str, dict, boo
     retea_ids = m._elemente()
     retea = {"verde": 0, "galben": 0, "portocaliu": 0, "rosu": 0}
     pred = dict(retea)
+    scoase = 0
     for f in m.snapshot(d)["features"]:
         p = f["properties"]
+        if p["nivel"] == "scos_din_uz":
+            scoase += 1          # nu mai e rețea (demontat / „demontat probabil”): nici în procent, nici în predicții
+            continue
         in_retea = p["element_id"] in retea_ids and p["nivel"] != "predictie"
         (retea if in_retea else pred)[p["banda"]] += 1
     n = sum(retea.values()) or 1
     proc = {b: round(100 * v / n, 1) for b, v in retea.items()}
-    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items()), {"n": sum(pred.values()), **pred}
+    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items()), {"n": sum(pred.values()), **pred, "scoase_din_uz": scoase}
 
 
 def rulează_smoke() -> list[str]:
@@ -181,7 +187,7 @@ def main() -> int:
         print(f"Distribuție culori (doar rețea) la {d}: verde {p['verde']} %, galben {p['galben']} %, portocaliu {p['portocaliu']} %, "
               f"roșu {p['rosu']} % (țintă {tinta}): " + ("în țintă" if in_tinta else "în afara țintei"))
         print(f"   predicții (nu intră în procent): {pr['n']} (verde {pr['verde']}, galben {pr['galben']}, "
-              f"portocaliu {pr['portocaliu']}, roșu {pr['rosu']})")
+              f"portocaliu {pr['portocaliu']}, roșu {pr['rosu']}); scoase din uz (nu sunt rețea): {pr['scoase_din_uz']}")
         if not in_tinta and "--strict-distributie" not in sys.argv:
             print("   (informativ; devine eșec cu --strict-distributie, după calibrare)")
     if not in_tinta and "--strict-distributie" in sys.argv:

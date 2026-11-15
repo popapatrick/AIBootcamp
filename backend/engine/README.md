@@ -11,6 +11,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `model.py` | `GridModel`: apply_event, snapshot, timeline, statistici, decizia omului | `docs/etapa-5-scor-decizie.md`, `etapa-14-verificare-om.md` |
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
 | `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
+| `linie_planificata.py` | mixin `LiniePlanificata`: `_planificata` = scara 2 noduri / 2 GPS / ancoră + stradă / fereastră de stradă -> predicție punctată `PLAN-<event>` pe străzi (niciodată aplicat), `neaplicat` fără loc | `docs/etapa-27-analiza-harta.md` (secțiunea „Linie planificată”) |
 | `analiza_harta.py` | analiza hărții (V3): `traseu_pe_strazi(tinta, net, cfg, evita, preferate, exclus)` = drum pe graful de străzi OSM de la stâlpii existenți, stâlpi noi la ~40 m, alternative, acuratețe | `docs/etapa-27-analiza-harta.md` |
 | `osm.py` | traseu pe străzi, `strazi()` pentru modulele lui A (cache `data/model/osm/`) | `docs/etapa-6-traseu-osm.md` |
 | `engine.py` | interfața publică pentru API: `apply_event`, `snapshot`, `timeline`, `statistici`, `aplica_decizie`, `reset` (scenariul extrem `model_scenariu` a fost scos în sesiunea 4) | `contracts/interfaces.md` |
@@ -61,3 +62,7 @@ Adresă fără ID/coordonate -> `fereastra_strada` (backend.geo) -> candidați d
 - `mutare_fire_text.py`: regex de rezervă pe text (`intersectie_din_eveniment`, `strada_noua_din_eveniment`, `strada_din_eveniment`, `nume_canonic`); pur, fără AI.
 - `sesiune2.py`: `_centru_mutare` (centru: `detalii.centru` > coordonate > intersecție geocodată > nod din ID > stradă), `_ancore_mutare`, `_legaturi_mutare` (arbore de ocoliri pe străzi, `traseu_pe_strazi(..., evita=zona, preferate=[strada_noua])`), `_mutare_fire` (marcare, scor, aplicare P1 doar executat de mentenanță/investiții, tronsoanele aeriene vechi `scos_din_uz` = „demontat probabil”); constantele `MAX_ANCORE`, `MAX_OCOLIRE_M`. Elementele `MUT-<event>-<n>`: `predictie.metoda: traseu_pe_strazi | linie_dreapta`; un pas `analiza_harta` pe legătură. Racordare: treptele 1-2 înmulțesc scorul cu `factor` al analizei când lanțul merge pe străzi.
 - `smoke_sesiune4.py`: `teste_mutare_fire_document()` (21 de verificări). `smoke_sesiune2.py`: aserțiunea pe `predictie.metoda` a traseului propus acceptă acum `traseu_pe_strazi`/`linie_dreapta` (era `zona_mutata`).
+
+## Linie planificată și distribuția culorilor (sesiunea 4)
+- `linie_planificata.py`: vezi tabelul de mai sus; teste în `smoke_sesiune4.py::teste_linie_planificata` (15 verificări). Constantele `LINIE_IMPLICITA_M`, `LINIE_MAX_M`, `LEGAT_MAX_M` sunt în cod.
+- `verifica_reglaje.py::distributie_culori`: elementele `scos_din_uz` nu sunt rețea (nici în procent, nici în predicții); se întorc separat ca `scoase_din_uz` (`docs/calibrare.md`).

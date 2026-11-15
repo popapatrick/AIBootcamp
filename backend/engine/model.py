@@ -24,6 +24,7 @@ from backend.engine.config import load_weights
 from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
+from backend.engine.linie_planificata import LiniePlanificata
 from backend.engine.sesiune2 import TIPURI_CAUTARE, TIPURI_NOI, Sesiune2
 from backend.engine.verificare_om import VerificareOm
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
@@ -33,7 +34,7 @@ START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițial�
 MAX_MOTIVE = 8
 
 
-class GridModel(Sesiune2, VerificareOm):
+class GridModel(Sesiune2, VerificareOm, LiniePlanificata):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
         if net is None:
@@ -224,10 +225,8 @@ class GridModel(Sesiune2, VerificareOm):
             self._cerere_racordare(event, m, trace)
         elif tip == "activ_demontat":
             self._demontat(event, m, trace)
-        elif tip == "linie_planificata" and m["status"] == "potrivit":
-            self._efect_pe_element(event, m, trace)      # planificat pe un element existent: doar notă, fără schimbare
         elif tip == "linie_planificata":
-            self._planificata(event, m, trace)
+            self._planificata(event, m, trace)           # întotdeauna predicție punctată pe străzi (sau neaplicat fără loc)
         elif m["status"] == "absent_din_model" and tip in ("nod_lipsa", "racord_nou"):
             self._propune_element_nou(event, m, trace)
         elif m["status"] == "potrivit":
@@ -795,32 +794,6 @@ class GridModel(Sesiune2, VerificareOm):
         self._scor_pas(trace, "aplicat", {"scor_nou": scor, "nivel": "in_model"}, [t], sp)
 
     # ------------------------------------------------------------------ linie planificată
-    def _planificata(self, event: dict, m: dict, trace: dict):
-        w, data = self.w, event["data"]
-        noduri = [n for n in ((event.get("detalii") or {}).get("noduri") or []) if n in self.net["noduri"]]
-        trace["pasi"].append({"nume": "predictie", "incredere": None, "rezultat": None})
-        if len(noduri) < 2:
-            return self._scor_pas(trace, "neaplicat", {"nivel": None},
-                                  ["Linie planificată fără două noduri cunoscute în `detalii.noduri`: nu are geometrie."])
-        a, b = (self.net["noduri"][n] for n in noduri[:2])
-        pts = [(a["lat"], a["lon"]), (b["lat"], b["lon"])]
-        q = 1.0 if noduri else 0.7
-        sp, factori = S.scor_propunere(event, q, w)
-        sp = min(sp, round(S.plafon("id", w), 3))      # nodurile sunt date prin ID în raport
-        sid = f"PLAN-{event['event_id']}"
-        self.predictii[sid] = {"puncte": pts, "metoda": "linie_dreapta", "capete": tuple(noduri[:2]),
-                               "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}
-        txt = (f"Linie planificată între {noduri[0]} și {noduri[1]}, scor {sp}. Ce e doar planificat nu se aplică "
-               f"în model până nu e executat, indiferent de scor.")
-        st = self._pune(sid, "tronson", data, nivel="predictie" if sp >= w["praguri"]["predictie"] else "de_verificat",
-                        scor=sp, ultima_verificare=None, sursa_locatie="id", t0=False,
-                        motive=[{"text": txt, "efect": 0.0, "eveniment": event["event_id"], "data": data}],
-                        predictie={"metoda": "linie_dreapta", "urmeaza_strada": None,
-                                   "propunere": {"proprietate": "linie_planificata", "valoare": sid},
-                                   "scor_propunere": sp})
-        trace["modificari"].append(self._publica(sid, st))
-        self._scor_pas(trace, "predictie", {"scor_propunere": sp, "factori": factori, "nivel": st["nivel"]}, [txt], sp)
-
     # ------------------------------------------------------------------ ieșiri
     def _publica(self, eid: str, st: dict) -> dict:
         """ElementState (contracts/state.schema.json) pentru StepTrace."""

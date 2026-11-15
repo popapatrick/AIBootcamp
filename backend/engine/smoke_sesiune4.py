@@ -601,6 +601,100 @@ def teste_mutare_fire_document() -> None:
         verifica("mutare fire: EV4-026 indisponibil (fixture lipsă)", True)
 
 
+def teste_linie_planificata() -> None:
+    """Linie planificată: 2 noduri / 2 GPS / stradă + indiciu -> predicție punctată pe străzi (`PLAN-*`), niciodată aplicată;
+    fără loc -> neaplicat; determinist; în zona de 3 km (backend/engine/linie_planificata.py)."""
+    from backend.engine.network import dist_m
+    from backend.engine.zona import zona_ok
+
+    def plan(m, i, ref=None, det=None, inc=0.8, sursa="formular", text="test"):
+        e = ev(i, "2026-09-20", "investitii", "linie_planificata", "planificat", ref=ref, det=det, sursa=sursa, inc=inc)
+        e["text_original"] = text
+        return m.apply_event(e)
+
+    def predictie_ok(t, sid, metoda="traseu_pe_strazi"):
+        st = (t["modificari"] or [{}])[0]
+        pr = st.get("predictie") or {}
+        return (t["decizie"] == "predictie" and st.get("element_id") == sid and st["nivel"] == "predictie"
+                and pr.get("metoda") == metoda and (pr.get("propunere") or {}).get("proprietate") == "linie_planificata")
+
+    m = mk()
+    nodes = sorted(n for n in m.net["noduri"] if not n.startswith("SIM-") and not n.endswith("-casa"))
+    a = nodes[0]
+    pa = (m.net["noduri"][a]["lat"], m.net["noduri"][a]["lon"])
+    b = next(n for n in nodes[1:] if 150 <= dist_m(pa, (m.net["noduri"][n]["lat"], m.net["noduri"][n]["lon"])) <= 400)
+    pb = (m.net["noduri"][b]["lat"], m.net["noduri"][b]["lon"])
+
+    # --- 1. două noduri cunoscute: traseu pe străzi între ele, nu linie dreaptă
+    t = plan(m, "LP-1", det={"noduri": [a, b]})
+    p1 = m.predictii.get("PLAN-LP-1") or {}
+    verifica("linie planificată (2 noduri): predicție punctată PLAN-*, metoda traseu_pe_strazi, propunere linie_planificata, nu aplicat",
+             predictie_ok(t, "PLAN-LP-1") and not any(x["nivel"] == "in_model" for x in t["modificari"]), str(t["decizie"]))
+    verifica("linie planificată (2 noduri): are pas analiza_harta, capete = cele 2 noduri, geometrie pe străzi (> 2 puncte), sursa id",
+             pas(t, "analiza_harta") and p1.get("capete") == (a, b) and len(p1["puncte"]) > 2 and t["modificari"][0]["sursa_locatie"] == "id",
+             f"{len(p1.get('puncte', []))} puncte")
+    verifica("linie planificată (2 noduri): scorul nu depășește plafonul `id`; element în `predictii`, nu în rețea (PLAN-LP-1 nu e în net)",
+             t["modificari"][0]["scor"] <= m.w["plafon_locatie"]["id"] and "PLAN-LP-1" not in m._elemente())
+    t_id = plan(mk(), "LP-1b", det={}, text=f"Linie între {a} și {b}.")
+    verifica("linie planificată: ID-urile a 2 noduri din textul raportului dau același rezultat ca `detalii.noduri`", predictie_ok(t_id, "PLAN-LP-1b"))
+
+    # --- 2. două puncte GPS: traseu pe străzi între ele
+    m2 = mk()
+    t = plan(m2, "LP-2", det={"puncte": [{"lat": pa[0], "lon": pa[1]}, {"lat": pb[0], "lon": pb[1]}]})
+    p2 = m2.predictii.get("PLAN-LP-2") or {}
+    verifica("linie planificată (2 puncte GPS): predicție punctată pe străzi, sursa coordonate, geometrie cu > 2 puncte",
+             predictie_ok(t, "PLAN-LP-2") and t["modificari"][0]["sursa_locatie"] == "coordonate" and len(p2.get("puncte", [])) > 2, str(len(p2.get("puncte", []))))
+
+    # --- 3. stradă + indiciu ("între nr. 10 și 40"): segmentul de stradă din fereastră
+    m3 = mk()
+    t = plan(m3, "LP-3", ref=r_adr("Strada Crinului", None, {"tip": "intre", "numar": "40", "numar_2": "70"}), det={"lungime_m": 150})
+    p3 = m3.predictii.get("PLAN-LP-3") or {}
+    cs = pas(t, "cautare_strada")
+    verifica("linie planificată (stradă + „între nr.”): predicție pe stradă, pas cautare_strada, sursa adresa_numar, nu neaplicat",
+             predictie_ok(t, "PLAN-LP-3") and cs and t["modificari"][0]["sursa_locatie"] == "adresa_numar" and len(p3.get("puncte", [])) >= 2,
+             f"{t['decizie']} {len(p3.get('puncte', []))} puncte")
+    verifica("linie planificată (stradă): toate punctele segmentului sunt în zona de 3 km",
+             all(zona_ok(p[0], p[1], m3.net, m3.w)["ok"] for p in p3["puncte"]))
+    # fără indiciu, doar strada: segment tăiat la LINIE_MAX_M, sursa strada
+    m3b = mk()
+    t = plan(m3b, "LP-3b", ref=r_adr("Strada Crinului"))
+    p3b = m3b.predictii.get("PLAN-LP-3b") or {}
+    lung = sum(dist_m(x, y) for x, y in zip(p3b.get("puncte", []), p3b.get("puncte", [])[1:]))
+    verifica("linie planificată (doar strada): predicție, sursa strada, segment nu toată strada", predictie_ok(t, "PLAN-LP-3b")
+             and t["modificari"][0]["sursa_locatie"] == "strada", f"{lung:.0f} m")
+    # colț „până la capăt"
+    m3c = mk()
+    t = plan(m3c, "LP-3c", ref=r_adr("Strada Crinului", None, {"tip": "colt", "strada_2": "Strada Liviu Rebreanu"}),
+             text="Linie de la colțul cu Strada Liviu Rebreanu până la capăt.")
+    verifica("linie planificată („de la colț până la capăt”): predicție pe stradă, sursa intersectie", predictie_ok(t, "PLAN-LP-3c")
+             and t["modificari"][0]["sursa_locatie"] == "intersectie", f"{t['decizie']}")
+
+    # --- 4. un singur nod + stradă: de la nod de-a lungul străzii
+    m4 = mk()
+    t = plan(m4, "LP-4", ref=r_adr("Strada Crinului", None, None, element_id=a), det={"lungime_m": 120})
+    verifica("linie planificată (un nod + stradă): predicție de la nod de-a lungul străzii, sursa id", predictie_ok(t, "PLAN-LP-4")
+             and t["modificari"][0]["sursa_locatie"] == "id", f"{t['decizie']}")
+
+    # --- 5. fără loc -> neaplicat; un nod singur, fără direcție -> neaplicat
+    m5 = mk()
+    t = plan(m5, "LP-5", det={})
+    verifica("linie planificată fără niciun indiciu de loc: neaplicat, nimic pe hartă", t["decizie"] == "neaplicat" and not t["modificari"]
+             and "PLAN-LP-5" not in m5.predictii, t["decizie"])
+    t = plan(m5, "LP-5b", det={"noduri": [a]})
+    verifica("linie planificată cu un singur nod, fără stradă: neaplicat (fără direcție)", t["decizie"] == "neaplicat" and not t["modificari"], t["decizie"])
+
+    # --- niciodată in_model, determinism, zona
+    verifica("linie planificată: niciodată in_model, chiar cu sursă și extracție perfecte",
+             predictie_ok(plan(mk(), "LP-6", det={"noduri": [a, b]}, inc=1.0, sursa="tableta_coordonate"), "PLAN-LP-6"))
+    r1 = json.dumps(plan(mk(), "LP-7", ref=r_adr("Strada Crinului", None, {"tip": "intre", "numar": "40", "numar_2": "70"}))["modificari"], sort_keys=True)
+    r2 = json.dumps(plan(mk(), "LP-7", ref=r_adr("Strada Crinului", None, {"tip": "intre", "numar": "40", "numar_2": "70"}))["modificari"], sort_keys=True)
+    verifica("linie planificată: determinist (aceeași intrare, același rezultat)", r1 == r2)
+    m8 = mk()
+    t = plan(m8, "LP-8", det={"puncte": [{"lat": 44.30, "lon": 26.10}, {"lat": 44.301, "lon": 26.101}]})
+    verifica("linie planificată: capete în afara zonei de 3 km -> neaplicat, eronat în cadrul prototipului", t["decizie"] == "neaplicat"
+             and bool(t.get("eronat_prototip")) and "PLAN-LP-8" not in m8.predictii, t["decizie"])
+
+
 def main() -> None:
     w = load_weights()
     m = mk()
@@ -720,6 +814,7 @@ def main() -> None:
     teste_verificare_om()
     teste_analiza_harta()
     teste_mutare_fire_document()
+    teste_linie_planificata()
 
     ok, tot = sum(OK), len(OK)
     print(f"\nsmoke_sesiune4: {ok}/{tot} OK")
