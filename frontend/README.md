@@ -4,7 +4,7 @@ Date FICTIVE.
 
 - `plan-b/index.html`: UI complet în HTML + Leaflet, servit de FastAPI la `http://localhost:8000/ui/`. Hartă colorată după scor, predicții punctate, timeline cu play, panou „De ce?", ecranul procesului și formular de raport nou. E planul B din plan (secțiunea 7) și referința pentru Lovable.
 - `lovable-prompts.md`: cele 4 prompturi pentru Lovable.
-- `lovable-prompt-sesiune4-P1.md`, `-P2.md`, `-P3.md`, `-P4.md` (netrimis): sesiunea 4 (vezi „Sesiunea 4” mai jos).
+- `lovable-prompt-sesiune4-P1.md`, `-P2.md`, `-P3.md`, `-P4.md`: sesiunea 4 (vezi „Sesiunea 4” mai jos).
 - Notă: `plan-b/` nu folosește `?scenariu=extrem` sau `/trasee-demo` (scoase din API în sesiunea 4).
 
 ## Stare Lovable
@@ -44,7 +44,7 @@ Trei prompturi, un mesaj grupat fiecare, cu „NU SCHIMBA”, câmpuri exacte ș
 | `lovable-prompt-sesiune4-P1.md` | curățenie, hartă tip GIS (Straturi, legendă, căutare, Identificare), culori din `banda`, „Marchează verificat de om”, accesibilitate | **aplicat 15 nov.** (6,3 credite, Lovable `966a24e`) | 5-7 |
 | `lovable-prompt-sesiune4-P2.md` | pagina de intro `/`, 4 carduri „Vezi pe hartă”, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”, „Resetează demo” | **aplicat 15 nov.** (5,7 credite, Lovable `34da2bf`) | ~5 |
 | `lovable-prompt-sesiune4-P3.md` | timeline orizontal, vizualizarea „Căutare pe stradă” (accentul) și „Analiza hărții” | **aplicat 15 nov.** (5,9 credite, Lovable `f54b58c`) | ~5 |
-| `lovable-prompt-sesiune4-P4.md` | tab „Tracking echipe” (generează tură, animare, opriri colorate, aplică, rezultat înainte→după) + buton „Șterge” în Identificare | **scris, netrimis** (așteaptă decizia lui Victor) | ~5 |
+| `lovable-prompt-sesiune4-P4.md` | tab „Tracking echipe” (generează tură, animare, opriri colorate, aplică, rezultat înainte→după) + buton „Șterge” în Identificare | **trimis 15 nov.** (credite neexpuse de API; estimat ~5, de verificat în editor; Lovable `0e79a4d`) | ~5 |
 
 Buget total 15-20 credite. Nepublicat; publicare doar cu confirmarea lui Victor.
 

@@ -17,7 +17,7 @@
 
 ## 4. UI (C, Faza 3)
 
-- [x] 4.1 Prompt Lovable P4 „Tracking echipe” (netrimis până decide Victor): tab, generare, animație, rezultate pe opriri, rezumat, accesibilitate
+- [x] 4.1 Prompt Lovable P4 „Tracking echipe” (trimis 15 nov., Lovable `0e79a4d`): tab, generare, animație, rezultate pe opriri, rezumat, accesibilitate
 - [ ] 4.2 Verificare prin tunel, capturi pe board
 
 ## 5. Demo (B + C, Faza 4)
