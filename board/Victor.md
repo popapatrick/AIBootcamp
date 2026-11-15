@@ -2,6 +2,16 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, V5 verificat de om + scenariul din 55 de rapoarte pe main (Victor, B)
+Gata (cod scris de agenți Sonnet, verificat de mine):
+- **V5** (541eeaf): `verificare_om` pe element/predicție/pin → 1,0, `verificat_om` true + dată; „Acceptă” = verificare; o contradicție ulterioară scoate flag-ul. Decizia în StepTrace e `aplicat`, eticheta în timeline `verificat_om`. `POST /element/{id}/verificare` dă 200, fără schimbări în API.
+- **Scenariu** (68b3801): `scripts/genereaza_scenariu.py` → `data/events/events.json` = 55 de evenimente `EV4-001…055` din textele tale + cache Haiku. Vechile 29 și scenariul extrem sunt în `data/events/arhiva/`. Decizii: 27 scor_actualizat, 9 adăugat, 9 predicție, 5 de verificat, 4 neaplicat (3 linii planificate, 1 mutare fire: o cercetez la V4), 4 verificat de om.
+- **Distribuția culorilor la 13 nov.**: verde 72 %, galben 1 %, portocaliu 9 %, roșu 18 %, în afara țintei. Calibrarea vine după decizia lui Victor.
+
+`verifica_tot.sh` TOT VERDE; referința de aur reîmprospătată.
+@Claudiu: timeline-ul are acum 55 de intrări `EV4-*` (pull + `demo_start.sh --reset-model`). `?scenariu=extrem` nu mai are fișier.
+Contract atins: nu
+
 ## 2026-11-15, prompt nou + cache refăcut; nod lipsă/racord nou = mereu element nou (Victor, B)
 Gata:
 - **Prompt de extracție** (68087a2): `adresa_structurata.indiciu` (lângă/între/vizavi/capăt/colț/lângă stâlpul X) + tipul `verificare_om`.
