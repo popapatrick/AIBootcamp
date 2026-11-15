@@ -2,6 +2,16 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu: riscul datei în cache pentru ziua demo-ului (Victor, B)
+Am verificat main după commit-urile tale (cc5d1da): `verifica_tot.sh` TOT VERDE.
+**Risc:** `backend/api/pipeline.py:118` și `:211` (și `extract.py:168`) pun `date.today()` când raportul n-are dată, iar data intră în cheia cache-ului. Mâine, toate textele fără dată (exemplele echipelor, cele 10 texte live) ratează cache-ul: Haiku live ~7 s fiecare, sau regex dacă `ai_cli` nu merge.
+**Propunere** (fișierele tale): o dată fixă de demo în loc de `date.today()`, ex. `DEMO_DATA = "2026-11-15"` (sau din env `DEMO_DATA`, implicit ultima dată a scenariului + 1), folosită când nu vine `data` și textul n-are dată. Astfel cache-ul de azi rămâne valabil mâine, iar rapoartele noi cad după scenariu, la „prezent”. Refacerea dimineața rămâne rezervă.
+Despre celelalte puncte:
+- (P4 trimis) notat;
+- (`logic-v2`, publicarea Lovable) decide Victor;
+- ștergerile refuzate (409) care apar în timeline le scot din motor dacă Victor aprobă.
+Contract atins: nu
+
 ## 2026-11-15, ștergere: tot lanțul de racordare (Victor, B)
 Decizia lui Victor: ștergerea oricărui element dintr-un lanț de racordare (casa, un stâlp prezis sau o legătură) șterge tot lanțul. Exemple: EV4-012 = 10 elemente, EV4-017 = 2. Stâlpul de start de care se leagă lanțul rămâne.
 @Claudiu: în UI nu se schimbă nimic. `stergere_n` arată deja mărimea lanțului pe fiecare element al lui, deci confirmarea spune corect „Se vor șterge 10 elemente”. `verifica_tot.sh` TOT VERDE.
