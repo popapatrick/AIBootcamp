@@ -121,3 +121,28 @@ paths:
       summary: "Sesiunea 4: benzile de culoare (din weights.culori), stilurile de linie și insignele, cu texte în română"
       responses:
         "200": {description: "{benzi: [{banda, de_la, culoare, text}], linii: [{stil, text}], insigne: [{cod, text}]}", content: {application/json: {schema: {type: object}}}}
+  /tracking/genereaza:
+    post:
+      summary: "Sesiunea 4b: generează o tură simulată a tabletei unei echipe (3–5 stâlpi existenți + un loc fără stâlp, pe străzi, determinist pe seed). NU schimbă modelul."
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, required: [echipa], properties: {echipa: {type: string, enum: [mentenanta, investitii, racordari]}, seed: {type: string, description: "implicit `<echipa>-<data>`"}, data: {type: string, format: date}}}}}
+      responses:
+        "200": {description: "tura: {tura_id, echipa, data, seed, puncte: [{t, lat, lon}], plan: [{lat, lon, durata_min, tip_plan: stalp|fara_stalp|scurta, element_id?}], lungime_m, durata_min}. `plan` e doar pentru depanare; motorul detectează singur opririle", content: {application/json: {schema: {type: object}}}}
+        "422": {description: echipă necunoscută sau dată invalidă}
+  /tracking/aplica:
+    post:
+      summary: "Sesiunea 4b: aplică o tură în model (eveniment tracking_tura, sursa tracking_gps). Opririle se detectează din puncte; validare = stâlp confirmat, oprire lungă fără stâlp = stâlp presupus (predicție punctată TRK-*)"
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, properties: {tura_id: {type: string, description: "o tură generată (sau din scenariu) cunoscută de server"}, tura: {type: object, description: "sau tura întreagă, ca la /tracking/genereaza"}, data: {type: string, format: date}}}}}
+      responses:
+        "200": {description: "StepTrace (vezi contracts/interfaces.md) + `tracking`: [{lat, lon, inceput, durata_min, tip: validare|stalp_presupus|scurta|neclara, element_id?, scor_inainte?, scor_dupa?, banda_inainte?, banda_dupa?, t_ajungere}] (t_ajungere = secunde de la începutul turei, ca UI-ul să dezvăluie rezultatul când tableta ajunge la oprire) + `focus` {lat, lon, zoom, bbox} al turei. Aplicată a doua oară = fără dublare", content: {application/json: {schema: {type: object}}}}
+        "404": {description: tura_id necunoscut}
+        "422": {description: corp invalid (nici tura_id, nici tura)}
+        "501": {description: motorul real nu e disponibil (mod stub)}
+  /tracking/ture:
+    get:
+      summary: "Sesiunea 4b: turele generate în sesiunea curentă și cele din scenariu (fără puncte, doar rezumat)"
+      responses:
+        "200": {description: "listă {tura_id, echipa, data, seed, aplicata: bool, durata_min, lungime_m, n_puncte}", content: {application/json: {schema: {type: array, items: {type: object}}}}}

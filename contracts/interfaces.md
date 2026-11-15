@@ -153,6 +153,24 @@ Patrick nu participă: `backend/extract`, `backend/geo`, `backend/trace`, `backe
 
 **UI (Lovable).** Nu afișează coduri (`in_model`, `predictie`, `generat_model`): culoare din `banda`, linie plină (în rețea) / punctată (predicție) / gri punctat (demontat probabil), insigne „GIS”, „Din raport”, „Verificat de om”. Fără bannerul „DATE FICTIVE” pe hartă.
 
+## Sesiunea 4b: tracking echipe (commit `contract:`, B; planul: `docs/plan-tracking-echipe.md`)
+Funcție independentă de rapoarte (nu e „traseul de ultima oră”, scos): o tură simulată a tabletei unei echipe, generată determinist pe străzi OSM.
+
+**Eveniment.** `tip: tracking_tura`, `echipa_sursa` = `mentenanta|investitii|racordari`, `tip_sursa_pondere: tracking_gps` (`fiabilitate_sursa.tracking_gps` 0,60). `detalii.tura {tura_id, seed, echipa, puncte: [{t, lat, lon}]}`; opririle NU sunt în eveniment, motorul le detectează din puncte cu `backend.trace.gaseste_opriri` (`trace.raza_oprire_m`, `trace.durata_min_min`).
+
+**Chei noi în `weights.yaml`** (secțiunea `tracking`, limite în `weights.limits.yaml`, reglabile cu `reglaj:`): `durata_validare_min` 5, `raza_validare_m` 15, `durata_stalp_nou_min` 12, `raza_fara_stalp_m` 25, `plafon_stalp_presupus` 0,45, `viteza_m_s` 1,4, `pas_s` 15, `zgomot_m` 5, `stalpi_min` 3, `stalpi_max` 5 (ultimele cinci le folosește generatorul). Relații verificate: `durata_validare_min < durata_stalp_nou_min`, `raza_validare_m < raza_fara_stalp_m`, `stalpi_min <= stalpi_max`.
+
+**Generator (B1, `backend/tracking/`).** `genereaza_tura(net, strazi, cfg, echipa, seed, data, scoruri=None, ora_start="08:00:00") -> {tura_id, echipa, data, seed, puncte, plan, lungime_m, durata_min, linie_dreapta}`. `plan` = `[{lat, lon, durata_min, tip_plan: stalp|fara_stalp|scurta, element_id?}]`, doar pentru depanare și teste; motorul nu îl folosește.
+
+**Motor (B2).** Oprire detectată: `< durata_validare_min` = `scurta` (ignorată); stâlp existent la `<= raza_validare_m` și durata `>= durata_validare_min` = `validare` (confirmare `scor.confirmare_teren × tracking_gps × calitate`, calitatea scade cu distanța; poziția devine GPS, plafon `plafon_locatie.coordonate`); niciun stâlp la `<= raza_fara_stalp_m` și durata `>= durata_stalp_nou_min` = `stalp_presupus` `TRK-<event>-<n>` (predicție punctată, `predictie.metoda: oprire_tracking`, scor `<= plafon_stalp_presupus`, legat pe străzi cu `analiza_harta`); altfel `neclara` (doar jurnal). Un stâlp validat de mai multe opriri din aceeași tură se numără o dată; „verificat de om” rămâne neatins (doar jurnal). Decizie: `scor_actualizat` / `predictie` / `fara_efect`; eticheta în timeline: `tracking`. Același eveniment aplicat de două ori = fără dublare.
+- `detalii.tracking` (scris de motor): `{opriri: [{lat, lon, inceput, sfarsit, durata_min, tip, element_id?, distanta_m?, scor_inainte?, scor_dupa?, banda_inainte?, banda_dupa?, motiv}], validari[], presupuneri[], ignorate, de_ce}`.
+- StepTrace: pași `opriri`, `validari_tracking` și, pentru stâlpii presupuși, `analiza_harta`.
+- `state.schema.json`: element cu `ultima_validare_tracking` (dată sau null); predicție cu `metoda: oprire_tracking`.
+
+**API (C).** `POST /tracking/genereaza {echipa, seed?, data?}` (tura, fără schimbarea modelului; `seed` implicit `<echipa>-<data>`); `POST /tracking/aplica {tura_id | tura, data?}` (StepTrace + `tracking[]` pe opriri `{lat, lon, inceput, durata_min, tip: validare|stalp_presupus|scurta|neclara, element_id?, scor_inainte?, scor_dupa?, banda_inainte?, banda_dupa?, t_ajungere}` + `focus`); `GET /tracking/ture`. Detalii: `api.openapi.yaml`. Câmpurile care vin din motor sunt null până la B2.
+
+**UI (Lovable, netrimis până decide Victor).** Tab separat „Tracking echipe” pe aceeași hartă: alegi echipa, „Generează tură”, „Pornește”; tableta se mișcă pe traseu (accelerat), rezultatul fiecărei opriri apare când tableta ajunge la ea (`t_ajungere`): stâlp confirmat „înainte → după”, stâlp presupus punctat, oprire scurtă = punct gri fără pop-up. Rezumat la final; timeline-ul arată evenimentul „Tracking echipă”. UI-ul nu afișează `tracking_gps` sau `oprire_tracking` ca atare, ci textele în română și banda.
+
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
 

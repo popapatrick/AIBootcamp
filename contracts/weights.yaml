@@ -7,6 +7,7 @@ fiabilitate_sursa:        # intră în scorul oricărei propuneri și multiplic�
   text_liber: 0.55
   apel_client: 0.25       # „nu am curent/net" poate însemna cădere, nu lipsă de rețea
   om_teren: 0.95          # decizia unui om dupa verificarea in teren (accepta/respinge o predictie)
+  tracking_gps: 0.60      # sesiunea 4b: oprire a tabletei unei echipe; mai mic decât un raport de teren
 
 scor:
   initial_element_kmz: 0.60       # nimeni nu l-a verificat recent, deci nu 1.0 (păstrat pentru compatibilitate)
@@ -195,3 +196,16 @@ mutare_fire_document:    # V4: fire mutate descrise doar în text (sens giratori
 
 demo:                    # D7
   trace_generat_activ: 0               # 0 = motorul nu mai generează traseu la raport
+
+# --- Sesiunea 4b: tracking echipe (docs/plan-tracking-echipe.md; proprietar B; valori de pornire, reglabile prin `reglaj:`) ---
+tracking:
+  durata_validare_min: 5      # sub asta oprirea nu validează (oprire scurtă, ignorată)
+  raza_validare_m: 15         # stâlp „atins” de oprire: la cel mult atât de centrul opririi
+  durata_stalp_nou_min: 12    # cât trebuie să stea într-un loc fără stâlp ca să presupunem un stâlp nou
+  raza_fara_stalp_m: 25       # niciun stâlp mai aproape de atât => loc fără stâlp
+  plafon_stalp_presupus: 0.45 # scorul maxim al unui stâlp presupus (predicție punctată)
+  viteza_m_s: 1.4             # generator: mers pe jos
+  pas_s: 15                   # generator: un punct GPS la atâtea secunde
+  zgomot_m: 5                 # generator: zgomot GPS (sigma, metri)
+  stalpi_min: 3               # generator: câți stâlpi existenți vizitează o tură (minim)
+  stalpi_max: 5               # generator: câți stâlpi existenți vizitează o tură (maxim)

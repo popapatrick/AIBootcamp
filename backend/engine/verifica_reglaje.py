@@ -27,7 +27,7 @@ LIMITS = ROOT / "contracts" / "weights.limits.yaml"
 REF = ROOT / "data" / "golden" / "calibrare-referinta.json"
 SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend.engine.smoke_engine",
           "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
-          "backend.trace.smoke_trace", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
+          "backend.trace.smoke_trace", "backend.tracking.smoke_tracking", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
 
 # Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2), interval [min, max] în %.
 # Se măsoară DOAR pe rețea (decizia lui Victor): elementele care fac parte din rețea la acea dată = ID prezent în
@@ -72,10 +72,17 @@ def verifica_valori(w: dict, limite: dict) -> list[str]:
            ("culori.portocaliu", "culori.galben"), ("culori.galben", "culori.verde"),
            ("acuratete.minim_gis", "acuratete.initial_gis"), ("acuratete.aplicat_raport_executat", "praguri.aplicat"),
            ("plafon_locatie.analiza_harta", "plafon_locatie.strada"), ("plafon_locatie.strada", "plafon_locatie.adresa_numar"),
-           ("plafon_locatie.adresa_numar", "plafon_locatie.coordonate"), ("verificat_om.minim", "verificat_om.scor")]
+           ("plafon_locatie.adresa_numar", "plafon_locatie.coordonate"), ("verificat_om.minim", "verificat_om.scor"),
+           # sesiunea 4b (tracking echipe)
+           ("tracking.durata_validare_min", "tracking.durata_stalp_nou_min"), ("tracking.raza_validare_m", "tracking.raza_fara_stalp_m")]
     for a, b in rel:
         if g(a) is not None and g(b) is not None and not g(a) < g(b):
             err.append(f"relație încălcată: {a} ({g(a)}) trebuie să fie < {b} ({g(b)})")
+    # relații cu „<=” (sesiunea 4b)
+    rel_le = [("tracking.stalpi_min", "tracking.stalpi_max")]
+    for a, b in rel_le:
+        if g(a) is not None and g(b) is not None and not g(a) <= g(b):
+            err.append(f"relație încălcată: {a} ({g(a)}) trebuie să fie <= {b} ({g(b)})")
     return err
 
 

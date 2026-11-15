@@ -38,9 +38,10 @@
         "mutare_fire",
         "activ_demontat",
         "cerere_racordare",
-        "verificare_om"
+        "verificare_om",
+        "tracking_tura"
       ],
-      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate); verificare_om (sesiunea 4) = un om marchează în teren orice element ca verificat (detalii.tinta_id), scorul devine weights.verificat_om.scor"
+      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate); verificare_om (sesiunea 4) = un om marchează în teren orice element ca verificat (detalii.tinta_id), scorul devine weights.verificat_om.scor; tracking_tura (sesiunea 4b) = tura simulată a tabletei unei echipe (detalii.tura {tura_id, seed, echipa, puncte}); motorul detectează opririle din puncte și scrie detalii.tracking: opriri lângă un stâlp existent = stâlp confirmat, opriri lungi fără stâlp = stâlp presupus (predicție)"
     },
     "referinta": {
       "type": "object",
@@ -213,9 +214,10 @@
         "formular",
         "text_liber",
         "apel_client",
-        "om_teren"
+        "om_teren",
+        "tracking_gps"
       ],
-      "description": "cheia folosită în contracts/weights.yaml"
+      "description": "cheia folosită în contracts/weights.yaml; tracking_gps (sesiunea 4b) = poziție GPS din tura unei echipe"
     },
     "text_original": {
       "type": "string"
@@ -398,6 +400,58 @@
             "null"
           ],
           "description": "verificare_om: elementul verificat"
+        },
+        "tura": {
+          "type": "object",
+          "description": "Doar pentru tip=tracking_tura (sesiunea 4b): tura simulată a tabletei. Opririle NU sunt date aici: motorul le detectează din puncte (backend.trace.gaseste_opriri).",
+          "required": [
+            "tura_id",
+            "puncte"
+          ],
+          "properties": {
+            "tura_id": {
+              "type": "string",
+              "description": "stabil, derivat din echipă + dată + seed"
+            },
+            "seed": {
+              "type": "string"
+            },
+            "echipa": {
+              "enum": [
+                "mentenanta",
+                "investitii",
+                "racordari"
+              ]
+            },
+            "puncte": {
+              "type": "array",
+              "description": "puncte GPS cronologice, câte unul la tracking.pas_s secunde",
+              "items": {
+                "type": "object",
+                "required": [
+                  "t",
+                  "lat",
+                  "lon"
+                ],
+                "properties": {
+                  "t": {
+                    "type": "string",
+                    "description": "ISO datetime"
+                  },
+                  "lat": {
+                    "type": "number"
+                  },
+                  "lon": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tracking": {
+          "type": "object",
+          "description": "Scris de motor (sesiunea 4b, tracking_tura): {opriri: [{lat, lon, inceput, sfarsit, durata_min, tip: validare|stalp_presupus|scurta|neclara, element_id?, distanta_m?, scor_inainte?, scor_dupa?, banda_inainte?, banda_dupa?, motiv}], validari: [element_id], presupuneri: [element_id TRK-*], ignorate: N, de_ce}. Nu se completează de extracție."
         },
         "intersectie": {
           "type": [

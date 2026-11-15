@@ -47,6 +47,14 @@
       ],
       "format": "date"
     },
+    "ultima_validare_tracking": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Sesiunea 4b: data ultimei validări prin oprirea unei echipe lângă element (eveniment tracking_tura, sursa tracking_gps); null dacă nu a fost validat prin tracking. Nu înlocuiește ultima_verificare (o validare o reîmprospătează și pe aceea)."
+    },
     "motive": {
       "type": "array",
       "description": "Lista „de ce”, cea mai recentă prima.",
@@ -94,8 +102,10 @@
             "zona_mutata",
             "pozitie_din_trace",
             "traseu_pe_strazi",
-            "cautare_strada"
-          ]
+            "cautare_strada",
+            "oprire_tracking"
+          ],
+          "description": "oprire_tracking (sesiunea 4b) = stâlp presupus dintr-o oprire lungă fără stâlp în tura unei echipe (TRK-<event>-<n>), legat de cel mai apropiat stâlp pe străzi; scor ≤ tracking.plafon_stalp_presupus"
         },
         "urmeaza_strada": {
           "type": [
