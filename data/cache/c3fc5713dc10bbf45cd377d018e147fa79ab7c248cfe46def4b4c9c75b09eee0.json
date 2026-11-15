@@ -1,0 +1,32 @@
+{
+  "event_id": "M-2026-0413",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Carpati nr. 12",
+    "adresa_structurata": {
+      "strada": "Strada Carpati",
+      "numar": "12",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp nou montat\nCod element: -\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp nou montat, necartat în GIS. Nu am coordonate.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Fișa M-2026-0413. Stâlp nou montat, necartat în GIS. Nu am coordonate."
+  }
+}

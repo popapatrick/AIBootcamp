@@ -3,9 +3,9 @@ FIȘĂ DE LUCRARE – MENTENANȚĂ
 Nr. fișă: M-2026-0413
 Data: 2026-09-14
 Echipa: mentenanta
-Tip lucrare: stâlp înlocuit
-Cod element: 6642890 (vechi)
+Tip lucrare: stâlp nou montat
+Cod element: -
 Coordonate: -
 Adresa: Strada Carpati nr. 12
-Constatare: Stâlp înlocuit cu unul nou, stâlpul vechi scos din uz.
+Constatare: Stâlp nou montat, necartat în GIS. Nu am coordonate.
 Status: executat

@@ -1,5 +1,22 @@
 # Panou laptop C
 
+## 2026-11-15, cardul 4 refăcut (lanț galben → verde → verificat de om), preview (Claudiu, C)
+Gata, după propunerea (a) a lui Victor:
+- **Cardul 4**, lanțul pe același element `NOU-EV4-023` (Strada Carpati nr. 12), verificat cu `genereaza_scenariu.py --out` (copie în scratchpad) + `engine.timeline()`:
+  1. `2026-09-14_mentenanta_14`: stâlp nou montat, doar adresa → `EV4-023` adăugat, 0,615 galben;
+  2. `2026-09-17_mentenanta_15`: verificare cu `Cod element: NOU-EV4-023` + GPS → 0,80 verde;
+  3. `2026-11-10_mentenanta_27`: `verificare_om` pe `NOU-EV4-023` → 1,0.
+
+  Cache: doar cele 3 texte noi (Haiku). `index.json` actualizat. Cardul are `data_moment` 2026-09-14 și titlul „Stâlp nou, confirmat pas cu pas”.
+- **API prin tunel:** toate endpointurile răspund. `POST /element/{id}/verificare` merge (V5 e în motor).
+- **Preview Lovable neverificat vizual:** extensia Chrome nu e conectată, iar preview-ul cere login Lovable. Rămâne verificarea manuală după `docs/demo-checklist-C.md`.
+
+`verifica_tot.sh` TOT VERDE.
+@Victor:
+1. Commitul tău cu `events.json` trebuie să includă textele acestea (`event_id` stabil: `NOU-EV4-023` depinde de ordinea rapoartelor). Dacă adaugi rapoarte înainte de 14.09, ID-ul se schimbă și pică rapoartele 2 și 3.
+2. Pentru o cerere de logică, dacă vrei: un raport `verificare` doar cu coordonate (fără ID), la 0,6 m de un stâlp nou, s-a potrivit pe tronsonul `NOU-EV4-023-6747737` (0,6 m), nu pe nodul `NOU-EV4-023` (0,7 m). La „stâlp verificat” ar trebui preferat nodul. L-am ocolit punând ID-ul în text.
+Contract atins: nu
+
 ## 2026-11-15, Lovable P3 aplicat (Claudiu, C)
 Gata: P3 aplicat: timeline orizontal, vizualizarea căutării pe stradă (fereastra din `linie`, candidații, cel ales) și a analizei hărții (apare când vine V3). 154 de teste, 5,9 credite, commit Lovable `f54b58c`, nepublicat. Total P1–P3: 17,9 credite (estimat 15–20).
 În lucru: verificarea preview-ului cu API-ul real, prin tunel.

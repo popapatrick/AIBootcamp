@@ -28,10 +28,10 @@
   },
   {
     "id": "intro-4",
-    "titlu": "Stâlp înlocuit, raportat cu adresă",
-    "descriere": "Raport cu adresă, aplicat galben; după confirmarea GPS devine verde, apoi verificat de om.",
+    "titlu": "Stâlp nou, confirmat pas cu pas",
+    "descriere": "Stâlp nou raportat doar cu adresa (galben, 0,62), confirmat apoi cu GPS (verde, 0,80) și la final verificat de om (1,0, insigna ✓).",
     "sursa": "mentenanta",
-    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: 6642890 (vechi)\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp înlocuit cu unul nou, stâlpul vechi scos din uz.\nStatus: executat\n",
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp nou montat\nCod element: -\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp nou montat, necartat în GIS. Nu am coordonate.\nStatus: executat\n",
     "data_moment": "2026-09-14",
     "focus": null
   }

@@ -180,8 +180,8 @@
     "sursa": "mentenanta",
     "data": "2026-09-14",
     "scenariu": null,
-    "element_id_asteptat": "6642890",
-    "tip_asteptat": "activ_inlocuit"
+    "element_id_asteptat": null,
+    "tip_asteptat": "nod_lipsa"
   },
   {
     "fisier": "2026-09-15_racordari_05.txt",
@@ -196,7 +196,7 @@
     "sursa": "mentenanta",
     "data": "2026-09-17",
     "scenariu": null,
-    "element_id_asteptat": "6872907",
+    "element_id_asteptat": "NOU-EV4-023",
     "tip_asteptat": "verificare"
   },
   {
@@ -412,7 +412,7 @@
     "sursa": "mentenanta",
     "data": "2026-11-10",
     "scenariu": null,
-    "element_id_asteptat": "6793869",
+    "element_id_asteptat": "NOU-EV4-023",
     "tip_asteptat": "verificare_om"
   },
   {

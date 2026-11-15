@@ -1,0 +1,34 @@
+{
+  "event_id": "EV-b3d1d681",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare_om",
+  "referinta": {
+    "adresa": "Strada Carpati nr. 12",
+    "adresa_structurata": {
+      "strada": "Strada Carpati",
+      "numar": "12",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": "NOU-EV4-023",
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-10",
+  "text_original": "DATE FICTIVE\nVerificat de om, pe teren, cu operatorul – 2026-11-10\nElement: NOU-EV4-023\nAdresa: Strada Carpati nr. 12\nConstatare: stâlpul nou confirmat la fața locului, nimic de corectat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.7,
+  "forma_sursa": "campuri",
+  "campuri_lipsa": [
+    "event_id",
+    "localitate",
+    "coordonate"
+  ],
+  "detalii": {
+    "tinta_id": "NOU-EV4-023",
+    "observatii": "Verificat de om, pe teren, cu operatorul. Stâlpul nou confirmat la fața locului, nimic de corectat."
+  }
+}
