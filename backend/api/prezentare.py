@@ -57,6 +57,8 @@ def standardizare(ev: dict, out: dict, cod: str | None = None) -> dict:
     cs, w = _pas(out, "cautare_strada"), sources_weights()
     mod = (out.get("modificari") or [{}])[0]
     sursa = mod.get("sursa_locatie") or (_pas(out, "predictie").get("sursa_locatie"))
+    if sursa == "gis":
+        sursa = None   # sursa elementului GIS potrivit, nu a raportului; ramurile de jos pun sursa raportului
     loc = None
     if cs:
         ind = cs.get("indiciu") or {}
