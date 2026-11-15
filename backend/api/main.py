@@ -4,7 +4,7 @@ Pornire:
     .venv/bin/uvicorn backend.api.main:app --reload --port 8000
 
 Endpoint-uri: /health, POST /rapoarte, GET /retea?data=, GET /evenimente, GET /element/{id}.
-Sesiunea 4: POST /element/{id}/verificare, GET /demo/exemple, POST /demo/reset, GET /legenda.
+Sesiunea 4: POST /element/{id}/verificare, POST /element/{id}/stergere, /tracking/{genereaza,aplica,ture}, GET /demo/exemple, POST /demo/reset, GET /legenda.
 În plus: /ui = UI plan B (Leaflet), /date = datele instantaneelor disponibile.
 """
 from __future__ import annotations
@@ -203,6 +203,69 @@ def verificare(element_id: str, v: Verificare | None = None) -> dict:
         raise HTTPException(404, str(e))
     except NotImplementedError as e:
         raise HTTPException(501, str(e))
+
+
+class Stergere(BaseModel):
+    motiv: str | None = None
+    data: _date | None = None
+
+
+@app.post("/element/{element_id}/stergere")
+def stergere(element_id: str, s: Stergere | None = None) -> dict:
+    """Un om șterge un element adăugat de sistem (și tot grupul lui: lanț de racordare, stâlp + legături). Întoarce StepTrace
+    (`decizie: sters`, `stergere {tinta_id, elemente[], n, motiv}`). 404 necunoscut; 409 `nu_se_sterge_retea_start`
+    (GIS/SIM-*) sau `deja_sters`; 501 fără motor real."""
+    s = s or Stergere()
+    try:
+        return pipeline.stergere(element_id, s.motiv, s.data.isoformat() if s.data else None)
+    except pipeline.StergereEroare as e:
+        raise HTTPException(404 if e.cod == "necunoscut" else 409, f"{e.cod}: {e}")
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
+
+
+class TuraCerere(BaseModel):
+    echipa: Literal["mentenanta", "investitii", "racordari"]
+    seed: str | None = None
+    data: _date | None = None
+
+
+class TuraAplica(BaseModel):
+    tura_id: str | None = None
+    tura: dict | None = None
+    data: _date | None = None
+
+
+@app.post("/tracking/genereaza")
+def tracking_genereaza(c: TuraCerere) -> dict:
+    """Generează o tură simulată a tabletei unei echipe (determinist pe seed, pe străzi); NU schimbă modelul.
+    Întoarce {tura_id, echipa, data, seed, puncte[{t, lat, lon}], plan[...], lungime_m, durata_min, ...}. 422 tură imposibilă."""
+    try:
+        return pipeline.tracking_genereaza(c.echipa, c.seed, c.data.isoformat() if c.data else None)
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
+@app.post("/tracking/aplica")
+def tracking_aplica(a: TuraAplica) -> dict:
+    """Aplică o tură în model (`tracking_tura`). StepTrace + `tracking[]` (opriri, `t_ajungere` în secunde de la start) + `focus`.
+    404 tura_id necunoscut; 422 fără `tura_id` și `tura`; 501 fără motor real. A doua aplicare = `fara_efect`."""
+    try:
+        return pipeline.tracking_aplica(a.tura_id, a.tura, a.data.isoformat() if a.data else None)
+    except pipeline.TuraLipsa as e:
+        raise HTTPException(404, str(e))
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
+    except (ValueError, KeyError) as e:
+        raise HTTPException(422, str(e))
+
+
+@app.get("/tracking/ture")
+def tracking_ture() -> list[dict]:
+    """Turele din sesiune și din scenariu (fără puncte): {tura_id, echipa, data, seed, aplicata, durata_min, lungime_m, n_puncte}."""
+    return pipeline.tracking_ture()
 
 
 @app.get("/date")

@@ -59,6 +59,50 @@ def sesiunea4(c, apply, rn) -> None:
     print("sesiunea 4: standardizare, focus, legenda, verificare", r.status_code, "ok")
 
 
+def tracking_stergere(c) -> None:
+    """Etapa 35: /tracking/{genereaza,aplica,ture} și POST /element/{id}/stergere (doar cu motor real); resetează modelul la final."""
+    assert c.post("/demo/reset").status_code == 200
+    assert c.post("/tracking/genereaza", json={"echipa": "gresita"}).status_code == 422
+    assert c.post("/tracking/aplica", json={}).status_code == 422
+    assert c.post("/tracking/aplica", json={"tura_id": "TURA-NU-EXISTA"}).status_code == 404
+    r = c.post("/tracking/genereaza", json={"echipa": "mentenanta", "seed": "smoke", "data": "2026-11-15"})
+    assert r.status_code == 200, r.text
+    t = r.json()
+    assert t["tura_id"] and len(t["puncte"]) > 100 and t["echipa_eticheta"] == "Mentenanță", t["tura_id"]
+    assert c.post("/tracking/genereaza", json={"echipa": "mentenanta", "seed": "smoke", "data": "2026-11-15"}).json()["tura_id"] == t["tura_id"]
+    lst = {x["tura_id"]: x for x in c.get("/tracking/ture").json()}
+    assert lst[t["tura_id"]]["aplicata"] is False and "puncte" not in lst[t["tura_id"]] and any(x["aplicata"] for x in lst.values())
+    a = c.post("/tracking/aplica", json={"tura_id": t["tura_id"]})
+    assert a.status_code == 200, a.text
+    a = a.json()
+    tipuri = {o["tip"] for o in a["tracking"]}
+    assert "validare" in tipuri and "stalp_presupus" in tipuri, tipuri
+    assert all(o["t_ajungere"] is not None and o["eticheta"] for o in a["tracking"]) and a["focus"]["bbox"], a["tracking"][:1]
+    v = next(o for o in a["tracking"] if o["tip"] == "validare")
+    assert {"element_id", "scor_inainte", "scor_dupa", "banda_inainte", "banda_dupa"} <= set(v), v
+    assert [o["t_ajungere"] for o in a["tracking"]] == sorted(o["t_ajungere"] for o in a["tracking"])
+    assert next(x for x in c.get("/tracking/ture").json() if x["tura_id"] == t["tura_id"])["aplicata"] is True
+    assert c.post("/tracking/aplica", json={"tura_id": t["tura_id"]}).json()["decizie"] == "fara_efect"
+    assert any(e.get("eticheta_text") == "Tracking echipă" for e in c.get("/evenimente").json())
+    # ștergere: stâlpul presupus TRK-* (șters cu tot grupul), 409 pe SIM/GIS și pe deja șters, 404 necunoscut
+    trk = next(o["element_id"] for o in a["tracking"] if o["tip"] == "stalp_presupus")
+    ps = {f["properties"]["element_id"]: f["properties"] for f in c.get("/retea").json()["features"]}
+    assert ps[trk]["stergibil"] is True and ps[trk]["stergere_n"] >= 1, ps[trk]
+    sim = next(i for i in ps if i.startswith("SIM-"))
+    gis = next(i for i, p in ps.items() if p.get("origine") == "retea_start" and not i.startswith("SIM-"))
+    assert ps[sim]["stergibil"] is False
+    assert c.post(f"/element/{sim}/stergere").status_code == 409 and c.post(f"/element/{gis}/stergere").status_code == 409
+    assert c.post("/element/NU-EXISTA/stergere").status_code == 404
+    d = c.post(f"/element/{trk}/stergere", json={"motiv": "smoke"})
+    assert d.status_code == 200, d.text
+    d = d.json()
+    assert d["decizie"] == "sters" and d["stergere"]["n"] == ps[trk]["stergere_n"] and trk in d["stergere"]["elemente"], d["stergere"]
+    assert c.post(f"/element/{trk}/stergere").status_code == 409
+    assert any(e.get("eticheta_text") == "Ștergere" for e in c.get("/evenimente").json())
+    assert c.post("/demo/reset").status_code == 200 and not any(x["tura_id"] == t["tura_id"] for x in c.get("/tracking/ture").json())
+    print("tracking + ștergere: ok", len(a["tracking"]), "opriri;", d["stergere"]["n"], "elemente șterse")
+
+
 def main() -> None:
     c = TestClient(app)
     apply = sources.engine_func("apply_event")
@@ -268,6 +312,8 @@ def main() -> None:
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
     sesiunea4(c, apply, rn)
     assert c.get("/ui/").status_code == 200
+    if apply:
+        tracking_stergere(c)
     print("OK: API")
 
 

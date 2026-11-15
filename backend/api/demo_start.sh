@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Pornește API (uvicorn) + tunel cloudflared și afișează linkul de demo.
-# Folosire: demo_start.sh [--port N] [--restart] [--reset-model]
+# Folosire: demo_start.sh [--port N] [--restart] [--reset-model] [--tunel-nou]
 #   --restart      oprește și repornește uvicorn de pe port, apoi asigură tunelul
 #   --reset-model  doar repornește uvicorn (model curat); tunelul rămâne
+#   --tunel-nou    omoară cloudflared-ul vechi și pornește tunel nou (link nou)
+#   Dacă tunelul salvat nu răspunde la /health (~10 s), se face tunel nou automat.
 set -u
-PORT=8000; RESTART=0; RESET=0
+PORT=8000; RESTART=0; RESET=0; NOU=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --port) PORT="$2"; shift;;
-    --restart) RESTART=1;; --reset-model) RESET=1;;
+    --restart) RESTART=1;; --reset-model) RESET=1;; --tunel-nou) NOU=1;;
     [0-9]*) PORT="$1";;
     *) echo "opțiune necunoscută: $1"; exit 1;;
   esac; shift
@@ -38,7 +40,18 @@ echo "API: $(health)"
 if [ $RESET = 1 ] && [ -s "$URLF" ]; then
   echo "Model resetat; tunelul rămâne."
 else
-  if ! pgrep -f "cloudflared tunnel .*--url http://localhost:$PORT\$" >/dev/null; then
+  TPAT="cloudflared tunnel .*--url http://localhost:$PORT\$"
+  url_ok() { curl -fsS -m 3 "$1/health" >/dev/null 2>&1; }
+  wait_ok() { for _ in $(seq "$2"); do url_ok "$1" && return 0; sleep 1; done; return 1; }
+  if pgrep -f "$TPAT" >/dev/null; then
+    OLD="$(cat "$URLF" 2>/dev/null)"
+    if [ $NOU = 1 ] || [ -z "$OLD" ] || ! wait_ok "$OLD" 10; then
+      echo "Tunel vechi mort sau cerut nou: îl opresc și pornesc altul."
+      pkill -f "$TPAT"; sleep 1; rm -f "$URLF"
+    fi
+  fi
+  if ! pgrep -f "$TPAT" >/dev/null; then
+    rm -f "$URLF"
     setsid nohup "$HOME/.local/bin/cloudflared" tunnel --no-autoupdate --url "http://localhost:$PORT" >"$LOG_TUN" 2>&1 &
   fi
   URL=""
@@ -47,6 +60,7 @@ else
     [ -n "$URL" ] && break; sleep 1
   done
   [ -n "$URL" ] || { echo "Nu am găsit URL-ul tunelului, vezi $LOG_TUN"; exit 1; }
+  wait_ok "$URL" 30 || { echo "Tunelul $URL nu răspunde la /health (30 s); rulează din nou cu --tunel-nou"; exit 1; }
   echo "$URL" > "$URLF"
 fi
 URL="$(cat "$URLF")"

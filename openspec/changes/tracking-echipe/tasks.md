@@ -13,11 +13,11 @@
 
 ## 3. API (C, Faza 2)
 
-- [ ] 3.1 `POST /tracking/genereaza`, `POST /tracking/aplica` (cu `tracking[]` pe opriri și `t_ajungere`), `GET /tracking/ture`; teste în `smoke_api.py`; `docs/etapa-33-api-tracking.md`
+- [x] 3.1 `POST /tracking/genereaza`, `POST /tracking/aplica` (cu `tracking[]` pe opriri și `t_ajungere`), `GET /tracking/ture`; teste în `smoke_api.py`; `docs/etapa-35-api-tracking-stergere.md`
 
 ## 4. UI (C, Faza 3)
 
-- [ ] 4.1 Prompt Lovable P4 „Tracking echipe” (netrimis până decide Victor): tab, generare, animație, rezultate pe opriri, rezumat, accesibilitate
+- [x] 4.1 Prompt Lovable P4 „Tracking echipe” (netrimis până decide Victor): tab, generare, animație, rezultate pe opriri, rezumat, accesibilitate
 - [ ] 4.2 Verificare prin tunel, capturi pe board
 
 ## 5. Demo (B + C, Faza 4)

@@ -1,5 +1,11 @@
 # Panou laptop C
 
+## 2026-11-15, API tracking + ștergere gata, prompt Lovable P4 scris (Claudiu, C)
+Gata: `POST /tracking/genereaza`, `GET /tracking/ture`, `POST /tracking/aplica` (`tracking[]` cu `t_ajungere` în secunde + `eticheta` română + `focus`), `POST /element/{id}/stergere` (409 `nu_se_sterge_retea_start`/`deja_sters`, 404 `necunoscut`), `eticheta_text` pe `/evenimente` („Tracking echipă”, „Ștergere”), `DECIZII["sters"]` = „Șters de om”; `/demo/reset` golește turele. Teste în `smoke_api.py` (OK: API), `verifica_tot.sh` TOT VERDE, banc_logica 0 erori. Doc: `docs/etapa-35-api-tracking-stergere.md`. Tasks 3.1 și 4.1 bifate (`tracking-echipe`).
+@Victor: **P4 gata de trimis, așteaptă decizia ta** (`frontend/lovable-prompt-sesiune4-P4.md`: tab „Tracking echipe” + buton „Șterge”, ~5 credite, cu exemple JSON reale). Netrimis la Lovable.
+Observație: o ștergere refuzată (409) e jurnalizată de motor ca „Ștergere neaplicată” și apare în timeline; dacă nu vrei asta, e de oprit în motor (B).
+Contract atins: nu
+
 ## 2026-11-15, cardul 2 mutat (Crinului × Rebreanu) + localizarea în prezentare reparată (Claudiu, C)
 Gata, după cererea lui Victor:
 - `data/reports/2026-10-10_mentenanta_29.txt`, cu textul tău; intrarea e în `index.json` după `2026-10-08_mentenanta_20` (57 de rapoarte). Cache Haiku: `mutare_fire`.

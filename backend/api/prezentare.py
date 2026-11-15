@@ -11,7 +11,10 @@ ECHIPE = {"mentenanta": "Mentenanță", "investitii": "Investiții", "racordari"
 METODE = {"ai_cache": "AI (cache)", "ai_cli": "AI (live)", "ai_api": "AI (live)", "regex": "Regex (simplificat)"}
 DECIZII = {"aplicat": "Aplicat în rețea", "scor_actualizat": "Scor actualizat", "predictie": "Propunere (neaplicată)",
            "neaplicat": "Neaplicat", "fara_efect": "Fără efect", "verificare": "Verificat", "conflict": "Conflict marcat",
-           "de_verificat": "De verificat"}
+           "de_verificat": "De verificat", "sters": "Șters de om"}
+ETICHETE_TIMELINE = {"tracking": "Tracking echipă", "stergere": "Ștergere", "verificat_om": "Verificat de om",
+                     "decizie_om": "Decizie om", "mutare_fire": "Mutare fire", "demontat": "Demontat",
+                     "val_apeluri": "Val de apeluri", "racordare": "Racordare"}
 BANDE = {"verde": "Sigur", "galben": "Probabil", "portocaliu": "Nesigur", "rosu": "Foarte nesigur"}
 _COLORI = {"verde": "#2e9e4f", "galben": "#e6c229", "portocaliu": "#f08a24", "rosu": "#d64545"}
 _CAMPURI = [("tip", "Tip eveniment"), ("status", "Stare lucrare"), ("element_id", "Element (ID)"),

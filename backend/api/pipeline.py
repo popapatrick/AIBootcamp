@@ -444,6 +444,136 @@ def verificare(element_id: str, motiv: str | None = None, data: str | None = Non
     return out
 
 
+class StergereEroare(Exception):
+    """Motorul a refuzat ștergerea; `cod` = trace.eroare.cod (nu_se_sterge_retea_start | deja_sters | necunoscut)."""
+
+    def __init__(self, cod: str, mesaj: str):
+        super().__init__(mesaj)
+        self.cod = cod
+
+
+def stergere(element_id: str, motiv: str | None = None, data: str | None = None) -> dict:
+    """Un om șterge un element adăugat de sistem: Event `stergere_om` (om_teren) dat lui `apply_event`. Întoarce StepTrace
+    (`decizie: sters`, `stergere {tinta_id, elemente[], n, motiv}`). Ridică StergereEroare dacă motorul refuză (-> 409/404);
+    FaraSuport dacă motorul real lipsește (-> 501)."""
+    apply = sources.engine_func("apply_event")
+    if not apply:
+        raise FaraSuport("ștergerea cere motorul real (apply_event)")
+    _dec_counter[0] += 1
+    ev = {"event_id": f"EV-STG-{_dec_counter[0]:03d}", "tip": "stergere_om", "echipa_sursa": "om_teren",
+          "data": data or date.today().isoformat(), "text_original": f"Șters de om: {element_id}" + (f" ({motiv})" if motiv else ""),
+          "detalii": {"tinta_id": element_id, "motiv": motiv}}
+    out = apply(ev)
+    err = out.get("eroare")
+    if err:
+        raise StergereEroare(err["cod"], err.get("mesaj", ""))
+    out["mod"] = sources.mod()
+    out.setdefault("schimbari", [])
+    evente_live[ev["event_id"]] = ev
+    return out
+
+
+# --- Tracking echipe (sesiunea 4b): turele generate în sesiune, în memorie; `reset()` le șterge ---
+_ture: dict[str, dict] = {}        # tura_id -> {tura, aplicata}
+ECHIPE_TRACKING = ("mentenanta", "investitii", "racordari")
+
+
+class TuraLipsa(Exception):
+    """tura_id necunoscut (-> 404)."""
+
+
+def _ture_scenariu() -> dict[str, dict]:
+    """Turele din data/events/ture-tracking.json (deja aplicate de scenariu), fără puncte în listă."""
+    d = sources.ROOT / "data" / "events" / "ture-tracking.json"
+    if not d.exists():
+        return {}
+    import json
+    return {t["tura"]["tura_id"]: t["tura"] for t in json.loads(d.read_text(encoding="utf-8"))}
+
+
+def _rezumat_tura(t: dict, aplicata: bool) -> dict:
+    return {"tura_id": t["tura_id"], "echipa": t["echipa"], "echipa_eticheta": prezentare.eticheta_echipa(t["echipa"]),
+            "data": t["data"], "seed": t["seed"], "aplicata": aplicata, "durata_min": t["durata_min"],
+            "lungime_m": t["lungime_m"], "n_puncte": len(t["puncte"])}
+
+
+def tracking_genereaza(echipa: str, seed: str | None = None, data: str | None = None) -> dict:
+    """Generează (fără să schimbe modelul) o tură simulată cu `backend.tracking.genereaza_tura`, cu scorurile curente
+    ale modelului (stâlpi nu-verzi preferați), și o ține în memorie. Ridică ValueError (-> 422) la echipă/dată invalide
+    sau tură imposibilă; FaraSuport (-> 501) fără motor real."""
+    if echipa not in ECHIPE_TRACKING:
+        raise ValueError(f"echipă necunoscută: {echipa}")
+    data = data or date.today().isoformat()
+    date.fromisoformat(data)
+    if sources.engine_func("apply_event") is None:
+        raise FaraSuport("tracking cere motorul real")
+    from backend.engine import engine as eng, osm
+    from backend.tracking import genereaza_tura
+    m = eng.get_model()
+    scoruri = {k: v[-1]["scor"] for k, v in m.istoric.items() if v}
+    t = genereaza_tura(m.net, osm.strazi(), m.w, echipa, seed or f"{echipa}-{data}", data, scoruri=scoruri)
+    t["echipa_eticheta"] = prezentare.eticheta_echipa(echipa)
+    _ture[t["tura_id"]] = {"tura": t, "aplicata": False}
+    return t
+
+
+def tracking_ture() -> list[dict]:
+    """Turele din sesiune (generate la cerere) și din scenariu, fără puncte: `{tura_id, echipa, data, seed, aplicata, ...}`."""
+    sc = _ture_scenariu()
+    out = [_rezumat_tura(t, True) for i, t in sc.items() if i not in _ture]
+    out += [_rezumat_tura(x["tura"], x["aplicata"]) for x in _ture.values()]
+    return sorted(out, key=lambda r: (r["data"], r["tura_id"]))
+
+
+def _t_sec(tura: dict, iso: str | None) -> int | None:
+    from datetime import datetime
+    if not iso or not tura.get("puncte"):
+        return None
+    return round((datetime.fromisoformat(iso) - datetime.fromisoformat(tura["puncte"][0]["t"])).total_seconds())
+
+
+def tracking_aplica(tura_id: str | None, tura: dict | None, data: str | None = None) -> dict:
+    """Aplică o tură în model: Event `tracking_tura` (`tracking_gps`) dat lui `apply_event`. Întoarce StepTrace plus
+    `tracking[]` (opririle, cu `t_ajungere` în secunde de la începutul turei și `eticheta`) și `focus` (bbox-ul turei).
+    Ridică TuraLipsa (-> 404) la tura_id necunoscut, ValueError (-> 422) fără tura_id și fără tura, FaraSuport (-> 501)."""
+    if tura is None:
+        if not tura_id:
+            raise ValueError("trimite `tura_id` sau `tura`")
+        tura = (_ture.get(tura_id) or {}).get("tura") or _ture_scenariu().get(tura_id)
+        if tura is None:
+            raise TuraLipsa(f"tură necunoscută: {tura_id}")
+    apply = sources.engine_func("apply_event")
+    if not apply:
+        raise FaraSuport("tracking cere motorul real (apply_event)")
+    _dec_counter[0] += 1
+    ev = {"event_id": f"EV-TRK-{_dec_counter[0]:03d}", "tip": "tracking_tura", "echipa_sursa": tura["echipa"],
+          "tip_sursa_pondere": "tracking_gps", "data": data or tura["data"],
+          "text_original": f"Tura de tracking a echipei {tura['echipa']}", "detalii": {"tura": tura}}
+    out = apply(ev)
+    out["mod"] = sources.mod()
+    out.setdefault("schimbari", [])
+    pas = next((p for p in out.get("pasi", []) if p.get("nume") == "opriri"), {})
+    out["tracking"] = [{**o, "t_ajungere": _t_sec(tura, o.get("inceput")),
+                        "eticheta": TIP_OPRIRE.get(o.get("tip"))}
+                       for o in (pas.get("rezultat") or {}).get("opriri", [])]
+    pts = [(p["lat"], p["lon"]) for p in tura["puncte"]]
+    if pts:
+        d_lat, d_lon = 30 / 111_000, 30 / 80_000
+        b = {"lat_min": min(p[0] for p in pts) - d_lat, "lat_max": max(p[0] for p in pts) + d_lat,
+             "lon_min": min(p[1] for p in pts) - d_lon, "lon_max": max(p[1] for p in pts) + d_lon}
+        b = {k: round(v, 6) for k, v in b.items()}
+        out["focus"] = {"lat": round((b["lat_min"] + b["lat_max"]) / 2, 6), "lon": round((b["lon_min"] + b["lon_max"]) / 2, 6),
+                        "zoom": 16, "bbox": b}
+    if tura["tura_id"] in _ture and out.get("decizie") != "fara_efect":
+        _ture[tura["tura_id"]]["aplicata"] = True
+    evente_live[ev["event_id"]] = ev
+    return out
+
+
+TIP_OPRIRE = {"validare": "Stâlp confirmat", "stalp_presupus": "Stâlp presupus", "scurta": "Oprire scurtă",
+              "neclara": "Oprire neclară"}
+
+
 def reset() -> int:
     """Reface modelul la starea de start (motorul reîncarcă evenimentele) și șterge rapoartele live. Întoarce nr. de evenimente."""
     f = sources.engine_func("reset")
@@ -452,6 +582,7 @@ def reset() -> int:
     f()
     _live.clear()
     evente_live.clear()
+    _ture.clear()
     return len(sources.evenimente())
 
 
@@ -471,6 +602,7 @@ def imbogateste_evenimente(items: list[dict]) -> list[dict]:
         e = dict(it)
         e.setdefault("text_original", ev.get("text_original"))
         e.setdefault("echipa", prezentare.eticheta_echipa(ev.get("echipa_sursa")))
+        e.setdefault("eticheta_text", prezentare.ETICHETE_TIMELINE.get(e.get("eticheta")))
         sch = e.get("schimbari") or []
         e.setdefault("banda_inainte", (sch[0].get("banda_inainte") if sch else None))
         e.setdefault("banda_dupa", (sch[0].get("banda_dupa") if sch else None))
