@@ -1,0 +1,14 @@
+Corectează 2 defecte. NU schimba altceva: nu atinge URL-ul API (vine doar din `?api=`), textele rămân în română, nu șterge teste, nu modifica culorile sau logica hărții.
+
+1. Eroare la demontarea hărții. Flux: pagina de start, card „Vezi pe hartă", apoi „Pagina de start" => „Pagina nu s-a încărcat", consolă: `TypeError: Cannot read properties of undefined (reading '_leaflet_pos')`. Cauză: ReteaMap (`src/components/ReteaMap.tsx`) face `flyToBounds`/`flyTo` (efectele pentru `focusIds`, `vizualizare`, `rezultatHarta`) și `setTimeout`, iar la demontare cleanup-ul din efectul de inițializare apelează doar `m.remove()`; animația de zoom/pan și timerele Leaflet rulează după ce harta e distrusă. Fix:
+   - În cleanup-ul efectului de inițializare: mai întâi `m.stop()`, `m.off()`, apoi `m.remove()`, apoi `map.current = null`; setează un ref `demontat.current = true` (resetat la `false` la inițializare).
+   - Efectul `rezultatHarta`: stochează `delay` și `expiry` (există deja) și în cleanup adaugă `m.stop()` dacă a pornit un zoom animat din acel efect; efectul principal cu `data`: la cleanup `m.stop()` dacă a pornit `flyToBounds`.
+   - Înainte de orice `flyTo`/`flyToBounds`/`fitBounds`/`setView`/`setZoom` verifică că harta e montată: `const viu = (m: L.Map) => !demontat.current && !!(m as any)._mapPane && !!m.getContainer()?.isConnected;` și sari peste apel dacă `!viu(m)`. Aplică și în callback-urile `show`, `frame` (requestAnimationFrame) și `showPopups`.
+   - În `src/routes/harta.tsx`: la demontarea paginii (cleanup `useEffect`) golește `presentationTimers` (`forEach(clearTimeout)`) și `debounceEvent`.
+   - Test unitar (vitest, fără browser real): montezi ReteaMap cu `data` și `focusIds`, declanșezi o animație, demontezi imediat, avansezi timerele (`vi.useFakeTimers()`, `vi.runAllTimers()`); nu trebuie aruncată nicio eroare.
+
+2. Pictograme Leaflet implicite lipsă (404 pe `marker-icon.png` și `marker-shadow.png`, pe cardul 2). Unele locuri folosesc `L.marker` fără `icon` (verifică `src/components/actiuni/overlay.ts` liniile ~20, 44, 57 și `src/components/tracking-map.ts` liniile ~26, 27, 39). Fix: în `src/components/ReteaMap.tsx` (și o singură dată, la nivel de modul) importă imaginile din pachet și setează-le:
+   `import markerIcon from "leaflet/dist/images/marker-icon.png"; import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png"; import markerShadow from "leaflet/dist/images/marker-shadow.png"; delete (L.Icon.Default.prototype as any)._getIconUrl; L.Icon.Default.mergeOptions({ iconUrl: markerIcon, iconRetinaUrl: markerIcon2x, shadowUrl: markerShadow });`
+   Aspectul markerelor care au deja `L.divIcon` nu se schimbă.
+
+Verificare: dintr-un card „Vezi pe hartă", apoi „Pagina de start" imediat (în timpul animației) și după 3 s, apoi alt card, fără reîncărcare: nicio eroare în consolă și nicio cerere 404 pentru marker-icon.png / marker-shadow.png; testele existente trec.

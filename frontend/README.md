@@ -46,6 +46,7 @@ Trei prompturi, un mesaj grupat fiecare, cu „NU SCHIMBA”, câmpuri exacte ș
 | `lovable-prompt-sesiune4-P3.md` | timeline orizontal, vizualizarea „Căutare pe stradă” (accentul) și „Analiza hărții” | **aplicat 15 nov.** (5,9 credite, Lovable `f54b58c`) | ~5 |
 | `lovable-prompt-sesiune4-P4.md` | tab „Tracking echipe” (generează tură, animare, opriri colorate, aplică, rezultat înainte→după) + buton „Șterge” în Identificare | **trimis 15 nov.** (credite neexpuse de API; estimat ~5, de verificat în editor; Lovable `0e79a4d`) | ~5 |
 | `lovable-prompt-sesiune4-P5.md` | corecturi după test: fișa evenimentului nu mai acoperă Identificare, fișe curate pentru `tracking_tura`/`stergere_om`, tură nouă = „Neaplicată" (lipsa `aplicata` = false, buton „Aplică" dezactivat după aplicare), harta Tracking rămâne încadrată pe rețea/focus | **aplicat 15 nov.** (4,6 credite, Lovable `35b48c0`, 198 teste verzi) | ~5 |
+| `lovable-prompt-sesiune4-P6.md` | oprește animațiile Leaflet la demontare (eroare `_leaflet_pos` la intro, hartă, înapoi la intro) + pictograme Leaflet implicite (404 marker-icon/shadow) | **aplicat 15 nov.** (2,6 credite, Lovable `c56b6db`, 206 teste verzi; publicat, retest 4 carduri fără erori) | ~2 |
 
 Buget total 15-20 credite. 
 ### Publicare
