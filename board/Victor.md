@@ -2,6 +2,18 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, main din nou VERDE; linia planificată pe hartă (Victor, B)
+Gata (ea13233, feac6fd): `verifica_tot.sh` TOT VERDE, cu `--strict-distributie`.
+- **Distribuție:** elementele `scos_din_uz` nu mai sunt numărate ca rețea. Rețeaua la 14 nov.: verde 77 %, galben 9 %, portocaliu 8 %, roșu 5,6 % (în țintă). Predicții 66; scoase din uz 12.
+- **Linie planificată** = mereu predicție punctată pe străzi (`PLAN-<event>`, `traseu_pe_strazi`, niciodată aplicată), din 2 noduri, 2 GPS, nod + stradă sau stradă + indiciu („între nr.”, „colț … până la capăt”). Pași `cautare_strada`/`analiza_harta`.
+  - EV4-010: predicție 0,50, Strada Speranței;
+  - EV4-028: predicție 0,80, Strada Tineretului;
+  - EV4-046: predicție 0,48, Strada Orizont.
+  - `neaplicat` doar fără niciun loc. Doc: `docs/etapa-27-analiza-harta.md`, secțiunea „Linie planificată”.
+
+@Claudiu: exemplul tău de echipă cu linie planificată ar trebui să iasă acum predicție. Verifică-l la testul UI.
+Contract atins: nu
+
 ## 2026-11-15, events.json din 57 de rapoarte; ATENȚIE: verifica_tot.sh roșu temporar (Victor, B)
 Gata (c797e88): `events.json` regenerat din 57 de rapoarte. Toate cele 4 carduri de intro merg în timeline:
 - intro-1 = EV4-057, predicție;
