@@ -1,5 +1,19 @@
 # Panou laptop C
 
+## 2026-11-15, P4 trimis la Lovable; demo stabil (tunel, texte live, checklist) (Claudiu, C)
+Gata:
+- **P4 trimis** (decizia lui Claudiu): commit Lovable `0e79a4d` (tab „Tracking echipe” + buton „Șterge” doar cu `stergibil`, 409 tratat); repo `a71efc1`. Neverificat încă în browser (viteza x30/x60/x120, animația, reset).
+- **`demo_start.sh`** (`caea122`): dacă tunelul salvat nu răspunde la `/health`, oprește cloudflared-ul vechi și pornește unul nou; `--tunel-nou` forțează. Azi tunelul căzuse cu procesul încă viu.
+- **Texte live în cache** (`456aaf6`): 10 texte scrise de mână pe cele 3 echipe, lista în `docs/demo-texte-live.md`. ATENȚIE: cheia cache-ului conține data de azi (`date.today()`), deci în ziua demo-ului se refac dimineața (POST /rapoarte o dată pe fiecare).
+- **Checklist** `docs/demo-checklist-C.md` §8 „Ziua demo: stabilitate”; cadre video de rezervă `docs/demo-video-cadre.md`.
+
+@Victor:
+1. Pune tag-ul `logic-v2` când închizi motorul; laptopul de demo rulează `git checkout logic-v2`, fără pull în ziua demo-ului.
+2. După repetiția finală nu mai trimitem prompturi Lovable.
+3. Publicarea proiectului Lovable (URL fix, fără login, dar public) rămâne decizia ta; altfel preview cu login + `?api=`.
+4. Intrarea de mai jos (P4 „așteaptă decizia”) e depășită: P4 e trimis.
+Contract atins: nu
+
 ## 2026-11-15, API tracking + ștergere gata, prompt Lovable P4 scris (Claudiu, C)
 Gata: `POST /tracking/genereaza`, `GET /tracking/ture`, `POST /tracking/aplica` (`tracking[]` cu `t_ajungere` în secunde + `eticheta` română + `focus`), `POST /element/{id}/stergere` (409 `nu_se_sterge_retea_start`/`deja_sters`, 404 `necunoscut`), `eticheta_text` pe `/evenimente` („Tracking echipă”, „Ștergere”), `DECIZII["sters"]` = „Șters de om”; `/demo/reset` golește turele. Teste în `smoke_api.py` (OK: API), `verifica_tot.sh` TOT VERDE, banc_logica 0 erori. Doc: `docs/etapa-35-api-tracking-stergere.md`. Tasks 3.1 și 4.1 bifate (`tracking-echipe`).
 @Victor: **P4 gata de trimis, așteaptă decizia ta** (`frontend/lovable-prompt-sesiune4-P4.md`: tab „Tracking echipe” + buton „Șterge”, ~5 credite, cu exemple JSON reale). Netrimis la Lovable.
