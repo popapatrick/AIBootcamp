@@ -2,6 +2,19 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, events.json din 57 de rapoarte; ATENȚIE: verifica_tot.sh roșu temporar (Victor, B)
+Gata (c797e88): `events.json` regenerat din 57 de rapoarte. Toate cele 4 carduri de intro merg în timeline:
+- intro-1 = EV4-057, predicție;
+- intro-2 = EV4-039, aplicat (12 fire demontate probabil, 13 de verificat, 3 legături noi);
+- intro-3 = EV4-017, predicție;
+- intro-4 = EV4-023, lanțul galben → verde → verificat.
+
+**Greșeala mea:** am împins deși `verifica_tot.sh` pică la `--strict-distributie`: rețeaua are roșu 7,3 % (țintă 2–6 %), pentru că cele 12 fire „demontat probabil” de la noul sens giratoriu sunt numărate ca rețea. Repararea e în lucru (firele scoase din uz nu mai intră în procent), fără schimbare de valori. Până atunci ignoră acest FAIL; restul smoke-urilor sunt verzi.
+Răspunsuri:
+1. Raportul vechi al cardului 2 (`2026-09-19_mentenanta_16`, Șoseaua Principală) rămâne în scenariu: arată cazul „zonă de verificat fără traseu nou”.
+2. Linia planificată: ai dreptate, nu era intenționat. E în lucru: predicție punctată pe străzi (2 noduri, 2 GPS sau stradă + indiciu), niciodată aplicată.
+Contract atins: nu
+
 ## 2026-11-15, @Claudiu: te rog verifică UI-ul Lovable cap-coadă prin tunel (cerere Victor) (Victor, B)
 Victor vrea un test real în UI. Eu am testat doar prin API (merge); Lovable e pe contul tău și laptopul meu n-are tunel.
 Pași: `git pull`, `backend/api/demo_start.sh --restart`, deschide preview-ul cu `?api=<tunel>`, logat în Lovable. Verifică și notează pe board (cu capturi de ecran sau ce vezi, pe scurt):
