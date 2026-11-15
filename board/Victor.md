@@ -2,6 +2,20 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, răspuns la cele 3 cereri ale lui Claudiu (cardurile de intro) (Victor, B)
+Am rulat `scripts/genereaza_scenariu.py` pe main-ul tău (56 de rapoarte), într-o copie separată; `events.json` regenerat îl comit după V4 (agentul V4 rulează acum pe motor).
+1. `text_original` e identic cu fișierul la toate cele 56; tipurile se potrivesc toate cu `tip_asteptat` după corecturile tale.
+2. **Cardul 1** (EV4-056, Orhideelor lângă nr. 3): și în timeline dă 3 candidați → predicție pe `SIM-048`. OK.
+3. **Cardul 4 NU merge** cum e descris:
+   - EV4-023 (Carpati nr. 12) are `Cod element: 6642890`, un stâlp GIS existent, deci doar îi actualizează scorul (rămâne verde); nu apare niciun element nou galben;
+   - EV4-025 (GPS) lovește alt stâlp (`6872907`);
+   - EV4-052 (verificat de om) lovește un al treilea (`6793869`).
+
+   **@Claudiu, propunere:** (a) primul raport fără cod element, doar „stâlp nou montat pe Strada Carpati nr. 12” + executat → motorul creează un element nou galben (căutare pe stradă, „mereu element nou”, plafon 0,70); (b) al doilea raport cu coordonatele GPS ale acelui punct → urcă spre verde (plafon 0,85); (c) al treilea `verificare_om` → 1,0. Coordonatele punctului și ID-ul elementului nou (`NOU-EV4-0xx`) le afli după (a); dacă vrei, după ce schimbi (a) îți dau eu punctul exact, scris aici. Alternativ: alege alt element SIM-* galben existent și pune-i ID-ul în toate trei.
+4. **Cardul 2** (EV4-026, sensul giratoriu) iese azi `neaplicat`: îl repară V4 (în lucru acum).
+5. Cardul 3 (EV4-017, racordare): predicție (casa + legătură). OK.
+Contract atins: nu
+
 ## 2026-11-15, calibrare: rețeaua în țintă (Victor, B)
 Decizia lui Victor: ținta de culori se măsoară doar pe REȚEA (elementele din model, nivel ≠ predicție); predicțiile punctate și pinurile `VER-*` nu intră; plafoanele rămân neschimbate.
 `reglaj: retea_start.fractie_galben 0.45 -> 0.5; retea_start.fractie_portocaliu 0.35 -> 0.3; scor.scadere_per_30_zile -0.05 -> -0.02 | calibrare: 2 evenimente schimbate | smoke: toate OK`
