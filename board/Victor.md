@@ -2,6 +2,20 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu: funcție nouă, ȘTERGERE de către om (motorul e gata, ai de făcut API + buton) (Victor, B)
+Victor a cerut un buton de ștergere pentru ce adaugă sistemul. Motorul și contractul sunt pe main (4103939, 4720d4e), iar `verifica_tot.sh` iese TOT VERDE. Detalii: `docs/etapa-34-stergere-om.md`; `contracts/interfaces.md`, secțiunea „Ștergere de către om”.
+**Reguli (decise de Victor):**
+- se pot șterge predicțiile punctate (`NOU-*`, `MUT-*`, `PLAN-*`, `TRK-*`, lanțuri), elementele aplicate din rapoarte/tracking și pinurile `VER-*`;
+- NU se pot șterge elementele rețelei de start (GIS și SIM-*);
+- ștergerea = retras cu jurnal: elementul dispare de la data ștergerii, rămâne în istoric („Șters de om: <motiv>”), apare în timeline cu eticheta `stergere`; fără penalizare de metodă (spre deosebire de „Respinge”);
+- se șterge tot grupul: stâlpul + legăturile lui.
+
+**Ce ai de făcut:**
+1. **API:** `POST /element/{id}/stergere {motiv?, data?}` → `engine.apply_event({"event_id": ..., "tip": "stergere_om", "echipa_sursa": "om_teren", "data": ..., "detalii": {"tinta_id": id, "motiv": motiv}})`. Mapare: `eroare.cod` `nu_se_sterge_retea_start` / `deja_sters` → 409, `necunoscut` → 404. În `prezentare.py`: `DECIZII["sters"] = "Șters de om"`; eticheta de timeline `stergere` = „Ștergere”. Test în `smoke_api.py`.
+2. **UI (Lovable):** buton „Șterge” în panoul Identificare, lângă „Marchează verificat de om”, vizibil DOAR când `properties.stergibil` e true. Confirmarea: „Se vor șterge <stergere_n> elemente. Motiv (opțional): [...]”, butoanele „Șterge” și „Anulează”. După succes: reîncarci `/retea` și `/evenimente`, iar timeline-ul sare la prezent. Pune-l în același prompt cu tab-ul de tracking (P4), ca să economisești credite. Netrimis până decide Victor.
+3. Pas mic în demo (opțional): ștergerea unei predicții roșii.
+Contract atins: DA (aditiv)
+
 ## 2026-11-15, tracking: partea B gata (motor + 2 ture în scenariu) (Victor, B)
 Gata (b454ef0, 0b24894): `tracking_tura` în motor. Oprire ≥ 5 min la ≤ 15 m de un stâlp → validare (scorul crește, poziție GPS); ≥ 12 min fără stâlp → `TRK-<event>-<n>` presupus (0,45) cu legătura `…-L` pe străzi; 1–2 min → `scurta`; restul → `neclara`. Aceeași tură a doua oară → `fara_efect`.
 Pe fiecare oprire: `{lat, lon, inceput, sfarsit, durata_min, tip, element_id, distanta_m, scor_inainte, scor_dupa, banda_inainte, banda_dupa, t_ajungere}` + extra `calitate`, `scor_propunere`, `legatura_id`, `om`. Pași: `opriri`, `validari_tracking`, `analiza_harta`. Detalii: `docs/etapa-32-tracking-echipe.md`.
