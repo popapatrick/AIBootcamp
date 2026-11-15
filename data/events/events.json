@@ -1,779 +1,1999 @@
 [
-  {
-    "event_id": "EV-001",
-    "echipa_sursa": "mentenanta",
-    "tip": "nod_lipsa",
-    "referinta": {
-      "adresa": "str. Fictivă, zona stației PTAB 7812 (adresă fictivă)",
-      "coordonate": null,
-      "element_id": "6925190",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-08-04",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0418\nData: 2026-08-04\nEchipa: mentenanta\nTip lucrare: verificare trasee JT, strada cu curbă\nCod element: nod 6925190\nCoordonate: -\nAdresa: str. Fictivă, zona stației PTAB 7812 (adresă fictivă)\nNr. cadastral: -\nConstatare: Nodul 6925190 există pe teren, în curba străzii, între nodurile 6513200 și 7824201. Nu apare în harta GIS.\nStatus: executat\n",
-    "tip_sursa_pondere": "formular",
-    "forma_sursa": "campuri",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [
-      "coordonate",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "noduri_vecine": [
-        "6513200",
-        "7824201"
-      ],
-      "observatii": "Fișa M-2026-0418, tip lucrare: verificare trasee JT, strada cu curbă. Nodul există pe teren în curba străzii, nu apare în harta GIS."
-    }
+ {
+  "event_id": "EV4-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Crinului",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6784406",
+   "id_client": null,
+   "nr_cadastral": null
   },
-  {
-    "event_id": "EV-002",
-    "echipa_sursa": "mentenanta",
-    "tip": "verificare",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "A-T-030",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-08-05",
-    "text_original": "DATE FICTIVE\nFIȘĂ VERIFICARE – MENTENANȚĂ\nNr. fișă: M-2026-0391\nData: 2026-08-05\nCod element: A-T-030 (între 6149155 și 6940335)\nCoordonate: -\nAdresa: -\nNr. cadastral: -\nVerificare vizuală a conductoarelor și a izolatorilor: fără defecte.\nStatus: executat\nUrmătoarea verificare: nestabilită\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [
-      "coordonate",
-      "adresa",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "observatii": "Verificare vizuală a conductoarelor și a izolatorilor: fără defecte. Nr. fișă: M-2026-0391. Următoarea verificare: nestabilită. Cod element în text: între nodurile 6149155 și 6940335."
-    }
-  },
-  {
-    "event_id": "EV-003",
-    "echipa_sursa": "mentenanta",
-    "tip": "verificare",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "A-T-040",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-08-12",
-    "text_original": "DATE FICTIVE\nVerificare tronson, 12 august 2026.\nAm verificat vizual tronsonul A-T-040 (între 6943383 și 6273923). Fără defecte vizibile, conductoare întregi, stâlpi drepți.\nNu am putut verifica la sol izolatorii de la capătul dinspre 6273923. Următoarea verificare: nestabilită.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.85,
-    "campuri_lipsa": [],
-    "detalii": {
-      "observatii": "Verificare vizuală a tronsonului A-T-040 (între nodurile 6943383 și 6273923). Fără defecte vizibile, conductoare întregi, stâlpi drepți. Izolatorii de la capătul dinspre 6273923 nu au putut fi verificați la sol. Următoarea verificare: nestabilită."
-    }
-  },
-  {
-    "event_id": "EV-004",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": "str. Fictivă nr. 22 (adresă fictivă)",
-      "coordonate": {
-        "lat": 26.066262,
-        "lon": 44.279575
-      },
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 301177"
-    },
-    "status": "executat",
-    "data": "2026-08-12",
-    "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0077\nData: 2026-08-12\nEchipa: racordari\nCod element: -\nCoordonate: lat 26.066262, lon 44.279575\nAdresa: str. Fictivă nr. 22 (adresă fictivă)\nNr. cadastral: CF-fictiv 301177\nObservații: racord pe stâlpul din colț\nStatus: executat\n",
-    "tip_sursa_pondere": "formular",
-    "forma_sursa": "campuri",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "element_id"
-    ],
-    "detalii": {
-      "observatii": "racord pe stâlpul din colț; nr. fișă R-2026-0077; cod element necompletat ('-')"
-    }
-  },
-  {
-    "event_id": "EV-005",
-    "echipa_sursa": "investitii",
-    "tip": "activ_inlocuit",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "R-T-006",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "planificat",
-    "data": "2026-08-14",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE INVESTIȚIE – PLANIFICARE\nNr. fișă: I-2026-0219\nData: 2026-08-14\nCod element: R-T-006\nCoordonate: -\nConstatare: tronson de ramură aeriană, de înlocuit în planul 2027.\nStatus: planificat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "coordonate",
-      "detalii.sectiune_noua"
-    ],
-    "detalii": {
-      "observatii": "Tronson de ramură aeriană, de înlocuit în planul 2027. Nr. fișă I-2026-0219."
-    }
-  },
-  {
-    "event_id": "EV-006",
-    "echipa_sursa": "mentenanta",
-    "tip": "nod_lipsa",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "6925190",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-08-18",
-    "text_original": "DATE FICTIVE\nRaport de teren – verificare rețea JT, 18 august 2026\nAm verificat tronsonul de pe strada cu curbă dinspre stația PTAB 7812. În GIS, între nodurile 6513200 și 7824201 există doar o linie dreaptă. Pe teren cablul face o curbă, iar în curbă există un nod de derivație, 6925190, de unde pornesc două tronsoane către stâlp: A-T-054 și A-T-057. Nodul și cele două tronsoane lipsesc din model.\nRecomand actualizarea GIS și verificarea secțiunii cablului. Lucrarea a fost făcută fără întreruperi.\nIng. fictiv (date fictive)\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.9,
-    "detalii": {
-      "noduri_vecine": [
-        "6513200",
-        "7824201"
-      ],
-      "observatii": "Nod de derivatie in curba, de unde pornesc doua tronsoane catre stalp: A-T-054 si A-T-057. Nodul si cele doua tronsoane lipsesc din GIS. Recomandare: actualizare GIS si verificarea sectiunii cablului. Lucrarea facuta fara intreruperi. Strada cu curba dinspre statia PTAB 7812."
-    },
-    "campuri_lipsa": [
-      "adresa",
-      "coordonate",
-      "lungime_m"
-    ]
-  },
-  {
-    "event_id": "EV-007",
-    "echipa_sursa": "mentenanta",
-    "tip": "verificare",
-    "referinta": {
-      "adresa": "stație fictivă (adresă fictivă)",
-      "coordonate": {
-        "lat": 44.2806944,
-        "lon": 26.0676334
-      },
-      "element_id": "DX10-2-099812",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-08-20",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0402\nData: 2026-08-20\nCod element: DX10-2-099812 (PTAB 7812)\nCoordonate: 44.2806944, 26.0676334\nAdresa: stație fictivă (adresă fictivă)\nNr. cadastral: -\nConstatare: post verificat, fără defecte, ulei în parametri\nStatus: executat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [],
-    "detalii": {
-      "observatii": "Post verificat, fără defecte, ulei în parametri. Nr. fișă M-2026-0402. Element identificat ca PTAB 7812. Nr. cadastral necompletat (-)."
-    }
-  },
-  {
-    "event_id": "EV-008",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 44.28124,
-        "lon": 26.05973
-      },
-      "element_id": null,
-      "id_client": "CL-39910",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-08-22",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-08-22 ora 19:10\nID client: CL-39910\nLocație: coordonate 44.28124, 26.05973 (aplicație telefon)\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Lumina pâlpâie de o oră, se aprinde și se stinge.\nOperator: Vă înregistrez, echipa verifică.\n",
-    "tip_sursa_pondere": "apel_client",
-    "forma_sursa": "text_liber",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "adresa",
-      "element_id",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "observatii": "Client raportează lumina pâlpâie de o oră, se aprinde și se stinge. Operatorul a înregistrat apelul, echipa verifică. Ora apelului: 19:10."
-    }
-  },
-  {
-    "event_id": "EV-009",
-    "echipa_sursa": "mentenanta",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "A-T-021",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-08-26",
-    "text_original": "DATE FICTIVE\nRaport de teren, 26 august 2026.\nPe tronsonul A-T-021 am găsit conductorul deteriorat pe o porțiune de circa 5 m, cu urme de arc electric. Secțiunea din teren: TYIR 3x70+54,6 OL-Al.\nRecomand intervenție urgentă; lucrarea va fi programată. Stare: semnalat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [],
-    "detalii": {
-      "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
-      "lungime_m": 5,
-      "observatii": "Conductor deteriorat pe o porțiune de circa 5 m, cu urme de arc electric. Recomandare: intervenție urgentă; lucrarea va fi programată."
-    }
-  },
-  {
-    "event_id": "EV-010",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "A-T-021",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-08-29",
-    "text_original": "DATE FICTIVE\nProces-verbal racordare, 29 august 2026.\nÎn zona tronsonului A-T-021 am racordat un client nou. Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al, cablu înlocuit cu două zile înainte.\nConductorul nu este deteriorat, am verificat la fața locului. Racord executat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "adresa",
-      "coordonate",
-      "id_client"
-    ],
-    "detalii": {
-      "observatii": "Client nou racordat în zona tronsonului A-T-021. Pe A-T-021 este montat conductor TYIR 3x50+54,6 OL-Al, cablu înlocuit cu două zile înainte. Conductorul nu este deteriorat, verificat la fața locului. Racord executat.",
-      "sectiune_noua": "TYIR 3x50+54,6 OL-Al"
-    }
-  },
-  {
-    "event_id": "EV-011",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": "str. fictivă nr. 5 (adresă fictivă)",
-      "coordonate": {
-        "lat": 44.278581,
-        "lon": 26.06509
-      },
-      "element_id": "6419627",
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 300888"
-    },
-    "status": "executat",
-    "data": "2026-08-29",
-    "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0080\nData: 2026-08-29\nCod element: nod 6419627\nCoordonate: 44.278581, 26.065090\nAdresa: str. fictivă nr. 5 (adresă fictivă)\nNr. cadastral: CF-fictiv 300888\nStatus: executat\n",
-    "tip_sursa_pondere": "formular",
-    "forma_sursa": "campuri",
-    "incredere_extractie": 0.95,
-    "campuri_lipsa": [],
-    "detalii": {
-      "observatii": "Nr. fișă: R-2026-0080. Date fictive."
-    }
-  },
-  {
-    "event_id": "EV-012",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 4427960,
-        "lon": 2606510
-      },
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 301502"
-    },
-    "status": "executat",
-    "data": "2026-09-03",
-    "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0084\nData: 2026-09-03\nEchipa: racordari\nCod element: -\nCoordonate: 4427960, 2606510\nAdresa: -\nNr. cadastral: CF-fictiv 301502\nStatus: executat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.6,
-    "campuri_lipsa": [
-      "element_id",
-      "adresa",
-      "coordonate_de_verificat"
-    ],
-    "detalii": {
-      "observatii": "Fișa R-2026-0084, racord nou, status executat. Cod element lipsă (fișa indică '-'). Coordonatele apar fără zecimale și par greșite; copiate exact ca în text."
-    }
-  },
-  {
-    "event_id": "EV-013",
-    "echipa_sursa": "mentenanta",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-09-08",
-    "text_original": "DATE FICTIVE\nPe tronsonul T-054 izolația e uzată pe circa 2 m, la capătul dinspre nodul 6513200. Marcat pentru înlocuire.\nStare: semnalat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.6,
-    "campuri_lipsa": [
-      "element_id",
-      "coordonate"
-    ],
-    "detalii": {
-      "id_partial": "T-054",
-      "lungime_m": 2,
-      "observatii": "Izolația uzată pe circa 2 m, la capătul dinspre nodul 6513200. Marcat pentru înlocuire."
-    }
-  },
-  {
-    "event_id": "EV-014",
-    "echipa_sursa": "investitii",
-    "tip": "activ_inlocuit",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 44.2758716,
-        "lon": 26.0627136
-      },
-      "element_id": "A-T-002",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-09-10",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE INVESTIȚIE – ÎNLOCUIRE CABLU\nNr. fișă: I-2026-0233\nData: 2026-09-10\nEchipa: investitii\nCod element: A-T-002\nCoordonate: 44.2758716, 26.0627136 (capăt 6168883)\nAdresa: -\nNr. cadastral: -\nSecțiune veche (în GIS): TYIR 3x35+54,6 OL-Al\nSecțiune nouă (montată): TYIR 3x70+54,6 OL-Al\nLungime: 37.8 m\nCapete: 6168883 – 6580180\nStatus: executat\n",
-    "tip_sursa_pondere": "formular",
-    "forma_sursa": "campuri",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [
-      "adresa",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
-      "lungime_m": 37.8,
-      "observatii": "Nr. fișă: I-2026-0233. Secțiune veche (în GIS): TYIR 3x35+54,6 OL-Al. Capete: 6168883 – 6580180. Capăt 6168883 indicat în coordonate."
-    }
-  },
-  {
-    "event_id": "EV-015",
-    "echipa_sursa": "mentenanta",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": "str. Fictivă nr. 9 (adresă fictivă)",
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 418902"
-    },
-    "status": "semnalat",
-    "data": "2026-09-15",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0455\nData: 2026-09-15\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 9 (adresă fictivă)\nNr. cadastral: CF-fictiv 418902\nConstatare: branșament ars, fără alimentare la imobil\nStatus: semnalat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "element_id",
-      "coordonate"
-    ],
-    "detalii": {
-      "observatii": "Branșament ars, fără alimentare la imobil. Cod element și coordonate necompletate ('-')."
-    }
-  },
-  {
-    "event_id": "EV-016",
-    "echipa_sursa": "investitii",
-    "tip": "activ_inlocuit",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-09-22",
-    "text_original": "DATE FICTIVE\nReferat investiție – lucrare de înlocuire\nSăptămâna trecută am schimbat cablul aerian pe tronsonul T-002, între stâlpii 6168883 și 6580180. Cablul vechi era TYIR 3x35+54,6 OL-Al, iar cel nou este TYIR 3x70+54,6 OL-Al. Lungime circa 38 m.\nLucrarea nu a fost trecută în GIS. Rog refacerea secțiunii în model.\nExecutat și recepționat la 2026-09-22.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.6,
-    "campuri_lipsa": [
-      "element_id"
-    ],
-    "detalii": {
-      "sectiune_noua": "TYIR 3x70+54,6 OL-Al",
-      "lungime_m": 38,
-      "id_partial": "T-002",
-      "observatii": "Cablul vechi era TYIR 3x35+54,6 OL-Al, între stâlpii 6168883 și 6580180. Lucrarea nu a fost trecută în GIS; se cere refacerea secțiunii în model. Executat și recepționat la 2026-09-22. Lungime circa 38 m."
-    }
-  },
-  {
-    "event_id": "EV-017",
-    "echipa_sursa": "investitii",
-    "tip": "activ_inlocuit",
-    "referinta": {
-      "adresa": "str. Fictivă nr. 14",
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 418777"
-    },
-    "status": "executat",
-    "data": "2026-09-29",
-    "text_original": "DATE FICTIVE\nReferat investiție, 29 septembrie 2026.\nPe str. Fictivă nr. 14, nr. cad. CF-fictiv 418777, am modificat branșamentul monofazat în trifazat. Lucrare executată. Nu am notat codul elementului.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.6,
-    "campuri_lipsa": [
-      "element_id",
-      "detalii.sectiune_noua"
-    ],
-    "detalii": {
-      "observatii": "Modificare branșament monofazat în trifazat, lucrare executată. Codul elementului nu a fost notat de echipă."
-    }
-  },
-  {
-    "event_id": "EV-018",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": "Strada fictivă, lângă blocul 5",
-      "coordonate": {
-        "lat": 44.28232,
-        "lon": 26.0621
-      },
-      "element_id": null,
-      "id_client": "CL-40117",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-02",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 07:40\nID client: CL-40117\nLocație: coordonate 44.28232, 26.06210 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu am curent din noaptea asta, e toată strada fără lumină.\nOperator: Vă rog adresa.\nClient: Strada fictivă, lângă blocul 5.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "apel_client",
-    "incredere_extractie": 0.7,
-    "campuri_lipsa": [
-      "element_id"
-    ],
-    "detalii": {
-      "observatii": "Clientul semnalează lipsa curentului din noaptea precedentă, toată strada fără lumină. Apel la ora 07:40. Adresa este descrisă vag (strada fictivă, lângă blocul 5)."
-    }
-  },
-  {
-    "event_id": "EV-019",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 44.28301,
-        "lon": 26.0624
-      },
-      "element_id": null,
-      "id_client": "CL-40982",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-02",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 18:15\nID client: CL-40982\nLocație: coordonate 44.28301, 26.06240 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Iar nu avem curent, a căzut din nou pe la șase.\nOperator: Din ce oră a picat prima oară?\nClient: Pe la 14:30, a revenit o dată și a picat iar.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "apel_client",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "element_id",
-      "adresa"
-    ],
-    "detalii": {
-      "observatii": "Clientul semnaleaza intrerupere de curent care a cazut din nou in jurul orei 18:00 (apel la 18:15). Prima cadere in jurul orei 14:30, cu o revenire intre timp. Nu apare cod de element in retea."
-    }
-  },
-  {
-    "event_id": "EV-020",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": "lângă școală, la capătul străzii fictive",
-      "coordonate": null,
-      "element_id": null,
-      "id_client": "CL-41533",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-03",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-03 ora 09:05\nID client: CL-41533\nLocație: lângă școală, la capătul străzii fictive (fără coordonate)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu e curent la noi, la capăt, lângă școală.\nOperator: Ați verificat siguranțele?\nClient: Da, sunt bune, e tot blocul fără lumină.\n",
-    "tip_sursa_pondere": "apel_client",
-    "forma_sursa": "text_liber",
-    "incredere_extractie": 0.7,
-    "campuri_lipsa": [
-      "coordonate",
-      "element_id"
-    ],
-    "detalii": {
-      "observatii": "Clientul raportează lipsa curentului în tot blocul, siguranțele sunt bune (verificat de client). Apel la 09:05. Locația este descrisă vag, fără coordonate."
-    }
-  },
-  {
-    "event_id": "EV-021",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 44.2826,
-        "lon": 26.0615
-      },
-      "element_id": null,
-      "id_client": "CL-40560",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-05",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-05 ora 21:30\nID client: CL-40560\nLocație: coordonate 44.28260, 26.06150 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Nu am curent de la ora 21. Ceilalți vecini la fel.\nOperator: Vă înregistrez, echipa va fi trimisă.\nClient: Mulțumesc.\n",
-    "tip_sursa_pondere": "apel_client",
-    "forma_sursa": "text_liber",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "adresa",
-      "element_id",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "observatii": "Client fără curent de la ora 21:00 (apel la 21:30, 2026-10-05). Vecinii au aceeași problemă. Operatorul a înregistrat apelul și va trimite echipa."
-    }
-  },
-  {
-    "event_id": "EV-022",
-    "echipa_sursa": "apel_client",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": {
-        "lat": 44.2819,
-        "lon": 26.0606
-      },
-      "element_id": null,
-      "id_client": "CL-42078",
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-06",
-    "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-06 ora 06:50\nID client: CL-42078\nLocație: coordonate 44.28190, 26.06060 (aplicație telefon)\nTranscriere:\nOperator: Bună, cu ce vă pot ajuta?\nClient: Dimineața nu avem curent din nou. Pică de câteva ori pe săptămâna asta.\nOperator: Ați mai sunat și săptămâna trecută?\nClient: Da, cu aceeași problemă.\n",
-    "tip_sursa_pondere": "apel_client",
-    "forma_sursa": "text_liber",
-    "incredere_extractie": 0.7,
-    "campuri_lipsa": [
-      "element_id",
-      "adresa"
-    ],
-    "detalii": {
-      "observatii": "Clientul raportează lipsa curentului dimineața, de mai multe ori în această săptămână (ora 06:50); a sunat și săptămâna trecută cu aceeași problemă. Nu există cod de nod sau tronson în text."
-    }
-  },
-  {
-    "event_id": "EV-023",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": "stâlpul de lângă strada fictivă",
-      "coordonate": {
-        "lat": 44.282,
-        "lon": 26.0598
-      },
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-10-07",
-    "text_original": "DATE FICTIVE\nProces-verbal racordare nouă, 7 octombrie 2026.\nRacordul nou a fost montat pe stâlpul de lângă strada fictivă, la coordonatele 26.0598, 44.2820. În procesul-verbal apar scrise invers, ca lon, lat. Client nou, putere 17 kW.\nNu am găsit ID de nod pe teren; am folosit coordonatele. Rog verificare.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.7,
-    "campuri_lipsa": [
-      "element_id",
-      "coordonate_de_verificat"
-    ],
-    "detalii": {
-      "observatii": "Racord nou montat pe stâlpul de lângă strada fictivă. Client nou, putere 17 kW. Nu s-a găsit ID de nod pe teren; s-au folosit coordonatele. Solicitată verificare. Coordonatele din procesul-verbal sunt scrise invers (lon, lat); valorile au fost copiate în ordinea lat, lon din text: 44.2820 (lat), 26.0598 (lon)."
-    }
-  },
-  {
-    "event_id": "EV-024",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "6628781",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-10-12",
-    "text_original": "DATE FICTIVE\nRacord nou executat la nodul 6628781. Client nou, monofazat 6 kW. Status executat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [
-      "adresa",
-      "coordonate",
-      "id_client",
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "observatii": "Client nou, monofazat 6 kW."
-    }
-  },
-  {
-    "event_id": "EV-025",
-    "echipa_sursa": "mentenanta",
-    "tip": "avarie_semnalata",
-    "referinta": {
-      "adresa": "str. Fictivă nr. 31",
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 418955"
-    },
-    "status": "semnalat",
-    "data": "2026-10-16",
-    "text_original": "DATE FICTIVE\nAm fost la adresa str. Fictivă nr. 31, nr. cadastral CF-fictiv 418955 (date fictive).\nStâlpul de branșament are izolatorul crăpat. Nu am reușit să identific nodul pe harta GIS.\nStare: semnalat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.6,
-    "campuri_lipsa": [
-      "element_id",
-      "coordonate"
-    ],
-    "detalii": {
-      "observatii": "Stâlpul de branșament are izolatorul crăpat. Echipa nu a putut identifica nodul pe harta GIS; codul nodului nu apare în text. Date fictive."
-    }
-  },
-  {
-    "event_id": "EV-026",
-    "echipa_sursa": "mentenanta",
-    "tip": "verificare",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "0287329",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "executat",
-    "data": "2026-10-20",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0471\nData: 2026-10-20\nCod element: nod 0287329 (plecare A)\nCoordonate: -\nConstatare: nod curat, fără supraîncălzire, control termografic.\nStatus: executat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.95,
-    "campuri_lipsa": [
-      "coordonate"
-    ],
-    "detalii": {
-      "observatii": "Nr. fișă M-2026-0471. Nod 0287329 (plecare A). Control termografic: nod curat, fără supraîncălzire."
-    }
-  },
-  {
-    "event_id": "EV-027",
-    "echipa_sursa": "racordari",
-    "tip": "racord_nou",
-    "referinta": {
-      "adresa": "str. Fictivă nr. 40 (adresă fictivă)",
-      "coordonate": null,
-      "element_id": null,
-      "id_client": null,
-      "nr_cadastral": "CF-fictiv 419120"
-    },
-    "status": "executat",
-    "data": "2026-10-21",
-    "text_original": "DATE FICTIVE\nFIȘĂ RACORDARE – RACORD NOU\nNr. fișă: R-2026-0102\nData: 2026-10-21\nCod element: -\nCoordonate: -\nAdresa: str. Fictivă nr. 40 (adresă fictivă)\nNr. cadastral: CF-fictiv 419120\nStatus: executat\n",
-    "forma_sursa": "campuri",
-    "tip_sursa_pondere": "formular",
-    "incredere_extractie": 0.8,
-    "campuri_lipsa": [
-      "element_id",
-      "coordonate"
-    ],
-    "detalii": {
-      "observatii": "Fișă racord nou, executată. Cod element și coordonate lipsesc (câmpuri marcate cu '-')."
-    }
-  },
-  {
-    "event_id": "EV-028",
-    "echipa_sursa": "mentenanta",
-    "tip": "nod_lipsa",
-    "referinta": {
-      "adresa": "str. Fictivă, zona stației PTAB 7812 (adresă fictivă)",
-      "coordonate": {
-        "lat": 44.2830311,
-        "lon": 26.063942
-      },
-      "element_id": "6925190",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "semnalat",
-    "data": "2026-10-23",
-    "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0488\nData: 2026-10-23\nEchipa: mentenanta\nTip lucrare: verificare trasee JT, strada cu curbă\nCod element: nod 6925190\nCoordonate: 44.2830311, 26.063942\nAdresa: str. Fictivă, zona stației PTAB 7812 (adresă fictivă)\nNr. cadastral: -\nConstatare: Nodul 6925190 există pe teren, în curba străzii, între nodurile 6513200 și 7824201. Lipsește din harta GIS.\nStatus: executat\n",
-    "tip_sursa_pondere": "formular",
-    "forma_sursa": "campuri",
-    "incredere_extractie": 0.9,
-    "campuri_lipsa": [
-      "nr_cadastral"
-    ],
-    "detalii": {
-      "noduri_vecine": [
-        "6513200",
-        "7824201"
-      ],
-      "observatii": "Tip lucrare: verificare trasee JT, strada cu curbă. Nr. fișă: M-2026-0488. Nodul există pe teren în curba străzii, lipsește din harta GIS."
-    }
-  },
-  {
-    "event_id": "EV-029",
-    "echipa_sursa": "investitii",
-    "tip": "linie_planificata",
-    "referinta": {
-      "adresa": null,
-      "coordonate": null,
-      "element_id": "R-T-012",
-      "id_client": null,
-      "nr_cadastral": null
-    },
-    "status": "planificat",
-    "data": "2026-10-27",
-    "text_original": "DATE FICTIVE\nPropunere buget 2027, 27 octombrie 2026.\nÎnlocuirea ramurii R-T-012, între nodurile 6834468 și 6628781, secțiune veche. Propun includerea în planul de investiții. Status planificat.\n",
-    "forma_sursa": "text_liber",
-    "tip_sursa_pondere": "text_liber",
-    "incredere_extractie": 0.85,
-    "campuri_lipsa": [
-      "lungime_m"
-    ],
-    "detalii": {
-      "noduri": [
-        "6834468",
-        "6628781"
-      ],
-      "observatii": "Propunere buget 2027: înlocuirea ramurii R-T-012, secțiune veche. Propus pentru includerea în planul de investiții."
-    }
+  "status": "executat",
+  "data": "2026-08-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0401\nData: 2026-08-03\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6784406\nCoordonate: -\nAdresa: Strada Crinului\nConstatare: Stâlp 6784406 există, izolator ok, nimic de făcut.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp există, izolator ok, nimic de făcut. Tip lucrare: verificare rutină, stâlp existent."
   }
+ },
+ {
+  "event_id": "EV4-002",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Strada Viilor, între nr. 11 și 17",
+   "adresa_structurata": {
+    "strada": "Strada Viilor",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "11",
+     "numar_2": "17",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0402\nData: 2026-08-06\nEchipa: mentenanta\nTip lucrare: stâlp nou, nod lipsă\nCod element: -\nCoordonate: -\nAdresa: Strada Viilor, între nr. 11 și 17\nConstatare: Stâlp nou montat, nu apare în harta GIS.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp nou montat, nu apare în harta GIS."
+  }
+ },
+ {
+  "event_id": "EV4-003",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Viilor",
+   "adresa_structurata": {
+    "strada": "Strada Viilor",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.283469,
+    "lon": 26.067581
+   },
+   "element_id": "6870734",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-07",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0403\nData: 2026-08-07\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6870734\nCoordonate: 44.283469, 26.067581 (GPS aplicație)\nAdresa: Strada Viilor\nConstatare: Stâlp verificat, poziția confirmată cu GPS, izolator ok.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 1,
+  "campuri_lipsa": [
+   "adresa_structurata.numar",
+   "adresa_structurata.localitate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp verificat, poziția confirmată cu GPS, izolator ok. Coordonatele provin din aplicația GPS."
+  }
+ },
+ {
+  "event_id": "EV4-004",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Bălții",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6199650",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-08-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0404\nData: 2026-08-10\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 6199650\nCoordonate: -\nAdresa: Strada Bălții\nConstatare: Izolator crăpat pe stâlpul 6199650, cablu atârnă un metru.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Fișă de lucrare M-2026-0404, tip lucrare: avarie. Izolator crăpat pe stâlpul 6199650, cablu atârnă un metru."
+  }
+ },
+ {
+  "event_id": "EV4-005",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6240749",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-11",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0405\nData: 2026-08-11\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6240749\nCoordonate: -\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp 6240749 există, fără defecte vizibile.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp 6240749 există, fără defecte vizibile. Verificare de rutină."
+  }
+ },
+ {
+  "event_id": "EV4-006",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Bălții nr. 14",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": "14",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-08-12",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0061\nData: 2026-08-12\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Bălții nr. 14\nConstatare: Client nou, casă, 1 fază, 5 kW.\nStatus: semnalat\n",
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Client nou, casă, 1 fază, 5 kW. Nr. fișă R-2026-0061."
+  },
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6
+ },
+ {
+  "event_id": "EV4-007",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Strada Speranței nr. 22",
+   "adresa_structurata": {
+    "strada": "Strada Speranței",
+    "numar": "22",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-13",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0406\nData: 2026-08-13\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței nr. 22\nConstatare: Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție."
+  }
+ },
+ {
+  "event_id": "EV4-008",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu, între nr. 2 și 12",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "2",
+     "numar_2": "12",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-08-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0112\nData: 2026-08-14\nEchipa: investitii\nTip lucrare: linie nouă, tronson TYIR 3x35+54,6\nCod element: -\nCoordonate: -\nAdresa: Strada Liviu Rebreanu, între nr. 2 și 12\nConstatare: Tronson nou executat, doi stâlpi montați.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "noduri_vecine"
+  ],
+  "detalii": {
+   "sectiune_noua": "TYIR 3x35+54,6",
+   "observatii": "Tronson nou executat, doi stâlpi montați. Fișă de lucrare nr. I-2026-0112. Cod element și coordonate lipsesc din fișă."
+  }
+ },
+ {
+  "event_id": "EV4-009",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.282786,
+    "lon": 26.064076
+   },
+   "element_id": "6382856",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-18",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0407\nData: 2026-08-18\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6382856\nCoordonate: 44.282786, 26.064076\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp verificat, poziția corectă, nimic de făcut.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "detalii": {
+   "observatii": "Stâlp verificat, poziția corectă, nimic de făcut. Verificare rutină, stâlp existent. Fișa M-2026-0407."
+  }
+ },
+ {
+  "event_id": "EV4-010",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+   "adresa": "Strada Speranței, între nr. 10 și 20",
+   "adresa_structurata": {
+    "strada": "Strada Speranței",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "10",
+     "numar_2": "20",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-08-21",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0113\nData: 2026-08-21\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței, între nr. 10 și 20\nConstatare: Linie de 150 m propusă, aprobată în planul 2027.\nStatus: planificat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "noduri"
+  ],
+  "detalii": {
+   "lungime_m": 150,
+   "observatii": "Linie de 150 m propusă, aprobată în planul 2027. Fișa de lucrare nr. I-2026-0113."
+  }
+ },
+ {
+  "event_id": "EV4-011",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Viilor, lângă nr. 9",
+   "adresa_structurata": {
+    "strada": "Strada Viilor",
+    "numar": "9",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "9",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": "CL-39910",
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-08-22",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-08-22 ora 19:10\nID client: CL-39910\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Lumina pâlpâie de o oră pe Strada Viilor, lângă nr. 9.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "detalii": {
+   "observatii": "Lumina pâlpâie de o oră. Apel la ora 19:10."
+  },
+  "campuri_lipsa": [
+   "event_id",
+   "coordonate",
+   "element_id"
+  ]
+ },
+ {
+  "event_id": "EV4-012",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "status": "planificat",
+  "data": "2026-08-24",
+  "referinta": {
+   "adresa": "Strada Crinului, casa de la capătul străzii",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "capat",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null
+  },
+  "campuri_lipsa": [
+   "coordonate",
+   "numar",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Casă nouă, 1 fază, 5 kW."
+  },
+  "incredere_extractie": 0.4,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0062\nData: 2026-08-24\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Crinului, casa de la capătul străzii\nConstatare: Casă nouă, 1 fază, 5 kW.\nStatus: semnalat\n"
+ },
+ {
+  "event_id": "EV4-013",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Șoseaua Principală",
+   "adresa_structurata": {
+    "strada": "Șoseaua Principală",
+    "numar": null,
+    "localitate": null,
+    "reper": "sensul giratoriu",
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "5481763",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-25",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0408\nData: 2026-08-25\nEchipa: mentenanta\nTip lucrare: verificare rutină, nod\nCod element: 5481763\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Nod 5481763 verificat la sensul giratoriu, în regulă.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "localitate",
+   "numar"
+  ],
+  "detalii": {
+   "observatii": "Verificare de rutină a nodului 5481763 la sensul giratoriu; fără defecte constatate."
+  }
+ },
+ {
+  "event_id": "EV4-014",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Strada Tineretului, lângă nr. 8",
+   "adresa_structurata": {
+    "strada": "Strada Tineretului",
+    "numar": "8",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "8",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": {
+    "lat": 44.279862,
+    "lon": 26.066133
+   },
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-27",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0409\nData: 2026-08-27\nEchipa: mentenanta\nTip lucrare: nod lipsă din GIS\nCod element: -\nCoordonate: 44.279862, 26.066133\nAdresa: Strada Tineretului, lângă nr. 8\nConstatare: Nod existent pe teren, lipsă din harta GIS.\nStatus: executat\n",
+  "detalii": {},
+  "campuri_lipsa": [
+   "element_id"
+  ],
+  "incredere_extractie": 0.8,
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular"
+ },
+ {
+  "event_id": "EV4-015",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare_om",
+  "referinta": {
+   "adresa": "Strada Bălții",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6640398",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-29",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-08-29\nElement: 6640398\nAdresa: Strada Bălții\nConstatare: stâlpul există, confirmat la fața locului, poziție corectă.\nStatus: executat\n",
+  "tip_sursa_pondere": "om_teren",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 1,
+  "detalii": {
+   "tinta_id": "6640398",
+   "observatii": "Stâlpul există, confirmat la fața locului, poziție corectă."
+  },
+  "campuri_lipsa": [
+   "event_id"
+  ]
+ },
+ {
+  "event_id": "EV4-016",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Bălții",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.275872,
+    "lon": 26.062714
+   },
+   "element_id": "6168883",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-01",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0410\nData: 2026-09-01\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6168883\nCoordonate: 44.275872, 26.062714\nAdresa: Strada Bălții\nConstatare: Stâlp 6168883 confirmat, GPS corect, izolator ok.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "numar"
+  ],
+  "detalii": {
+   "observatii": "Verificare rutină, stâlp existent. Stâlp 6168883 confirmat, GPS corect, izolator ok."
+  }
+ },
+ {
+  "event_id": "EV4-017",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Regina Maria nr. 40",
+   "adresa_structurata": {
+    "strada": "Strada Regina Maria",
+    "numar": "40",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-09-02",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0063\nData: 2026-09-02\nEchipa: racordari\nTip lucrare: cerere racord casă departe de rețea\nCod element: -\nCoordonate: -\nAdresa: Strada Regina Maria nr. 40\nConstatare: Casa e la cca 180 m de ultimul stâlp, traseu pe Strada Regina Maria.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "lungime_m": 180,
+   "observatii": "Casa e la cca 180 m de ultimul stâlp, traseu pe Strada Regina Maria."
+  }
+ },
+ {
+  "event_id": "EV4-018",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+   "adresa": "Strada Bălții nr. 14",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": "14",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0064\nData: 2026-09-03\nEchipa: racordari\nTip lucrare: racord executat\nCod element: -\nCoordonate: -\nAdresa: Strada Bălții nr. 14\nConstatare: Racord executat, mufă montată.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Racord executat, mufă montată."
+  }
+ },
+ {
+  "event_id": "EV4-019",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Crinului",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6605236",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-09-04",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0411\nData: 2026-09-04\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 6605236\nCoordonate: -\nAdresa: Strada Crinului\nConstatare: Ruptură de conductor la stâlpul 6605236, tronsonul e deconectat.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "numar"
+  ],
+  "detalii": {
+   "observatii": "Ruptură de conductor la stâlpul 6605236, tronsonul e deconectat. Tip lucrare: avarie."
+  }
+ },
+ {
+  "event_id": "EV4-020",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Crinului",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6474725",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-08",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0412\nData: 2026-09-08\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6474725\nCoordonate: -\nAdresa: Strada Crinului\nConstatare: Stâlp 6474725 verificat, fără defecte.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Verificare de rutină, stâlp existent, fără defecte. Fișă M-2026-0412."
+  },
+  "event_id_dummy": "null"
+ },
+ {
+  "event_id": "EV4-021",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+   "adresa": "Aleea Bălții, lângă nr. 9",
+   "adresa_structurata": {
+    "strada": "Aleea Bălții",
+    "numar": "9",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "9",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0114\nData: 2026-09-10\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Aleea Bălții, lângă nr. 9\nConstatare: Tronson nou executat, 40 m de linie.\nStatus: executat\n",
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "noduri"
+  ],
+  "detalii": {
+   "lungime_m": 40,
+   "observatii": "Fișă I-2026-0114, tip lucrare linie nouă; tronson nou executat, 40 m de linie. Cod element lipsă (câmp „-”)."
+  },
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6
+ },
+ {
+  "event_id": "EV4-022",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+   "adresa": "Aleea Bălții",
+   "adresa_structurata": {
+    "strada": "Aleea Bălții",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6623968",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-11",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0115\nData: 2026-09-11\nEchipa: investitii\nTip lucrare: demontare stâlp\nCod element: 6623968\nCoordonate: -\nAdresa: Aleea Bălții\nConstatare: Stâlp scos din uz, executat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "adresa_structurata.numar"
+  ],
+  "detalii": {
+   "observatii": "Demontare stâlp scos din uz, executat. Tip lucrare: demontare stâlp."
+  }
+ },
+ {
+  "event_id": "EV4-023",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "referinta": {
+   "adresa": "Strada Carpati nr. 12",
+   "adresa_structurata": {
+    "strada": "Strada Carpati",
+    "numar": "12",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6642890",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: 6642890 (vechi)\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp înlocuit cu unul nou, stâlpul vechi scos din uz.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Fișa M-2026-0413. Stâlp înlocuit cu unul nou; stâlpul vechi (cod 6642890, marcat „vechi”) scos din uz."
+  }
+ },
+ {
+  "event_id": "EV4-024",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Ulmului nr. 7",
+   "adresa_structurata": {
+    "strada": "Strada Ulmului",
+    "numar": "7",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-09-15",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0065\nData: 2026-09-15\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Ulmului nr. 7\nConstatare: Cerere din aplicația clientului, 1 fază.\nStatus: semnalat\n",
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "localitate"
+  ],
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "detalii": {
+   "observatii": "Nr. fișă R-2026-0065. Cerere din aplicația clientului, 1 fază."
+  }
+ },
+ {
+  "event_id": "EV4-025",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Carpati",
+   "adresa_structurata": {
+    "strada": "Strada Carpati",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.281967,
+    "lon": 26.065858
+   },
+   "element_id": "6872907",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-17",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0414\nData: 2026-09-17\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6872907\nCoordonate: 44.281967, 26.065858\nAdresa: Strada Carpati\nConstatare: Stâlp verificat, poziție confirmată cu GPS.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.95,
+  "detalii": {
+   "observatii": "Stâlp verificat, poziție confirmată cu GPS. Tip lucrare: verificare rutină, stâlp existent. Nr. fișă M-2026-0414."
+  },
+  "campuri_lipsa": [
+   "numar"
+  ]
+ },
+ {
+  "event_id": "EV4-026",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+   "adresa": "Șoseaua Principală",
+   "adresa_structurata": {
+    "strada": "Șoseaua Principală",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "5481763",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-19",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0415\nData: 2026-09-19\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: 5481763 → 6374339\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "tip_sursa_pondere": "formular",
+  "campuri_lipsa": [
+   "coordonate",
+   "centru",
+   "raza_m"
+  ],
+  "detalii": {
+   "motiv_mutare": "sens_giratoriu",
+   "observatii": "Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos. Nod nou: 6374339."
+  }
+ },
+ {
+  "event_id": "EV4-027",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "referinta": {
+   "adresa": "Strada Ulmului, lângă nr. 6",
+   "adresa_structurata": {
+    "strada": "Strada Ulmului",
+    "numar": "6",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "6",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "semnalat",
+  "data": "2026-09-23",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0416\nData: 2026-09-23\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: -\nCoordonate: -\nAdresa: Strada Ulmului, lângă nr. 6\nConstatare: Brațul stâlpului rupt, cablul atârnă spre trotuar.\nStatus: semnalat\n",
+  "incredere_extractie": 0.55,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Fișă M-2026-0416, tip lucrare: avarie. Constatare: brațul stâlpului rupt, cablul atârnă spre trotuar."
+  },
+  "event_id_placeholder": "null"
+ },
+ {
+  "event_id": "EV4-028",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+   "adresa": "Strada Tineretului, colț cu Șoseaua Principală",
+   "adresa_structurata": {
+    "strada": "Strada Tineretului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "colt",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": "Șoseaua Principală",
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": {
+    "lat": 44.280665,
+    "lon": 26.064629
+   },
+   "element_id": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-09-24",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0116\nData: 2026-09-24\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: 44.280665, 26.064629\nAdresa: Strada Tineretului, colț cu Șoseaua Principală\nConstatare: Linie propusă, planificată pentru 2027.\nStatus: planificat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.8,
+  "campuri_lipsa": [
+   "element_id",
+   "noduri"
+  ],
+  "detalii": {
+   "observatii": "Linie propusă, planificată pentru 2027."
+  }
+ },
+ {
+  "event_id": "EV4-029",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare_om",
+  "status": "executat",
+  "data": "2026-09-26",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-09-26\nElement: 7322194\nAdresa: Strada Liviu Rebreanu, lângă nr. 24\nConstatare: stâlpul există și e la locul indicat în GIS. Confirm, nu e nimic de corectat.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [],
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu, lângă nr. 24",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": "24",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "24",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "element_id": "7322194",
+   "coordonate": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "detalii": {
+   "tinta_id": "7322194",
+   "observatii": "Stâlpul există și e la locul indicat în GIS. Confirmat, nimic de corectat."
+  }
+ },
+ {
+  "event_id": "EV4-030",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+   "adresa": "Strada Bălții nr. 8",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": "8",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6879546",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-09-28",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0117\nData: 2026-09-28\nEchipa: investitii\nTip lucrare: demontare stâlp\nCod element: 6879546\nCoordonate: -\nAdresa: Strada Bălții nr. 8\nConstatare: Stâlp scos din uz, executat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.95,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {}
+ },
+ {
+  "event_id": "EV4-031",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "status": "executat",
+  "data": "2026-10-01",
+  "referinta": {
+   "adresa": "Strada Crinului",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.282386,
+    "lon": 26.062073
+   },
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "campuri_lipsa": [
+   "element_id",
+   "numar",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Fișa I-2026-0118: tip lucrare linie nouă; două stâlpi noi montați pe teren, tronson executat. Coordonatele indică începutul tronsonului. Cod element: „-” (absent)."
+  },
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0118\nData: 2026-10-01\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: 44.282386, 26.062073 (început tronson)\nAdresa: Strada Crinului\nConstatare: Două stâlpi montați, tronson executat.\nStatus: executat\n"
+ },
+ {
+  "event_id": "EV4-032",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu, lângă nr. 12",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": "12",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "12",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": "CL-51001",
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:10\nID client: CL-51001\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Nu avem curent pe Strada Liviu Rebreanu, lângă nr. 12.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Client raportează lipsă curent pe Strada Liviu Rebreanu, lângă nr. 12. Operatorul a înregistrat apelul, echipa verifică. Ora apelului: 19:10."
+  }
+ },
+ {
+  "event_id": "EV4-033",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu, lângă nr. 14",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": "14",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "14",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": "CL-51002",
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:24\nID client: CL-51002\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Și la noi, pe Strada Liviu Rebreanu, lângă nr. 14, pâlpâie.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Clientul raportează că iluminatul pâlpâie pe Strada Liviu Rebreanu, lângă nr. 14. Formularea „Și la noi” sugerează o problemă similară semnalată și în altă parte; nu e precizat detaliul."
+  }
+ },
+ {
+  "event_id": "EV4-034",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu, între nr. 10 și 20",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "10",
+     "numar_2": "20",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": "CL-51003",
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-02",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-10-02 ora 19:40\nID client: CL-51003\nTranscriere:\nOperator: Bună seara, cu ce vă pot ajuta?\nClient: Strada Liviu Rebreanu, între nr. 10 și 20, două case fără curent.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.6,
+  "forma_sursa": "campuri",
+  "campuri_lipsa": [
+   "event_id",
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Două case fără curent; client din Strada Liviu Rebreanu, între nr. 10 și 20. Operatorul a înregistrat apelul, echipa verifică."
+  }
+ },
+ {
+  "event_id": "EV4-035",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Liliacului, vizavi de nr. 8",
+   "adresa_structurata": {
+    "strada": "Strada Liliacului",
+    "numar": "8",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "vizavi",
+     "numar": "8",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0066\nData: 2026-10-03\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Liliacului, vizavi de nr. 8\nConstatare: Casă nouă, 1 fază.\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Casă nouă, 1 fază."
+  }
+ },
+ {
+  "event_id": "EV4-036",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Strada Oituz, colț cu Strada 1 Mai",
+   "adresa_structurata": {
+    "strada": "Strada Oituz",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "colt",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": "Strada 1 Mai",
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-05",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0417\nData: 2026-10-05\nEchipa: mentenanta\nTip lucrare: nod lipsă din GIS\nCod element: -\nCoordonate: -\nAdresa: Strada Oituz, colț cu Strada 1 Mai\nConstatare: Nod existent pe teren, lipsă din harta GIS.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+   "event_id",
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Fișa nr. M-2026-0417. Nod existent pe teren, lipsă din harta GIS. Cod element și coordonate nespecificate în fișă."
+  }
+ },
+ {
+  "event_id": "EV4-037",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6513200",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-08",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0418\nData: 2026-10-08\nEchipa: mentenanta\nTip lucrare: verificare rutină, nod\nCod element: 6513200\nCoordonate: -\nAdresa: Strada Liviu Rebreanu\nConstatare: Nod 6513200 verificat, în regulă.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "numar",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Nod verificat, în regulă. Verificare rutină, nod."
+  }
+ },
+ {
+  "event_id": "EV4-038",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Soarelui, la capătul străzii",
+   "adresa_structurata": {
+    "strada": "Strada Soarelui",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "capat",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-09",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0067\nData: 2026-10-09\nEchipa: racordari\nTip lucrare: cerere racord casă departe de rețea\nCod element: -\nCoordonate: -\nAdresa: Strada Soarelui, la capătul străzii\nConstatare: Casă la cca 300 m de ultimul stâlp, traseu pe Strada Soarelui.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "nr_cadastral"
+  ],
+  "detalii": {
+   "lungime_m": 300,
+   "observatii": "Casă la cca 300 m de ultimul stâlp, traseu pe Strada Soarelui. Cod element necompletat (\"-\")."
+  }
+ },
+ {
+  "event_id": "EV4-039",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+   "adresa": "Strada Fagului, între nr. 5 și 9",
+   "adresa_structurata": {
+    "strada": "Strada Fagului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "5",
+     "numar_2": "9",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-10-13",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0119\nData: 2026-10-13\nEchipa: investitii\nTip lucrare: demontare segment\nCod element: -\nCoordonate: -\nAdresa: Strada Fagului, între nr. 5 și 9\nConstatare: Segment scos din uz, executat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Demontare segment scos din uz, executat. Cod element și coordonate lipsesc ('-' în fișă)."
+  }
+ },
+ {
+  "event_id": "EV4-040",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "7966503",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-10-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0419\nData: 2026-10-14\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: 7966503\nCoordonate: -\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp înclinat, risc de cădere, de reparat urgent.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "numar"
+  ],
+  "detalii": {
+   "observatii": "Stâlp înclinat, risc de cădere, de reparat urgent. Tip lucrare: avarie. Nr. fișă: M-2026-0419."
+  }
+ },
+ {
+  "event_id": "EV4-041",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+   "adresa": "Strada Speranței, colț cu Strada Tineretului",
+   "adresa_structurata": {
+    "strada": "Strada Speranței",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "colt",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": "Strada Tineretului",
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-16",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0420\nData: 2026-10-16\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței, colț cu Strada Tineretului\nConstatare: Firele mutate pe Strada Tineretului, traseul vechi scos.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+   "centru",
+   "raza_m"
+  ],
+  "detalii": {
+   "intersectie": {
+    "strada_1": "Strada Speranței",
+    "strada_2": "Strada Tineretului"
+   },
+   "strada_noua": "Strada Tineretului",
+   "motiv_mutare": "sens_giratoriu",
+   "raza_m": null,
+   "observatii": "Firele mutate pe Strada Tineretului, traseul vechi scos. Nr. fișă M-2026-0420."
+  }
+ },
+ {
+  "event_id": "EV4-042",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+   "adresa": "Strada Crinului, lângă nr. 17",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": "17",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "17",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-10-17",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0068\nData: 2026-10-17\nEchipa: racordari\nTip lucrare: racord executat\nCod element: -\nCoordonate: -\nAdresa: Strada Crinului, lângă nr. 17\nConstatare: Racord executat, contor montat.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Racord executat, contor montat."
+  }
+ },
+ {
+  "event_id": "EV4-043",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare_om",
+  "referinta": {
+   "adresa": "Strada Bălții",
+   "adresa_structurata": {
+    "strada": "Strada Bălții",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6418317",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-18",
+  "text_original": "DATE FICTIVE\nVerificat de om, în teren – 2026-10-18\nElement: 6418317\nAdresa: Strada Bălții\nConstatare: nodul există pe teren, confirmat, GPS corect.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "tinta_id": "6418317",
+   "observatii": "Nodul există pe teren, confirmat de om în teren; GPS corect (valorile coordonatelor nu apar în text)."
+  },
+  "event_id_placeholder": "null"
+ },
+ {
+  "event_id": "EV4-044",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+   "adresa": "Intrarea Plopilor, lângă nr. 4",
+   "adresa_structurata": {
+    "strada": "Intrarea Plopilor",
+    "numar": "4",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "4",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "executat",
+  "data": "2026-10-22",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0421\nData: 2026-10-22\nEchipa: mentenanta\nTip lucrare: stâlp nou\nCod element: -\nCoordonate: -\nAdresa: Intrarea Plopilor, lângă nr. 4\nConstatare: Stâlp nou montat, de adăugat în GIS.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp nou montat, de adăugat în GIS. Tip lucrare: stâlp nou. Nr. fișă M-2026-0421."
+  }
+ },
+ {
+  "event_id": "EV4-045",
+  "echipa_sursa": "investitii",
+  "tip": "linie_planificata",
+  "referinta": {
+   "adresa": "Strada Orizont, vizavi de nr. 8",
+   "adresa_structurata": {
+    "strada": "Strada Orizont",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "vizavi",
+     "numar": "8",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "planificat",
+  "data": "2026-10-26",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0120\nData: 2026-10-26\nEchipa: investitii\nTip lucrare: linie nouă planificată\nCod element: -\nCoordonate: -\nAdresa: Strada Orizont, vizavi de nr. 8\nConstatare: Linie de 120 m propusă, în așteptare de buget.\nStatus: planificat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id",
+   "noduri"
+  ],
+  "detalii": {
+   "lungime_m": 120,
+   "observatii": "Linie de 120 m propusă, în așteptare de buget. Nr. fișă I-2026-0120."
+  }
+ },
+ {
+  "event_id": "EV4-046",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Orhideelor nr. 3",
+   "adresa_structurata": {
+    "strada": "Strada Orhideelor",
+    "numar": "3",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-10-28",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0069\nData: 2026-10-28\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Orhideelor nr. 3\nConstatare: Două case noi, 1 fază fiecare.\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Nr. fișă R-2026-0069. Două case noi, 1 fază fiecare."
+  }
+ },
+ {
+  "event_id": "EV4-047",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+   "adresa": "Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Liviu Rebreanu",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.282376,
+    "lon": 26.064957
+   },
+   "element_id": "6650412",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-29",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0422\nData: 2026-10-29\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6650412\nCoordonate: 44.282376, 26.064957\nAdresa: Strada Liviu Rebreanu\nConstatare: Stâlp verificat, izolator ok, poziția confirmată.\nStatus: executat\n",
+  "campuri_lipsa": [
+   "numar",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Fișa M-2026-0422, verificare rutină pe stâlp existent. Stâlp verificat, izolator ok, poziția confirmată."
+  },
+  "forma_sursa": "campuri",
+  "incredere_extractie": 1,
+  "tip_sursa_pondere": "formular"
+ },
+ {
+  "event_id": "EV4-048",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+   "adresa": "Strada Liliacului nr. 11",
+   "adresa_structurata": {
+    "strada": "Strada Liliacului",
+    "numar": "11",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-30",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0070\nData: 2026-10-30\nEchipa: racordari\nTip lucrare: racord executat\nCod element: -\nCoordonate: -\nAdresa: Strada Liliacului nr. 11\nConstatare: Racord executat, status executat.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Nr. fișă R-2026-0070; racord executat, status executat"
+  }
+ },
+ {
+  "event_id": "EV4-049",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Soarelui, între nr. 4 și 10",
+   "adresa_structurata": {
+    "strada": "Strada Soarelui",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "intre",
+     "numar": "4",
+     "numar_2": "10",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-03",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0423\nData: 2026-11-03\nEchipa: mentenanta\nTip lucrare: avarie\nCod element: -\nCoordonate: -\nAdresa: Strada Soarelui, între nr. 4 și 10\nConstatare: Cablu căzut pe carosabil, zona e delimitată.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "sectiune_noua": null,
+   "observatii": "Nr. fișă M-2026-0423. Tip lucrare: avarie. Constatare: cablu căzut pe carosabil, zona e delimitată."
+  }
+ },
+ {
+  "event_id": "EV4-050",
+  "echipa_sursa": "investitii",
+  "tip": "racord_nou",
+  "referinta": {
+   "adresa": "Strada Primăverii, la capătul străzii",
+   "adresa_structurata": {
+    "strada": "Strada Primăverii",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "capat",
+     "numar": null,
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Tronson nou executat, racord la rețea.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.4,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate"
+  ],
+  "detalii": {
+   "sectiune_noua": null,
+   "observatii": "Fișa I-2026-0121: tronson nou executat, racord la rețea. Tip lucrare: linie nouă. Cod element lipsă ('-'), coordonate lipsă ('-'); locația este doar stradă și capăt de stradă. Tipul racord_nou este ales pentru racordul la rețea executat; nu există cerere de client în text."
+  }
+ },
+ {
+  "event_id": "EV4-051",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+   "adresa": "Strada Primăverii, între nr. 4 și 10",
+   "adresa_structurata": {
+    "strada": "Strada Primăverii",
+    "numar": null,
+    "localitate": null,
+    "reper": "lângă poarta cu gard verde",
+    "indiciu": {
+     "tip": "intre",
+     "numar": "4",
+     "numar_2": "10",
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-07",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0071\nData: 2026-11-07\nEchipa: racordari\nTip lucrare: cerere racord casă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, între nr. 4 și 10\nConstatare: Casă nouă, lângă poarta cu gard verde.\nStatus: semnalat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate"
+  ],
+  "detalii": {
+   "observatii": "Casă nouă, lângă poarta cu gard verde."
+  }
+ },
+ {
+  "event_id": "EV4-052",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare_om",
+  "referinta": {
+   "adresa": "Strada Carpati",
+   "adresa_structurata": {
+    "strada": "Strada Carpati",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6793869",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-10",
+  "text_original": "DATE FICTIVE\nVerificat de om, pe teren, cu operatorul – 2026-11-10\nElement: 6793869\nAdresa: Strada Carpati\nConstatare: nodul confirmat la fața locului, nimic de corectat.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.9,
+  "campuri_lipsa": [
+   "coordonate",
+   "numar"
+  ],
+  "detalii": {
+   "tinta_id": "6793869",
+   "observatii": "Verificat de om, pe teren, cu operatorul; nodul confirmat la fața locului, nimic de corectat."
+  }
+ },
+ {
+  "event_id": "EV4-053",
+  "echipa_sursa": "apel_client",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Crinului",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": {
+    "lat": 44.283453,
+    "lon": 26.062913
+   },
+   "element_id": null,
+   "id_client": "CL-61204",
+   "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-11",
+  "text_original": "DATE FICTIVE\nApel client – fișă apel\nData: 2026-11-11 ora 08:05\nID client: CL-61204\nTranscriere:\nOperator: Bună dimineața, cu ce vă pot ajuta?\nClient: Stâlp înclinat pe Strada Crinului. Locație din telefon: 44.283453, 26.062913.\nOperator: Vă înregistrez, echipa verifică.\n",
+  "tip_sursa_pondere": "apel_client",
+  "incredere_extractie": 0.8,
+  "forma_sursa": "campuri",
+  "campuri_lipsa": [
+   "event_id",
+   "element_id",
+   "adresa_structurata.numar",
+   "adresa_structurata.localitate"
+  ],
+  "detalii": {
+   "observatii": "Stâlp înclinat pe Strada Crinului. Locație din telefon: 44.283453, 26.062913."
+  }
+ },
+ {
+  "event_id": "EV4-054",
+  "echipa_sursa": "investitii",
+  "tip": "activ_demontat",
+  "referinta": {
+   "adresa": "Strada Speranței",
+   "adresa_structurata": {
+    "strada": "Strada Speranței",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6510484",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-12",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0122\nData: 2026-11-12\nEchipa: investitii\nTip lucrare: demontare stâlp\nCod element: 6510484\nCoordonate: -\nAdresa: Strada Speranței\nConstatare: Stâlp scos din uz, executat 12.11.2026.\nStatus: executat\n",
+  "campuri_lipsa": [
+   "coordonate",
+   "numar"
+  ],
+  "detalii": {
+   "observatii": "Fișă de lucrare nr. I-2026-0122; tip lucrare: demontare stâlp; stâlp scos din uz, executat 12.11.2026"
+  },
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.85
+ },
+ {
+  "event_id": "EV4-055",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+   "adresa": "Strada Carpati nr. 15",
+   "adresa_structurata": {
+    "strada": "Strada Carpati",
+    "numar": "15",
+    "localitate": null,
+    "reper": null,
+    "indiciu": null
+   },
+   "coordonate": null,
+   "element_id": "6872907",
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-13",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0072\nData: 2026-11-13\nEchipa: racordari\nTip lucrare: racord executat\nCod element: 6872907\nCoordonate: -\nAdresa: Strada Carpati nr. 15\nConstatare: Racord executat 13.11, lanț trecut pe stâlpul 6872907.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.85,
+  "campuri_lipsa": [
+   "coordonate",
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Racord executat 13.11, lanț trecut pe stâlpul 6872907."
+  }
+ }
 ]

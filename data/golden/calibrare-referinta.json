@@ -1,205 +1,387 @@
 [
  {
-  "event_id": "EV-001",
-  "data": "2026-08-04",
+  "event_id": "EV4-001",
+  "data": "2026-08-03",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-002",
+  "data": "2026-08-06",
   "tip": "nod_lipsa",
+  "decizie": "adaugat",
+  "scor": 0.661
+ },
+ {
+  "event_id": "EV4-003",
+  "data": "2026-08-07",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-004",
+  "data": "2026-08-10",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-005",
+  "data": "2026-08-11",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-006",
+  "data": "2026-08-12",
+  "tip": "cerere_racordare",
   "decizie": "predictie",
-  "scor": 0.744
+  "scor": 0.677
  },
  {
-  "event_id": "EV-002",
-  "data": "2026-08-05",
-  "tip": "verificare",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
+  "event_id": "EV4-007",
+  "data": "2026-08-13",
+  "tip": "nod_lipsa",
+  "decizie": "adaugat",
+  "scor": 0.577
  },
  {
-  "event_id": "EV-003",
-  "data": "2026-08-12",
-  "tip": "verificare",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
- },
- {
-  "event_id": "EV-004",
-  "data": "2026-08-12",
-  "tip": "racord_nou",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
- },
- {
-  "event_id": "EV-005",
+  "event_id": "EV4-008",
   "data": "2026-08-14",
-  "tip": "activ_inlocuit",
-  "decizie": "fara_efect",
-  "scor": 0.946
- },
- {
-  "event_id": "EV-006",
-  "data": "2026-08-18",
   "tip": "nod_lipsa",
-  "decizie": "predictie",
-  "scor": 0.813
+  "decizie": "adaugat",
+  "scor": 0.567
  },
  {
-  "event_id": "EV-007",
-  "data": "2026-08-20",
+  "event_id": "EV4-009",
+  "data": "2026-08-18",
   "tip": "verificare",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV-008",
+  "event_id": "EV4-010",
+  "data": "2026-08-21",
+  "tip": "linie_planificata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV4-011",
   "data": "2026-08-22",
   "tip": "avarie_semnalata",
-  "decizie": "scor_actualizat",
-  "scor": 0.908
+  "decizie": "de_verificat",
+  "scor": null
  },
  {
-  "event_id": "EV-009",
-  "data": "2026-08-26",
-  "tip": "avarie_semnalata",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
+  "event_id": "EV4-012",
+  "data": "2026-08-24",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.55
  },
  {
-  "event_id": "EV-010",
-  "data": "2026-08-29",
-  "tip": "racord_nou",
-  "decizie": "conflict",
-  "scor": 0.889
- },
- {
-  "event_id": "EV-011",
-  "data": "2026-08-29",
-  "tip": "racord_nou",
+  "event_id": "EV4-013",
+  "data": "2026-08-25",
+  "tip": "verificare",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV-012",
+  "event_id": "EV4-014",
+  "data": "2026-08-27",
+  "tip": "nod_lipsa",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-015",
+  "data": "2026-08-29",
+  "tip": "verificare_om",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-016",
+  "data": "2026-09-01",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-017",
+  "data": "2026-09-02",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.362
+ },
+ {
+  "event_id": "EV4-018",
   "data": "2026-09-03",
   "tip": "racord_nou",
   "decizie": "adaugat",
-  "scor": 0.63
+  "scor": 0.7
  },
  {
-  "event_id": "EV-013",
+  "event_id": "EV4-019",
+  "data": "2026-09-04",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-020",
   "data": "2026-09-08",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-014",
-  "data": "2026-09-10",
-  "tip": "activ_inlocuit",
-  "decizie": "aplicat",
-  "scor": 0.883
- },
- {
-  "event_id": "EV-015",
-  "data": "2026-09-15",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-016",
-  "data": "2026-09-22",
-  "tip": "activ_inlocuit",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
- },
- {
-  "event_id": "EV-017",
-  "data": "2026-09-29",
-  "tip": "activ_inlocuit",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-018",
-  "data": "2026-10-02",
-  "tip": "avarie_semnalata",
-  "decizie": "scor_actualizat",
-  "scor": 0.896
- },
- {
-  "event_id": "EV-019",
-  "data": "2026-10-02",
-  "tip": "avarie_semnalata",
-  "decizie": "scor_actualizat",
-  "scor": 0.906
- },
- {
-  "event_id": "EV-020",
-  "data": "2026-10-03",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-021",
-  "data": "2026-10-05",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-022",
-  "data": "2026-10-06",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-023",
-  "data": "2026-10-07",
-  "tip": "racord_nou",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
- },
- {
-  "event_id": "EV-024",
-  "data": "2026-10-12",
-  "tip": "racord_nou",
-  "decizie": "scor_actualizat",
-  "scor": 1.0
- },
- {
-  "event_id": "EV-025",
-  "data": "2026-10-16",
-  "tip": "avarie_semnalata",
-  "decizie": "neaplicat",
-  "scor": null
- },
- {
-  "event_id": "EV-026",
-  "data": "2026-10-20",
   "tip": "verificare",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV-027",
-  "data": "2026-10-21",
-  "tip": "racord_nou",
+  "event_id": "EV4-021",
+  "data": "2026-09-10",
+  "tip": "linie_planificata",
   "decizie": "neaplicat",
   "scor": null
  },
  {
-  "event_id": "EV-028",
-  "data": "2026-10-23",
-  "tip": "nod_lipsa",
-  "decizie": "adaugat",
-  "scor": 0.85
+  "event_id": "EV4-022",
+  "data": "2026-09-11",
+  "tip": "activ_demontat",
+  "decizie": "scor_actualizat",
+  "scor": 0.786
  },
  {
-  "event_id": "EV-029",
-  "data": "2026-10-27",
+  "event_id": "EV4-023",
+  "data": "2026-09-14",
+  "tip": "activ_inlocuit",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-024",
+  "data": "2026-09-15",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.239
+ },
+ {
+  "event_id": "EV4-025",
+  "data": "2026-09-17",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-026",
+  "data": "2026-09-19",
+  "tip": "mutare_fire",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV4-027",
+  "data": "2026-09-23",
+  "tip": "avarie_semnalata",
+  "decizie": "de_verificat",
+  "scor": 0.35
+ },
+ {
+  "event_id": "EV4-028",
+  "data": "2026-09-24",
   "tip": "linie_planificata",
   "decizie": "fara_efect",
-  "scor": 0.921
+  "scor": 0.932
+ },
+ {
+  "event_id": "EV4-029",
+  "data": "2026-09-26",
+  "tip": "verificare_om",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-030",
+  "data": "2026-09-28",
+  "tip": "activ_demontat",
+  "decizie": "scor_actualizat",
+  "scor": 0.781
+ },
+ {
+  "event_id": "EV4-031",
+  "data": "2026-10-01",
+  "tip": "nod_lipsa",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-032",
+  "data": "2026-10-02",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.455
+ },
+ {
+  "event_id": "EV4-033",
+  "data": "2026-10-02",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.425
+ },
+ {
+  "event_id": "EV4-034",
+  "data": "2026-10-02",
+  "tip": "avarie_semnalata",
+  "decizie": "de_verificat",
+  "scor": 0.35
+ },
+ {
+  "event_id": "EV4-035",
+  "data": "2026-10-03",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.677
+ },
+ {
+  "event_id": "EV4-036",
+  "data": "2026-10-05",
+  "tip": "nod_lipsa",
+  "decizie": "adaugat",
+  "scor": 0.53
+ },
+ {
+  "event_id": "EV4-037",
+  "data": "2026-10-08",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-038",
+  "data": "2026-10-09",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.32
+ },
+ {
+  "event_id": "EV4-039",
+  "data": "2026-10-13",
+  "tip": "activ_demontat",
+  "decizie": "de_verificat",
+  "scor": 0.35
+ },
+ {
+  "event_id": "EV4-040",
+  "data": "2026-10-14",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-041",
+  "data": "2026-10-16",
+  "tip": "mutare_fire",
+  "decizie": "de_verificat",
+  "scor": null
+ },
+ {
+  "event_id": "EV4-042",
+  "data": "2026-10-17",
+  "tip": "racord_nou",
+  "decizie": "adaugat",
+  "scor": 0.582
+ },
+ {
+  "event_id": "EV4-043",
+  "data": "2026-10-18",
+  "tip": "verificare_om",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-044",
+  "data": "2026-10-22",
+  "tip": "nod_lipsa",
+  "decizie": "adaugat",
+  "scor": 0.564
+ },
+ {
+  "event_id": "EV4-045",
+  "data": "2026-10-26",
+  "tip": "linie_planificata",
+  "decizie": "neaplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV4-046",
+  "data": "2026-10-28",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.677
+ },
+ {
+  "event_id": "EV4-047",
+  "data": "2026-10-29",
+  "tip": "verificare",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-048",
+  "data": "2026-10-30",
+  "tip": "racord_nou",
+  "decizie": "adaugat",
+  "scor": 0.582
+ },
+ {
+  "event_id": "EV4-049",
+  "data": "2026-11-03",
+  "tip": "avarie_semnalata",
+  "decizie": "predictie",
+  "scor": 0.205
+ },
+ {
+  "event_id": "EV4-050",
+  "data": "2026-11-06",
+  "tip": "racord_nou",
+  "decizie": "adaugat",
+  "scor": 0.53
+ },
+ {
+  "event_id": "EV4-051",
+  "data": "2026-11-07",
+  "tip": "cerere_racordare",
+  "decizie": "predictie",
+  "scor": 0.33
+ },
+ {
+  "event_id": "EV4-052",
+  "data": "2026-11-10",
+  "tip": "verificare_om",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
+ },
+ {
+  "event_id": "EV4-053",
+  "data": "2026-11-11",
+  "tip": "avarie_semnalata",
+  "decizie": "scor_actualizat",
+  "scor": 0.881
+ },
+ {
+  "event_id": "EV4-054",
+  "data": "2026-11-12",
+  "tip": "activ_demontat",
+  "decizie": "scor_actualizat",
+  "scor": 0.766
+ },
+ {
+  "event_id": "EV4-055",
+  "data": "2026-11-13",
+  "tip": "racord_nou",
+  "decizie": "scor_actualizat",
+  "scor": 1.0
  }
 ]

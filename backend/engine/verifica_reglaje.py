@@ -3,11 +3,13 @@
     .venv/bin/python -m backend.engine.verifica_reglaje            # chei, limite, relații, diferență calibrare, smoke-uri
     .venv/bin/python -m backend.engine.verifica_reglaje --rapid    # fără smoke-uri
     .venv/bin/python -m backend.engine.verifica_reglaje --scrie-referinta   # (B) scrie data/golden/calibrare-referinta.json
+    .venv/bin/python -m backend.engine.verifica_reglaje --strict-distributie   # distribuția culorilor în afara țintei = eșec
 
 Reguli: aceleași chei ca în `contracts/weights.limits.yaml`, fiecare valoare numerică în [min, max], relațiile dintre
 praguri respectate. Arată ce valori s-au schimbat față de `git HEAD`, ce evenimente de calibrare își schimbă decizia sau
 scorul față de referință (`data/golden/calibrare-referinta.json`, sau față de HEAD dacă lipsește) și rulează smoke-urile.
-Tipărește o linie gata de lipit în `board/<laptop>.md`. Cod de ieșire 0 = reglaj bun de împins (commit `reglaj:`).
+Tipărește și distribuția culorilor (benzilor) la ultima dată a scenariului, față de `TINTA_DISTRIBUTIE` (informativ;
+eșec doar cu `--strict-distributie`; sărită cu `--rapid`). Tipărește o linie gata de lipit în `board/<laptop>.md`. Cod de ieșire 0 = reglaj bun de împins (commit `reglaj:`).
 """
 from __future__ import annotations
 
@@ -26,6 +28,10 @@ REF = ROOT / "data" / "golden" / "calibrare-referinta.json"
 SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend.engine.smoke_engine",
           "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
           "backend.trace.smoke_trace", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
+
+# Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2): procente din toate
+# elementele vizibile în snapshot (rețea de start + SIM + adăugate din rapoarte + predicții), interval [min, max].
+TINTA_DISTRIBUTIE = {"verde": (70.0, 82.0), "galben": (8.0, 15.0), "portocaliu": (5.0, 10.0), "rosu": (2.0, 6.0)}
 
 
 def aplatizeaza(d: dict, pre: str = "") -> dict:
@@ -102,6 +108,21 @@ def diferenta_calibrare(w: dict) -> tuple[list[str], list[dict]]:
     return [f"referință: {sursa}"] + linii, acum
 
 
+def distributie_culori(w: dict) -> tuple[str, dict, bool]:
+    """Rulează scenariul (calibrare.evenimente) cu ponderile `w`; întoarce (ultima_data, procente pe benzi, în_țintă)."""
+    from backend.engine import osm
+    from backend.engine.calibrare import evenimente
+    from backend.engine.model import GridModel
+    ev, _ = evenimente()
+    m = GridModel(weights=w)
+    m.traseu_fn = osm.traseu_fn()
+    for e in ev:
+        m.apply_event(e)
+    d = m.ultima_data
+    proc = m.statistici(d)["procent_banda"]
+    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items())
+
+
 def rulează_smoke() -> list[str]:
     esuate = []
     env = {**os.environ, "EXTRACT_CLI": "0", "API_EXTRACTIE": os.environ.get("API_EXTRACTIE", "")}
@@ -137,6 +158,16 @@ def main() -> int:
         print("  ", l)
     if len(linii) == 1:
         print("   (nicio decizie sau scor schimbat)")
+    in_tinta = True
+    if "--rapid" not in sys.argv:
+        d, p, in_tinta = distributie_culori(w)
+        tinta = ", ".join(f"{b.replace('rosu', 'roșu')} {lo:g}-{hi:g} %" for b, (lo, hi) in TINTA_DISTRIBUTIE.items())
+        print(f"Distribuție culori la {d}: verde {p['verde']} %, galben {p['galben']} %, portocaliu {p['portocaliu']} %, "
+              f"roșu {p['rosu']} % (țintă {tinta}): " + ("în țintă" if in_tinta else "în afara țintei"))
+        if not in_tinta and "--strict-distributie" not in sys.argv:
+            print("   (informativ; devine eșec cu --strict-distributie, după calibrare)")
+    if not in_tinta and "--strict-distributie" in sys.argv:
+        return 1
     esuate = [] if "--rapid" in sys.argv else rulează_smoke()
     if esuate:
         print("Smoke-uri eșuate:", ", ".join(esuate))
