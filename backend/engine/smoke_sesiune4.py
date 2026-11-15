@@ -233,6 +233,115 @@ def teste_cautare_strada() -> None:
     verifica("determinism: două rulări identice dau aceleași decizii, scoruri, ferestre, candidați și ancore", ruleaza() == ruleaza())
 
 
+def teste_verificare_om() -> None:
+    """V5 / D10: `verificare_om`, acceptarea ca verificare, contradicția ulterioară, scăderea în timp, API."""
+    def vev(i, data, tinta=None, ref=None, motiv=None):
+        det = {"tinta_id": tinta} if tinta else {}
+        if motiv:
+            det["motiv"] = motiv
+        return ev(i, data, "om_teren", "verificare_om", "executat", ref=ref, det=det, sursa="om_teren", inc=1.0)
+
+    m = mk()
+    w = m.w
+    sid = next(e for e in sorted(m.istoric) if e.startswith("SIM-") and m.istoric[e][0]["scor"] == w["retea_start"]["scor_galben"]
+               and e in m.net["noduri"])
+    verifica("V5 pregătire: stâlp SIM-* galben la start", snap(m, "2026-08-01", sid)["banda"] == "galben", sid)
+    t = m.apply_event(vev("V5-1", "2026-11-15", sid, motiv="verificat pe teren"))
+    s1 = snap(m, "2026-11-15", sid)
+    verifica("V5: verificare_om pe galben -> scor 1,0, verde, verificat_om, data, confirmat_de om, in_model",
+             s1["scor"] == 1.0 and s1["banda"] == "verde" and s1["verificat_om"] is True and s1["verificat_om_data"] == "2026-11-15"
+             and s1["confirmat_de"] == "om" and s1["nivel"] == "in_model" and s1["ultima_verificare"] == "2026-11-15", str(s1["scor"]))
+    verifica("V5: motiv 'Verificat de om în teren (data): motiv'", s1["motive"][0]["text"].startswith("Verificat de om în teren (2026-11-15): verificat pe teren"), s1["motive"][0]["text"])
+    verifica("V5: decizie aplicat, schimbare actualizat galben -> verde, jurnal cu eticheta verificat_om",
+             t["decizie"] == "aplicat" and t["schimbari"][0]["ce"] == "actualizat" and t["schimbari"][0]["banda_inainte"] == "galben"
+             and t["schimbari"][0]["banda_dupa"] == "verde" and m.jurnal[-1]["eticheta"] == "verificat_om" and m.jurnal[-1]["tip"] == "verificare_om",
+             f"{t['decizie']} {m.jurnal[-1]['eticheta']}")
+    s2 = snap(m, "2027-11-15", sid)
+    verifica("V5: la +365 zile scorul >= 0,95 (minim verificat_om), încă verificat", s2["scor"] >= w["verificat_om"]["minim"] and s2["verificat_om"] is True, str(s2["scor"]))
+    print("StepTrace verificare_om:", json.dumps({"decizie": t["decizie"], "pasi": [p["nume"] for p in t["pasi"]],
+                                                   "schimbari": t["schimbari"]}, ensure_ascii=False)[:600])
+    # contradicție: apel de client ulterior
+    tc = m.apply_event(ev("V5-2", "2026-12-01", "apel_client", "avarie_semnalata", "semnalat", ref={"element_id": sid}, sursa="apel_client", inc=0.9))
+    s3 = snap(m, "2026-12-01", sid)
+    verifica("V5: apel care contrazice -> verificat_om false, scor scade, motiv pomenește contrazicerea",
+             s3["verificat_om"] is False and s3["verificat_om_data"] is None and s3["scor"] < 1.0 and "contrazisă de V5-2" in s3["motive"][0]["text"]
+             and "2026-11-15" in s3["motive"][0]["text"], f"{s3['scor']} {s3['motive'][0]['text'][:90]}")
+    verifica("V5: contradicția: scor = scor efectiv + efect (nu resetat)", abs(s3["scor"] - (S.scor_la_data(1.0, "2026-11-15", "2026-12-01", w, "verificat_om") + tc["modificari"][0]["motive"][0]["efect"])) < 0.002, str(s3["scor"]))
+    # un raport care confirmă nu șterge flag-ul
+    m2 = mk()
+    m2.apply_event(vev("V5-3", "2026-11-15", sid))
+    m2.apply_event(ev("V5-4", "2026-11-20", "mentenanta", "verificare", "executat", ref={"element_id": sid}))
+    verifica("V5: raport care confirmă nu șterge verificat_om", snap(m2, "2026-11-20", sid)["verificat_om"] is True)
+    # demontat (semnal) contrazice
+    m3 = mk()
+    m3.apply_event(vev("V5-5", "2026-11-15", sid))
+    m3.apply_event(ev("V5-6", "2026-11-20", "mentenanta", "activ_demontat", "executat", ref={"element_id": sid}))
+    verifica("V5: semnal de demontare contrazice verificarea", snap(m3, "2026-11-20", sid)["verificat_om"] is False)
+    # element GIS și tronson
+    kmz = next(e for e in m.net["tronsoane"] if not e.startswith("SIM-"))
+    mg = mk()
+    mg.apply_event(vev("V5-7", "2026-11-15", kmz))
+    verifica("V5: tronson GIS verificat -> 1,0", snap(mg, "2026-11-15", kmz)["scor"] == 1.0 and snap(mg, "2026-11-15", kmz)["verificat_om"] is True)
+    # fără tinta_id: ID în referință
+    mi = mk()
+    ti = mi.apply_event(vev("V5-8", "2026-11-15", None, ref={"element_id": sid}))
+    verifica("V5: fără tinta_id, cu referinta.element_id -> verificat", snap(mi, "2026-11-15", sid)["verificat_om"] is True and ti["decizie"] == "aplicat", ti["decizie"])
+    tn = mi.apply_event(vev("V5-9", "2026-11-16", None, ref={}))
+    verifica("V5: fără tinta_id și fără element -> neaplicat cu motiv", tn["decizie"] == "neaplicat" and tn["pasi"][-1]["motive"][0], str(tn["pasi"][-1].get("motive")))
+    tx = mi.apply_event(vev("V5-10", "2026-11-16", "NU-EXISTA-1"))
+    verifica("V5: tinta_id inexistent -> neaplicat", tx["decizie"] == "neaplicat" and tx["eroare"]["cod"] == "tinta_necunoscuta", tx["decizie"])
+    # predicție NOU-...
+    mp = mk()
+    nod = m.net["noduri"][sid]
+    tp = mp.apply_event(ev("V5-11", "2026-11-15", "mentenanta", "nod_lipsa", "semnalat", ref={"coordonate": {"lat": nod["lat"] + 0.0003, "lon": nod["lon"]}},
+                           sursa="text_liber", inc=0.7, forma="text_liber"))
+    pred = next((x["element_id"] for x in tp["modificari"] if x["tip_element"] == "nod"), None)
+    verifica("V5 pregătire: predicție de nod", tp["decizie"] == "predictie" and pred in mp.predictii, str(tp["decizie"]))
+    tv = mp.apply_event(vev("V5-12", "2026-11-16", pred))
+    sp = snap(mp, "2026-11-16", pred)
+    verifica("V5: verificare pe predicție NOU-* -> aplicată, verificată, 1,0", tv["decizie"] == "aplicat" and pred in mp.net["noduri"] and pred not in mp.predictii
+             and sp["verificat_om"] is True and sp["scor"] == 1.0 and sp["nivel"] == "in_model" and sp["confirmat_de"] == "om", str(sp and sp["scor"]))
+    # „Acceptă” (decizia omului) = verificare de om
+    ma = mk()
+    tp = ma.apply_event(ev("V5-13", "2026-11-15", "mentenanta", "nod_lipsa", "semnalat", ref={"coordonate": {"lat": nod["lat"] + 0.0003, "lon": nod["lon"]}},
+                           sursa="text_liber", inc=0.7, forma="text_liber"))
+    pred = next(x["element_id"] for x in tp["modificari"] if x["tip_element"] == "nod")
+    ta = ma.apply_event(ev("V5-14", "2026-11-16", "om_teren", "verificare", "executat", det={"decizie": {"tinta_id": pred, "decizie": "accepta"}}, sursa="om_teren", inc=1.0))
+    sa = snap(ma, "2026-11-16", pred)
+    verifica("V5: «Acceptă» prin _decizie_om -> verificat_om true, scor 1,0", ta["decizie"] == "aplicat" and sa["verificat_om"] is True and sa["scor"] == 1.0 and sa["verificat_om_data"] == "2026-11-16", str(sa["scor"]))
+    # pin VER-* devine nod verificat
+    mv = mk()
+    pid = "VER-TEST"
+    mv.pinuri[pid] = {"geometrie": {"type": "Point", "coordinates": [nod["lon"], nod["lat"] + 0.0002]}}
+    mv._pune(pid, "nod", "2026-11-15", nivel="de_verificat", scor=0.3, ultima_verificare=None, origine="generat_model", t0=False, sursa_locatie="strada",
+             verificat_om=False, verificat_om_data=None, predictie=None, motive=[{"text": "pin", "efect": 0.0, "eveniment": "x", "data": "2026-11-15"}])
+    mv.apply_event(vev("V5-15", "2026-11-16", pid))
+    sv = snap(mv, "2026-11-16", pid)
+    verifica("V5: pin VER-* devine nod verificat în model", pid in mv.net["noduri"] and pid not in mv.pinuri and sv and sv["verificat_om"] is True and sv["scor"] == 1.0
+             and sv["geometrie"]["coordinates"][1] == nod["lat"] + 0.0002 if sv and "geometrie" in sv else bool(sv and sv["verificat_om"]), str(sv and sv["nivel"]))
+    # determinism
+    def rul():
+        mm = mk()
+        mm.apply_event(vev("V5-1", "2026-11-15", sid))
+        mm.apply_event(ev("V5-2", "2026-12-01", "apel_client", "avarie_semnalata", "semnalat", ref={"element_id": sid}, sursa="apel_client", inc=0.9))
+        return json.dumps([mm.jurnal, snap(mm, "2027-01-01", sid)], sort_keys=True, default=str)
+    verifica("V5: determinism (două rulări identice)", rul() == rul())
+    # element cu predicția „probabil acest element” (cautare_strada): marker șters
+    mm = mk()
+    mm._pune(sid, "nod", "2026-11-15", predictie={"metoda": "cautare_strada", "urmeaza_strada": None, "propunere": None, "scor_propunere": 0.5})
+    mm.apply_event(vev("V5-16", "2026-11-16", sid))
+    verifica("V5: marker cautare_strada șters la verificare", snap(mm, "2026-11-16", sid)["predictie"] is None)
+    # API: POST /element/{id}/verificare
+    try:
+        from fastapi.testclient import TestClient
+        from backend.api.main import app
+        r = TestClient(app).post(f"/element/{sid}/verificare", json={"motiv": "test"})
+        verifica("V5 API: POST /element/{id}/verificare -> 200 (nu 501)", r.status_code == 200, f"{r.status_code} {r.text[:120]}")
+        TestClient(app).post("/demo/reset")
+    except ImportError:
+        print("SKIP API (fastapi lipsă)")
+
+
 def main() -> None:
     w = load_weights()
     m = mk()
@@ -349,6 +458,7 @@ def main() -> None:
              m0.istoric[e0][0]["origine"] == "retea_start" and m0.istoric[e0][0]["scor"] == 0.95)
 
     teste_cautare_strada()
+    teste_verificare_om()
 
     ok, tot = sum(OK), len(OK)
     print(f"\nsmoke_sesiune4: {ok}/{tot} OK")

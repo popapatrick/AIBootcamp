@@ -10,6 +10,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `scoring.py`, `config.py` | scor, praguri, ponderi din `contracts/weights.yaml` | `docs/etapa-5-scor-decizie.md` |
 | `model.py` | `GridModel`: apply_event, snapshot, timeline, statistici, decizia omului | `docs/etapa-5-scor-decizie.md`, `etapa-14-verificare-om.md` |
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
+| `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
 | `osm.py` | traseu pe străzi, `strazi()` pentru modulele lui A (cache `data/model/osm/`) | `docs/etapa-6-traseu-osm.md` |
 | `engine.py` | interfața publică pentru API: `apply_event`, `snapshot`, `timeline`, `statistici`, `aplica_decizie`, `model_scenariu`, `reset` | `contracts/interfaces.md` |
 | `calibrare.py`, `fallback_events.py` | rulare pe evenimente reale, rezervă fără date de la A | `docs/calibrare.md` |
@@ -22,7 +23,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_engine     # 39 verificări
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 52 verificări (acuratețe V1/V2 + căutare pe stradă V6)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 72 verificări (acuratețe V1/V2, căutare pe stradă V6, verificat de om V5)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 

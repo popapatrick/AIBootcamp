@@ -8,7 +8,7 @@
 
 - [x] 2.1 (V1) Scădere separată pe origine, plafon după sursa locației, prag de aplicare pentru rapoarte executate, `banda`, `sursa_locatie`
 - [x] 2.2 (V2) SIM-* „din rapoarte mai vechi”, scoruri amestecate deterministe
-- [ ] 2.3 (V5) Eveniment `verificare_om`, „Acceptă” = verificare de om, contradicție
+- [x] 2.3 (V5) Eveniment `verificare_om`, „Acceptă” = verificare de om, contradicție
 - [ ] 2.4 Teste în `smoke_sesiune4.py`, `docs/etapa-26-acuratete-realista.md`, `docs/etapa-29-verificat-om.md`
 
 ## 3. API (C)

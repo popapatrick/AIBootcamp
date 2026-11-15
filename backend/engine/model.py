@@ -24,6 +24,7 @@ from backend.engine.defects import build
 from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
 from backend.engine.sesiune2 import TIPURI_CAUTARE, TIPURI_NOI, Sesiune2
+from backend.engine.verificare_om import VerificareOm
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -31,7 +32,7 @@ START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițial�
 MAX_MOTIVE = 8
 
 
-class GridModel(Sesiune2):
+class GridModel(Sesiune2, VerificareOm):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
         if net is None:
@@ -134,6 +135,12 @@ class GridModel(Sesiune2):
         if event["echipa_sursa"] == "om_teren" and event["tip"] == "verificare" and det0.get("decizie"):
             self._decizie_om(event, det0["decizie"], trace)          # decizia omului asupra unei predicții
             return self._inchide(event, "verificare", trace, {"element_id": det0["decizie"].get("tinta_id"), "motiv": ""}, inainte)
+        if event["tip"] == "verificare_om":
+            # D10 (V5): un om marchează un element verificat. Cu `tinta_id`: direct. Fără: potrivirea normală, ca la o verificare
+            if (det0.get("tinta_id") or "").strip():
+                self._verificare_om(event, det0["tinta_id"].strip(), trace)
+                return self._inchide(event, "verificare_om", trace, {"element_id": det0["tinta_id"].strip(), "motiv": ""}, inainte)
+            event = {**event, "tip": "verificare", "_om": True}
         if not ref0.get("element_id") and det0.get("id_partial"):
             # extracția a lăsat codul brut (ex. T-002, fără prefix de categorie); potrivirea îl dezambiguizează
             event = {**event, "referinta": {**ref0, "element_id": det0["id_partial"]}}
@@ -199,6 +206,15 @@ class GridModel(Sesiune2):
             trace["pasi"][0]["rezultat"]["tip_tratat_ca"] = "nod_lipsa"
             trace["pasi"][0]["rezultat"]["nota"] = f"Nodul {eid0} nu există în model: raportul e tratat ca nod lipsă."
         m = self._ajusteaza_element_nou(event, m, trace)
+        if event.get("_om"):
+            # verificare de om fără tinta_id: doar un element sigur (potrivit, nu predicție/pin/fereastră) poate fi verificat
+            if m["status"] == "potrivit" and not (cs and cs["actiune"]) and m.get("element_id"):
+                self._verificare_om(event, m["element_id"], trace, pas_potrivire=False)
+            else:
+                self._neaplicat(event, trace, "Verificare de om neaplicată: nu e niciun element sigur de verificat "
+                                              f"(potrivire {m['status']}: {m['motiv']}). Dă ID-ul elementului sau apasă pe el pe hartă.")
+            self._inregistreaza_ancora(event, m, cs)
+            return self._inchide(event, "verificare_om", trace, m, inainte)
         if cs and cs["actiune"]:
             self._rezultat_cautare(event, m, cs, trace)      # predicție / de verificat pe fereastră / pin (căutare pe stradă)
         elif tip == "mutare_fire":
@@ -237,6 +253,8 @@ class GridModel(Sesiune2):
 
     def _eticheta(self, event: dict, tip: str, trace: dict) -> str:
         """Etichetă pentru timeline-ul din UI: mutare_fire | demontat | val_apeluri | racordare | decizie_om | tipul evenimentului."""
+        if tip == "verificare_om":
+            return "verificat_om"
         if event["echipa_sursa"] == "om_teren":
             return "decizie_om"
         if self._val_flag:
@@ -354,7 +372,9 @@ class GridModel(Sesiune2):
                     scor = S.clamp(eff + delta, w)
                     t = (f"Conflict: {ua['event_id']} ({ua['echipa']}, {ua['data']}) spune «{ua['valoare']}», "
                          f"acest raport spune «{sect_noua}». Nimic nou aplicat, de verificat.")
-                    st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="de_verificat", scor=scor,
+                    kw_v, t_v = self._deverifica(cur, event)
+                    t = (t_v + " " + t) if t_v else t
+                    st = self._pune(eid, el["tip_element"], data, **obs_kw, **kw_v, nivel="de_verificat", scor=scor,
                                     motive=self._motiv(eid, t, delta, event),
                                     predictie={"metoda": "propunere_proprietate", "urmeaza_strada": None,
                                                "propunere": {"proprietate": "sectiune", "valoare": sect_noua},
@@ -437,6 +457,11 @@ class GridModel(Sesiune2):
         else:
             motive.insert(0, text)
         ver = event["data"] if efect == "confirmare" else cur["ultima_verificare"]
+        if delta < 0:
+            kw_v, t_v = self._deverifica(cur, event)       # contradicție: verificarea de om nu mai e valabilă
+            if t_v:
+                motive.insert(0, t_v)
+                extra_st.update(kw_v)
         st = self._pune(eid, el["tip_element"], data, **obs_kw, **extra_st, **self._fara_marker(cur), nivel=nivel, scor=scor,
                         ultima_verificare=ver, motive=self._motiv(eid, " ".join(motive), delta, event))
         trace["modificari"].append(self._publica(eid, st))
@@ -661,18 +686,7 @@ class GridModel(Sesiune2):
         if proprietate:
             self._decizie_proprietate(event, tinta, cur, alege, fiab, ev_txt, trace)
             return
-        # grupul: nodul prezis și legăturile lui, sau legătura și nodurile ei încă prezise
-        grup = [tinta]
-        s0 = self.predictii[tinta]
-        if "punct" in s0:
-            grup += [sid for sid, s in self.predictii.items() if "capete" in s and tinta in s["capete"]]
-        elif "capete" in s0:
-            grup += [c for c in s0["capete"] if c in self.predictii and "punct" in self.predictii[c]]
-        if alege == "accepta":
-            # la acceptare, o legătură intră doar dacă ambele capete există în model sau sunt în grup (nu lăsăm legături în aer)
-            noduri_ok = {c for c in grup if "punct" in self.predictii[c]} | set(self.net["noduri"])
-            grup = [g for g in grup if "punct" in self.predictii[g] or g == tinta
-                    or all(c in noduri_ok for c in self.predictii[g]["capete"])]
+        grup = self._grup_predictie(tinta, alege == "accepta")
         metoda = (cur or {}).get("predictie", {}).get("metoda") if cur else None
         if alege == "respinge":
             pen = w["decizie_om"]["penalizare_metoda_la_respingere"]
@@ -690,21 +704,20 @@ class GridModel(Sesiune2):
                            [f"Predicția {tinta} respinsă de om; încrederea în metoda «{metoda}» scade cu "
                             f"{w['decizie_om']['penalizare_metoda_la_respingere']}."])
             return
-        # acceptare: scorul vine din același calcul (fiabilitate om_teren, extracție 1, potrivire 1)
+        # acceptare = verificare de om (D10): grupul intră în model cu scor `verificat_om.scor`, `verificat_om: true`
         sp, factori = S.scor_propunere(event, 1.0, w)
+        vs = w["verificat_om"]["scor"]
         specs = [(sid, "nod" if "punct" in self.predictii[sid] else "tronson", self.predictii[sid])
                  for sid in sorted(grup, key=lambda x: "punct" not in self.predictii[x])]
-        txt = (f"Acceptată de om în teren ({ev_txt}): scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, "
-               f"extracție {factori['incredere_extractie']}, potrivire {factori['calitate_potrivire']}). "
-               f"Peste pragul {w['praguri']['aplicat']}: aplicată în model.")
-        self._adauga_in_model(specs, event, sp, [txt], None, plafoneaza=False)
+        txt = (f"Acceptată de om în teren ({ev_txt}): scor propunere {sp}, aplicată în model. "
+               f"Verificat de om în teren ({data}): scor {S.fmt(vs)}.")
+        self._adauga_in_model(specs, event, vs, [txt], None, plafoneaza=False)
         trace["_ce"] = {}
         for sid, _, _ in specs:
-            c = self._curent(sid)
-            c["confirmat_de"] = "om"
+            c = self._marcheaza_verificat(sid, event, txt)
             trace["_ce"][sid] = "adaugat"
             trace["modificari"].append(self._publica(sid, c))
-        self._scor_pas(trace, "aplicat", {"scor_nou": sp, "nivel": "in_model", "grup": grup}, [txt], sp)
+        self._scor_pas(trace, "aplicat", {"scor_nou": vs, "nivel": "in_model", "grup": grup, "verificat_om": True}, [txt], sp)
 
     def _decizie_proprietate(self, event: dict, eid: str, cur: dict, alege: str, fiab: float, ev_txt: str, trace: dict):
         """Decizia omului asupra unei propuneri de secțiune pentru un tronson existent (predicție sau conflict)."""
@@ -722,11 +735,13 @@ class GridModel(Sesiune2):
             self._scor_pas(trace, "respins", {"nivel": nivel}, [f"Propunerea de secțiune pentru {eid} respinsă de om."])
             return
         sp, factori = S.scor_propunere(event, 1.0, w)
-        delta = w["scor"]["confirmare_teren"] * fiab
-        scor = S.clamp(eff + delta, w)
-        t = f"Secțiunea «{prop['valoare']}» acceptată de om în teren ({ev_txt}): aplicată (scor propunere {sp})."
+        scor = w["verificat_om"]["scor"]        # acceptarea e o verificare de om (D10)
+        delta = scor - eff
+        t = (f"Secțiunea «{prop['valoare']}» acceptată de om în teren ({ev_txt}): aplicată (scor propunere {sp}). "
+             f"Verificat de om în teren ({data}).")
         st = self._pune(eid, "tronson", data, nivel="in_model", scor=scor, ultima_verificare=data, predictie=None,
                         props={**cur["props"], "sectiune": prop["valoare"]}, confirmat_de="om",
+                        verificat_om=True, verificat_om_data=data,
                         motive=self._motiv(eid, t, delta, event),
                         ultimul_aplicat={"event_id": event["event_id"], "data": data, "echipa": "om_teren",
                                          "proprietate": "sectiune", "valoare": prop["valoare"]})

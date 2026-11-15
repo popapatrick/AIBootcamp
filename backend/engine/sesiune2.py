@@ -588,8 +588,10 @@ class Sesiune2:
         if len(echipe) >= cfg["rapoarte_min"] and comb >= w["praguri"]["aplicat"]:
             t = (f"Demontat: {len(lista)} rapoarte de la {len(echipe)} echipe ({', '.join(sorted(echipe))}), scor combinat {comb} "
                  f"peste pragul {w['praguri']['aplicat']}: element scos din uz.")
+            kw_v, t_v = self._deverifica(cur, event)
+            t = (t_v + " " + t) if t_v else t
             st = self._pune(eid, el["tip_element"], data, nivel="scos_din_uz", scor=comb, ultima_verificare=data,
-                            predictie=None, motive=self._motiv(eid, t, comb - eff, event))
+                            predictie=None, motive=self._motiv(eid, t, comb - eff, event), **kw_v)
             trace["modificari"].append(self._publica(eid, st))
             return self._scor_pas(trace, "aplicat", {"scor_nou": comb, "nivel": "scos_din_uz", "rapoarte": len(lista)}, [t])
         f = S.fiabilitate(event, w)
@@ -599,7 +601,9 @@ class Sesiune2:
         t = (f"Semnal de demontare ({len(lista)} raport(e) de la {len(echipe)} echipă/echipe, scor combinat {comb}): "
              f"trebuie cel puțin {cfg['rapoarte_min']} echipe și scor peste {w['praguri']['aplicat']} ca să fie scos din uz. "
              f"Elementul rămâne în model, scor {delta:+.3f}.")
-        st = self._pune(eid, el["tip_element"], data, nivel=nivel, scor=scor, motive=self._motiv(eid, t, delta, event), **self._fara_marker(cur))
+        kw_v, t_v = self._deverifica(cur, event)
+        t = (t_v + " " + t) if t_v else t
+        st = self._pune(eid, el["tip_element"], data, nivel=nivel, scor=scor, motive=self._motiv(eid, t, delta, event), **self._fara_marker(cur), **kw_v)
         trace["modificari"].append(self._publica(eid, st))
         self._scor_pas(trace, "scor_actualizat", {"scor_nou": scor, "nivel": nivel, "efect": "semnal_demontare"}, [t])
 
