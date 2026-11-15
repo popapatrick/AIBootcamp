@@ -53,7 +53,6 @@ def reset() -> None:
     """Șterge modelul din memorie; următorul apel îl reconstruiește din evenimente."""
     global _model
     _model = None
-    _scenarii.clear()
 
 
 def apply_event(event: dict) -> dict:
@@ -84,26 +83,6 @@ def aplica_decizie(event: dict) -> dict:
             raise KeyError(err["mesaj"])
         raise ValueError(err["mesaj"])
     return trace
-
-
-EXTREME = EVENTS / "events.extreme.json"
-_scenarii: dict[str, GridModel] = {}
-
-
-def model_scenariu(nume: str = "extrem") -> GridModel:
-    """Un model separat: evenimentele de bază plus scenariul `data/events/events.<nume>.json` (de ex. `extrem`),
-    în ordinea datelor. Nu atinge modelul de bază. Ridică FileNotFoundError dacă fișierul scenariului lipsește."""
-    if nume not in _scenarii:
-        cale = EVENTS / f"events.{'extreme' if nume == 'extrem' else nume}.json"
-        if not cale.is_file():
-            raise FileNotFoundError(f"scenariul {nume} nu există: lipsește {cale.relative_to(ROOT)}")
-        m = GridModel()
-        m.traseu_fn = osm.traseu_fn()
-        evs = _incarca_evenimente() + json.loads(cale.read_text(encoding="utf-8"))
-        for ev in sorted(evs, key=lambda e: (e["data"], e["event_id"])):
-            m.apply_event(ev)
-        _scenarii[nume] = m
-    return _scenarii[nume]
 
 
 def jurnal() -> list[dict]:

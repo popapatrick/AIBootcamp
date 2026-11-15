@@ -396,8 +396,11 @@ class Sesiune2:
         Doar pentru rapoarte de echipă (nu apel/om) cu locație (coordonate sau adresă geocodată), fără ID și fără trace real.
         Complementar: nu schimbă locația, doar acuratețea ei (`detalii.trace_factor`): oprire lungă, zgomot mic, acoperire bună și
         oprire consistentă cu adresa o cresc (plafon `bonus_max`); zgomot/acoperire slabă sau contradicție o scad.
+        Oprit global (sesiunea 4) cât `demo.trace_generat_activ == 0` în weights; repornire: valoarea 1.
         Dezactivare per raport: `detalii.trace_params = {"dezactivat": true}`.
         """
+        if not int((self.w.get("demo") or {}).get("trace_generat_activ", 1)):
+            return event                                   # sesiunea 4 (V7): oprit global (`demo.trace_generat_activ: 0`)
         ref, det = event.get("referinta") or {}, event.get("detalii") or {}
         pt = ref.get("coordonate")
         w = self.w

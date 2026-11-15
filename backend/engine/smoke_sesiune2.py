@@ -2,6 +2,7 @@
 locația din trace, acceptare parțială). Rulează: python -m backend.engine.smoke_sesiune2. Date FICTIVE."""
 from __future__ import annotations
 
+import copy
 import json
 
 from backend.engine import osm
@@ -233,8 +234,16 @@ def main() -> None:
     verifica("standardizare: cu ID nu se plafonează", ts["pasi"][0]["incredere"] == 1.0)
 
     # --- traseu generat la raport: bonus, zgomot, decalaj (contradicție), dezactivare
+    def mk_tr(activ=1):
+        # sesiunea 4 (V7): traseul generat e oprit în weights; testele lui rulează cu o copie având `demo.trace_generat_activ = 1`
+        w_ = copy.deepcopy(mk().w)
+        w_.setdefault("demo", {})["trace_generat_activ"] = activ
+        m_ = GridModel(weights=w_)
+        m_.traseu_fn = osm.traseu_fn()
+        return m_
+
     def tfac(i, par=None, coord=None):
-        t_ = mk().apply_event(ev(i, "2026-09-20", "mentenanta", "nod_lipsa", ref={"coordonate": coord or la_nord(200)},
+        t_ = mk_tr().apply_event(ev(i, "2026-09-20", "mentenanta", "nod_lipsa", ref={"coordonate": coord or la_nord(200)},
                                  det={"trace_params": par} if par else {}, sursa="tableta_coordonate", forma="campuri"))
         p_ = next((x for x in t_["pasi"] if x["nume"] == "trace"), None)
         return t_, p_
@@ -244,6 +253,11 @@ def main() -> None:
     _, p_a = tfac("TG-4", {"zgomot_m": 3, "durata_oprire_min": 15, "acoperire": 0.4})
     tz_, p_x = tfac("TG-5", {"dezactivat": True})
     fb = p_b["rezultat"]["factor_trace"] if p_b else None
+    t_of = mk().apply_event(ev("TG-OFF", "2026-09-20", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(200)},
+                               sursa="tableta_coordonate", forma="campuri"))
+    verifica("trace generat: oprit implicit (demo.trace_generat_activ=0): fără pas trace, fără trace_*",
+             mk().w["demo"]["trace_generat_activ"] == 0 and not any(x["nume"] == "trace" for x in t_of["pasi"])
+             and not any(k in (t_of.get("detalii") or {}) for k in ("trace_params", "trace_sursa", "trace_factor")))
     verifica("trace generat: bonus peste 1 dar sub plafon", p_b and 1.0 < fb <= 1 + mk().w["trace_generat"]["bonus_max"] + 1e-9, str(fb))
     verifica("trace generat: etichetat simulat", p_b and p_b["rezultat"]["sursa"] == "simulat")
     verifica("trace generat: zgomot mare nu mai dă bonus", p_z and p_z["rezultat"]["factor_trace"] <= 1.0, str(p_z and p_z["rezultat"]["factor_trace"]))

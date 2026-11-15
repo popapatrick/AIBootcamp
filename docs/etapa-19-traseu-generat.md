@@ -22,3 +22,10 @@ EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune2   # blocul „tr
 - Traseul e generat în jurul punctului primit, nu al rezultatului geocodării ca „adevăr"; de aceea contradicția apare doar când parametrii (decalaj) o produc. E un semnal complementar, etichetat „simulat".
 - Valorile bonusului și penalizărilor sunt puncte de plecare, necalibrate pe date reale; se reglează prin `reglaj:`.
 - Ce trebuie să știe ceilalți: C trece `trace_params` din `POST /rapoarte` și afișează pasul „trace" și `trace_sursa` (C1).
+
+## Sesiunea 4 (V7): traseul generat este OPRIT
+- `sesiune2.py::_trace_generat` iese imediat cât `contracts/weights.yaml: demo.trace_generat_activ == 0` (valoarea actuală). Rezultat: raportul nu mai are pasul `trace` și nici `detalii.trace_params/trace_sursa/trace_factor`; scorurile nu mai primesc bonus/penalizare de traseu.
+- **Repornire:** `demo.trace_generat_activ: 1` (commit `reglaj:`); codul, `backend/trace/` și parametrii `trace_generat.*` au rămas neatinși.
+- Testele traseului generat (`smoke_sesiune2.py`, blocul „trace generat”) rulează cu o copie a weights cu `trace_generat_activ = 1`; un test separat verifică starea oprită.
+- Traseul real al tabletei (`detalii.trace` explicit, `localizeaza`) rămâne funcțional în motor; API-ul și UI nu-l mai trimit (scoase în sesiunea 4).
+- Scenariul extrem a fost scos din motor (`engine.model_scenariu`/`EXTREME`); API-ul nu le importa.

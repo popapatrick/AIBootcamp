@@ -12,7 +12,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
 | `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
 | `osm.py` | traseu pe străzi, `strazi()` pentru modulele lui A (cache `data/model/osm/`) | `docs/etapa-6-traseu-osm.md` |
-| `engine.py` | interfața publică pentru API: `apply_event`, `snapshot`, `timeline`, `statistici`, `aplica_decizie`, `model_scenariu`, `reset` | `contracts/interfaces.md` |
+| `engine.py` | interfața publică pentru API: `apply_event`, `snapshot`, `timeline`, `statistici`, `aplica_decizie`, `reset` (scenariul extrem `model_scenariu` a fost scos în sesiunea 4) | `contracts/interfaces.md` |
 | `calibrare.py`, `fallback_events.py` | rulare pe evenimente reale, rezervă fără date de la A | `docs/calibrare.md` |
 
 ## Rulare și verificare
