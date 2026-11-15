@@ -215,6 +215,33 @@
       ],
       "format": "date"
     },
+    "stergibil": {
+      "type": "boolean",
+      "description": "Etapa 34: true dacă omul poate șterge elementul acum (buton „Șterge” în panoul Identificare): adăugat de sistem (predicții punctate NOU-/MUT-/PLAN-/TRK-, elemente aplicate din rapoarte/tracking cu t0=false, pinuri VER-*), încă activ. false pe rețeaua de start (GIS și SIM-*, t0=true) și pe elementele deja retrase/șterse. Există pe fiecare feature din GET /retea și în ElementState din StepTrace; la o dată trecută reflectă starea de acum (un element șters ulterior arată false)."
+    },
+    "stergere_n": {
+      "type": "integer",
+      "description": "Etapa 34: doar pe features din GET /retea: câte elemente se șterg odată cu acesta (grupul: el + legăturile lui, sau legătura + stâlpii rămași fără alte legături); 0 dacă stergibil=false. Pentru textul confirmării din UI („Se șterg N elemente”)."
+    },
+    "sters": {
+      "type": "boolean",
+      "description": "Etapa 34: doar în ElementState din StepTrace-ul unui eveniment stergere_om: elementul a fost șters de om (retras de la sters_data). Elementele șterse nu mai apar în GET /retea de la acea dată, dar rămân la datele anterioare."
+    },
+    "sters_data": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Etapa 34: data ștergerii (sters=true)."
+    },
+    "sters_motiv": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Etapa 34: motivul dat de om, dacă a fost dat; „De ce?” (motive[0]) începe cu „Șters de om: ...”."
+    },
     "banda": {
       "enum": [
         "verde",

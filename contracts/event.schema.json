@@ -39,9 +39,10 @@
         "activ_demontat",
         "cerere_racordare",
         "verificare_om",
-        "tracking_tura"
+        "tracking_tura",
+        "stergere_om"
       ],
-      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate); verificare_om (sesiunea 4) = un om marchează în teren orice element ca verificat (detalii.tinta_id), scorul devine weights.verificat_om.scor; tracking_tura (sesiunea 4b) = tura simulată a tabletei unei echipe (detalii.tura {tura_id, seed, echipa, puncte}); motorul detectează opririle din puncte și scrie detalii.tracking: opriri lângă un stâlp existent = stâlp confirmat, opriri lungi fără stâlp = stâlp presupus (predicție)"
+      "description": "verificare = inspecție în teren fără modificări (confirmă elementul și îi reîmprospătează scorul) sau decizia omului asupra unei predicții (detalii.decizie); mutare_fire = firele dintr-o zonă au fost mutate (detalii.centru/raza_m/motiv); activ_demontat = element scos din uz; cerere_racordare = un client cere racordarea unei case (locația în referinta.coordonate); verificare_om (sesiunea 4) = un om marchează în teren orice element ca verificat (detalii.tinta_id), scorul devine weights.verificat_om.scor; tracking_tura (sesiunea 4b) = tura simulată a tabletei unei echipe (detalii.tura {tura_id, seed, echipa, puncte}); motorul detectează opririle din puncte și scrie detalii.tracking: opriri lângă un stâlp existent = stâlp confirmat, opriri lungi fără stâlp = stâlp presupus (predicție); stergere_om (etapa 34) = un om șterge din hartă un element adăugat de sistem (echipa_sursa om_teren, detalii.tinta_id, detalii.motiv opțional): predicții punctate, elemente aplicate din rapoarte/tracking, pinuri VER-*; NU elementele rețelei de start (GIS, SIM-*). Se șterge tot grupul (stâlp + legăturile lui, sau legătură + stâlpii rămași fără alte legături); elementele sunt retrase cu jurnal (rămân vizibile la datele anterioare), fără penalizare de metodă"
     },
     "referinta": {
       "type": "object",
@@ -399,7 +400,7 @@
             "string",
             "null"
           ],
-          "description": "verificare_om: elementul verificat"
+          "description": "verificare_om / stergere_om: elementul verificat, respectiv șters (stergere_om: refuz cu eroare.cod nu_se_sterge_retea_start | deja_sters | necunoscut)"
         },
         "tura": {
           "type": "object",

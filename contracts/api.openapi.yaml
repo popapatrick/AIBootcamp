@@ -62,7 +62,7 @@ paths:
         "200": {description: GeoJSON FeatureCollection, content: {application/json: {schema: {type: object}}}}
   /evenimente:
     get:
-      summary: "Lista pentru timeline. Fiecare element are `tip` (tipul evenimentului) și `eticheta` (mutare_fire, demontat, val_apeluri, racordare, decizie_om sau egală cu tipul). Sesiunea 4: fără scenariul extrem; fiecare intrare are și `text_original`, `echipa` (etichetă română), `standardizare`, `banda_inainte`, `banda_dupa`, `focus`"
+      summary: "Lista pentru timeline. Fiecare element are `tip` (tipul evenimentului) și `eticheta` (mutare_fire, demontat, val_apeluri, racordare, decizie_om, verificat_om, tracking, stergere sau egală cu tipul). Sesiunea 4: fără scenariul extrem; fiecare intrare are și `text_original`, `echipa` (etichetă română), `standardizare`, `banda_inainte`, `banda_dupa`, `focus`"
       parameters:
       responses:
         "200": {description: lista, content: {application/json: {schema: {type: array, items: {type: object}}}}}
@@ -106,6 +106,19 @@ paths:
       responses:
         "200": {description: StepTrace, content: {application/json: {schema: {type: object}}}}
         "404": {description: element necunoscut}
+  /element/{id}/stergere:
+    post:
+      summary: "Etapa 34: un om șterge un element adăugat de sistem (eveniment stergere_om, echipa_sursa om_teren). Se șterge tot grupul (stâlp + legăturile lui, sau legătură + stâlpii rămași fără alte legături); elementele sunt retrase cu jurnal (dispar de pe hartă de la data ștergerii, rămân la datele anterioare), fără penalizare de metodă. Se pot șterge: predicțiile punctate (NOU-/MUT-/PLAN-/TRK-), elementele aplicate din rapoarte/tracking, pinurile VER-*. NU se pot șterge elementele rețelei de start (GIS și SIM-*: `stergibil: false`)."
+      parameters:
+        - {name: id, in: path, required: true, schema: {type: string}}
+      requestBody:
+        required: false
+        content: {application/json: {schema: {type: object, properties: {motiv: {type: string}, data: {type: string, format: date}}}}}
+      responses:
+        "200": {description: "StepTrace: `decizie: sters`, `schimbari[].ce = sters` pe fiecare element din grup, `stergere {tinta_id, elemente[], n, motiv}`, pasul `scor` cu `grup`. UI-ul spune câte elemente s-au șters (`stergere.n`).", content: {application/json: {schema: {type: object}}}}
+        "409": {description: "refuz (StepTrace cu `decizie: neaplicat`, `eroare.cod`): `nu_se_sterge_retea_start` (GIS/SIM-*) sau `deja_sters` (deja șters sau retras)"}
+        "404": {description: "element necunoscut (eroare.cod necunoscut)"}
+        "501": {description: motorul real nu e disponibil (mod stub)}
   /demo/exemple:
     get:
       summary: "Sesiunea 4: cardurile paginii de intro (data/reports/demo-intro.json)"

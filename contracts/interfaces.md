@@ -171,6 +171,21 @@ Funcție independentă de rapoarte (nu e „traseul de ultima oră”, scos): o 
 
 **UI (Lovable, netrimis până decide Victor).** Tab separat „Tracking echipe” pe aceeași hartă: alegi echipa, „Generează tură”, „Pornește”; tableta se mișcă pe traseu (accelerat), rezultatul fiecărei opriri apare când tableta ajunge la ea (`t_ajungere`): stâlp confirmat „înainte → după”, stâlp presupus punctat, oprire scurtă = punct gri fără pop-up. Rezumat la final; timeline-ul arată evenimentul „Tracking echipă”. UI-ul nu afișează `tracking_gps` sau `oprire_tracking` ca atare, ci textele în română și banda.
 
+## Ștergere de către om (etapa 34; commit `contract:`, B, aditiv; `docs/etapa-34-stergere-om.md`)
+Un om poate șterge din hartă ce a adăugat sistemul după start (greșeli de extracție, predicții false, pinuri inutile). Eveniment nou `tip: stergere_om` (`echipa_sursa: om_teren`, `detalii.tinta_id`, `detalii.motiv` opțional), din `POST /element/{id}/stergere {motiv?, data?}`. Motorul îl procesează fără extracție/potrivire (nu are nevoie de `status`/`forma_sursa`).
+
+**Reguli.**
+- **Se poate șterge:** predicțiile punctate (`NOU-*`, `MUT-*`, `PLAN-*`, `TRK-*`, lanțuri de racordare), elementele aplicate din rapoarte/tracking (`origine: generat_model`, `t0: false`, ex. `NOU-EV4-023`, `MUT-*` aplicate) și pinurile `VER-*`.
+- **NU se poate șterge:** elementele rețelei de start (`t0: true`: GIS/KMZ și `SIM-*`) și elementele deja retrase/șterse. Refuz = StepTrace cu `decizie: neaplicat` și `eroare.cod`: `nu_se_sterge_retea_start`, `deja_sters` (și pe elementele retrase de „Respinge” sau înlocuite), `necunoscut` (ID inexistent sau gol). API: 409 / 409 / 404.
+- **Efect = retras cu jurnal:** elementul dispare din `GET /retea` de la data ștergerii, dar rămâne în istoric (vizibil la datele anterioare, cu forma și geometria de atunci). `motive[0].text` = „Șters de om: <motiv>. Retras de la <data> ...”. FĂRĂ penalizare de metodă (penalizarea e doar la „Respinge”). Elementele aplicate ies din rețeaua folosită la potrivire (un raport ulterior pe aceeași poziție nu se mai potrivește cu ele). Scorurile altor elemente nu se schimbă.
+- **Grup (ca la „Respinge”):** stâlp = el + legăturile lui ștergibile; legătură = ea + stâlpii ei ștergibili rămași fără alte legături. Niciodată un element de start; o legătură nu rămâne cu un capăt șters (fir în aer).
+
+**StepTrace.** `decizie: sters` (text recomandat în UI: „Șters de om”; nu e încă în `DECIZII` din `backend/api/prezentare.py`), `schimbari[].ce = "sters"` pe fiecare element din grup (cu `scor_inainte`/`scor_dupa` identice: scorul nu se schimbă), `stergere {tinta_id, elemente[], n, motiv}` (la succes), pasul `scor` cu `grup` și `sters` (număr), `modificari[]` (ElementState cu `sters: true`, `sters_data`, `sters_motiv`, `stergibil: false`). La refuz: `eroare {cod, mesaj}`, `modificari: []`. Timeline: `eticheta: "stergere"`, `rezumat` „Șters de om: <n> elemente (<id-uri>)”.
+
+**`stergibil` (snapshot și StepTrace).** Fiecare feature din `GET /retea` are `stergibil: true|false`: true pe predicții, elemente aplicate din rapoarte/tracking și pinuri `VER-*`; false pe GIS și `SIM-*`. `stergere_n` = câte elemente se șterg odată cu el (grupul; 0 dacă `stergibil: false`), pentru textul confirmării. La o dată trecută reflectă starea de acum.
+
+**UI.** Buton „Șterge” în panoul Identificare, doar pe elementele cu `stergibil: true` (pe GIS/SIM nu apare); la clic, confirmare care spune câte elemente se șterg (numărul = `stergere_n` din feature) și că se pot vedea la date anterioare; apoi `POST /element/{id}/stergere` și refresh la hartă; după succes elementele dispar și apare intrarea „Ștergere” în timeline.
+
 ## C: API
 Vezi `contracts/api.openapi.yaml`. Cu mod stub (citește `data/model/sample/`) până apare motorul.
 
