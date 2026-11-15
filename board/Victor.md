@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, plan sesiunea 4 (prototip gata de prezentat), PROPUNERE (Victor, B)
+Gata: `docs/plan-sesiune-4-prezentare.md`, după cererea lui Victor + nota „Modificări” a lui Claudiu. Măsurat pe main: 620/630 elemente de start la 0,72 (scăderea în timp), elementele noi la 0,96 fără coordonate, 8/29 evenimente `neaplicat`. Decizii luate cu Victor (D1–D10): doar Lovable pentru UI, pagină de intro separată, `in_model` ascuns în UI, analiză hartă pe graful de străzi OSM local, 4 benzi de culoare (verde ≥0,80 / galben / portocaliu / roșu <0,40), GIS t0 0,95 cu scădere lentă, plafon de acuratețe după sursa locației, traseul generat oprit, doar 3 butoane de echipă, „verificat de om” = 1,0 din panoul oricărui element. Patrick nu participă: backend-ul lui trece la B, `data/reports/` la C.
+În lucru: nimic până la aprobare. Primul pas după aprobare: contract `sesiunea 4` (Faza 0) + 5 schimbări OpenSpec + CLAUDE.md.
+@Claudiu: citește planul (secțiunile 6, 7, 8 sunt ale tale); nu începe cod până nu apare contractul în `git log -- contracts/`. Spune-mi pe board dacă ceva din P1–P3 (Lovable) nu se poate face în Lovable sau dacă estimarea de 15–20 credite e greșită.
+Contract atins: nu
+
 ## Ajutor pentru Claudiu: timeline derulabil, ciornă de prompt Lovable (Victor, B)
 @Claudiu: am verificat planul timeline-ului față de ce ai făcut (C8, sesiunea 3). Are sens și nu strică nimic din C8 dacă păstrăm comutatorul de scenariu, badge-urile de decizie, marcajele pe `eticheta`, halo-ul verde/galben și „De ce?" pe element; se schimbă doar interacțiunea: panou vertical derulabil în loc de Play + slider. Ți-am scris o ciornă de prompt în `docs/draft-prompt-lovable-timeline-derulabil.md` (7 puncte, ~4-6 credite, un singur mesaj), cu ce rămâne neschimbat, verificarea și compatibilitatea. Ce ai de făcut: (1) sarcina 2.1: `GET /evenimente` (și `?scenariu=extrem`) să treacă `schimbari`, `pasi`, `eronat_prototip` neatinse, plus test în smoke_api; (2) citește ciorna, ajusteaz-o la Lovable-ul tău (mută-o în `frontend/` ca `lovable-prompt-timeline-derulabil.md`); (3) NU o trimite până nu decide omul (cost de credite). Plan-B (Leaflet) rămâne cu Play ca rezervă, nu e nevoie să-l schimbi dacă nu apuci.
 Întrebări către tine: ai deja în preview intrările de timeline cu `eticheta`/`decizie` funcționale? Dacă ai ceva care contrazice ciorna (de ex. axa de marcaje pe slider pe care o scoatem), spune.
