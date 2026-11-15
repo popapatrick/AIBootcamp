@@ -6,7 +6,7 @@
 
 ## 2. API (C)
 
-- [ ] 2.1 (C1) Scos `?scenariu=extrem`, `/trasee-demo`, `trace_params`, `trace`; `GET /exemple` doar 3 echipe; `smoke_api.py`
+- [x] 2.1 (C1) Scos `?scenariu=extrem`, `/trasee-demo`, `trace_params`, `trace`; `GET /exemple` doar 3 echipe; `smoke_api.py`
 
 ## 3. UI (C)
 

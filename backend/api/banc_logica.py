@@ -3,7 +3,8 @@
 Rulare: `python -m backend.api.banc_logica [--fisier F] [--json] [--doar-diferente] [--cu-ai]`
 Sursa implicită: `data/golden/*.json` (listă de {id, sursa, text, data?, asteptat?}); dacă lipsește,
 `data/reports/exemple-dummy.json`. Rulează pe modelul din memorie; nu scrie în data/.
-`asteptat` (opțional) poate avea: tip, decizie, nivel, origine, slaba, treapta, eronat_prototip, element_id.
+`asteptat` (opțional) poate avea: tip, decizie, nivel, origine, slaba, treapta, banda, sursa_locatie, verificat_om,
+lungime_m, eronat_prototip, element_id.
 Câmpurile pe care contractul le are doar în sesiunea 3 și lipsesc din rezultat apar ca „-".
 """
 from __future__ import annotations
@@ -17,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "data" / "golden"
 DUMMY = ROOT / "data" / "reports" / "exemple-dummy.json"
-COLOANE = ["id", "sursa", "tip", "metoda_cod", "decizie", "scor", "origine", "slaba", "treapta", "eronat", "ok"]
+COLOANE = ["id", "sursa", "tip", "metoda_cod", "decizie", "scor", "origine", "slaba", "treapta", "banda", "sursa_locatie", "verificat_om", "lungime_m", "eronat", "ok"]
 
 
 def incarca(fisier: str | None = None) -> tuple[list[dict], str]:
@@ -57,6 +58,10 @@ def ruleaza_caz(caz: dict) -> dict:
          "scor": _g(pasi.get("scor"), "rezultat", "scor_nou") or mod.get("scor"),
          "origine": mod.get("origine") or pred.get("origine"),
          "slaba": pred.get("slaba"), "treapta": pred.get("treapta"),
+         "banda": mod.get("banda"),   # sesiunea 4: null până le dă motorul (V1/V3/V5)
+         "sursa_locatie": mod.get("sursa_locatie") or pred.get("sursa_locatie"),
+         "verificat_om": mod.get("verificat_om"),
+         "lungime_m": _g(pasi.get("analiza_harta"), "rezultat", "ales", "lungime_m"),   # null-safe
          "eronat": bool(out.get("eronat_prototip")),   # câmp absent = fals (golden așteaptă false explicit)
          "nivel": mod.get("nivel") or _g(pasi.get("scor"), "rezultat", "nivel"),
          # element referit (potrivire, apoi ID din text); `modificari[0].element_id` e doar elementul creat de motor (ex. NOU-...)

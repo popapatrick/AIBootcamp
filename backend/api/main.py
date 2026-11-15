@@ -4,6 +4,7 @@ Pornire:
     .venv/bin/uvicorn backend.api.main:app --reload --port 8000
 
 Endpoint-uri: /health, POST /rapoarte, GET /retea?data=, GET /evenimente, GET /element/{id}.
+Sesiunea 4: POST /element/{id}/verificare, GET /demo/exemple, POST /demo/reset, GET /legenda.
 În plus: /ui = UI plan B (Leaflet), /date = datele instantaneelor disponibile.
 """
 from __future__ import annotations
@@ -18,7 +19,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from backend.api import pipeline, sources
+from backend.api import pipeline, prezentare, sources
 
 app = FastAPI(title="Grid model API (prototip, date fictive)", version="0.1.0")
 
@@ -26,15 +27,6 @@ app = FastAPI(title="Grid model API (prototip, date fictive)", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 NOTA = "date fictive, rețea demonstrativă"
-Scenariu = Literal["extrem"] | None
-
-
-def _sc(f):
-    """Rulează f(); scenariul lipsă devine 404 clar."""
-    try:
-        return f()
-    except sources.ScenariuLipsa as e:
-        raise HTTPException(404, str(e))
 
 
 class Coord(BaseModel):
@@ -51,24 +43,12 @@ class LocatieOperator(BaseModel):
     zona: str | None = None
 
 
-class TraceParams(BaseModel):
-    """Parametri de generare a traseului simulat (contracts: detalii.trace_params); suprascriu weights.trace_generat."""
-    puncte: float | None = None
-    zgomot_m: float | None = None
-    durata_oprire_min: float | None = None
-    acoperire: float | None = None
-    decalaj_m: float | None = None
-    dezactivat: bool | None = None       # fără traseu generat pentru acest raport (motorul îl respectă)
-
-
 class Raport(BaseModel):
     text: str
     sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]
     data: _date | None = None
     locatie: Coord | None = None          # clic pe hartă (cerere_racordare, mutare_fire)
-    trace: list[dict] | None = None       # traseul tabletei: [{t, lat, lon}]
     locatie_operator: LocatieOperator | None = None   # cerere_racordare fără coordonate și fără clic
-    trace_params: TraceParams | None = None           # reglaje traseu simulat; intră în detalii.trace_params
 
 
 class Decizie(BaseModel):
@@ -94,9 +74,8 @@ def rapoarte(r: Raport) -> dict:
     if not r.text.strip():
         raise HTTPException(422, "text gol")
     return pipeline.proceseaza(r.text, r.sursa, r.data.isoformat() if r.data else None,
-                              r.locatie.model_dump() if r.locatie else None, r.trace,
-                              r.locatie_operator.model_dump(exclude_none=True) if r.locatie_operator else None,
-                              r.trace_params.model_dump(exclude_none=True) if r.trace_params else None)
+                              r.locatie.model_dump() if r.locatie else None,
+                              r.locatie_operator.model_dump(exclude_none=True) if r.locatie_operator else None)
 
 
 @app.get("/locatie-operator-demo")
@@ -116,17 +95,21 @@ def locatie_operator_demo(text: str | None = Query(None, description="descrierea
 
 
 @app.get("/retea")
-def retea(data: _date | None = Query(None), scenariu: Scenariu = Query(None)) -> dict:
+def retea(data: _date | None = Query(None)) -> dict:
     """GeoJSON FeatureCollection cu starea la `data`; properties = ElementState.
 
-    `?scenariu=extrem`: scenariul din data/events/events.extreme.json (404 dacă lipsește).
-    `ultima_actualizare`: din motor (null până îl dă B).
+    Sesiunea 4: fiecare feature are `banda`, `verificat_om`, `sursa_locatie`, `t0` (null cât timp motorul nu le dă,
+    altfel neatinse) și `eticheta_origine` („GIS” / „Din raport”, din `origine`). `ultima_actualizare`: din motor.
     """
     d = data.isoformat() if data else None
-    fc = _sc(lambda: sources.retea(d, scenariu))
-    if not scenariu:
-        fc = pipeline.live_overlay(fc, d)
-    fc["ultima_actualizare"] = _sc(lambda: sources.ultima_actualizare(d or fc.get("data_instantaneu"), scenariu))
+    fc = sources.retea(d)
+    fc = pipeline.live_overlay(fc, d)
+    for f in fc.get("features", []):
+        p = f.setdefault("properties", {})
+        for k in ("banda", "verificat_om", "sursa_locatie", "t0"):
+            p.setdefault(k, None)
+        p["eticheta_origine"] = prezentare.eticheta_origine(p.get("origine"))
+    fc["ultima_actualizare"] = sources.ultima_actualizare(d or fc.get("data_instantaneu"))
     fc["nota"] = NOTA
     z = sources.zona()
     if z:
@@ -152,17 +135,18 @@ def reguli() -> dict:
 
 
 @app.get("/evenimente")
-def evenimente(scenariu: Scenariu = Query(None)) -> list[dict]:
+def evenimente() -> list[dict]:
     """Lista pentru timeline, sortată după dată (include rapoartele live din sesiune).
 
-    `?scenariu=extrem`: scenariul extrem (fără rapoarte live); 404 dacă fișierul lipsește.
+    Sesiunea 4: pe fiecare intrare `text_original`, `echipa` (etichetă), `standardizare`, `focus`, `banda_inainte`,
+    `banda_dupa` (null dacă motorul nu le dă încă).
     """
-    live = [] if scenariu else pipeline.live_evenimente()
-    return sorted(_sc(lambda: sources.evenimente(scenariu)) + live, key=lambda e: e.get("data", ""))
+    items = sorted(sources.evenimente() + pipeline.live_evenimente(), key=lambda e: e.get("data", ""))
+    return pipeline.imbogateste_evenimente(items)
 
 
 @app.get("/exemple")
-def exemple(sursa: Literal["mentenanta", "investitii", "racordari", "apel_client"]) -> list[dict]:
+def exemple(sursa: Literal["mentenanta", "investitii", "racordari"]) -> list[dict]:
     """Texte dummy pentru „Generează exemplu" din data/reports/exemple-dummy.json; [] dacă fișierul lipsește."""
     d = sources.raport_json("exemple-dummy.json") or []
     if isinstance(d, dict):   # acceptăm și {sursa: [...]}
@@ -170,10 +154,25 @@ def exemple(sursa: Literal["mentenanta", "investitii", "racordari", "apel_client
     return [x for x in d if not isinstance(x, dict) or x.get("sursa", sursa) == sursa]
 
 
-@app.get("/trasee-demo")
-def trasee_demo() -> list[dict]:
-    """Trasee GPS dummy din data/reports/trasee-dummy.json; [] dacă fișierul lipsește."""
-    return sources.raport_json("trasee-dummy.json") or []
+@app.get("/demo/exemple")
+def demo_exemple() -> list[dict]:
+    """Cardurile paginii de intro din data/reports/demo-intro.json; [] dacă fișierul lipsește (încă nu e scris)."""
+    return sources.raport_json("demo-intro.json") or []
+
+
+@app.post("/demo/reset")
+def demo_reset() -> dict:
+    """Modelul revine la starea de start (evenimentele scenariului reluate), rapoartele live se șterg. 501 fără motor."""
+    try:
+        return {"status": "ok", "evenimente": pipeline.reset()}
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
+
+
+@app.get("/legenda")
+def legenda() -> dict:
+    """Benzi de culoare (din weights.culori), stiluri de linie și insigne, cu texte în română."""
+    return prezentare.legenda()
 
 
 @app.post("/predictii/{pred_id}/decizie")
@@ -186,6 +185,24 @@ def decizie(pred_id: str, d: Decizie) -> dict:
         raise HTTPException(501, str(e))
     except pipeline.DecizieEroare as e:
         raise HTTPException({"necunoscut": 404, "deja_decis": 409}.get(e.cod, 400), f"{e.cod}: {e}")
+
+
+class Verificare(BaseModel):
+    motiv: str | None = None
+    data: _date | None = None
+
+
+@app.post("/element/{element_id}/verificare")
+def verificare(element_id: str, v: Verificare | None = None) -> dict:
+    """Un om marchează elementul verificat (eveniment `verificare_om`). Întoarce StepTrace.
+    404 element necunoscut; 501 cât timp motorul nu are `verificare_om` (V5)."""
+    v = v or Verificare()
+    try:
+        return pipeline.verificare(element_id, v.motiv, v.data.isoformat() if v.data else None)
+    except pipeline.ElementLipsa as e:
+        raise HTTPException(404, str(e))
+    except NotImplementedError as e:
+        raise HTTPException(501, str(e))
 
 
 @app.get("/date")

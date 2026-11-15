@@ -13,4 +13,4 @@
 
 ## 3. API (C)
 
-- [ ] 3.1 (C2, C3) `POST /element/{id}/verificare`, `banda`/`verificat_om`/`sursa_locatie`/`t0`/`eticheta_origine` în `GET /retea`, `GET /legenda`; teste în `smoke_api.py`
+- [x] 3.1 (C2, C3) `POST /element/{id}/verificare`, `banda`/`verificat_om`/`sursa_locatie`/`t0`/`eticheta_origine` în `GET /retea`, `GET /legenda`; teste în `smoke_api.py`

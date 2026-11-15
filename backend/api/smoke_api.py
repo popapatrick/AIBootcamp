@@ -13,6 +13,52 @@ from backend.api import sources
 from backend.api.sources import ROOT
 
 
+def sesiunea4(c, apply, rn) -> None:
+    """C1-C3: scoase (extrem, trasee, trace), endpointuri noi, standardizare/focus/câmpuri noi."""
+    assert c.get("/trasee-demo").status_code == 404
+    from backend.api import pipeline as _pl
+    assert "trace_params" not in _pl.proceseaza.__code__.co_varnames
+    # standardizare + focus în POST /rapoarte
+    st = rn["standardizare"]
+    assert set(st) >= {"metoda", "campuri", "lipsa", "localizare", "decizie"} and st["metoda"] == "regex", st
+    assert st["metoda_eticheta"] == "Regex (simplificat)" and all({"camp", "valoare", "eticheta", "din"} <= set(x) for x in st["campuri"])
+    tc = c.post("/rapoarte", json={"text": "Stâlp nou care nu apare în GIS, coordonate 44.2849717, 26.0601908.",
+                                   "sursa": "mentenanta", "data": "2026-10-20"}).json()
+    co = next(x for x in tc["standardizare"]["campuri"] if x["camp"] == "coordonate")
+    assert co["din"] == "text" and tc["standardizare"]["localizare"]["sursa"] == "coordonate", tc["standardizare"]
+    assert "focus" in tc
+    if apply:
+        f = tc["focus"]
+        assert f and f["zoom"] == 17 and f["bbox"]["lat_min"] < 44.2849717 < f["bbox"]["lat_max"], f
+    # /retea: câmpuri noi (null cât motorul nu le dă)
+    p = c.get("/retea").json()["features"][0]["properties"]
+    assert {"banda", "verificat_om", "sursa_locatie", "eticheta_origine"} <= set(p), p
+    # /evenimente: câmpuri noi
+    ev = c.get("/evenimente").json()
+    assert all({"text_original", "standardizare", "banda_inainte", "banda_dupa", "focus", "echipa"} <= set(e) for e in ev)
+    if apply:
+        e1 = next(e for e in ev if e.get("text_original"))
+        assert e1["echipa"] and e1["standardizare"]["decizie"] and e1["focus"], e1
+    # /legenda, /demo/exemple, /demo/reset
+    lg = c.get("/legenda").json()
+    assert [b["banda"] for b in lg["benzi"]] == ["verde", "galben", "portocaliu", "rosu"] and lg["benzi"][0]["de_la"] == 0.8, lg
+    assert {x["stil"] for x in lg["linii"]} == {"plina", "punctata", "gri_punctat"} and len(lg["insigne"]) == 3
+    assert isinstance(c.get("/demo/exemple").json(), list)
+    # verificare: 404 element lipsă; 501 cât motorul nu știe verificare_om, altfel 200
+    assert c.post("/element/NU-EXISTA/verificare").status_code == 404
+    eid = c.get("/retea").json()["features"][0]["properties"]["element_id"]
+    r = c.post(f"/element/{eid}/verificare", json={"motiv": "smoke"})
+    if apply and not _pl._motorul_stie_verificare_om():
+        assert r.status_code == 501 and "verificare_om" in r.json()["detail"], r.text
+    else:
+        assert r.status_code == 200 and r.json()["schimbari"], r.text
+    if apply:
+        rs = c.post("/demo/reset")
+        assert rs.status_code == 200 and rs.json()["status"] == "ok" and rs.json()["evenimente"] >= 0, rs.text
+        assert not any(e.get("live") for e in c.get("/evenimente").json()), "reset nu a șters rapoartele live"
+    print("sesiunea 4: standardizare, focus, legenda, verificare", r.status_code, "ok")
+
+
 def main() -> None:
     c = TestClient(app)
     apply = sources.engine_func("apply_event")
@@ -64,11 +110,11 @@ def main() -> None:
         assert t["schimbari"] and t["schimbari"][0]["ce"] and t["ultima_actualizare"], t
         assert c.get("/retea").json()["ultima_actualizare"] and c.get("/health").json()["ultima_actualizare"]
     assert "ultima_actualizare" in t and "ultima_actualizare" in c.get("/retea").json()
-    loc, tr = {"lat": 44.285, "lon": 26.061}, [{"t": "2026-10-20T10:00:00", "lat": 44.285, "lon": 26.061}]
+    loc = {"lat": 44.285, "lon": 26.061}
     t2 = c.post("/rapoarte", json={"text": "Cerere racordare casă nouă.", "sursa": "racordari",
-                                   "data": "2026-10-21", "locatie": loc, "trace": tr}).json()
+                                   "data": "2026-10-21", "locatie": loc}).json()
     det = next(p for p in t2["pasi"] if p["nume"] == "extractie")["rezultat"]["detalii"]
-    assert det["locatie"] == loc and det["centru"] == loc and det["trace"] == tr, det
+    assert det["locatie"] == loc and det["centru"] == loc and "trace" not in det, det
     assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta", "locatie": {"lat": "a"}}).status_code == 422
 
     # mutare_fire -> potrivire.status == "zona" (Event direct: extracția stub nu știe tipul mutare_fire)
@@ -98,7 +144,6 @@ def main() -> None:
     def ext(t):
         return next(p for p in t["pasi"] if p["nume"] == "extractie")["rezultat"]
     lr = {"lat": 44.2850305, "lon": 26.0595998}
-    tr1 = next(x for x in c.get("/trasee-demo").json() if x["id"] == "trace-1")
     tb = c.post("/rapoarte", json={"text": "Cerere racordare: client nou, casă la coord 44.2850305, 26.0595998",
                                    "sursa": "apel_client", "data": "2026-10-28", "locatie": lr}).json()
     assert ext(tb)["tip"] == "cerere_racordare" and ext(tb)["referinta"]["coordonate"] == lr, ext(tb)
@@ -113,20 +158,15 @@ def main() -> None:
         and ext(tf)["detalii"]["motiv_mutare"] == "sens_giratoriu", ext(tf)
     if apply:
         assert next(p for p in tf["pasi"] if p["nume"] == "potrivire")["rezultat"]["status"] == "zona", tf["pasi"]
-    tt = c.post("/rapoarte", json={"text": f"Raport tabletă: stâlp nou necartat pe {tr1['adresa']}, lucrare executată. Am verificat și stâlpii din jur.",
-                                   "sursa": "mentenanta", "data": tr1["data"], "trace": tr1["puncte"]}).json()
-    assert ext(tt)["tip"] == "nod_lipsa", ext(tt)
-    if apply:
-        assert any(p["nume"] == "trace" for p in tt["pasi"]) and \
-            any(str(m["element_id"]).startswith("NOU-") for m in tt["modificari"]), tt["pasi"]
     sc = lambda t: sorted({round(m["scor"], 3) for m in t["modificari"]})[-3:]
-    print("butoane (regex?):", xc, "racordare", sc(tb), "zona", len(tf["modificari"]), "trace", sc(tt))
+    print("butoane (regex?):", xc, "racordare", sc(tb), "zona", len(tf["modificari"]))
 
-    for s_ in ("mentenanta", "investitii", "racordari", "apel_client"):
+    for s_ in ("mentenanta", "investitii", "racordari"):
         r = c.get("/exemple", params={"sursa": s_})
         assert r.status_code == 200 and isinstance(r.json(), list), r.text
     assert c.get("/exemple", params={"sursa": "gresit"}).status_code == 422
-    assert isinstance(c.get("/trasee-demo").json(), list)
+    assert c.get("/exemple", params={"sursa": "apel_client"}).status_code == 422, "D9: doar 3 echipe"
+    assert c.get("/trasee-demo").status_code == 404, "scos (D7)"
 
     # motor real: geocodare din adresă (B2) și trace_params -> traseu simulat (B4), independent de ai_cli
     if apply:
@@ -139,21 +179,7 @@ def main() -> None:
         assert nm.count("geocodare") == 1, nm
         assert next(p for p in tg["pasi"] if p["nume"] == "geocodare")["rezultat"]["status"] in ("gasit", "necunoscut", "in_afara_zonei"), tg["pasi"]
 
-        def fct(i, tp):   # coordonate noi la fiecare apel: să nu se potrivească cu un nod creat de apelul anterior
-            b = {"text": f"Stâlp nou care nu apare în GIS, coordonate {round(44.2849717 + i * 0.0004, 7)}, 26.0601908.",
-                 "sursa": "mentenanta", "data": "2026-10-20", "trace_params": tp}
-            pt_ = next((p for p in c.post("/rapoarte", json=b).json()["pasi"] if p["nume"] == "trace"), None)
-            return pt_ and pt_["rezultat"]
-        pb = {"acoperire": 1.0}
-        # traseul e determinist pe event_id: pe unele id-uri nu iese nicio oprire (observat cu API_EXTRACTIE=stub); încercăm până iese una
-        i0, base = next((i, r) for i in range(0, 40, 5) if (r := fct(i, pb)) and r["alegere"])
-        assert base["sursa"] == "simulat" and base["factor_trace"] > 1.0, base
-        zg_mic, zg_mare, acop, off = (fct(i0 + 1 + k, tp) for k, tp in enumerate(
-            ({**pb, "zgomot_m": 2}, {**pb, "zgomot_m": 40}, {"acoperire": 0.2}, {"dezactivat": True})))
-        assert zg_mic["params"]["zgomot_m"] == 2 and zg_mic["factor_trace"] > base["factor_trace"] > zg_mare["factor_trace"], (zg_mic, zg_mare)
-        assert acop["factor_trace"] < base["factor_trace"], acop
-        assert off is None, "trace_params.dezactivat nu oprește traseul generat"
-        print("motor: geocodare + trace_params ok (factor", zg_mic["factor_trace"], ">", base["factor_trace"], ">", zg_mare["factor_trace"], ")")
+        print("motor: geocodare ok")
 
     # decizia omului (B4): predicția se pregătește direct în motor (Event nod_lipsa), independent de extracție
     if apply:
@@ -173,30 +199,13 @@ def main() -> None:
         print("decizie: 200 / 409 / 404 pe", pid)
     assert c.post("/predictii/PRED-X/decizie", json={"decizie": "poate"}).status_code == 422
 
-    r = c.get("/evenimente", params={"scenariu": "extrem"})
-    if (ROOT / "data" / "events" / "events.extreme.json").is_file():
-        assert r.status_code == 200 and len(r.json()) > len(c.get("/evenimente").json()), r.text
-        assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 200
-        if apply:   # B6: eticheta pe timeline, verificat_recent / scos_din_uz în snapshot
-            et = {e.get("eticheta") for e in r.json()}
-            assert {"val_apeluri", "demontat"} <= et and all("tip" in e for e in r.json()), et
-            fe = c.get("/retea", params={"scenariu": "extrem"}).json()["features"]
-            assert all("verificat_recent" in f["properties"] for f in fe)
-            assert any(f["properties"]["nivel"] == "scos_din_uz" for f in fe), "niciun scos_din_uz în extrem"
-    else:
-        assert r.status_code == 404 and "extrem" in r.json()["detail"], r.text
-        assert c.get("/retea", params={"scenariu": "extrem"}).status_code == 404
-    print("scenariu extrem:", r.status_code, len(r.json()) if r.status_code == 200 else "")
-    # timeline derulabil 2.1: câmpurile motorului trec neatinse prin API, în ambele scenarii
-    for par, atins in (({}, c.get("/evenimente").json()), ({"scenariu": "extrem"}, r.json() if r.status_code == 200 else None)):
-        if atins is None:
-            continue
-        assert atins and all({"schimbari", "pasi", "eronat_prototip"} <= set(e) for e in atins if "pasi" in e or "schimbari" in e), par
-        e0 = next((e for e in atins if e.get("pasi") and e.get("schimbari")), None)
-        assert e0 and e0["pasi"][0]["nume"] and {"element_id", "scor_dupa"} <= set(e0["schimbari"][0]) \
-            and isinstance(e0["eronat_prototip"], bool), (par, e0 and list(e0))
+    # timeline derulabil 2.1: câmpurile motorului trec neatinse prin API
+    atins = c.get("/evenimente").json()
+    assert atins and all({"schimbari", "pasi", "eronat_prototip"} <= set(e) for e in atins if "pasi" in e or "schimbari" in e)
+    e0 = next((e for e in atins if e.get("pasi") and e.get("schimbari")), None)
+    assert e0 and e0["pasi"][0]["nume"] and {"element_id", "scor_dupa"} <= set(e0["schimbari"][0]) \
+        and isinstance(e0["eronat_prototip"], bool), e0 and list(e0)
     print("timeline derulabil: schimbari/pasi/eronat_prototip trec prin API")
-    assert c.get("/evenimente", params={"scenariu": "altul"}).status_code == 422
 
     # --- locația operatorului (simulată) din textul lui
     q = "casă pe Strada Liviu Rebreanu"
@@ -234,12 +243,6 @@ def main() -> None:
     print("locatie operator:", lo["lat"], lo["lon"], "±", lo["precizie_m"], "m", to["modificari"][0]["nivel"] if to["modificari"] else "")
 
     # --- sesiunea 3 (C1): trace_params, geocodare, zona, /reguli, /geocodeaza
-    tp = {"puncte": 60, "zgomot_m": 5, "durata_oprire_min": 12, "acoperire": 0.9, "decalaj_m": 0}
-    t3 = c.post("/rapoarte", json={"text": "Stâlp nou care nu apare în GIS, coordonate 44.2849717, 26.0601908.",
-                                   "sursa": "mentenanta", "data": "2026-10-26", "trace_params": tp}).json()
-    assert ext(t3)["detalii"]["trace_params"] == tp, ext(t3)["detalii"]
-    assert c.post("/rapoarte", json={"text": "x", "sursa": "mentenanta", "trace_params": {"puncte": "a"}}).status_code == 422
-    assert "trace_params" not in ext(rn).get("detalii", {}), "trace_params apare fără să fie cerut"
     from backend.api import pipeline as _pl
     geo = {"lat": 44.28, "lon": 26.06, "precizie_m": 25, "metoda": "osm_cache", "acuratete": 0.55, "motiv": "smoke"}
     o = {"pasi": [{"nume": "extractie", "rezultat": {"detalii": {"geocodare": geo}}}, {"nume": "scor"}]}
@@ -263,6 +266,7 @@ def main() -> None:
     print("sesiunea 3: zona", z["raza_m"], "m, /reguli ok, /geocodeaza", g.status_code)
 
     assert c.post("/rapoarte", json={"text": "x", "sursa": "gresit"}).status_code == 422
+    sesiunea4(c, apply, rn)
     assert c.get("/ui/").status_code == 200
     print("OK: API")
 

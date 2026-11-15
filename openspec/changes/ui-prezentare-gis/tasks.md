@@ -2,7 +2,7 @@
 
 ## 1. API (C)
 
-- [ ] 1.1 (C2, C3) `GET /demo/exemple`, `POST /demo/reset`, `standardizare` și `focus` în `POST /rapoarte` și `GET /evenimente`; teste
+- [x] 1.1 (C2, C3) `GET /demo/exemple`, `POST /demo/reset`, `standardizare` și `focus` în `POST /rapoarte` și `GET /evenimente`; teste
 
 ## 2. Lovable (C, fiecare prompt netrimis până decide Victor)
 

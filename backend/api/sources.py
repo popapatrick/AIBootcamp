@@ -138,14 +138,8 @@ def date_disponibile() -> list[str]:
     return sorted(_snapshot_files())
 
 
-def retea(data: str | None, scenariu: str | None = None) -> dict:
+def retea(data: str | None) -> dict:
     """GeoJSON cu starea la `data` (sau cea mai recentă). Alege instantaneul cu data <= `data`."""
-    if scenariu:
-        m = model_extrem()
-        data = data or max((j["data"] for j in m.jurnal), default=_azi())
-        fc = m.snapshot(data)
-        fc["data_instantaneu"] = data
-        return fc
     snap = engine_func("snapshot")
     if snap:
         if data is None:
@@ -163,10 +157,8 @@ def retea(data: str | None, scenariu: str | None = None) -> dict:
     return fc
 
 
-def evenimente(scenariu: str | None = None) -> list[dict]:
+def evenimente() -> list[dict]:
     """Lista pentru timeline: [{data, event_id, rezumat, elemente_atinse}], sortată după dată."""
-    if scenariu:
-        return sorted(model_extrem().timeline(), key=lambda e: e.get("data", ""))
     tl = engine_func("timeline")
     if tl:
         items = tl()
@@ -212,31 +204,12 @@ def model_net() -> dict | None:
         return None
 
 
-# ---------------------------------------------------------------- scenariul extrem (sesiunea 2)
-class ScenariuLipsa(Exception):
-    """Fișierul scenariului nu există (se traduce în 404)."""
-
-
-def model_extrem():
-    """GridModel al scenariului extrem, din `engine.model_scenariu("extrem")` (B). Ridică ScenariuLipsa dacă fișierul lipsește."""
-    from backend.engine import engine as eng
-    try:
-        return eng.model_scenariu("extrem")
-    except FileNotFoundError as e:
-        raise ScenariuLipsa(f"scenariul extrem nu există încă: {e}")
-
-
-def ultima_actualizare(data: str | None, scenariu: str | None = None) -> str | None:
+def ultima_actualizare(data: str | None) -> str | None:
     """`ultima_actualizare` din statistici(data) al motorului; None dacă motorul nu o dă încă."""
     try:
-        if scenariu:
-            st = model_extrem().statistici(data or _azi())
-        else:
-            f = engine_func("statistici")
-            st = f(data or _date_motor()[-1]) if f else {}
+        f = engine_func("statistici")
+        st = f(data or _date_motor()[-1]) if f else {}
         return st.get("ultima_actualizare")
-    except ScenariuLipsa:
-        raise
     except Exception:
         return None
 

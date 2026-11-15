@@ -14,7 +14,7 @@ from datetime import date
 
 import yaml
 
-from backend.api import sources
+from backend.api import prezentare, sources
 from backend.racordare import LocalizareEroare, locatie_operator_demo
 
 try:
@@ -25,6 +25,7 @@ except Exception:  # extracția lui A lipsește: nu va fi ridicată oricum
 
 _live: list[dict] = []          # rapoarte procesate în sesiunea curentă (mod stub/parțial)
 _counter = [0]
+evente_live: dict[str, dict] = {}   # event_id -> Event (cu text_original) pentru GET /evenimente
 
 RE_TRONSON = re.compile(r"\b([ARS]-T-\d{1,4})\b")
 RE_TRONSON_SCURT = re.compile(r"(?<![A-Z]-)\b(T-\d{1,4})\b")
@@ -183,17 +184,15 @@ def locatie_operator(text: str, lat: float | None = None, lon: float | None = No
 
 
 def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | None = None,
-               trace: list[dict] | None = None, locatie_operator: dict | None = None,
-               trace_params: dict | None = None) -> dict:
+               locatie_operator: dict | None = None) -> dict:
     """Rulează pipeline-ul pe un raport nou; întoarce StepTrace.
 
-    `trace_params` (opțional) intră în `detalii.trace_params`: motorul/backend.trace îl folosesc la generarea traseului.
     Câmpurile sesiunii 3 produse de motor (`detalii.geocodare`, `trace_sursa`, `origine`, `predictie.slaba/treapta`,
     `eronat_prototip`, `adresa_structurata`) trec neatinse; dacă Event-ul are `detalii.geocodare`, se adaugă pasul „geocodare".
     `locatie_operator` {lat, lon, precizie_m, simulata} (poziție simulată) intră în `detalii.locatie_operator`.
-    `locatie` {lat, lon} (clic pe hartă) și `trace` (traseul tabletei) intră în `detalii` ale Event-ului
-    (`detalii.locatie`, `detalii.centru`, `detalii.trace`); `locatie` completează și `referinta.coordonate`
-    doar dacă extracția nu a găsit coordonate. Răspunsul are mereu `schimbari` (listă; goală dacă motorul nu le dă).
+    `locatie` {lat, lon} (clic pe hartă, doar pentru teste) intră în `detalii.locatie`/`detalii.centru` și completează
+    `referinta.coordonate` doar dacă extracția nu a găsit coordonate. Răspunsul are mereu `schimbari` (listă; goală
+    dacă motorul nu le dă), plus `standardizare` și `focus` (sesiunea 4, vezi `backend/api/prezentare.py`).
 
     Exemplu: proceseaza("Stâlp nou la 44.2847, 26.0606", "mentenanta")
     -> {"event_id": "EV-LIVE-001", "pasi": [...4 pași...], "modificari": [...], "mod": {...}}
@@ -247,17 +246,12 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
 
     if locatie_operator:   # doar indiciu: NU intră în referinta.coordonate (motorul îl pune ultimul și îl marchează simulat)
         ev.setdefault("detalii", {})["locatie_operator"] = locatie_operator
-    if trace_params:
-        ev.setdefault("detalii", {})["trace_params"] = trace_params
-    if locatie or trace:
+    if locatie:
         det = ev.setdefault("detalii", {})
-        if locatie:
-            det["locatie"] = det["centru"] = locatie
-            ref = ev.setdefault("referinta", {})
-            if not ref.get("coordonate"):
-                ref["coordonate"] = locatie
-        if trace:
-            det["trace"] = trace
+        det["locatie"] = det["centru"] = locatie
+        ref = ev.setdefault("referinta", {})
+        if not ref.get("coordonate"):
+            ref["coordonate"] = locatie
 
     out = _ruleaza(ev, metoda_ext)
     _pas_geocodare(ev, out)
@@ -268,6 +262,9 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
             pas["motiv"] = motiv
     out.setdefault("schimbari", [])   # nu inventăm: [] dacă motorul nu le dă (B3)
     out.setdefault("ultima_actualizare", sources.ultima_actualizare(ev["data"]))
+    evente_live[ev["event_id"]] = ev
+    out["standardizare"] = prezentare.standardizare(ev, out, cod)
+    out["focus"] = prezentare.focus(ev, out)
     return out
 
 
@@ -405,4 +402,84 @@ def decizie(tinta_id: str, decizie: str, motiv: str | None, data: str | None) ->
         raise DecizieEroare(err["cod"], err.get("mesaj", ""))
     out["mod"] = sources.mod()
     out.setdefault("schimbari", [])
+    return out
+
+
+class ElementLipsa(Exception):
+    """Elementul cerut nu există (-> 404)."""
+
+
+class FaraSuport(NotImplementedError):
+    """Motorul nu știe încă evenimentul cerut (-> 501)."""
+
+
+def _motorul_stie_verificare_om() -> bool:
+    """True dacă codul motorului tratează `verificare_om` (V5). Căutare în sursele din backend/engine."""
+    return any("verificare_om" in p.read_text(encoding="utf-8") for p in (sources.ROOT / "backend" / "engine").glob("*.py")
+               if not p.name.startswith(("smoke", "test", "verifica")))
+
+
+def verificare(element_id: str, motiv: str | None = None, data: str | None = None) -> dict:
+    """Marchează un element verificat de om: Event `verificare_om` (om_teren) dat lui `apply_event`. Întoarce StepTrace.
+
+    Ridică ElementLipsa (404) dacă elementul nu există; FaraSuport (501) dacă motorul nu are încă `verificare_om`.
+    """
+    if live_element(element_id) is None and sources.element(element_id) is None:
+        raise ElementLipsa(f"element necunoscut: {element_id}")
+    apply = sources.engine_func("apply_event")
+    if not apply or not _motorul_stie_verificare_om():
+        raise FaraSuport("verificare_om nu e încă în motor (V5, Victor)")
+    _dec_counter[0] += 1
+    ev = {"event_id": f"EV-VER-{_dec_counter[0]:03d}", "echipa_sursa": "om_teren", "tip": "verificare_om",
+          "referinta": {"element_id": element_id}, "status": "executat", "data": data or date.today().isoformat(),
+          "forma_sursa": "campuri", "tip_sursa_pondere": "om_teren", "incredere_extractie": 1.0,
+          "text_original": f"Verificat de om: {element_id}" + (f" ({motiv})" if motiv else ""), "campuri_lipsa": [],
+          "detalii": {"tinta_id": element_id, "motiv": motiv}}
+    out = apply(ev)
+    out["mod"] = sources.mod()
+    out.setdefault("schimbari", [])
+    evente_live[ev["event_id"]] = ev
+    out["standardizare"] = prezentare.standardizare(ev, out, None)
+    out["focus"] = prezentare.focus(ev, out)
+    return out
+
+
+def reset() -> int:
+    """Reface modelul la starea de start (motorul reîncarcă evenimentele) și șterge rapoartele live. Întoarce nr. de evenimente."""
+    f = sources.engine_func("reset")
+    if f is None:
+        raise FaraSuport("reset cere motorul real")
+    f()
+    _live.clear()
+    evente_live.clear()
+    return len(sources.evenimente())
+
+
+def imbogateste_evenimente(items: list[dict]) -> list[dict]:
+    """Adaugă pe intrările timeline-ului: `text_original`, `echipa`, `standardizare`, `focus`, `banda_inainte`, `banda_dupa`.
+    Ce dă deja motorul rămâne neatins; ce nu știm rămâne null."""
+    surse = dict(evente_live)
+    try:
+        from backend.engine import engine as eng
+        surse = {**{e["event_id"]: e for e in eng._incarca_evenimente()}, **surse}
+    except Exception:
+        pass
+    idx = prezentare._index_pozitii()
+    out = []
+    for it in items:
+        ev = surse.get(it.get("event_id")) or {}
+        e = dict(it)
+        e.setdefault("text_original", ev.get("text_original"))
+        e.setdefault("echipa", prezentare.eticheta_echipa(ev.get("echipa_sursa")))
+        sch = e.get("schimbari") or []
+        e.setdefault("banda_inainte", (sch[0].get("banda_inainte") if sch else None))
+        e.setdefault("banda_dupa", (sch[0].get("banda_dupa") if sch else None))
+        if ev:
+            o = {"pasi": e.get("pasi") or [], "schimbari": sch, "decizie": e.get("decizie"), "modificari": []}
+            e.setdefault("standardizare", prezentare.standardizare(ev, o, None))
+            e.setdefault("focus", prezentare.focus(ev, o, idx))
+        else:
+            e.setdefault("standardizare", None)
+            e.setdefault("focus", None)
+        out.append(e)
     return out
