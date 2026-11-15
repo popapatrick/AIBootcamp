@@ -196,6 +196,13 @@
   "scor": 0.8
  },
  {
+  "event_id": "EV4-T01",
+  "data": "2026-09-25",
+  "tip": "tracking_tura",
+  "decizie": "scor_actualizat",
+  "scor": null
+ },
+ {
   "event_id": "EV4-029",
   "data": "2026-09-26",
   "tip": "verificare_om",
@@ -341,6 +348,13 @@
   "tip": "racord_nou",
   "decizie": "adaugat",
   "scor": 0.57
+ },
+ {
+  "event_id": "EV4-T02",
+  "data": "2026-10-30",
+  "tip": "tracking_tura",
+  "decizie": "scor_actualizat",
+  "scor": null
  },
  {
   "event_id": "EV4-050",

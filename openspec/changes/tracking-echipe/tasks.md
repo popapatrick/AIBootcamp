@@ -8,8 +8,8 @@
 
 - [x] 2.1 (B1) `backend/tracking/genereaza_tura` + `smoke_tracking.py`
 - [x] 2.2 (B2) `backend/engine/tracking.py`: ramura `tracking_tura` (validare, stâlp presupus, opriri scurte), pași StepTrace, teste
-- [ ] 2.3 (B3) 2 ture în scenariu (`data/events/ture-tracking.json`, `genereaza_scenariu.py`), distribuția în țintă
-- [ ] 2.4 `docs/etapa-32-tracking-echipe.md`, README-uri
+- [x] 2.3 (B3) 2 ture în scenariu (`data/events/ture-tracking.json`, `genereaza_scenariu.py`), distribuția în țintă
+- [x] 2.4 `docs/etapa-32-tracking-echipe.md`, README-uri
 
 ## 3. API (C, Faza 2)
 

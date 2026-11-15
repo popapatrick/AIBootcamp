@@ -68,4 +68,18 @@ Acoperă: validare SIM portocaliu 0,50 -> ~0,63 galben cu sursa `coordonate`; st
 - Stâlpul validat e cel mai apropiat stâlp eligibil, nu neapărat cel din `plan` al generatorului (dacă doi stâlpi sunt la câțiva metri, câștigă cel mai apropiat de oprire).
 - Legătura stâlpului presupus: un singur tronson, fără stâlpi intermediari noi (ca la `PLAN-*`); capătul existent e cel ales de `traseu_pe_strazi` dintre cei mai apropiați candidați.
 
-**Limite.** Un stâlp presupus în același loc într-o tură ulterioară nu întărește predicția veche (a doua oprire devine `neclara`). Deduplicarea turii e pe model (`ture_aplicate`), nu persistă între rulări. Opririle fără timp (`t` lipsă) dau eroare. Elementele `scos_din_uz` nu se validează. Scenariul (B3) nu conține încă ture; calibrarea nu se schimbă.
+**Limite.** Un stâlp presupus în același loc într-o tură ulterioară nu întărește predicția veche (a doua oprire devine `neclara`). Deduplicarea turii e pe model (`ture_aplicate`), nu persistă între rulări. Opririle fără timp (`t` lipsă) dau eroare. Elementele `scos_din_uz` nu se validează. 
+
+## Scenariu (B3)
+**Ce.** Două ture în `data/events/ture-tracking.json` (definiții `{echipa, seed, data, ora_start}` + `tura` cu punctele generate, păstrate în fișier ca scenariul să nu depindă de modificări viitoare ale generatorului). `scripts/genereaza_scenariu.py` le adaugă în `events.json` ca `tracking_tura` (`EV4-T01`, `EV4-T02`, `tip_sursa_pondere: tracking_gps`, `detalii.tura`, `text_original` „Tura de tracking a echipei <echipa>”), intercalate cronologic cu rapoartele (la aceeași dată, după rapoarte); ID-urile `EV4-0xx` rămân neschimbate.
+
+| Tură | Echipă | Data | Seed | Puncte | Validează (scor înainte -> după) | Presupune |
+|---|---|---|---|---|---|---|
+| `EV4-T01` | mentenanta | 2026-09-25 | `s2` | 312 (78 min) | SIM-011 0,463 -> 0,596; SIM-041 0,463 -> 0,581; SIM-013 0,463 -> 0,586 (portocalii); SIM-018 0,643 -> 0,766; SIM-015 0,643 -> 0,764 (galbeni) | `TRK-EV4-T01-1` 0,45 |
+| `EV4-T02` | investitii | 2026-10-30 | `s1` | 290 (72 min) | SIM-051 0,62 -> 0,748; SIM-010 0,62 -> 0,738 (galbeni); SIM-027 0,28 -> 0,414; 6978295 0,35 -> 0,468 (roșii -> portocalii) | `TRK-EV4-T02-1` 0,45 |
+
+Fără linie dreaptă în ambele; fiecare tură mai are o oprire scurtă ignorată. Seed-urile au fost alese prin încercări (3–5 stâlpi ne-verzi validați, exact un stâlp presupus). Scorurile „înainte” sunt cele efective la data turei, din modelul cu rapoartele (și tura anterioară) aplicate până atunci.
+
+**Regenerare.** `EXTRACT_CLI=0 .venv/bin/python scripts/genereaza_ture_tracking.py` (reface `tura` din definiții; `--verifica` doar tipărește) apoi `EXTRACT_CLI=0 .venv/bin/python scripts/genereaza_scenariu.py`. Schimbarea unui seed/dată schimbă turele; reverifică `scripts/verifica_tot.sh`.
+
+**Verificare.** Cardurile de intro rămân neschimbate (EV4-057 predicție SIM-048; EV4-039 aplicat; EV4-017 predicție; EV4-023 -> NOU-EV4-023 0,615 -> 0,8 -> 1,0). Distribuția (doar rețea) la 2026-11-14: verde 76,9 %, galben 9,1 %, portocaliu 8,7 %, roșu 5,3 %: în țintă. `verifica_tot.sh` TOT VERDE; `timeline()` arată cele 2 ture cu eticheta `tracking`.

@@ -5,7 +5,9 @@
 Pași: citește `data/reports/index.json` și fișierele `.txt`; pentru fiecare ia evenimentul extras de Haiku din
 `data/cache/` (`extract_event_cu_metoda(text, sursa, data)`); dacă lipsește din cache, se oprește cu eroare (nu cade pe
 regex). Evenimentele extrase NU se corectează: se adaugă doar `event_id` stabil `EV4-001`… (ordinea: data, apoi numele
-fișierului) și `text_original`. Scrie lista sortată cronologic. Tipărește unde `tip` extras diferă de `tip_asteptat`.
+fișierului) și `text_original`. Adaugă apoi turele de tracking din `data/events/ture-tracking.json` (B3, generat de `scripts/genereaza_ture_tracking.py`) ca
+evenimente `tracking_tura` `EV4-T01`, `EV4-T02`, intercalate cronologic (la aceeași dată, după rapoarte; ID-urile EV4-0xx
+ale rapoartelor nu se schimbă). Scrie lista sortată cronologic. Tipărește unde `tip` extras diferă de `tip_asteptat`.
 Date FICTIVE.
 """
 from __future__ import annotations
@@ -49,6 +51,16 @@ def genereaza() -> tuple[list[dict], list[str], list[str]]:
     return evs, dif, lipsa
 
 
+def ture_tracking() -> list[dict]:
+    """Evenimentele `tracking_tura` din `data/events/ture-tracking.json` (cu punctele deja generate în fișier)."""
+    f = ROOT / "data" / "events" / "ture-tracking.json"
+    if not f.exists():
+        return []
+    from scripts.genereaza_ture_tracking import eveniment_tura
+    defs = sorted(json.loads(f.read_text(encoding="utf-8")), key=lambda d: d["data"])
+    return [eveniment_tura(i, d, d["tura"]) for i, d in enumerate(defs, 1)]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(ROOT / "data" / "events" / "events.json"))
@@ -58,6 +70,7 @@ def main() -> int:
     if lipsa:
         print("LIPSĂ din cache (oprit):", *lipsa, sep="\n  ")
         return 1
+    evs = sorted(evs + ture_tracking(), key=lambda e: e["data"])   # sort stabil: la aceeași dată, rapoartele primele
     if not a.dry:
         Path(a.out).write_text(json.dumps(evs, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"{len(evs)} evenimente{'' if a.dry else ' scrise în ' + a.out}")
