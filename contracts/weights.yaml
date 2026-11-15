@@ -15,7 +15,7 @@ scor:
   factor_semnalat_teren: 0.5      # raport de teren doar „semnalat” (ex. defect găsit): tot dovedește că elementul există, la jumătate
   contradictie: -0.20             # input care contrazice elementul (înmulțit la fel)
   verificat_recent_zile: 30       # halou verde în UI: verificat în ultimele N zile (expus și ca `verificat_recent` în snapshot)
-  scadere_per_30_zile: -0.05      # fără verificare; -0,07 făcea ca toată rețeaua neverificată să treacă sub prag în aceeași zi (~87 de zile)
+  scadere_per_30_zile: -0.02      # fără verificare; -0,07 făcea ca toată rețeaua neverificată să treacă sub prag în aceeași zi (~87 de zile)
   fereastra_conflict_zile: 45     # două rapoarte diferite despre aceeași proprietate în această fereastră = conflict
   minim: 0.0
   maxim: 1.0
@@ -141,8 +141,8 @@ acuratete:               # D6: GIS stabil, elementele din rapoarte plafonate dup
 
 retea_start:             # P2: punctele simulate SIM-* = „din rapoarte mai vechi”, cu scoruri amestecate deterministe
   sim_din_rapoarte: 1                  # 1 = da, 0 = SIM-* tratate ca GIS
-  fractie_galben: 0.45
-  fractie_portocaliu: 0.35             # restul = roșu
+  fractie_galben: 0.50
+  fractie_portocaliu: 0.30             # restul = roșu
   scor_galben: 0.68
   scor_portocaliu: 0.50
   scor_rosu: 0.34
