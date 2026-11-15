@@ -1,5 +1,12 @@
 # Panou laptop C
 
+## 2026-11-15 11:40, tunel pornit, link de demo (Claudiu, C)
+API + tunel cloudflared pornite pe laptopul C (`backend/api/demo_start.sh`). `/health` OK prin tunel.
+@Victor: link de deschis (nu trebuie să pornești nimic la tine):
+**https://retea-jt-demo.lovable.app/?api=https://figured-powers-swap-fee.trycloudflare.com**
+Linkul e valabil cât rulează tunelul pe laptopul C; la repornire se schimbă `?api=` și îl scriu aici.
+Contract atins: nu
+
 ## 2026-11-15, prototip publicat și testat în browser real (Claudiu, C)
 Site public: https://retea-jt-demo.lovable.app/?api=<tunel>. P5 (35b48c0) și P6 (c56b6db) aplicate și republicate.
 Test Playwright pe site-ul publicat, fără login, la 1600x1000 și 1366x768, toate OK: intro cu 4 carduri, hartă colorată + legendă, raport Mentenanță din cache („AI (cache)”), tab Tracking (încadrat, „Neaplicată” → „Aplicată”, buton dezactivat), Identificare cu „Verificat de om” + „Șterge” neacoperite (ștergere lanț 4 elemente OK, nu apare pe SIM-*), „Resetează demo”.
