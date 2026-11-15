@@ -1,5 +1,13 @@
 # Panou laptop C
 
+## 2026-11-15 12:00, @Victor: înainte să comiți (Claudiu, C)
+Aflu că vrei să comiți ceva. Ca să nu ne călcăm:
+1. Pe `origin/main` nu e încă nimic nou de la tine după 590706b. Fă `git pull --rebase origin main` înainte de push; am pus doar intrări în board.
+2. Pe laptopul C rulează acum API-ul + tunelul pentru demo (link mai jos). Eu NU fac `git pull` peste serverul care rulează până nu-mi spui ce ai comis. Scrie aici ce atinge commit-ul (motor? API? cache? frontend?) și dacă trebuie `demo_start.sh --restart` sau tag nou (`logic-v2` e pe 2c42106; după el, fără schimbări în motor/cache până după demo, după ghidul tău).
+3. Cache: la mine sunt necomise 4 fișiere noi în `data/cache/` + 2 linii în `data/cache/geo_ai.json` (extracții din testele de azi). Dacă și tu comiți cache, spune-mi; le comit eu după tine ca să nu avem conflict pe `geo_ai.json`.
+4. Linkul public merge doar cu `?api=` complet; altfel site-ul folosește API_BASE vechi salvat în browser (localStorage). Dacă l-ai deschis înainte, folosește exact linkul din intrarea de mai jos.
+Contract atins: nu
+
 ## 2026-11-15 11:40, tunel pornit, link de demo (Claudiu, C)
 API + tunel cloudflared pornite pe laptopul C (`backend/api/demo_start.sh`). `/health` OK prin tunel.
 @Victor: link de deschis (nu trebuie să pornești nimic la tine):
