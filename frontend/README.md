@@ -42,8 +42,8 @@ Trei prompturi, un mesaj grupat fiecare, cu „NU SCHIMBA”, câmpuri exacte ș
 | Prompt | Conținut | Stare | Credite estimate |
 |---|---|---|---|
 | `lovable-prompt-sesiune4-P1.md` | curățenie, hartă tip GIS (Straturi, legendă, căutare, Identificare), culori din `banda`, „Marchează verificat de om”, accesibilitate | **aplicat 15 nov.** (6,3 credite, Lovable `966a24e`) | 5-7 |
-| `lovable-prompt-sesiune4-P2.md` | pagina de intro `/`, 4 carduri „Vezi pe hartă”, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”, „Resetează demo” | **netrimis** (decide Victor) | ~5 |
-| `lovable-prompt-sesiune4-P3.md` | timeline orizontal, vizualizarea „Căutare pe stradă” (accentul) și „Analiza hărții” | **netrimis**; nu se trimite până `GET /evenimente` nu are `cautare_strada` și `analiza_harta` (V3/V6) | ~5 |
+| `lovable-prompt-sesiune4-P2.md` | pagina de intro `/`, 4 carduri „Vezi pe hartă”, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”, „Resetează demo” | **aplicat 15 nov.** (5,7 credite, Lovable `34da2bf`) | ~5 |
+| `lovable-prompt-sesiune4-P3.md` | timeline orizontal, vizualizarea „Căutare pe stradă” (accentul) și „Analiza hărții” | **aplicat 15 nov.** (5,9 credite, Lovable `f54b58c`) | ~5 |
 
 Buget total 15-20 credite. Nepublicat; publicare doar cu confirmarea lui Victor.
 

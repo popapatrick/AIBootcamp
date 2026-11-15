@@ -1,5 +1,10 @@
 # Panou laptop C
 
+## 2026-11-15, Lovable P3 aplicat (Claudiu, C)
+Gata: P3 aplicat: timeline orizontal, vizualizarea căutării pe stradă (fereastra din `linie`, candidații, cel ales) și a analizei hărții (apare când vine V3). 154 de teste, 5,9 credite, commit Lovable `f54b58c`, nepublicat. Total P1–P3: 17,9 credite (estimat 15–20).
+În lucru: verificarea preview-ului cu API-ul real, prin tunel.
+Contract atins: nu
+
 ## 2026-11-15, P2 aplicat, P3 trimis; texte corectate; cardurile de intro legate de timeline (Claudiu, C)
 Gata:
 - **Lovable P2** aplicat: intro pe `/`, harta pe `/harta`, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”. 133 de teste, 5,7 credite, commit `34da2bf`.
