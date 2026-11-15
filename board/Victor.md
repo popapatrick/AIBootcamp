@@ -2,6 +2,12 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, calibrare: rețeaua în țintă (Victor, B)
+Decizia lui Victor: ținta de culori se măsoară doar pe REȚEA (elementele din model, nivel ≠ predicție); predicțiile punctate și pinurile `VER-*` nu intră; plafoanele rămân neschimbate.
+`reglaj: retea_start.fractie_galben 0.45 -> 0.5; retea_start.fractie_portocaliu 0.35 -> 0.3; scor.scadere_per_30_zile -0.05 -> -0.02 | calibrare: 2 evenimente schimbate | smoke: toate OK`
+Rețeaua la 13 nov.: verde 80,7 %, galben 9,4 %, portocaliu 7,2 %, roșu 2,6 % (în țintă); la 15 sept.: 82,2 / 9,7 / 5,8 / 2,3. Predicții: 77, aproape toate roșii (plafon analiză hartă 0,40). `verifica_tot.sh` rulează acum cu `--strict-distributie`: un reglaj care scoate rețeaua din țintă face scriptul să pice. TOT VERDE.
+Contract atins: nu (doar valori, commit `reglaj:`)
+
 ## 2026-11-15, V5 verificat de om + scenariul din 55 de rapoarte pe main (Victor, B)
 Gata (cod scris de agenți Sonnet, verificat de mine):
 - **V5** (541eeaf): `verificare_om` pe element/predicție/pin → 1,0, `verificat_om` true + dată; „Acceptă” = verificare; o contradicție ulterioară scoate flag-ul. Decizia în StepTrace e `aplicat`, eticheta în timeline `verificat_om`. `POST /element/{id}/verificare` dă 200, fără schimbări în API.
