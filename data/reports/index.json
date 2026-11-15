@@ -438,5 +438,13 @@
     "scenariu": null,
     "element_id_asteptat": "6872907",
     "tip_asteptat": "racord_nou"
+  },
+  {
+    "fisier": "2026-11-14_mentenanta_28.txt",
+    "sursa": "mentenanta",
+    "data": "2026-11-14",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "avarie_semnalata"
   }
 ]

@@ -1,6 +1,6 @@
 # Prompt Lovable sesiunea 4, P3: timeline orizontal + vizualizarea căutării pe stradă + a analizei hărții
 
-> **STARE: NETRIMIS — câmpurile cautare_strada/analiza_harta vin după V3/V6 (Victor)**
+> **STARE: trimis 15 nov. (cautare_strada e în motor din V6; analiza_harta vine la V3, până atunci vizualizarea ei nu apare)**
 
 - **Ordine:** se trimite DUPĂ P1 și P2 (nu le contrazice: Straturi, Identificare, bara de unelte, butoanele de echipă, panoul „Ce a înțeles AI-ul” rămân). Nu se trimite fără decizia lui Victor.
 - **Dependențe API:** `GET /evenimente` cu `pasi[]` care conține pașii `cautare_strada` și `analiza_harta` (V6, V3), `focus`, `banda`; `POST /rapoarte` care întoarce aceiași pași; `predictie.traseu` / `predictie.alternative` pe features din `GET /retea`. Timeline-ul de ~55 de evenimente (secț. 7 din plan) trebuie să existe, altfel se vede gol.
@@ -33,7 +33,7 @@ Schimbări de afișare (frontend, română). Nu schimba logica de date. Orice c�
 
 ### 2. Vizualizarea „Căutare pe stradă” (doar când intrarea activă sau răspunsul unui raport nou are pasul `cautare_strada` cu `punct`)
 Pe hartă, peste elementele normale:
-- **Fereastra pe stradă:** bandă semitransparentă (albastru, ~25% opacitate) centrată pe `punct`, cu raza `(pana_la_m − de_la_m) / 2` m (dacă `de_la_m`/`pana_la_m` lipsesc: raza `precizie_m`). Etichetă „Fereastră <strada>, <rotunjit> m”.
+- **Fereastra pe stradă:** polilinia `rezultat.linie` (listă `[[lat, lon], ...]`, porțiunea de stradă dintre `de_la_m` și `pana_la_m`) desenată ca bandă semitransparentă (albastru, ~25% opacitate, grosime ~30 px la zoom 17, adică ±15 m de ax). Dacă `linie` lipsește sau e goală: cerc semitransparent centrat pe `punct` cu raza `precizie_m`. Etichetă „Fereastră <strada>, <rotunjit pana_la_m − de_la_m> m”.
 - **Punctul estimat:** marcaj mic cu cerc de precizie de rază `precizie_m` (linie subțire, fără umplere).
 - **Ancorele:** puncte mici gri-închis cu numărul (`ancore[].numar`) lângă ele.
 - **Candidații:** fiecare element din `candidati` apare cu contur albastru subțire (cerc mare în jurul poziției, ~10 px); **cel ales (`ales`) e plin** (umplere cu culoarea benzii lui, din `banda`) și are eticheta „ales”.

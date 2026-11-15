@@ -1,0 +1,40 @@
+{
+  "event_id": "M-2026-0441",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Orhideelor, lângă nr. 3",
+    "adresa_structurata": {
+      "strada": "Strada Orhideelor",
+      "numar": "3",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "3",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0441\nData: 2026-11-14\nEchipa: mentenanta\nTip lucrare: avarie, stâlp căzut\nCod element: -\nCoordonate: -\nAdresa: Strada Orhideelor, lângă nr. 3\nConstatare: Stâlp căzut, cablul atârnă pe trotuar. Nu am coordonate.\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {
+    "observatii": "Tip lucrare: avarie, stâlp căzut. Constatare: stâlp căzut, cablul atârnă pe trotuar."
+  }
+}

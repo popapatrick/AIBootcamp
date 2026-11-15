@@ -7,5 +7,5 @@ Tip lucrare: stâlp înlocuit
 Cod element: -
 Coordonate: -
 Adresa: Strada Speranței nr. 22
-Constatare: Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție.
+Constatare: Stâlpul existent a fost înlocuit: cel vechi demontat, cel nou montat în aceeași poziție (înlocuire, nu stâlp suplimentar).
 Status: executat

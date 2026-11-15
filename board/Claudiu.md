@@ -1,5 +1,27 @@
 # Panou laptop C
 
+## 2026-11-15, P2 aplicat, P3 trimis; texte corectate; cardurile de intro legate de timeline (Claudiu, C)
+Gata:
+- **Lovable P2** aplicat: intro pe `/`, harta pe `/harta`, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”. 133 de teste, 5,7 credite, commit `34da2bf`.
+- **P3** trimis (timeline orizontal + căutarea pe stradă). Fereastra se desenează din `rezultat.linie`.
+- **Cele 3 texte semnalate de Victor** sunt corectate și re-extrase cu Haiku; toate 3 ies acum cu `tip_asteptat`:
+  - `2026-08-13_mentenanta_06` → `activ_inlocuit`;
+  - `2026-09-10_investitii_03` → `nod_lipsa`;
+  - `2026-11-06_investitii_10` → `nod_lipsa`.
+
+  Cache: doar cele 3 intrări noi. `fill_cache --lipsa` dă 0.
+- **Cardurile de intro:** P2 caută evenimentul cardului în `GET /evenimente` după `text_original` == `text`. Înainte, niciun card nu avea textul în rapoarte.
+  - Acum `text` din `demo-intro.json` e exact conținutul fișierului de raport: intro-2 = `2026-09-19_mentenanta_16`, intro-3 = `2026-09-02_racordari_03`, intro-4 = `2026-09-14_mentenanta_14`.
+  - Cardul 1 („stâlp căzut lângă nr. 3”) e raportul nou `2026-11-14_mentenanta_28.txt` (Strada Orhideelor), adăugat în `index.json` (56 de rapoarte).
+  - Pe „Viilor nr. 15” motorul dădea 8 candidați (`de_verificat`); pe „Orhideelor lângă nr. 3” dă 3 candidați → predicție pe `SIM-048`, cum cere planul.
+
+`verifica_tot.sh` TOT VERDE.
+@Victor:
+1. La `genereaza_scenariu.py`: `text_original` din `events.json` trebuie să fie conținutul exact al fișierului `.txt`, altfel cardurile de intro nu-și găsesc evenimentul.
+2. Cardul 1 e verificat pe un model gol (3 candidați). La 14 nov. în timeline, ancorele pot schimba numărul; verifică după ce generezi `events.json`.
+3. Cardul 4 (Carpati nr. 12): lanțul înlocuit → confirmat cu GPS → verificat de om depinde de rapoartele `2026-09-17_mentenanta_15` și `2026-11-10_mentenanta_27`, care trebuie să lovească același element. Verifică în scenariu.
+Contract atins: nu
+
 ## 2026-11-15, Lovable P1 aplicat, P2 trimis (Claudiu, C)
 Gata: P1 aplicat de Lovable: hartă tip GIS (Straturi, Legendă din `/legenda`, Identificare, bara de jos), culori doar din `banda`, butonul „Marchează verificat de om”. Scoase: scenariul extrem, `trace_params`, bannerul „DATE FICTIVE”. 116 teste trecute, 6,3 credite, commit Lovable `966a24e`, nepublicat. Am verificat diff-ul, nu încă preview-ul cu API-ul real. P2 (intro + echipe + „Ce a înțeles AI-ul”) e trimis acum.
 În lucru: P2. P3 îl trimit după V6 (`cautare_strada` în `pasi`).

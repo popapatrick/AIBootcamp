@@ -1,0 +1,40 @@
+{
+  "event_id": "I-2026-0114",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "status": "executat",
+  "data": "2026-09-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0114\nData: 2026-09-10\nEchipa: investitii\nTip lucrare: linie nouă executată\nCod element: -\nCoordonate: -\nAdresa: Aleea Bălții, lângă nr. 9\nConstatare: Tronson nou de 40 m montat și pus sub tensiune, cu stâlp nou; lucrare finalizată, nu planificată.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "referinta": {
+    "adresa": "Aleea Bălții, lângă nr. 9",
+    "adresa_structurata": {
+      "strada": "Aleea Bălții",
+      "numar": "9",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "9",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null
+  },
+  "detalii": {
+    "lungime_m": 40,
+    "observatii": "Tronson nou de 40 m montat și pus sub tensiune, cu stâlp nou; lucrare finalizată, nu planificată. Cod element lipsă în fișă (\"-\")."
+  }
+}

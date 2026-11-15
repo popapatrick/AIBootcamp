@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0441
+Data: 2026-11-14
+Echipa: mentenanta
+Tip lucrare: avarie, stâlp căzut
+Cod element: -
+Coordonate: -
+Adresa: Strada Orhideelor, lângă nr. 3
+Constatare: Stâlp căzut, cablul atârnă pe trotuar. Nu am coordonate.
+Status: semnalat

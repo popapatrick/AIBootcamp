@@ -1,10 +1,10 @@
 [
   {
     "id": "intro-1",
-    "titlu": "Stâlp căzut lângă nr. 15",
-    "descriere": "Raport fără coordonate: sistemul caută pe Strada Viilor, găsește candidații și alege cel mai apropiat.",
+    "titlu": "Stâlp căzut lângă nr. 3",
+    "descriere": "Raport fără coordonate: sistemul caută pe Strada Orhideelor, lângă nr. 3, găsește 3 stâlpi candidați și îl alege pe cel mai apropiat.",
     "sursa": "mentenanta",
-    "text": "Stâlp căzut lângă nr. 15 pe Strada Viilor, cablul atârnă pe trotuar. Nu am coordonate.",
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0441\nData: 2026-11-14\nEchipa: mentenanta\nTip lucrare: avarie, stâlp căzut\nCod element: -\nCoordonate: -\nAdresa: Strada Orhideelor, lângă nr. 3\nConstatare: Stâlp căzut, cablul atârnă pe trotuar. Nu am coordonate.\nStatus: semnalat\n",
     "data_moment": "2026-11-14",
     "focus": null
   },
@@ -13,7 +13,7 @@
     "titlu": "Sens giratoriu, fire mutate",
     "descriere": "Firele mutate la sensul giratoriu de pe Șoseaua Principală: traseul nou apare, cel vechi se scoate.",
     "sursa": "mentenanta",
-    "text": "Sens giratoriu: firul de la nodul 5481763 mutat pe nodul 6374339 pe Șoseaua Principală, traseul vechi scos.",
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0415\nData: 2026-09-19\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: 5481763 → 6374339\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos.\nStatus: executat\n",
     "data_moment": "2026-09-19",
     "focus": null
   },
@@ -22,7 +22,7 @@
     "titlu": "Casă departe de rețea",
     "descriere": "Cerere de racordare la o casă departe de ultimul stâlp: lanțul se trasează pe străzi.",
     "sursa": "racordari",
-    "text": "Cerere racord, casa din Strada Regina Maria nr. 40, la cca 180 m de ultimul stâlp.",
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – RACORDĂRI\nNr. fișă: R-2026-0063\nData: 2026-09-02\nEchipa: racordari\nTip lucrare: cerere racord casă departe de rețea\nCod element: -\nCoordonate: -\nAdresa: Strada Regina Maria nr. 40\nConstatare: Casa e la cca 180 m de ultimul stâlp, traseu pe Strada Regina Maria.\nStatus: semnalat\n",
     "data_moment": "2026-09-02",
     "focus": null
   },
@@ -31,7 +31,7 @@
     "titlu": "Stâlp înlocuit, raportat cu adresă",
     "descriere": "Raport cu adresă, aplicat galben; după confirmarea GPS devine verde, apoi verificat de om.",
     "sursa": "mentenanta",
-    "text": "Stâlp înlocuit pe Strada Carpati nr. 12, stâlpul vechi scos din uz, stâlp nou montat.",
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: 6642890 (vechi)\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp înlocuit cu unul nou, stâlpul vechi scos din uz.\nStatus: executat\n",
     "data_moment": "2026-09-14",
     "focus": null
   }

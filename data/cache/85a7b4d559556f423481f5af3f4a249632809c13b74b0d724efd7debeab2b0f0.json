@@ -1,0 +1,32 @@
+{
+  "event_id": "M-2026-0406",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "referinta": {
+    "adresa": "Strada Speranței nr. 22",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": "22",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-08-13",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0406\nData: 2026-08-13\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței nr. 22\nConstatare: Stâlpul existent a fost înlocuit: cel vechi demontat, cel nou montat în aceeași poziție (înlocuire, nu stâlp suplimentar).\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Înlocuire stâlp existent: cel vechi demontat, cel nou montat în aceeași poziție (nu stâlp suplimentar). Fișă M-2026-0406."
+  }
+}

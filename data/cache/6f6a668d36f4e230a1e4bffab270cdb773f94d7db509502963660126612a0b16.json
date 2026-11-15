@@ -1,0 +1,40 @@
+{
+  "event_id": "I-2026-0121",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Primăverii, la capătul străzii",
+    "adresa_structurata": {
+      "strada": "Strada Primăverii",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "capat",
+        "numar": null,
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-06",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă executată\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Stâlp nou montat la capătul străzii și tronson nou până la el; lucrare finalizată. Nu e branșament de client.\nStatus: executat\n",
+  "tip_sursa_pondere": "formular",
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.45,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "Stâlp nou montat la capătul străzii și tronson nou până la el; lucrare finalizată. Nu e branșament de client. Nr. fișă I-2026-0121. Cod element și coordonate lipsesc în fișă ('-')."
+  }
+}

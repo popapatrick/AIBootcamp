@@ -3,9 +3,9 @@ FIȘĂ DE LUCRARE – INVESTIȚII
 Nr. fișă: I-2026-0121
 Data: 2026-11-06
 Echipa: investitii
-Tip lucrare: linie nouă
+Tip lucrare: linie nouă executată
 Cod element: -
 Coordonate: -
 Adresa: Strada Primăverii, la capătul străzii
-Constatare: Tronson nou executat, racord la rețea.
+Constatare: Stâlp nou montat la capătul străzii și tronson nou până la el; lucrare finalizată. Nu e branșament de client.
 Status: executat
