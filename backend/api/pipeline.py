@@ -9,6 +9,7 @@ text -> extracție -> potrivire -> (predicție) -> scor, întors ca StepTrace (c
 """
 from __future__ import annotations
 
+import os
 import re
 from datetime import date
 
@@ -16,6 +17,12 @@ import yaml
 
 from backend.api import prezentare, sources
 from backend.racordare import LocalizareEroare, locatie_operator_demo
+
+
+def data_demo() -> str:
+    """Data de rezervă (raport fără `data` și fără dată în text): `DEMO_DATA` din env, implicit 2026-11-15.
+    Fixă, ca cheia de cache (text+echipă+dată) să se potrivească indiferent de ziua demo-ului."""
+    return os.environ.get("DEMO_DATA") or "2026-11-15"
 
 try:
     from backend.extract import CacheMiss
@@ -115,7 +122,7 @@ def extract_stub(text: str, sursa: str, data: str | None) -> dict:
             data = d.group(1) or f"{d.group(4)}-{int(d.group(3)):02d}-{int(d.group(2)):02d}"
         else:
             lipsa.append("data")
-            data = date.today().isoformat()
+            data = data_demo()
 
     sec = re.search(r"(TYIR\s*[\dx+,\s]+OL-Al|NA2XS?\w*\s*[\dx]+)", text)
     gasite = sum(ref[k] is not None for k in ("element_id", "coordonate", "adresa"))
@@ -208,7 +215,7 @@ def proceseaza(text: str, sursa: str, data: str | None = None, locatie: dict | N
                 if m:
                     data_ext = m.group(1) or f"{m.group(4)}-{int(m.group(3)):02d}-{int(m.group(2)):02d}"
                 else:  # extract_event cere dată: folosim data primirii raportului
-                    data_ext = date.today().isoformat()
+                    data_ext = data_demo()
                     data_primirii = True
             try:   # metoda_cod vine de la extracție: ai_cache | ai_cli (Claude Code din abonament) | ai_api
                 from backend.extract import extract_event_cu_metoda

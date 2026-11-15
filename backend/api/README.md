@@ -3,6 +3,7 @@
 API FastAPI pentru prototip (etapa 7). Implementează `contracts/api.openapi.yaml`. Date FICTIVE.
 
 - `main.py`: aplicația și endpoint-urile; servește și UI-ul plan B (`frontend/plan-b/`) la `/ui/`.
+- `pipeline.py:data_demo()`: data fixă de rezervă pentru cheia de cache (`DEMO_DATA` din env, implicit 2026-11-15); vezi `docs/etapa-35-api-tracking-stergere.md`.
 - `sources.py`: de unde vin datele (motorul lui B → fișierele lui B → eșantionul `data/model/sample/`), ales automat.
 - `pipeline.py`: `POST /rapoarte` (extracție → potrivire → predicție → scor); folosește `extract_event` (A) și `apply_event` (B) când există, altfel stub + `match_event` real.
 - `POST /predictii/{id}/decizie`: Event `om_teren` dat lui `apply_event`; 404 necunoscută, 409 deja decisă, 400 invalidă. `API_EXTRACTIE=stub` forțează extracția regex. Detalii: `docs/etapa-7b-api-sesiunea-2.md`.

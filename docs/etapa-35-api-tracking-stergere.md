@@ -33,3 +33,10 @@ Testul (`tracking_stergere` în `smoke_api.py`, doar cu motor real) acoperă: ge
 ## Ce trebuie să știe ceilalți
 - UI (Lovable): `frontend/lovable-prompt-sesiune4-P4.md`, netrimis până decide Victor.
 - B: `t_ajungere` din `tracking[]` e convertit în secunde (contractul spune secunde; motorul dă ISO).
+
+## DEMO_DATA: data fixă de demo pentru cheia de cache
+
+- **Ce:** cheia de cache a extracției e text + echipă + dată. Un raport fără `data` și fără dată în text folosea `date.today()`, deci textele pregătite azi nu mai nimereau cache-ul în altă zi. Acum `backend/api/pipeline.py:data_demo()` dă `DEMO_DATA` din env, implicit `2026-11-15`; e folosită în stub-ul regex (câmpul `data`) și la apelul `extract_event_cu_metoda` (`data_ext`).
+- **Nu e schimbat:** `date.today()` rămâne la evenimentele de timeline/tracking/ștergere (nu intră în cheia de cache) și în `backend/extract/extract.py:168` (al lui B, data evenimentului când modelul nu o dă; nu afectează cheia).
+- **Verificare:** `.venv/bin/python -m backend.api.smoke_api` -> `OK: API`. Testul simulează altă zi (`date.today` fals 2027-03-09 în modulul `pipeline`) și cere `standardizare.metoda == "ai_cache"` pentru 3 texte din `docs/demo-texte-live.md`. Cu `DEMO_DATA=2027-01-01` testul pică (așteptat).
+- **Limită:** dacă se schimbă `DEMO_DATA`, cache-ul pentru noua dată trebuie refăcut.

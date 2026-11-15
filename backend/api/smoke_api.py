@@ -182,6 +182,22 @@ def main() -> None:
     assert rn["pasi"][0]["metoda_cod"] == "regex", rn["pasi"][0]
     if xc == "ai_cache":
         assert "fără cache" in rn["pasi"][0]["motiv"], rn["pasi"][0]
+    if xc == "ai_cache":   # DEMO_DATA: altă zi (date.today fals) tot nimerește cache-ul
+        from datetime import date as _d
+        from backend.api import pipeline
+        class _Alta(_d):
+            @classmethod
+            def today(cls):
+                return cls(2027, 3, 9)
+        vechi, pipeline.date = pipeline.date, _Alta
+        try:
+            for sr, t in (("mentenanta", "Stâlp căzut pe Strada Orhideelor lângă nr. 3"),
+                          ("mentenanta", "Montat stâlp nou pe Strada Viilor nr. 9"),
+                          ("investitii", "Stâlp nou montat la capătul Străzii Crinului")):
+                rz = c.post("/rapoarte", json={"text": t, "sursa": sr}).json()
+                assert rz["standardizare"]["metoda"] == "ai_cache", rz["standardizare"]
+        finally:
+            pipeline.date = vechi
     print("metoda_cod:", xc, "-> text nou:", rn["pasi"][0]["metoda_cod"])
 
     # textele butoanelor UI (C5-C7) dau tipul corect și fără AI (regex)

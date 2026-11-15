@@ -2,7 +2,7 @@
 
 Date FICTIVE. Textele de mai jos sunt deja în `data/cache/` (cheia = text + echipă + dată; fără dată în text se folosește data zilei, deci valabile **doar fără dată scrisă în text** și cu aceeași echipă). Verificate pe API (15.11.2026, model resetat înainte de fiecare): `standardizare.metoda` = `ai_cache`, răspuns instant, fără AI live. Textul trebuie scris **exact** (inclusiv punctuația); variantele fără diacritice sunt cache-uri separate.
 
-Atenție: cache-ul se potrivește pe data zilei. Dacă demo-ul e în altă zi decât 2026-11-15, aceste intrări nu se mai nimeresc (apel AI live sau regex). Se refac cu `docs/` / scriptul de pregătire rulat în ziua demo-ului.
+Data de rezervă (raport fără `data` și fără dată în text) e fixă: `DEMO_DATA` din env, implicit `2026-11-15` (`backend/api/pipeline.py:data_demo`). Cache-ul se potrivește deci în orice zi a demo-ului, fără refacere dimineața; refacerea rămâne doar rezervă (dacă se setează alt `DEMO_DATA` sau textul conține o dată). Vezi `docs/etapa-35-api-tracking-stergere.md`, „DEMO_DATA”.
 
 | Echipă | Text | Decizie | Scor / bandă |
 |---|---|---|---|
