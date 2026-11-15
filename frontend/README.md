@@ -45,8 +45,13 @@ Trei prompturi, un mesaj grupat fiecare, cu „NU SCHIMBA”, câmpuri exacte ș
 | `lovable-prompt-sesiune4-P2.md` | pagina de intro `/`, 4 carduri „Vezi pe hartă”, 3 butoane de echipă, panoul „Ce a înțeles AI-ul”, „Resetează demo” | **aplicat 15 nov.** (5,7 credite, Lovable `34da2bf`) | ~5 |
 | `lovable-prompt-sesiune4-P3.md` | timeline orizontal, vizualizarea „Căutare pe stradă” (accentul) și „Analiza hărții” | **aplicat 15 nov.** (5,9 credite, Lovable `f54b58c`) | ~5 |
 | `lovable-prompt-sesiune4-P4.md` | tab „Tracking echipe” (generează tură, animare, opriri colorate, aplică, rezultat înainte→după) + buton „Șterge” în Identificare | **trimis 15 nov.** (credite neexpuse de API; estimat ~5, de verificat în editor; Lovable `0e79a4d`) | ~5 |
+| `lovable-prompt-sesiune4-P5.md` | corecturi după test: fișa evenimentului nu mai acoperă Identificare, fișe curate pentru `tracking_tura`/`stergere_om`, tură nouă = „Neaplicată" (lipsa `aplicata` = false, buton „Aplică" dezactivat după aplicare), harta Tracking rămâne încadrată pe rețea/focus | **aplicat 15 nov.** (4,6 credite, Lovable `35b48c0`, 198 teste verzi) | ~5 |
 
-Buget total 15-20 credite. Nepublicat; publicare doar cu confirmarea lui Victor.
+Buget total 15-20 credite. 
+### Publicare
+- URL public: https://retea-jt-demo.lovable.app (publicat 15 nov. după P5, `deploy_project` cu `name="retea-jt-demo"`).
+- Se folosește cu `?api=<URL tunel>` (ex. `https://retea-jt-demo.lovable.app/?api=https://xxx.trycloudflare.com`); fără `?api=` arată „Exemplele nu sunt disponibile".
+- După orice prompt nou trebuie republicat cu deploy; previzualizarea (`id-preview--...`) se actualizează singură, URL-ul public nu.
 
 **Endpointuri noi folosite de UI** (detalii în `docs/etapa-30-api-sesiune4.md`):
 - `GET /legenda` (benzi, linii, insigne; UI nu hardcodează culori sau praguri).
