@@ -1,0 +1,39 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Orhideelor lângă nr. 3",
+    "adresa_structurata": {
+      "strada": "Strada Orhideelor",
+      "numar": "3",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "3",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null,
+    "id_client": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "Stâlp căzut pe Strada Orhideelor lângă nr. 3",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {}
+}

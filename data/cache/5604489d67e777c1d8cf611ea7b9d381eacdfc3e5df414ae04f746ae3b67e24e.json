@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": {
+      "strada": null,
+      "numar": null,
+      "localitate": null,
+      "reper": "giratoriu"
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "lucrari de mentenanta in giratoriu\n",
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "adresa",
+    "strada",
+    "numar",
+    "localitate"
+  ],
+  "detalii": {},
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.2
+}

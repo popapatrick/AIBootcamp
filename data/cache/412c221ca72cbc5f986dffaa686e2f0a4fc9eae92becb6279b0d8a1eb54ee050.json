@@ -1,0 +1,29 @@
+{
+  "event_id": "EV-NECUNOSCUT",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "victor suge",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.05,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "adresa",
+    "coordonate",
+    "detalii"
+  ],
+  "detalii": {
+    "observatii": "Textul „victor suge” nu conține informații tehnice despre element, locație sau lucrare."
+  }
+}

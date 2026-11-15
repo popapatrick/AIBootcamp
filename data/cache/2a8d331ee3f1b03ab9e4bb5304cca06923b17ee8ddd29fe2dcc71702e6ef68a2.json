@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "pe Liviu Rebreanu la colt",
+    "adresa_structurata": {
+      "strada": "Liviu Rebreanu",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Montat stalp pe Liviu Rebreanu la colt\n",
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "numar",
+    "localitate",
+    "indiciu"
+  ],
+  "detalii": {
+    "observatii": "Stâlp montat (executat) pe strada Liviu Rebreanu, la colț; strada din colț nu este precizată, codul stâlpului nu apare în text."
+  },
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.4
+}

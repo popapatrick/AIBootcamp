@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-b0884d2a",
+  "echipa_sursa": "mentenanta",
+  "tip": "nod_lipsa",
+  "referinta": {
+    "adresa": "Strada Viilor nr. 9",
+    "adresa_structurata": {
+      "strada": "Strada Viilor",
+      "numar": "9",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-11-15",
+  "text_original": "Montat stâlp nou pe Strada Viilor nr. 9",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "coordonate"
+  ],
+  "detalii": {}
+}

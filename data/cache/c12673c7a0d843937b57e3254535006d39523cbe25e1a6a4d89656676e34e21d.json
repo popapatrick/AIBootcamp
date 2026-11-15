@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Cerere racord Strada Bălții nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": "14",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-15",
+  "text_original": "Cerere racord Strada Bălții nr. 14",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "coordonate",
+    "nr_cadastral"
+  ],
+  "detalii": {}
+}

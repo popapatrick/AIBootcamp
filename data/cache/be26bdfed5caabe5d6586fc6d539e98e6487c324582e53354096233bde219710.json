@@ -1,0 +1,28 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "verificare",
+  "referinta": {
+    "adresa": null,
+    "adresa_structurata": null,
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "x",
+  "campuri_lipsa": [
+    "tip",
+    "referinta",
+    "element_id",
+    "adresa",
+    "coordonate",
+    "observatii"
+  ],
+  "detalii": {},
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0
+}

@@ -1,0 +1,32 @@
+{
+  "event_id": "EV-PENDING",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Bălții nr. 14",
+    "adresa_structurata": {
+      "strada": "Strada Bălții",
+      "numar": "14",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-15",
+  "text_original": "Cerere racord, Strada Bălții nr. 14, casa, 1 faza 5 kW.",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+    "event_id",
+    "coordonate"
+  ],
+  "detalii": {
+    "observatii": "casa, 1 faza, 5 kW"
+  }
+}

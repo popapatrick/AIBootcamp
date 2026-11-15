@@ -1,0 +1,30 @@
+{
+  "event_id": "EV-33678b3f",
+  "echipa_sursa": "racordari",
+  "tip": "cerere_racordare",
+  "referinta": {
+    "adresa": "Strada Speranței nr. 7",
+    "adresa_structurata": {
+      "strada": "Strada Speranței",
+      "numar": "7",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-15",
+  "text_original": "Cerere de racord pentru casă pe Strada Speranței nr. 7",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "coordonate",
+    "event_id"
+  ],
+  "detalii": {}
+}

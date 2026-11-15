@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Ulmului, lângă nr. 6",
+    "adresa_structurata": {
+      "strada": "Strada Ulmului",
+      "numar": "6",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "6",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "avarie izolator pe Strada Ulmului, lângă nr. 6",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "detalii": {
+    "observatii": "avarie izolator"
+  },
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ]
+}

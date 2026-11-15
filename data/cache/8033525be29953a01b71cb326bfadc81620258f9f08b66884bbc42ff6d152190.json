@@ -1,0 +1,33 @@
+{
+  "event_id": "EV-RAC-2026-11-15",
+  "echipa_sursa": "racordari",
+  "tip": "racord_nou",
+  "referinta": {
+    "adresa": "stada bucuresti langa intersectie",
+    "adresa_structurata": {
+      "strada": "bucuresti",
+      "numar": null,
+      "localitate": null,
+      "reper": "langa intersectie",
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "planificat",
+  "data": "2026-11-15",
+  "text_original": "un racord pe stada bucuresti langa intersectie ",
+  "campuri_lipsa": [
+    "event_id",
+    "numar",
+    "localitate",
+    "coordonate",
+    "element_id"
+  ],
+  "detalii": {},
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.4
+}

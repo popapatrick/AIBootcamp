@@ -1,0 +1,31 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "activ_inlocuit",
+  "status": "executat",
+  "data": "2026-11-15",
+  "referinta": {
+    "adresa": "Strada Carpati nr. 12",
+    "adresa_structurata": {
+      "strada": "Strada Carpati",
+      "numar": "12",
+      "localitate": null,
+      "reper": null,
+      "indiciu": null
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "detalii": {},
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "incredere_extractie": 0.5,
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "text_original": "Înlocuit stâlp vechi pe Strada Carpati nr. 12"
+}

@@ -1,0 +1,39 @@
+{
+  "event_id": "EV-001",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+    "adresa": "Strada Orhideelor langa nr 3",
+    "adresa_structurata": {
+      "strada": "Strada Orhideelor",
+      "numar": "3",
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "langa",
+        "numar": "3",
+        "numar_2": null,
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "id_client": null,
+    "nr_cadastral": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-15",
+  "text_original": "stalp cazut pe Strada Orhideelor langa nr 3",
+  "tip_sursa_pondere": "text_liber",
+  "forma_sursa": "text_liber",
+  "incredere_extractie": 0.7,
+  "campuri_lipsa": [
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "detalii": {}
+}
