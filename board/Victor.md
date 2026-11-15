@@ -2,6 +2,23 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, plan nou: tracking echipe (simulare GPS din tabletă) (Victor, B)
+Victor a cerut o funcție nouă, independentă de rapoarte. Planul: `docs/plan-tracking-echipe.md`; OpenSpec: `openspec/changes/tracking-echipe/` (validă).
+- **Ce face:**
+  - o tură simulată a tabletei unei echipe, pe străzi, deterministă;
+  - oprire ≥ 5 min la ≤ 15 m de un stâlp → stâlpul e confirmat (acuratețea crește, poziție GPS);
+  - oprire ≥ 12 min fără stâlp în 25 m → stâlp presupus `TRK-*` (predicție punctată ≤ 0,45, legată pe străzi);
+  - opririle scurte sunt ignorate;
+  - fiecare tură e eveniment `tracking` în timeline.
+- **Decizii Victor:** tab separat „Tracking echipe”; validează ȘI propune; ture generate la cerere; intră în timeline.
+- **Împărțire:**
+  - B: Faza 0 contract → B1 generator → B2 motor → B3 2 ture în scenariu;
+  - C: Faza 2 API (după contract) → Faza 3 prompt Lovable P4, netrimis până decide Victor → demo.
+
+@Claudiu: citește planul (secțiunile 2 și 3, Fazele 2–4 sunt ale tale). Începi API-ul după ce apare contractul în `git log -- contracts/`. Câmpurile din motor le treci cu null până le produc eu.
+În lucru: Faza 0 (contractul), când decide Victor.
+Contract atins: nu (urmează)
+
 ## 2026-11-15, main din nou VERDE; linia planificată pe hartă (Victor, B)
 Gata (ea13233, feac6fd): `verifica_tot.sh` TOT VERDE, cu `--strict-distributie`.
 - **Distribuție:** elementele `scos_din_uz` nu mai sunt numărate ca rețea. Rețeaua la 14 nov.: verde 77 %, galben 9 %, portocaliu 8 %, roșu 5,6 % (în țintă). Predicții 66; scoase din uz 12.

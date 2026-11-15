@@ -68,3 +68,6 @@ Rulează doar pe laptopurile lui Victor (B) și Claudiu (C); **Patrick (A) nu pa
 - **Scoase:** scenariul extrem, traseul de ultima oră (UI, API; generarea din motor oprită), plasarea prin clic, bannerul „DATE FICTIVE” de sus, codurile brute în UI. Doar 3 butoane de echipă (Mentenanță, Investiții, Racordări).
 - **UI:** doar Lovable, 3 prompturi grupate (P1–P3), fiecare netrimis până decide Victor; textele în română vin din API, Lovable doar afișează.
 - Textele de demo folosesc doar cele 24 de străzi din cache-ul OSM local (`osm.strazi()`).
+
+## Sesiunea 4b: tracking echipe (planul: `docs/plan-tracking-echipe.md`)
+Funcție independentă de rapoarte: o tură simulată a tabletei unei echipe (GPS pe străzi, determinist pe seed). Oprire lângă un stâlp existent = stâlp confirmat (acuratețea crește, sursa `tracking_gps`, fiabilitate 0,60); oprire lungă fără stâlp = stâlp presupus (predicție punctată, plafonată). Fiecare tură e eveniment `tracking_tura` în timeline. UI: tab separat „Tracking echipe”, cu animația tabletei și rezultatele arătate la fiecare oprire. B: contract, `backend/tracking/`, mixin în motor, 2 ture în scenariu. C: 3 endpointuri `/tracking/*`, prompt Lovable P4 (netrimis până decide Victor). OpenSpec: `openspec/changes/tracking-echipe/`. Nu e „traseul de ultima oră” (acela rămâne scos).
