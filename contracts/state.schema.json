@@ -29,7 +29,7 @@
         "de_verificat",
         "scos_din_uz"
       ],
-      "description": "in_model = aplicat; predictie = nesigur, neaplicat (linie punctată în UI); de_verificat = semnal contradictoriu sau scor scăzut; scos_din_uz = demontat (tip activ_demontat), doar peste pragul de aplicare"
+      "description": "in_model = aplicat; predictie = nesigur, neaplicat (linie punctată în UI); de_verificat = semnal contradictoriu sau scor scăzut; scos_din_uz = demontat (tip activ_demontat, peste pragul de aplicare) sau, din sesiunea 4 (V4), „demontat probabil”: tronson aerian dintr-o zonă de fire mutate când traseul nou e aplicat, cu scor mic (≤ mutare_fire.scor_marcat)"
     },
     "scor": {
       "type": "number",

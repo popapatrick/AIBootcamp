@@ -145,7 +145,7 @@ Patrick nu participă: `backend/extract`, `backend/geo`, `backend/trace`, `backe
 
 **Analiza hărții (D4, V3; `analiza_harta`).** Predicțiile de legătură (racordare, nod lipsă departe, mutare fire) merg pe graful de străzi OSM local, nu în linie dreaptă: `predictie.metoda: traseu_pe_strazi`, `predictie.traseu`, `predictie.alternative`. Pas nou în StepTrace: `analiza_harta` `{tinta, bransament_m, ales{de_la, lungime_m, strazi[], stalpi_noi, stalpi_reutilizati, traseu}, alternative[], acuratete, explicatie[]}`. Fără drum pe străzi: linie dreaptă, scor `fara_drum`.
 
-**Fire mutate din document (V4; `mutare_fire_document`).** `mutare_fire` fără `detalii.centru`: centrul vine din `detalii.intersectie {strada_1, strada_2}` geocodată (rază `raza_intersectie_m`); traseul nou ocolește centrul pe străzi, preferând `detalii.strada_noua`.
+**Fire mutate din document (V4; `mutare_fire_document`).** `mutare_fire` fără `detalii.centru`: centrul vine din `detalii.intersectie {strada_1, strada_2}` geocodată (rază `raza_intersectie_m`); traseul nou ocolește centrul pe străzi, preferând `detalii.strada_noua`. Dacă traseul nou e aplicat (raport executat, P1), tronsoanele aeriene vechi din zonă trec pe `nivel: scos_din_uz` cu scor mic („demontat probabil”, gri punctat în UI), fără să fie șterse; traseul nou = tronsoane `MUT-<event>-<n>` cu pași `analiza_harta`.
 
 **Scoase (D7, D9).** Scenariul extrem (`?scenariu=extrem`, `events.extreme.json` → `data/events/arhiva/`), `GET /trasee-demo`, `trace_params` și `trace` din `POST /rapoarte`; `demo.trace_generat_activ: 0` oprește traseul generat în motor (codul rămâne). `locatie` (clic) rămâne în API pentru teste, neutilizat în UI. `GET /exemple` doar pentru `mentenanta`, `investitii`, `racordari`.
 
