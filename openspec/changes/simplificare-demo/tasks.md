@@ -10,4 +10,4 @@
 
 ## 3. UI (C)
 
-- [ ] 3.1 (P1) Prompt Lovable: scos bannerul, scenariul extrem, butoanele de traseu și clic, codurile brute
+- [x] 3.1 (P1) Prompt Lovable: scos bannerul, scenariul extrem, butoanele de traseu și clic, codurile brute

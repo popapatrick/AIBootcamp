@@ -13,4 +13,4 @@
 
 ## 3. API și bancă (C)
 
-- [ ] 3.1 (C3, C5) Pașii `cautare_strada`/`analiza_harta` și `standardizare.localizare` în răspuns; coloane noi în `banc_logica`
+- [x] 3.1 (C3, C5) Pașii `cautare_strada`/`analiza_harta` și `standardizare.localizare` în răspuns; coloane noi în `banc_logica`
