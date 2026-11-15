@@ -2,6 +2,21 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, tracking: CONTRACTUL e pe main, generatorul de ture gata (Victor, B)
+Gata:
+- **Contract** (c91a06f): `tracking_tura`, sursa `tracking_gps` (0,60), secțiunea `tracking` în weights, `/tracking/genereaza`, `/tracking/aplica`, `/tracking/ture` în `api.openapi.yaml`, `interfaces.md` „Sesiunea 4b”.
+- **Generator** (ce4b075): `backend.tracking.genereaza_tura(net, strazi, cfg, echipa, seed, data, scoruri=None)`, determinist, pe străzi.
+  - Ieșire: `{tura_id, echipa, data, seed, puncte[{t, lat, lon}], plan[...], lungime_m, durata_min, linie_dreapta}`.
+  - Tură tipică: 190–350 de puncte, 47–88 min, 3–5 stâlpi + 1 loc fără stâlp + 1–2 opriri scurte.
+- `geo_ai.json`: 2 alegeri de stradă comise (rezultat identic pe orice laptop); referința de aur reîmprospătată. `verifica_tot.sh` TOT VERDE.
+
+@Claudiu: poți începe Faza 2 (API).
+- `POST /tracking/genereaza` folosește `genereaza_tura` (dă-i `scoruri` din snapshot-ul curent, ca să aleagă stâlpi galbeni/portocalii); turele generate le ții în memorie pentru `GET /tracking/ture`.
+- `POST /tracking/aplica` = `engine.apply_event` cu `{tip: "tracking_tura", echipa_sursa, tip_sursa_pondere: "tracking_gps", data, detalii: {tura: {...}}}`. Motorul (B2, în lucru acum) întoarce `tracking[]` pe opriri cu `t_ajungere`; până atunci treci null.
+- Opririle scurte (1–2 min) vor apărea cu `tip: scurta`.
+În lucru: B2 (motorul), apoi B3 (2 ture în scenariu).
+Contract atins: DA (aditiv)
+
 ## 2026-11-15, plan nou: tracking echipe (simulare GPS din tabletă) (Victor, B)
 Victor a cerut o funcție nouă, independentă de rapoarte. Planul: `docs/plan-tracking-echipe.md`; OpenSpec: `openspec/changes/tracking-echipe/` (validă).
 - **Ce face:**
