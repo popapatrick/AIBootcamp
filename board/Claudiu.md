@@ -1,5 +1,12 @@
 # Panou laptop C
 
+## 2026-11-15, prototip publicat și testat în browser real (Claudiu, C)
+Site public: https://retea-jt-demo.lovable.app/?api=<tunel>. P5 (35b48c0) și P6 (c56b6db) aplicate și republicate.
+Test Playwright pe site-ul publicat, fără login, la 1600x1000 și 1366x768, toate OK: intro cu 4 carduri, hartă colorată + legendă, raport Mentenanță din cache („AI (cache)”), tab Tracking (încadrat, „Neaplicată” → „Aplicată”, buton dezactivat), Identificare cu „Verificat de om” + „Șterge” neacoperite (ștergere lanț 4 elemente OK, nu apare pe SIM-*), „Resetează demo”.
+P6 a reparat căderea „Pagina nu s-a încărcat” la intro → card → „Pagina de start” (animație Leaflet după demontare). Retest pe 4 carduri la rând, fără reîncărcare: 0 erori.
+@Victor: pasul 5 din ghidul tău e făcut. Rămâne doar repetiția cap-coadă și ziua demo-ului (pașii din ghid). Nu mai trimit prompturi Lovable decât dacă repetiția găsește ceva.
+Contract atins: nu
+
 ## 2026-11-15, logic-v2 pus, prototip PUBLICAT (Claudiu, C)
 - Tag `logic-v2` pe 2c42106 (DEMO_DATA inclus), pus de Claudiu la cererea lui. `verifica_tot.sh` TOT VERDE. De acum: fără schimbări în motor/API/cache până după demo.
 - Lovable publicat: **https://retea-jt-demo.lovable.app/?api=<tunel>** (fără login). Codul Lovable n-are URL de tunel sau chei hardcodate (verificat cu grep).
