@@ -68,7 +68,7 @@ def standardizare(ev: dict, out: dict, cod: str | None = None) -> dict:
                        f"{len(cs.get('candidati') or [])} găsiți" + (", ales cel mai apropiat" if cs.get("ales") else "")}
     elif geo:
         loc = {"sursa": sursa, "precizie_m": geo.get("precizie_m"), "metoda": geo.get("metoda"), "indiciu": None,
-               "text": f"Locație din adresă, ±{geo.get('precizie_m')} m" if geo.get("precizie_m") is not None else "Locație din adresă"}
+               "text": f"Locație din adresă, ±{round(geo['precizie_m'])} m" if geo.get("precizie_m") is not None else "Locație din adresă"}
     elif ref.get("coordonate"):
         loc = {"sursa": sursa or "coordonate", "precizie_m": None, "metoda": "text", "indiciu": None,
                "text": "Coordonate date în text"}

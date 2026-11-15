@@ -70,13 +70,13 @@
     },
     {
       "id": "inv-02",
-      "titlu": "Linie planificată, adresă",
-      "text": "Planificat: linie noua pe Strada Tineretului nr. 14, 120 m, buget 2027.",
+      "titlu": "Linie nouă, între două numere",
+      "text": "Linie nouă executată pe Strada Tineretului, stâlp nou montat între nr. 10 și nr. 20, de trecut în GIS.",
       "data": "2026-11-02",
       "asteptat": {
-        "tip": "linie_planificata",
+        "tip": "nod_lipsa",
         "element_id": null,
-        "nota": "adresă cu număr: predicție punctată"
+        "nota": "stradă + indiciu „între”: fereastră de 60 m, element nou galben"
       }
     },
     {
@@ -103,13 +103,13 @@
     },
     {
       "id": "inv-05",
-      "titlu": "Stâlp nou, reper",
-      "text": "Stalp nou langa PTAB 7812, executat, de trecut in GIS.",
+      "titlu": "Stâlp nou, doar stradă + indiciu",
+      "text": "Stâlp nou montat pe Strada Crinului, lângă nr. 7, executat, de trecut în GIS.",
       "data": "2026-11-12",
       "asteptat": {
         "tip": "nod_lipsa",
         "element_id": null,
-        "nota": "reper PTAB 7812: punct lângă postul de transformare"
+        "nota": "stradă + „lângă nr. 7”: element nou portocaliu"
       }
     }
   ],

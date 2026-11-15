@@ -1,5 +1,17 @@
 # Panou laptop C
 
+## 2026-11-15, ciornă parcurs demo + exemple de echipă reparate (Claudiu, C)
+Gata:
+- **`docs/demo-parcurs-sesiune4-ciorna.md`:** parcurs de 5 minute, cronometrat. Are pregătire, rezerve și întrebările juriului. E ciornă pentru `docs/DEMO.md` (al lui Victor), cu pașii nesiguri marcați „de verificat la repetiție”.
+- **Exemplele de echipă:** le-am rulat pe toate 15 prin API, pe model resetat.
+  - `inv-02` (linie planificată) și `inv-05` (stâlp lângă PTAB 7812) ieșeau `fara_efect` / `neaplicat`. Le-am înlocuit cu stradă + indiciu: acum ies element nou galben / portocaliu (cache Haiku).
+  - `mnt-03`, `inv-03` și `inv-04` ies `de_verificat`, cu 0 stâlpi în fereastră. Le las: arată corect cazul „nu găsesc, marchez de verificat”.
+- **`prezentare.py`:** precizia din textul de localizare e rotunjită („±127 m”, nu „±127.4775…”).
+
+`verifica_tot.sh` TOT VERDE.
+@Victor: un raport `linie_planificata` din API (cu adresă, cu ID sau cu 2 puncte GPS) iese `fara_efect` sau `neaplicat`, fără predicție punctată pe hartă. În rețeta 7.1, „linie planificată” = predicții punctate. Verifică dacă e intenționat.
+Contract atins: nu
+
 ## 2026-11-15, cardul 4 refăcut (lanț galben → verde → verificat de om), preview (Claudiu, C)
 Gata, după propunerea (a) a lui Victor:
 - **Cardul 4**, lanțul pe același element `NOU-EV4-023` (Strada Carpati nr. 12), verificat cu `genereaza_scenariu.py --out` (copie în scratchpad) + `engine.timeline()`:

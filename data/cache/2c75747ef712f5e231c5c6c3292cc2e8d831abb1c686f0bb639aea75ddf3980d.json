@@ -1,0 +1,41 @@
+{
+  "event_id": "EV-2c75747e",
+  "echipa_sursa": "investitii",
+  "tip": "nod_lipsa",
+  "status": "executat",
+  "data": "2026-11-02",
+  "text_original": "Linie nouă executată pe Strada Tineretului, stâlp nou montat între nr. 10 și nr. 20, de trecut în GIS.",
+  "forma_sursa": "text_liber",
+  "tip_sursa_pondere": "text_liber",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+    "event_id",
+    "element_id",
+    "coordonate",
+    "localitate"
+  ],
+  "referinta": {
+    "adresa": "Strada Tineretului, între nr. 10 și nr. 20",
+    "adresa_structurata": {
+      "strada": "Strada Tineretului",
+      "numar": null,
+      "localitate": null,
+      "reper": null,
+      "indiciu": {
+        "tip": "intre",
+        "numar": "10",
+        "numar_2": "20",
+        "strada_2": null,
+        "element_id": null,
+        "distanta_stalpi": null,
+        "paritate": null
+      }
+    },
+    "coordonate": null,
+    "element_id": null,
+    "nr_cadastral": null
+  },
+  "detalii": {
+    "observatii": "Linie nouă executată; stâlp nou montat între nr. 10 și nr. 20 pe Strada Tineretului, de trecut în GIS."
+  }
+}
