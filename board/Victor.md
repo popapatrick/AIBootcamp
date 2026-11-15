@@ -2,6 +2,29 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu: Victor a decis PUBLICAREA prototipului. Ghid pas cu pas (Victor, B)
+Victor vrea prototipul public și cache-ul păstrat, ca să nu apară erori după publicare. Starea: `verifica_tot.sh` TOT VERDE pe c1f038d; `fill_cache --lipsa` = 0 texte fără cache; am comis și 12 extracții Haiku de azi (variante de texte de echipă).
+**Ordinea (nu sări pași):**
+1. **(tu) Data fixă de demo, ÎNAINTE de publicare.** E riscul din intrarea mea de mai jos. În `backend/api/pipeline.py` (liniile ~118 și ~211) folosește `DEMO_DATA` (env, implicit `"2026-11-15"`) în loc de `date.today()` când nu vine `data` și textul n-are dată. Astfel cheile de cache de azi (exemplele echipelor, cele 10 texte live din `docs/demo-texte-live.md`) rămân valabile mâine. Verifică: cu data sistemului schimbată (sau cu un test care simulează altă zi), `POST /rapoarte` cu „Stâlp căzut pe Strada Orhideelor lângă nr. 3” dă `standardizare.metoda = ai_cache`. Rulează `verifica_tot.sh`, comite, scrie pe board „gata pentru logic-v2”.
+2. **(eu) Tag-ul `logic-v2`** pe commit-ul tău de la pasul 1; îl anunț aici. De atunci, fără schimbări în motor sau cache până după demo.
+3. **(tu) Publicarea în Lovable.** Butonul „Publish” din editorul proiectului `fd19026a-…` dă un URL public fix `*.lovable.app`, fără login.
+   - Înainte: în codul Lovable nu trebuie să existe niciun URL de tunel sau vreo cheie hardcodată; API-ul vine doar din `?api=` / Setări → `API_BASE`, ca acum.
+   - După publicare, orice prompt nou în Lovable NU ajunge în versiunea publică fără „Publish” din nou. Nu mai trimite prompturi după repetiția finală.
+4. **(tu) Linkul public complet:** `https://<proiect>.lovable.app/?api=<URL tunel>`. Tunelul (trycloudflare) se schimbă la fiecare repornire: `demo_start.sh` îl afișează; în ziua demo-ului linkul se refăcut după `demo_start.sh --restart`.
+5. **(tu) Test din fereastră privată sau de pe alt dispozitiv** (fără login Lovable), cu linkul complet: intro și cele 4 carduri, harta (culori), un buton de echipă cu un text din cache (instant), tab-ul Tracking (generează + pornește), „Marchează verificat de om”, „Șterge” pe o predicție, „Resetează demo”. Notează aici ce nu merge.
+6. **Ziua demo-ului, laptopul de demo:**
+```
+git fetch --tags && git checkout logic-v2
+claude auth login          # o singură dată; pentru texte noi scrise live
+backend/api/demo_start.sh --restart
+curl -s <tunel>/health     # motor: real, extractie_cod: ai_cli
+curl -s -X POST <tunel>/demo/reset
+```
+   apoi deschizi linkul public cu `?api=<tunel nou>`. Fără `git pull` în ziua demo-ului.
+
+**De știut:** cât timp rulează tunelul, oricine are linkul poate trimite rapoarte și schimba modelul de demo (date fictive, fără chei). Pornește tunelul doar înainte de demo și oprește-l după; „Resetează demo” readuce starea de start.
+Contract atins: nu
+
 ## 2026-11-15, @Claudiu: riscul datei în cache pentru ziua demo-ului (Victor, B)
 Am verificat main după commit-urile tale (cc5d1da): `verifica_tot.sh` TOT VERDE.
 **Risc:** `backend/api/pipeline.py:118` și `:211` (și `extract.py:168`) pun `date.today()` când raportul n-are dată, iar data intră în cheia cache-ului. Mâine, toate textele fără dată (exemplele echipelor, cele 10 texte live) ratează cache-ul: Haiku live ~7 s fiecare, sau regex dacă `ai_cli` nu merge.
