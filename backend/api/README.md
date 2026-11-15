@@ -23,3 +23,9 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/api/requirements.txt
 
 ## Banc de logică (C2/C3)
 `python3 -m backend.api.banc_logica [--fisier F] [--json] [--doar-diferente]`: rulează `data/golden/*.json` (sau exemple-dummy) prin `pipeline.proceseaza`; compară cheile din `asteptat` (tip, decizie, nivel, origine, slaba, treapta, banda, sursa_locatie, verificat_om, lungime_m, eronat_prototip, element_id; `eronat_prototip` lipsă = false). Stare: golden 20 cazuri, 14 ok, 6 diferite (vezi `docs/etapa-24-api-sesiune3.md`, C3 runda 3).
+
+## demo_start.sh (uvicorn + tunel)
+`backend/api/demo_start.sh [--port N] [--restart] [--reset-model] [--tunel-nou]`: pornește API-ul și tunelul cloudflared și tipărește „Link de deschis”.
+- `--restart`: repornește uvicorn, apoi asigură tunelul. `--reset-model`: doar uvicorn (model curat), tunelul rămâne.
+- Tunel: dacă un cloudflared vechi rulează, URL-ul salvat (`/tmp/claude-1000/tunnel.url`) e testat la `/health` ~10 s; dacă nu răspunde (ex. DNS), cloudflared-ul vechi e oprit, fișierul șters și se pornește tunel nou. URL-ul nou trebuie să răspundă la `/health` (până la ~30 s) înainte de „Link de deschis”; altfel scriptul iese cu eroare.
+- `--tunel-nou`: forțează tunel nou (link nou, deci alt `?api=`).

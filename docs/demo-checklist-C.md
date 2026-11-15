@@ -85,3 +85,13 @@ Ordinea din plan (secțiunea 9); pornești cu model curat (`--reset-model`).
 ## Ce NU promitem
 - Extracția fără `claude auth login` cade pe „Regex (simplificat)”, vizibil în panou.
 - Proiectul Lovable e nepublicat; se folosește preview-ul. Publicare doar cu confirmarea lui Victor.
+
+## 8. Ziua demo: stabilitate
+- **Laptop:** fără suspendare (setări energie: nu adormi, ecran stins permis) și cu încărcătorul conectat.
+- **Tunel:** pornit o singură dată, `backend/api/demo_start.sh --restart`. Nu-l reporni inutil: fiecare tunel nou are alt URL. Dacă linkul moare: `demo_start.sh --tunel-nou`, apoi deschizi din nou cu noul `?api=`.
+- **AI:** `claude auth login` o dată; `curl -s $T/health` trebuie să arate `extractie_cod: ai_cli`.
+- **Reset:** `POST /demo/reset` (sau butonul „Resetează demo”) înainte de fiecare repetiție și înainte de prezentare.
+- **Versiune:** laptopul demo e pe tag-ul `logic-v2`: `git checkout logic-v2`. Fără `git pull` în ziua demo.
+- **Lovable:** niciun prompt nou după repetiția finală.
+- **Plan B:** `http://localhost:8000/ui/` deschis într-o filă separată.
+- **Video de rezervă:** deschis într-o altă filă (cadre: `docs/demo-video-cadre.md`).
