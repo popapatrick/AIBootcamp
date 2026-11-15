@@ -2,6 +2,16 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, sesiunea 4 PORNITĂ: contract + OpenSpec + CLAUDE.md (Victor, B)
+Victor a aprobat planul (`docs/plan-sesiune-4-prezentare.md`). Gata: Faza 0.
+- Contract (`contract:`): `weights.yaml` cu secțiunile noi `acuratete`, `retea_start`, `plafon_locatie`, `culori`, `verificat_om`, `cautare_strada`, `analiza_harta`, `mutare_fire_document`, `demo` (+ limite, relații în `verifica_reglaje`); `state.schema.json` (`banda`, `verificat_om`, `verificat_om_data`, `sursa_locatie`, `t0`, `predictie.traseu/alternative`, metode `traseu_pe_strazi`/`cautare_strada`); `event.schema.json` (`verificare_om`, `adresa_structurata.indiciu`, `detalii.intersectie/strada_noua/latura/tinta_id`); `api.openapi.yaml` (scoase: scenariul extrem, `/trasee-demo`, `trace_params`, `trace`; noi: `/element/{id}/verificare`, `/demo/exemple`, `/demo/reset`, `/legenda`, `standardizare`, `focus`, câmpuri în `/retea` și `/evenimente`); `interfaces.md` secțiunea „Sesiunea 4”. Cheile noi nu schimbă încă nimic în motor (calibrare: 0 evenimente schimbate); valorile existente (ex. 0,90 → 0,95) se schimbă odată cu codul V1.
+- OpenSpec: `acuratete-realista`, `predictie-pe-strazi`, `simplificare-demo`, `scenariu-timeline-realist`, `ui-prezentare-gis` (20/20 valide).
+- CLAUDE.md + agenți: secțiunea „Sesiunea 4”, folderele lui Patrick trec la B și C.
+`verifica_tot.sh`: TOT VERDE.
+În lucru: V1 (acuratețe), apoi V2, V6.
+@Claudiu: poți începe C1–C4 (secțiunea 6 din plan, sarcinile din `openspec/changes/*/tasks.md` marcate C). Câmpurile care vin din motor (`banda`, `verificat_om`, `sursa_locatie`, pașii `cautare_strada`/`analiza_harta`) le treci prin API cu „—”/null până le produc eu; anunț pe board fiecare. Pentru textele tale (C4): doar cele 24 de străzi din `osm.strazi()`, o treime doar stradă + indiciu. Promptul Lovable P1 îl poți scrie, dar nu-l trimiți până decide Victor.
+Contract atins: DA (aditiv + scoase scenariul extrem și traseul din API)
+
 ## 2026-11-15, plan sesiunea 4: accent pe căutarea pe stradă (Victor, B)
 Victor a cerut accent pe cazul „stradă + indiciu parțial” (ex. „lângă nr. 15”): modelul caută pe stradă, nu așteaptă coordonate exacte. Planul are acum D11 și V6 rescris: indiciul extras de AI (`numar`, `langa`, `vizavi`, `intre`, `dupa`, `capat`, `colt`, `element`), fereastră de căutare pe stradă (ancore din rapoarte anterioare sau convenția de numerotare, par/impar), apoi căutarea elementelor din fereastră (1 candidat = potrivit, 2–4 = predicție cu alternative, 0 = element nou sau „de verificat”). Pasul nou `cautare_strada` în `pasi`; vizualizare în P3; primul card de pe intro e acest caz; 8 cazuri golden.
 @Claudiu: în textele tale (C4), cel puțin o treime doar stradă + indiciu, fără coordonate.
