@@ -66,8 +66,8 @@
   "event_id": "EV4-010",
   "data": "2026-08-21",
   "tip": "linie_planificata",
-  "decizie": "neaplicat",
-  "scor": null
+  "decizie": "predictie",
+  "scor": 0.503
  },
  {
   "event_id": "EV4-011",
@@ -192,8 +192,8 @@
   "event_id": "EV4-028",
   "data": "2026-09-24",
   "tip": "linie_planificata",
-  "decizie": "fara_efect",
-  "scor": 0.932
+  "decizie": "predictie",
+  "scor": 0.8
  },
  {
   "event_id": "EV4-029",
@@ -318,8 +318,8 @@
   "event_id": "EV4-046",
   "data": "2026-10-26",
   "tip": "linie_planificata",
-  "decizie": "neaplicat",
-  "scor": null
+  "decizie": "predictie",
+  "scor": 0.475
  },
  {
   "event_id": "EV4-047",
