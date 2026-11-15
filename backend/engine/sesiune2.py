@@ -33,6 +33,62 @@ def _dist_la_linie(p: tuple[float, float], puncte: list) -> float:
 
 
 class Sesiune2:
+    # ------------------------------------------------------------ acuratețe (sesiunea 4)
+    @staticmethod
+    def _e_gis(st: dict) -> bool:
+        """Element din rețeaua GIS (fără plafon de locație) sau verificat de om."""
+        return S.regim_stare(st) in ("gis", "verificat_om")
+
+    def _eff(self, st: dict, data: str) -> float:
+        """Scorul efectiv al stării `st` la `data`, cu regimul ei de scădere (gis | verificat_om | normal)."""
+        return S.scor_la_data(st["scor"], st["valid_de_la"], data, self.w, S.regim_stare(st))
+
+    def _plafoneaza(self, st: dict, scor: float, eff: float | None = None) -> float:
+        """Plafonul sursei de locație al elementului din raport (GIS și verificat de om: fără plafon).
+        Un scor deja peste plafon (`eff`) nu e coborât de plafon."""
+        if self._e_gis(st) or not st.get("sursa_locatie"):
+            return scor
+        return min(scor, max(S.plafon(st["sursa_locatie"], self.w), eff if eff is not None else 0.0))
+
+    @staticmethod
+    def _sursa_din_geocodare(geo: dict) -> str:
+        """Sursa locației dintr-un rezultat de geocodare: intersectie | adresa_numar | strada | reper
+        (din `tip` dacă există, altfel din textul `motiv` al geocodării)."""
+        tip = geo.get("tip") or geo.get("loc")
+        if tip in ("intersectie", "strada", "reper"):
+            return tip
+        if tip in ("strada_numar", "adresa_numar"):
+            return "adresa_numar"
+        mt = (geo.get("motiv") or "").lower()
+        if mt.startswith("intersec"):
+            return "intersectie"
+        if "nr." in mt and "interpolat" in mt:
+            return "adresa_numar"
+        if mt.startswith("reper"):
+            return "reper"
+        return "strada"
+
+    def _sursa_eveniment(self, event: dict, pozitie_dedusa: bool = False) -> str:
+        """Cum a fost localizat elementul creat de raport: id | coordonate | intersectie | adresa_numar | strada | reper |
+        analiza_harta (poziție dedusă din vecini)."""
+        ref, det = event.get("referinta") or {}, event.get("detalii") or {}
+        if (ref.get("element_id") or "").strip():
+            return "id"
+        geo, c = det.get("geocodare"), ref.get("coordonate")
+        if geo and c and (geo.get("lat"), geo.get("lon")) == (c.get("lat"), c.get("lon")):
+            return self._sursa_din_geocodare(geo)
+        if c or det.get("locatie"):
+            return "coordonate"
+        return "analiza_harta" if pozitie_dedusa else "coordonate"
+
+    def _executat_teren(self, event: dict) -> bool:
+        """Raport executat al unei echipe din teren: aplică de la `acuratete.aplicat_raport_executat` (P1).
+        Racordări doar pentru racord_nou; cererile de racordare rămân predicții."""
+        if event.get("status") != "executat":
+            return False
+        e = event.get("echipa_sursa")
+        return e in ("mentenanta", "investitii") or (e == "racordari" and event.get("tip") == "racord_nou")
+
     # ------------------------------------------------------------ locația din traseul tabletei
     def _foloseste_trace(self, event: dict, trace: dict) -> dict:
         """Dacă raportul are `detalii.trace` și nici ID, nici coordonate, deduce locația din opriri (backend/trace)."""
@@ -103,7 +159,7 @@ class Sesiune2:
             return {**event, "_eronat": (g["lat"], g["lon"])}
         det = event.get("detalii") or {}
         return {**event, "referinta": {**ref, "coordonate": {"lat": g["lat"], "lon": g["lon"]}},
-                "detalii": {**det, "geocodare": {k: g.get(k) for k in ("lat", "lon", "precizie_m", "metoda", "acuratete", "motiv")}}}
+                "detalii": {**det, "geocodare": {k: g.get(k) for k in ("lat", "lon", "precizie_m", "metoda", "acuratete", "motiv", "tip") if g.get(k) is not None}}}
 
     def _trace_generat(self, event: dict, trace: dict) -> dict:
         """Traseu simulat al tabletei lângă punctul din raport (feature traseu-generat-din-raport).
@@ -172,10 +228,10 @@ class Sesiune2:
             if not eid or eid in deja or eid not in self.istoric or eid not in self._elemente():
                 continue
             cur = self._curent(eid)
-            eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+            eff = self._eff(cur, data)
             delta = w["scor"]["confirmare_teren"] * f * w["potrivire"]["calitate_dupa_coordonate"]
             nivel = "in_model" if (cur["nivel"] == "de_verificat" and eff + delta >= w["praguri"]["predictie"]) else cur["nivel"]
-            st = self._pune(eid, cur["tip_element"], data, nivel=nivel, scor=S.clamp(eff + delta, w), ultima_verificare=data,
+            st = self._pune(eid, cur["tip_element"], data, nivel=nivel, scor=self._plafoneaza(cur, S.clamp(eff + delta, w), eff), ultima_verificare=data,
                             motive=self._motiv(eid, f"Operatorul a stat {v.get('durata_min')} min lângă element (traseu tabletă): "
                                                     f"verificare, {delta:+.3f}.", delta, event))
             trace["modificari"].append(self._publica(eid, st))
@@ -218,7 +274,7 @@ class Sesiune2:
         marcate = {eid for _, eid in gasite}
         for d, eid in gasite:
             cur = self._curent(eid)
-            eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+            eff = self._eff(cur, data)
             q = 1 - 0.5 * d / raza
             delta = w["scor"]["contradictie"] * f * q
             scor = min(S.clamp(eff + delta, w), cfg["scor_marcat"])
@@ -247,6 +303,7 @@ class Sesiune2:
             sp, factori = S.scor_propunere(event, cfg["calitate_propunere"], w, urm)
             if not r:
                 sp = round(sp * cfg["factor_fara_strada"], 3)
+            sp = min(sp, round(S.plafon("analiza_harta", w), 3))     # traseul propus vine din analiza hărții
             if sp < w["praguri"]["predictie"]:
                 fara.append((a, b, sp))
                 continue
@@ -258,7 +315,8 @@ class Sesiune2:
                    + (f", urmează strada {urm}" if urm is not None else ", fără stradă (linie dreaptă)")
                    + ". Neaplicat până la confirmarea din teren.")
             st = self._pune(sid, "tronson", data, nivel="predictie", scor=sp, ultima_verificare=None,
-                            motive=[{"text": txt, "efect": 0.0, "eveniment": event["event_id"], "data": data}],
+                            sursa_locatie="analiza_harta", t0=False,
+                            motive=[{"text": txt + " " + S.text_plafon("analiza_harta", w), "efect": 0.0, "eveniment": event["event_id"], "data": data}],
                             predictie={"metoda": "zona_mutata", "urmeaza_strada": urm,
                                        "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp})
             trace["modificari"].append(self._publica(sid, st))
@@ -287,7 +345,7 @@ class Sesiune2:
             return self._scor_pas(trace, "neaplicat", {"nivel": None},
                                   [f"Demontare raportată, dar elementul nu a fost găsit în model ({m.get('motiv', '')})."])
         cur = self._curent(eid)
-        eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+        eff = self._eff(cur, data)
         sp, _ = S.scor_propunere(event, m["calitate"], w)
         lista = [x for x in self.demontari.setdefault(eid, []) if S.zile(x["data"], data) <= cfg["fereastra_zile"]]
         lista.append({"event_id": event["event_id"], "data": data, "echipa": event["echipa_sursa"], "sp": sp})
@@ -365,11 +423,15 @@ class Sesiune2:
         ev = event["event_id"]
         nume = {f"stalp-{s['ordine']}": f"NOU-{ev}-S{s['ordine']}" for s in r["stalpi"]}
         nume["casa"] = f"NOU-{ev}-casa"
+        # sursa locației casei (coordonate/clic -> coordonate, adresă -> tipul geocodării, operator simulat -> strada);
+        # stâlpii și cablurile prezise vin din analiza hărții
+        sursa_casa = ("coordonate" if sursa_loc in ("clic", "text") else
+                      self._sursa_din_geocodare(det["geocodare"]) if sursa_loc == "adresa" else "strada")
         specs = []
         for s in r["stalpi"]:
-            specs.append((nume[f"stalp-{s['ordine']}"], "nod", {"punct": (s["lat"], s["lon"]),
+            specs.append((nume[f"stalp-{s['ordine']}"], "nod", {"punct": (s["lat"], s["lon"]), "sursa_locatie": "analiza_harta",
                           "geometrie": {"type": "Point", "coordinates": [s["lon"], s["lat"]]}}))
-        specs.append((nume["casa"], "nod", {"punct": (loc["lat"], loc["lon"]),
+        specs.append((nume["casa"], "nod", {"punct": (loc["lat"], loc["lon"]), "sursa_locatie": sursa_casa,
                       "geometrie": {"type": "Point", "coordinates": [loc["lon"], loc["lat"]]}}))
         urm = r.get("urmeaza_strada")
         for k, cab in enumerate(r["cabluri"]):
@@ -377,6 +439,7 @@ class Sesiune2:
             pts = [tuple(p) for p in cab["puncte"]]
             specs.append((f"NOU-{ev}-L{k + 1}", "tronson", {
                 "puncte": pts, "metoda": "traseu_strada_osm" if urm is not None else "linie_dreapta", "capete": (a, b),
+                "sursa_locatie": "analiza_harta",
                 "urmeaza": urm, "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}))
         q = w["potrivire"]["calitate_dupa_coordonate"] * (0.8 if r.get("ambiguu") else 1.0)
         if sursa_loc == "adresa":
@@ -387,6 +450,10 @@ class Sesiune2:
         sp = round(sp * {1: 1.0, 2: cfg["factor_raza_extinsa"], 3: cfg["factor_linie_dreapta_lunga"], 4: cfg["factor_doar_casa"]}[treapta], 3)
         if sursa_loc == "operator_simulat":
             sp = round(sp * cfg["factor_locatie_operator"], 3)
+        cap_casa = S.plafon(sursa_casa, w)
+        plafonat = sp > cap_casa
+        if plafonat:
+            sp = round(cap_casa, 3)         # decizia se ia pe scorul plafonat după sursa locației casei
         niv = S.decizie(sp, w, planificat=event["status"] == "planificat" or sursa_loc == "operator_simulat")
         txt = (f"Cerere de racordare: lanț de {len(r['stalpi'])} stâlp(i) de la nodul {r['nod_start']} ({r['distanta_m']} m) spre casă, "
                f"scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
@@ -395,6 +462,8 @@ class Sesiune2:
             prec = op.get("precizie_m")
             txt += (f" Locația e din poziția SIMULATĂ a operatorului" + (f", ±{prec:g} m" if prec is not None else "") +
                     f" (nu GPS real, nu coordonate exacte): scor × {cfg['factor_locatie_operator']}; rămâne predicție până confirmă omul.")
+        if plafonat:
+            txt += " " + S.text_plafon(sursa_casa, w) + f" Stâlpii și cablurile prezise (analiza hărții): cel mult {S.fmt(S.plafon('analiza_harta', w))}."
         if taiat:
             txt += " Lanțul a fost tăiat la limita zonei prototipului (stâlpi în afara razei de 3 km eliminați)."
         txt += f" Treapta {treapta} din 4 (1 nod în rază, 2 rază extinsă, 3 linie dreaptă, 4 doar casa)."
@@ -418,7 +487,8 @@ class Sesiune2:
                       "urmeaza_strada": urm if tip_el == "tronson" else None,
                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp,
                       "slaba": slaba, "treapta": treapta}
-                self._pune(sid, tip_el, data, nivel="predictie", scor=sp, ultima_verificare=None, predictie=pr,
+                self._pune(sid, tip_el, data, nivel="predictie", scor=min(sp, S.plafon(s.get("sursa_locatie"), w)),
+                           ultima_verificare=None, predictie=pr, sursa_locatie=s.get("sursa_locatie"), t0=False,
                            motive=[{"text": txt + f" Sub pragul {w['praguri']['aplicat']}: predicție, neaplicată; fiecare stâlp poate fi "
                                                   "acceptat sau respins separat.", "efect": 0.0, "eveniment": ev, "data": data}])
             dec = "predictie"

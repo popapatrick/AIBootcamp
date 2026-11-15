@@ -25,14 +25,14 @@
   "data": "2026-08-12",
   "tip": "racord_nou",
   "decizie": "scor_actualizat",
-  "scor": 0.997
+  "scor": 1.0
  },
  {
   "event_id": "EV-005",
   "data": "2026-08-14",
   "tip": "activ_inlocuit",
   "decizie": "fara_efect",
-  "scor": 0.878
+  "scor": 0.946
  },
  {
   "event_id": "EV-006",
@@ -53,21 +53,21 @@
   "data": "2026-08-22",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.83
+  "scor": 0.908
  },
  {
   "event_id": "EV-009",
   "data": "2026-08-26",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.927
+  "scor": 1.0
  },
  {
   "event_id": "EV-010",
   "data": "2026-08-29",
   "tip": "racord_nou",
   "decizie": "conflict",
-  "scor": 0.812
+  "scor": 0.889
  },
  {
   "event_id": "EV-011",
@@ -80,7 +80,7 @@
   "event_id": "EV-012",
   "data": "2026-09-03",
   "tip": "racord_nou",
-  "decizie": "predictie",
+  "decizie": "adaugat",
   "scor": 0.63
  },
  {
@@ -123,14 +123,14 @@
   "data": "2026-10-02",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.763
+  "scor": 0.896
  },
  {
   "event_id": "EV-019",
   "data": "2026-10-02",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.773
+  "scor": 0.906
  },
  {
   "event_id": "EV-020",
@@ -158,14 +158,14 @@
   "data": "2026-10-07",
   "tip": "racord_nou",
   "decizie": "scor_actualizat",
-  "scor": 0.891
+  "scor": 1.0
  },
  {
   "event_id": "EV-024",
   "data": "2026-10-12",
   "tip": "racord_nou",
   "decizie": "scor_actualizat",
-  "scor": 0.917
+  "scor": 1.0
  },
  {
   "event_id": "EV-025",
@@ -179,7 +179,7 @@
   "data": "2026-10-20",
   "tip": "verificare",
   "decizie": "scor_actualizat",
-  "scor": 0.954
+  "scor": 1.0
  },
  {
   "event_id": "EV-027",
@@ -193,13 +193,13 @@
   "data": "2026-10-23",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
-  "scor": 1.0
+  "scor": 0.85
  },
  {
   "event_id": "EV-029",
   "data": "2026-10-27",
   "tip": "linie_planificata",
   "decizie": "fara_efect",
-  "scor": 0.755
+  "scor": 0.921
  }
 ]

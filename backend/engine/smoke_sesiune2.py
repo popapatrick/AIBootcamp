@@ -178,23 +178,27 @@ def main() -> None:
     # --- origine: rețea de start vs generat de model
     mo = mk()
     sn0 = {f["properties"]["element_id"]: f["properties"] for f in mo.snapshot("2026-08-01")["features"]}
-    verifica("origine: rețeaua de start are origine retea_start și scor initial_retea_start",
-             all(p["origine"] == "retea_start" for p in sn0.values())
-             and {p["scor"] for p in sn0.values()} == {mo.w["scor"]["initial_retea_start"]})
+    # V2 (sesiunea 4): KMZ = retea_start cu acuratete.initial_gis; SIM-* = generat_model (din rapoarte mai vechi), t0
+    gis0 = {e_: p for e_, p in sn0.items() if not e_.startswith("SIM-")}
+    sim0 = {e_: p for e_, p in sn0.items() if e_.startswith("SIM-")}
+    verifica("origine: rețeaua KMZ are origine retea_start și scor acuratete.initial_gis; SIM-* sunt generat_model cu t0",
+             all(p["origine"] == "retea_start" for p in gis0.values())
+             and {p["scor"] for p in gis0.values()} == {mo.w["acuratete"]["initial_gis"]}
+             and all(p["origine"] == "generat_model" and p["t0"] for p in sim0.values()))
     tn = mo.apply_event(ev("O-1", "2026-09-05", "mentenanta", "nod_lipsa", ref={"coordonate": la_nord(300)}, sursa="tableta_coordonate", forma="campuri"))
     nou = [m_ for m_ in tn["modificari"] if m_["element_id"] not in sn0]
     verifica("origine: elementul adăugat de sistem e generat_model", nou and all(m_["origine"] == "generat_model" for m_ in nou))
     sn1 = {f["properties"]["element_id"]: f["properties"] for f in mo.snapshot("2026-09-05")["features"]}
-    verifica("origine: elementele rețelei rămân retea_start după evenimente",
-             all(sn1[e_]["origine"] == "retea_start" for e_ in sn0 if e_ in sn1))
+    verifica("origine: elementele rețelei rămân cu originea lor (KMZ retea_start, SIM-* generat_model) după evenimente",
+             all(sn1[e_]["origine"] == sn0[e_]["origine"] for e_ in sn0 if e_ in sn1))
     pred = [p for p in sn1.values() if p.get("predictie")]
     verifica("origine: predicțiile au predictie.origine generat_model", all(p["predictie"]["origine"] == "generat_model" for p in pred))
 
     # --- puncte simulate hardcodate = parte din rețeaua de start
     mp = mk()
     sim = [e for e in mp.net["noduri"] if e.startswith("SIM-")]
-    verifica("puncte simulate: 55 de noduri SIM-* în rețeaua de start, toate retea_start și în zonă",
-             len(sim) == 55 and all(mp.istoric[e][0]["origine"] == "retea_start" for e in sim)
+    verifica("puncte simulate: 55 de noduri SIM-* în rețeaua de start, toate generat_model (din rapoarte mai vechi, t0) și în zonă",
+             len(sim) == 55 and all(mp.istoric[e][0]["origine"] == "generat_model" and mp.istoric[e][0]["t0"] for e in sim)
              and all(zona_ok(mp.net["noduri"][e]["lat"], mp.net["noduri"][e]["lon"], mp.net, mp.w)["ok"] for e in sim), str(len(sim)))
     verifica("puncte simulate: tronsoanele SIM-L* au capete în rețea",
              all(c in mp.net["noduri"] for t_ in mp.net["tronsoane"].values() if t_["id"].startswith("SIM-L") for c in t_["capete"]))

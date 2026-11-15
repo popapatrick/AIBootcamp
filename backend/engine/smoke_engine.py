@@ -68,9 +68,14 @@ def main() -> None:
 
     # Scenariul 1b: același tip de raport, dar text liber, fără ID, vecini deduși -> doar predicție
     m2 = GridModel()
-    t = m2.apply_event(ev(2, "2026-08-10", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+    # Sesiunea 4 (P1): un raport EXECUTAT de mentenanță aplică de la 0,50, deci predicția slabă se obține cu „semnalat"
+    tx = GridModel().apply_event(ev(2, "2026-08-10", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+                                    referinta={"coordonate": c}))
+    verifica("P1: nod lipsă, text liber, EXECUTAT (scor peste 0,50) -> aplicat", tx["decizie"] == "adaugat",
+             f"{tx['decizie']} {tx['pasi'][-1]['rezultat'].get('scor_propunere')}")
+    t = m2.apply_event(ev(2, "2026-08-10", "mentenanta", "nod_lipsa", "semnalat", forma="text_liber", incredere=0.7,
                           referinta={"coordonate": c}))
-    verifica("nod lipsă, text liber -> predicție", t["decizie"] == "predictie" and not m2.net["noduri"].get("NOU-T-02"),
+    verifica("nod lipsă, text liber, semnalat -> predicție", t["decizie"] == "predictie" and not m2.net["noduri"].get("NOU-T-02"),
              f"{t['decizie']} {t['pasi'][-1]['rezultat'].get('scor_propunere')}")
     pid = t["modificari"][0]["element_id"]
     # al doilea raport întărește predicția
@@ -95,7 +100,7 @@ def main() -> None:
 
     # Înlocuire doar cu text liber -> predicție, neaplicată
     alt = next(k for k, v in m.net["tronsoane"].items() if k.startswith("A-") and k != CABLU["tronson"])
-    t = m.apply_event(ev(6, "2026-09-02", "mentenanta", "activ_inlocuit", "executat", forma="text_liber", incredere=0.6,
+    t = m.apply_event(ev(6, "2026-09-02", "mentenanta", "activ_inlocuit", "semnalat", forma="text_liber", incredere=0.6,
                          referinta={"element_id": alt}, detalii={"sectiune_noua": "TYIR 3x95+54,6 OL-Al"}))
     verifica("înlocuire din text liber -> predicție", t["decizie"] == "predictie",
              f"{t['decizie']} {t['pasi'][-1]['rezultat'].get('scor_propunere')}")
@@ -126,7 +131,14 @@ def main() -> None:
     mm = GridModel()
     a = next(x for x in mm.snapshot("2026-08-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
     b = next(x for x in mm.snapshot("2027-08-01")["features"] if x["properties"]["element_id"] == alt)["properties"]
-    verifica("scade în timp", b["scor"] < a["scor"] and b["nivel"] == "de_verificat", f"{a['scor']} -> {b['scor']} {b['nivel']}")
+    # Sesiunea 4 (V1): GIS scade încet și nu coboară sub acuratete.minim_gis (rămâne in_model)
+    verifica("GIS scade încet, nu sub minim_gis", b["scor"] < a["scor"] and b["scor"] >= mm.w["acuratete"]["minim_gis"] and b["nivel"] == "in_model",
+             f"{a['scor']} -> {b['scor']} {b['nivel']}")
+    sim_e = next(e_ for e_ in mm.net["noduri"] if e_.startswith("SIM-"))
+    a2 = next(x for x in mm.snapshot("2026-08-01")["features"] if x["properties"]["element_id"] == sim_e)["properties"]
+    b2 = next(x for x in mm.snapshot("2027-08-01")["features"] if x["properties"]["element_id"] == sim_e)["properties"]
+    verifica("element din rapoarte mai vechi (SIM-*) scade în timp și devine de_verificat", b2["scor"] < a2["scor"] and b2["nivel"] == "de_verificat",
+             f"{a2['scor']} -> {b2['scor']} {b2['nivel']}")
     verifica("„de ce” include scăderea în timp", any("Neverificat" in x["text"] for x in b["motive"]))
 
     # Linie planificată: rămâne predicție chiar dacă sursa e bună
@@ -168,7 +180,7 @@ def main() -> None:
         return ev(i, data, "om_teren", "verificare", "executat", sursa="om_teren", incredere=1.0,
                   detalii={"decizie": {"tinta_id": tinta, "decizie": alege}})
     md = GridModel()
-    tp = md.apply_event(ev(70, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+    tp = md.apply_event(ev(70, "2026-08-09", "mentenanta", "nod_lipsa", "semnalat", forma="text_liber", incredere=0.7,
                            referinta={"coordonate": c}))
     pred = next((x["element_id"] for x in tp["modificari"] if x["tip_element"] == "nod"), None)
     verifica("pregătire: există o predicție de nod", tp["decizie"] == "predictie" and pred is not None, str(pred))
@@ -185,7 +197,7 @@ def main() -> None:
     verifica("predicție necunoscută", tn["eroare"]["cod"] == "necunoscut")
 
     mr = GridModel()
-    tr0 = mr.apply_event(ev(74, "2026-08-09", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+    tr0 = mr.apply_event(ev(74, "2026-08-09", "mentenanta", "nod_lipsa", "semnalat", forma="text_liber", incredere=0.7,
                             referinta={"coordonate": c}))
     predr = next(x["element_id"] for x in tr0["modificari"] if x["tip_element"] == "nod")
     sc0 = tr0["pasi"][-1]["rezultat"]["scor_propunere"] if "scor_propunere" in tr0["pasi"][-1]["rezultat"] else None
@@ -195,7 +207,7 @@ def main() -> None:
     verifica("respingerea retrage și legăturile", all(x["ce"] == "retras" for x in tr["schimbari"]) and len(tr["schimbari"]) >= 1,
              str([x["ce"] for x in tr["schimbari"]]))
     verifica("respingerea penalizează metoda", mr.penalizare_metoda and max(mr.penalizare_metoda.values()) > 0, str(mr.penalizare_metoda))
-    tr2 = mr.apply_event(ev(76, "2026-08-25", "mentenanta", "nod_lipsa", "executat", forma="text_liber", incredere=0.7,
+    tr2 = mr.apply_event(ev(76, "2026-08-25", "mentenanta", "nod_lipsa", "semnalat", forma="text_liber", incredere=0.7,
                             referinta={"coordonate": c}))
     verifica("propunere nouă cu aceeași metodă: scor mai mic și motivul penalizării",
              any("respinsă în teren" in x for x in tr2["pasi"][-1].get("motive", [])), str(tr2["decizie"]))

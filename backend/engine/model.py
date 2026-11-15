@@ -13,6 +13,7 @@ Regula de intrare (decisă împreună cu Victor):
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -50,11 +51,31 @@ class GridModel(Sesiune2):
         self.penalizare_metoda: dict[str, float] = {}   # metoda propunătoare -> scădere a scorului propunerilor viitoare
         self.traseu_fn = None   # etapa 6: callable((lat,lon),(lat,lon)) -> {"puncte":[(lat,lon)..], "urmeaza_strada":0-1}
         centru_retea(self.net)      # centroidul rețelei de start, înainte să se adauge ceva (safeguard)
-        init = self.w["scor"].get("initial_retea_start", self.w["scor"]["initial_element_kmz"])
+        rs = self.w.get("retea_start") or {}
+        init_gis = self.w["acuratete"]["initial_gis"]
         for eid, el in self._elemente().items():
-            self._pune(eid, el["tip_element"], start, nivel="in_model", scor=init, ultima_verificare=None, origine="retea_start",
-                       motive=[{"text": "Element din modelul GIS, neverificat recent", "efect": 0.0,
-                                "eveniment": None, "data": start}])
+            if eid.startswith("SIM-") and rs.get("sim_din_rapoarte") == 1:
+                # V2: punctele simulate = „din rapoarte mai vechi” (nu GIS), scor ales determinist pe ID
+                scor, sursa = self._scor_sim(eid)
+                self._pune(eid, el["tip_element"], start, nivel="in_model", scor=scor, ultima_verificare=None,
+                           origine="generat_model", t0=True, sursa_locatie=sursa, verificat_om=False, verificat_om_data=None,
+                           motive=[{"text": f"Element din rapoarte mai vechi (nu din GIS), acuratețe {S.fmt(scor)}.",
+                                    "efect": 0.0, "eveniment": None, "data": start}])
+            else:
+                self._pune(eid, el["tip_element"], start, nivel="in_model", scor=init_gis, ultima_verificare=None,
+                           origine="retea_start", t0=True, sursa_locatie="gis", verificat_om=False, verificat_om_data=None,
+                           motive=[{"text": f"Element din modelul GIS, neverificat recent, acuratețe {S.fmt(init_gis)}.",
+                                    "efect": 0.0, "eveniment": None, "data": start}])
+
+    def _scor_sim(self, eid: str) -> tuple[float, str]:
+        """Scorul inițial și sursa locației unui element SIM-*, deterministe pe ID (retea_start.fractie_*)."""
+        rs = self.w["retea_start"]
+        u = int(hashlib.md5(eid.encode()).hexdigest(), 16) % 10000 / 10000
+        if u < rs["fractie_galben"]:
+            return rs["scor_galben"], "adresa_numar"
+        if u < rs["fractie_galben"] + rs["fractie_portocaliu"]:
+            return rs["scor_portocaliu"], "strada"
+        return rs["scor_rosu"], "strada"
 
     # ------------------------------------------------------------------ utilitare
     def _elemente(self) -> dict[str, dict]:
@@ -235,12 +256,16 @@ class GridModel(Sesiune2):
             else:
                 ce = "adaugat" if nou else "actualizat"
             de_ce = st["motive"][0]["text"] if st.get("motive") else motiv_pas
-            out.append({"element_id": eid, "ce": ce, "scor_inainte": None if inainte.get(eid) is None else round(inainte[eid], 3),
-                        "scor_dupa": round(st["scor"], 3), "de_ce": de_ce})
+            si = None if inainte.get(eid) is None else round(inainte[eid], 3)
+            out.append({"element_id": eid, "ce": ce, "scor_inainte": si, "banda_inainte": None if si is None else S.banda(si, self.w),
+                        "scor_dupa": round(st["scor"], 3), "banda_dupa": S.banda(st["scor"], self.w), "de_ce": de_ce})
         trace.pop("_ce", None)
         if not out and trace["decizie"] in ("neaplicat", "fara_efect"):
-            out.append({"element_id": m.get("element_id"), "ce": "neaplicat", "scor_inainte": inainte.get(m.get("element_id")),
-                        "scor_dupa": inainte.get(m.get("element_id")), "de_ce": motiv_pas or m.get("motiv", "")})
+            sv = inainte.get(m.get("element_id"))
+            out.append({"element_id": m.get("element_id"), "ce": "neaplicat", "scor_inainte": sv,
+                        "banda_inainte": None if sv is None else S.banda(sv, self.w),
+                        "scor_dupa": sv, "banda_dupa": None if sv is None else S.banda(sv, self.w),
+                        "de_ce": motiv_pas or m.get("motiv", "")})
         return out
 
     def _ajusteaza_element_nou(self, event: dict, m: dict, trace: dict) -> dict:
@@ -289,7 +314,7 @@ class GridModel(Sesiune2):
     def _efect_pe_element(self, event: dict, m: dict, trace: dict):
         w, eid, data = self.w, m["element_id"], event["data"]
         cur = self._curent(eid)
-        eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+        eff = self._eff(cur, data)
         f, q = S.fiabilitate(event, w), m["calitate"]
         det = event.get("detalii") or {}
         el = self._elemente()[eid]
@@ -325,14 +350,16 @@ class GridModel(Sesiune2):
                     self._scor_pas(trace, "conflict", {"scor_nou": scor, "nivel": "de_verificat"}, [t])
                     return
                 sp, factori = S.scor_propunere(event, q, w)
-                niv = S.decizie(sp, w, planificat=event["status"] == "planificat")
+                ex_teren = self._executat_teren(event)
+                prag_ap = w["acuratete"]["aplicat_raport_executat"] if ex_teren else w["praguri"]["aplicat"]
+                niv = S.decizie(sp, w, planificat=event["status"] == "planificat", executat_teren=ex_teren)
                 txt = (f"Propunere: secțiunea {veche} -> {sect_noua}, scor {sp} "
                        f"(fiabilitate {factori['fiabilitate_sursa']}, extracție {factori['incredere_extractie']}, "
                        f"potrivire {factori['calitate_potrivire']}).")
                 if niv == "in_model":
                     delta = w["scor"]["confirmare_teren"] * f * q
-                    scor = S.clamp(eff + delta, w)
-                    t = txt + f" Peste pragul {w['praguri']['aplicat']}: aplicat."
+                    scor = self._plafoneaza(cur, S.clamp(eff + delta, w), eff)
+                    t = txt + f" Peste pragul {prag_ap}: aplicat."
                     st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="in_model", scor=scor,
                                     ultima_verificare=data, props={**cur["props"], "sectiune": sect_noua},
                                     motive=self._motiv(eid, t, delta, event), predictie=None,
@@ -341,7 +368,7 @@ class GridModel(Sesiune2):
                                                      "proprietate": "sectiune", "valoare": sect_noua})
                     dec = "aplicat"
                 elif niv == "predictie":
-                    t = txt + f" Sub pragul {w['praguri']['aplicat']}: rămâne predicție, neaplicată."
+                    t = txt + f" Sub pragul {prag_ap}: rămâne predicție, neaplicată."
                     st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel="predictie", scor=eff,
                                     motive=self._motiv(eid, t, 0.0, event),
                                     predictie={"metoda": "propunere_proprietate", "urmeaza_strada": None,
@@ -367,6 +394,21 @@ class GridModel(Sesiune2):
             delta += extra
             motive.append("ID și coordonate se contrazic: semnal contradictoriu în plus.")
         scor = S.clamp(eff + delta, w)
+        extra_st: dict = {}
+        if efect == "confirmare" and not self._e_gis(cur) and cur.get("sursa_locatie"):
+            # localizare mai bună în acest raport (ID/coordonate) ridică plafonul elementului din raport
+            ev_s = m["metoda"] if m["metoda"] in ("id", "coordonate") else None
+            veche_s = cur["sursa_locatie"]
+            noua_s = S.mai_buna(veche_s, ev_s)
+            if noua_s != veche_s:
+                extra_st["sursa_locatie"] = noua_s
+                motive.append(f"Localizare mai bună în acest raport ({ev_s}): plafonul crește de la "
+                              f"{S.fmt(S.plafon(veche_s, w))} la {S.fmt(S.plafon(noua_s, w))}.")
+        if efect == "confirmare" and not self._e_gis(cur):
+            sursa_c = extra_st.get("sursa_locatie") or cur.get("sursa_locatie")
+            if sursa_c and scor > S.plafon(sursa_c, w) and scor > eff:
+                scor = max(S.plafon(sursa_c, w), eff)
+                motive.append(S.text_plafon(sursa_c, w))
         nivel = cur["nivel"]
         if efect == "confirmare" and scor >= w["praguri"]["predictie"] and nivel == "de_verificat":
             nivel = "in_model"
@@ -382,7 +424,7 @@ class GridModel(Sesiune2):
         else:
             motive.insert(0, text)
         ver = event["data"] if efect == "confirmare" else cur["ultima_verificare"]
-        st = self._pune(eid, el["tip_element"], data, **obs_kw, nivel=nivel, scor=scor, ultima_verificare=ver,
+        st = self._pune(eid, el["tip_element"], data, **obs_kw, **extra_st, nivel=nivel, scor=scor, ultima_verificare=ver,
                         motive=self._motiv(eid, " ".join(motive), delta, event))
         trace["modificari"].append(self._publica(eid, st))
         self._scor_pas(trace, "scor_actualizat" if efect != "fara_efect" else "fara_efect",
@@ -477,7 +519,16 @@ class GridModel(Sesiune2):
                 eid = id_dat          # raportul dă ID-ul real: predicția se „mută" pe el
             else:
                 eid = pid
-        niv = S.decizie(sp, w)
+        sursa = self._sursa_eveniment(event, pozitie_dedusa)
+        if pid and pid in self.istoric:
+            sursa = S.mai_buna(sursa, self._curent(pid).get("sursa_locatie"))     # al doilea raport: sursa cea mai bună
+        cap = S.plafon(sursa, w)
+        if sp > cap:
+            sp = round(cap, 3)
+            motive.append(S.text_plafon(sursa, w))
+        ex_teren = self._executat_teren(event)
+        prag_ap = w["acuratete"]["aplicat_raport_executat"] if ex_teren else w["praguri"]["aplicat"]
+        niv = S.decizie(sp, w, executat_teren=ex_teren)
         planificat = event["status"] == "planificat"      # „semnalat" = observație din teren, nu lucrare viitoare
         if planificat and niv == "in_model":
             niv = "predictie"
@@ -504,14 +555,15 @@ class GridModel(Sesiune2):
                        motive=[{"text": f"Înlocuită de elementul {eid} (raportul {event['event_id']} dă ID-ul real).",
                                 "efect": 0.0, "eveniment": event["event_id"], "data": data}] + self._curent(oid)["motive"])
             self.retrase[oid] = self.predictii.pop(oid, None)   # geometria rămâne pentru date anterioare
-        specs = [(eid, "nod", {"punct": pt, "geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}})]
+        specs = [(eid, "nod", {"punct": pt, "sursa_locatie": sursa,
+                               "geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}})]
         for (v, puncte, met), u_leg in zip(legaturi, urm):
             tid = f"{eid}-{v}" if eid.startswith("NOU-") else f"NOU-{eid}-{v}"
-            specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v), "urmeaza": u_leg,
+            specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v), "urmeaza": u_leg, "sursa_locatie": sursa,
                                            "geometrie": {"type": "LineString",
                                                          "coordinates": [[o, a] for a, o in puncte]}}))
         if niv == "in_model":
-            self._adauga_in_model(specs, event, sp, motive + [txt + f" Peste pragul {w['praguri']['aplicat']}: adăugat în model."], pid)
+            self._adauga_in_model(specs, event, sp, motive + [txt + f" Peste pragul {prag_ap}: adăugat în model."], pid)
             dec = "adaugat"
         else:
             for sid, tip_el, sp_ in specs:
@@ -521,10 +573,10 @@ class GridModel(Sesiune2):
                 if sid in self.istoric:
                     mot = self._motiv(sid, txt + " Sub prag: rămâne predicție.", 0.0, event)
                 else:
-                    mot = [{"text": txt + f" Sub pragul {w['praguri']['aplicat']}: predicție, neaplicată.",
+                    mot = [{"text": txt + f" Sub pragul {prag_ap}: predicție, neaplicată.",
                             "efect": 0.0, "eveniment": event["event_id"], "data": data}]
                 st = self._pune(sid, tip_el, data, nivel="predictie", scor=sp, ultima_verificare=None,
-                                motive=mot, predictie=pr)
+                                motive=mot, predictie=pr, sursa_locatie=sp_.get("sursa_locatie"), t0=False)
             dec = "predictie"
             for sid, tip_el, _ in specs:
                 trace["modificari"].append(self._publica(sid, self._curent(sid)))
@@ -534,7 +586,9 @@ class GridModel(Sesiune2):
             trace["modificari"].append(self._publica(sid, self._curent(sid)))
         self._scor_pas(trace, dec, {**rez, "scor_nou": sp, "nivel": "in_model"}, motive + [txt], sp)
 
-    def _adauga_in_model(self, specs, event, sp, motive, pid):
+    def _adauga_in_model(self, specs, event, sp, motive, pid, plafoneaza: bool = True):
+        """Pune în model elementele din `specs`. `plafoneaza`: scorul fiecăruia nu depășește plafonul sursei lui de locație
+        (False la acceptarea de către om, care e o verificare în teren)."""
         data = event["data"]
         for sid, tip_el, s in specs:
             if tip_el == "nod":
@@ -549,7 +603,8 @@ class GridModel(Sesiune2):
                     "puncte": pts, "capete": tuple(s["capete"])}
             self.predictii.pop(sid, None)
             mot = [{"text": " ".join(motive), "efect": 0.0, "eveniment": event["event_id"], "data": data}]
-            self._pune(sid, tip_el, data, nivel="in_model", scor=sp, motive=mot, predictie=None,
+            extra = {"sursa_locatie": s["sursa_locatie"]} if s.get("sursa_locatie") else {}
+            self._pune(sid, tip_el, data, nivel="in_model", scor=min(sp, S.plafon(s.get("sursa_locatie"), self.w)) if plafoneaza else sp, motive=mot, predictie=None, t0=False, **extra,
                        ultima_verificare=data if event["status"] == "executat" else None)
 
     # ------------------------------------------------------------------ decizia omului (om_teren)
@@ -622,7 +677,7 @@ class GridModel(Sesiune2):
         txt = (f"Acceptată de om în teren ({ev_txt}): scor {sp} (fiabilitate {factori['fiabilitate_sursa']}, "
                f"extracție {factori['incredere_extractie']}, potrivire {factori['calitate_potrivire']}). "
                f"Peste pragul {w['praguri']['aplicat']}: aplicată în model.")
-        self._adauga_in_model(specs, event, sp, [txt], None)
+        self._adauga_in_model(specs, event, sp, [txt], None, plafoneaza=False)
         trace["_ce"] = {}
         for sid, _, _ in specs:
             c = self._curent(sid)
@@ -636,7 +691,7 @@ class GridModel(Sesiune2):
         w, data = self.w, event["data"]
         prop = cur["predictie"]["propunere"]
         el = self.net["tronsoane"][eid]
-        eff = S.scor_la_data(cur["scor"], cur["valid_de_la"], data, w)
+        eff = self._eff(cur, data)
         if alege == "respinge":
             pen = w["decizie_om"]["penalizare_metoda_la_respingere"]
             self.penalizare_metoda["propunere_proprietate"] = round(min(0.20, self.penalizare_metoda.get("propunere_proprietate", 0.0) + pen), 3)
@@ -671,13 +726,14 @@ class GridModel(Sesiune2):
         pts = [(a["lat"], a["lon"]), (b["lat"], b["lon"])]
         q = 1.0 if noduri else 0.7
         sp, factori = S.scor_propunere(event, q, w)
+        sp = min(sp, round(S.plafon("id", w), 3))      # nodurile sunt date prin ID în raport
         sid = f"PLAN-{event['event_id']}"
         self.predictii[sid] = {"puncte": pts, "metoda": "linie_dreapta", "capete": tuple(noduri[:2]),
                                "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}
         txt = (f"Linie planificată între {noduri[0]} și {noduri[1]}, scor {sp}. Ce e doar planificat nu se aplică "
                f"în model până nu e executat, indiferent de scor.")
         st = self._pune(sid, "tronson", data, nivel="predictie" if sp >= w["praguri"]["predictie"] else "de_verificat",
-                        scor=sp, ultima_verificare=None,
+                        scor=sp, ultima_verificare=None, sursa_locatie="id", t0=False,
                         motive=[{"text": txt, "efect": 0.0, "eveniment": event["event_id"], "data": data}],
                         predictie={"metoda": "linie_dreapta", "urmeaza_strada": None,
                                    "propunere": {"proprietate": "linie_planificata", "valoare": sid},
@@ -688,8 +744,11 @@ class GridModel(Sesiune2):
     # ------------------------------------------------------------------ ieșiri
     def _publica(self, eid: str, st: dict) -> dict:
         """ElementState (contracts/state.schema.json) pentru StepTrace."""
-        return {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
-                                    "ultima_verificare", "motive", "predictie", "confirmat_de", "origine") if k in st}
+        out = {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
+                                  "ultima_verificare", "motive", "predictie", "confirmat_de", "origine",
+                                  "sursa_locatie", "t0", "verificat_om", "verificat_om_data") if k in st}
+        out["banda"] = S.banda(st["scor"], self.w)
+        return out
 
     def _geometrie(self, eid: str) -> dict | None:
         el = self._elemente().get(eid)
@@ -714,15 +773,18 @@ class GridModel(Sesiune2):
         if not st:
             return None
         out = copy.deepcopy(st)
-        eff = S.scor_la_data(st["scor"], st["valid_de_la"], data, self.w)
+        regim = S.regim_stare(st)
+        eff = S.scor_la_data(st["scor"], st["valid_de_la"], data, self.w, regim)
         out["scor"] = round(eff, 3)
+        out["banda"] = S.banda(round(eff, 3), self.w)
         out["valid_de_la"] = st["valid_de_la"]
         if st["nivel"] == "in_model" and eff < self.w["praguri"]["predictie"]:
             out["nivel"] = "de_verificat"
         zile = S.zile(st["ultima_verificare"] or self.start, data)
         if S.zile(st["valid_de_la"], data) > 0 and st["nivel"] in ("in_model", "de_verificat") and eff < st["scor"]:
             out["motive"] = [{"text": f"Neverificat de {zile} zile: scorul scade cu "
-                                      f"{abs(self.w['scor']['scadere_per_30_zile'])} la 30 de zile.",
+                                      f"{abs(S.rata_scadere(regim, self.w))} la 30 de zile"
+                                      + (" (rețea GIS)" if regim == "gis" else " (verificat de om)" if regim == "verificat_om" else "") + ".",
                               "efect": round(eff - st["scor"], 3), "eveniment": None, "data": data}] + out["motive"]
         return out
 
@@ -743,6 +805,11 @@ class GridModel(Sesiune2):
             if eid not in self._elemente():      # predicție sau element neaplicat: clasa după tip
                 props["clasa"] = clasa_element({"tip_element": st["tip_element"]})
             props.setdefault("confirmat_de", st.get("confirmat_de"))
+            props["banda"] = st["banda"]
+            props["t0"] = bool(st.get("t0", False))
+            props["sursa_locatie"] = st.get("sursa_locatie")
+            props["verificat_om"] = bool(st.get("verificat_om", False))
+            props["verificat_om_data"] = st.get("verificat_om_data")
             props["origine"] = st.get("origine", "generat_model")
             if props.get("predictie"):
                 props["predictie"] = {**props["predictie"], "origine": "generat_model"}   # predicțiile sunt ale modelului, nu ale AI
@@ -767,13 +834,16 @@ class GridModel(Sesiune2):
         fs = self.snapshot(data)["features"]
         n = len(fs) or 1
         niv: dict[str, int] = {}
+        benzi = {"verde": 0, "galben": 0, "portocaliu": 0, "rosu": 0}
         for f in fs:
             niv[f["properties"]["nivel"]] = niv.get(f["properties"]["nivel"], 0) + 1
+            benzi[f["properties"]["banda"]] += 1
         efective = [j["data"] for j in self.jurnal
                     if j["decizie"] not in ("neaplicat", "fara_efect") and j["data"] <= data]
         return {"data": data, "elemente": len(fs),
                 "ultima_actualizare": max(efective) if efective else None,
                 "procent": {k: round(100 * v / n, 1) for k, v in niv.items()},
+                "procent_banda": {k: round(100 * v / n, 1) for k, v in benzi.items()},
                 "scor_mediu": round(sum(f["properties"]["scor"] for f in fs) / n, 3),
                 "verificat_recent_pct": round(100 * sum(1 for f in fs if f["properties"]["ultima_verificare"]
                                                        and S.zile(f["properties"]["ultima_verificare"], data) <= self.w["scor"]["verificat_recent_zile"]) / n, 1)}

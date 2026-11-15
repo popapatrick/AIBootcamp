@@ -24,7 +24,7 @@ WEIGHTS = ROOT / "contracts" / "weights.yaml"
 LIMITS = ROOT / "contracts" / "weights.limits.yaml"
 REF = ROOT / "data" / "golden" / "calibrare-referinta.json"
 SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend.engine.smoke_engine",
-          "backend.engine.smoke_sesiune2", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
+          "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
           "backend.trace.smoke_trace", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
 
 

@@ -18,10 +18,11 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.txt   # o singură dată
 .venv/bin/python -m backend.engine.smoke_network    # rețea, clase KMZ
-.venv/bin/python -m backend.engine.smoke_match      # 13 cazuri
-.venv/bin/python -m backend.engine.smoke_engine     # 36 verificări
-.venv/bin/python -m backend.engine.smoke_sesiune2   # 23 verificări
-.venv/bin/python -m backend.engine.smoke_osm        # 9 verificări
+.venv/bin/python -m backend.engine.smoke_match      # 14 verificări
+.venv/bin/python -m backend.engine.smoke_engine     # 39 verificări
+.venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
+.venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 23 verificări (acuratețe)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 
@@ -32,3 +33,10 @@ Ponderile și pragurile vin doar din `contracts/weights.yaml`. Contractele se sc
 - `zona.py`: safeguard-ul zonei prototipului (`centru_retea`, `zona_ok`, `motiv_afara`); vezi `docs/etapa-20-safeguard-zona.md`.
 - `verifica_reglaje.py`: verifică un reglaj în `contracts/weights.yaml` (limite din `weights.limits.yaml`, diferență de calibrare, smoke-uri, linie pentru board). `scripts/verifica_tot.sh` rulează toate verificările. Vezi `docs/etapa-23-reglaje.md` și `docs/cerere-logica.md`.
 - `calibrare.py`: `evenimente()` și `ruleaza(weights)` sunt reutilizate de `verifica_reglaje`.
+
+## Sesiunea 4 (acuratețe realistă; `docs/etapa-26-acuratete-realista.md`)
+- `scoring.py`: `scor_la_data(..., regim)` (gis | verificat_om | normal), `regim_stare`, `banda`, `plafon`, `mai_buna`, `text_plafon`, `fmt`, `decizie(..., executat_teren)`.
+- `model.py`: KMZ la `acuratete.initial_gis` (`origine: retea_start`, `t0`); SIM-* „din rapoarte mai vechi” cu scor determinist (`_scor_sim`); `banda`,
+  `t0`, `sursa_locatie`, `verificat_om` în `snapshot`/`_publica`; `banda_inainte`/`banda_dupa` în `schimbari`; `procent_banda` în `statistici`.
+- `sesiune2.py`: `_eff`, `_plafoneaza`, `_sursa_eveniment`, `_sursa_din_geocodare`, `_executat_teren`; plafon la racordare și mutare fire.
+- `smoke_sesiune4.py`: verificările V1/V2.
