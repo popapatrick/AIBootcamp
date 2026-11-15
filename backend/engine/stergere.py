@@ -8,10 +8,14 @@ NU se șterg: elementele rețelei de start (`t0: true`: KMZ/GIS și SIM-*) și c
 
 Efect = retras cu jurnal: elementul dispare din `snapshot` de la data ștergerii, rămâne în istoric (date anterioare),
 motivul „Șters de om: <motiv>” e primul în „De ce?”. Fără penalizare pentru metodă (diferit de „Respinge”).
-Grup: un stâlp + legăturile lui ștergibile; o legătură + stâlpii ei ștergibili rămași fără alte legături (niciun fir în aer).
+Grup: la un lanț de racordare, orice element (casa, stâlp prezis, legătură) șterge TOT lanțul; altfel un stâlp + legăturile lui ștergibile; o legătură + stâlpii ei ștergibili rămași fără alte legături (niciun fir în aer).
 Decizia din StepTrace: `sters`; eticheta din timeline: `stergere`.
 """
 from __future__ import annotations
+
+import re
+
+_RE_LANT = re.compile(r"^NOU-(?P<ev>.+)-(?:casa|S\d+|L\d+)$")     # elementele unui lanț de racordare (`sesiune2._cerere_racordare`)
 
 
 class Stergere:
@@ -45,9 +49,25 @@ class Stergere:
         return (eid in self.net["noduri"] or eid in self.pinuri
                 or (eid in self.predictii and "punct" in self.predictii[eid]))
 
+    def _lant_racordare(self, eid: str) -> set[str] | None:
+        """Lanțul de racordare din care face parte `eid` (casa, stâlpii prezisi `-S<n>`, legăturile `-L<n>`), sau None.
+        Identificare: id `NOU-<event>-(casa|S<n>|L<n>)` ȘI există `NOU-<event>-casa` în istoric (doar `_cerere_racordare` creează
+        casa; astfel `NOU-<ev>-<vecin>-S<k>` de la nod lipsă nu se confundă). Se iau toate elementele cu prefixul `NOU-<event>-` de
+        acest fel, ștergibile acum (predicții sau aplicate în model); elementele de start la care se leagă lanțul nu au acest prefix."""
+        mt = _RE_LANT.match(eid)
+        if not mt or f"NOU-{mt['ev']}-casa" not in self.istoric:
+            return None
+        pref = f"NOU-{mt['ev']}-"
+        return {x for x in self.istoric if x.startswith(pref) and _RE_LANT.match(x) and _RE_LANT.match(x)["ev"] == mt["ev"]
+                and self._stergibil(x)}
+
     def _grup_stergere(self, tinta: str) -> list[str]:
-        """Grupul șters odată cu `tinta` (ștergibil). Stâlp: el + legăturile lui ștergibile. Legătură: ea + capetele ștergibile
+        """Grupul șters odată cu `tinta` (ștergibil). Lanț de racordare (casa, stâlp prezis sau legătură): TOT lanțul
+        (`_lant_racordare`). Altfel stâlp: el + legăturile lui ștergibile. Legătură: ea + capetele ștergibile
         rămase fără alte legături. Stâlpii rămași izolați după ștergerea legăturilor se șterg și ei. Noduri întâi, apoi legături."""
+        lant = self._lant_racordare(tinta)
+        if lant:
+            return sorted(lant | {tinta}, key=lambda x: (self._capete_legatura(x) is not None, x))
         sters = {tinta}
         if self._este_nod(tinta):
             sters |= {l for l in self._legaturi_nod(tinta) if self._stergibil(l)}

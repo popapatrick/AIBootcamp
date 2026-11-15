@@ -89,15 +89,33 @@ def scenariu(m: GridModel):
     pred_inainte = set(m.predictii)
     lant = sorted(k for k in pred_inainte if k.startswith("NOU-EV4-012-"))
     verifica("EV4-012: lanț cu mai mulți stâlpi (casa + S1..S4 + L1..L5)", len(lant) == 10, str(lant))
+    n_lant = {x: prop(m, INAINTE, x)["stergere_n"] for x in lant}
+    verifica("EV4-012: `stergere_n` = mărimea lanțului (10) pe fiecare element al lui", set(n_lant.values()) == {10}, str(n_lant))
     tr = m.apply_event(stergere("DEL-2", "NOU-EV4-012-casa", "lanț greșit"))
     g = set(tr["stergere"]["elemente"])
-    verifica("stâlp (casa): se șterge cu legăturile lui, fără alt stâlp rămas izolat",
-             {"NOU-EV4-012-casa"} < g and all(x in lant for x in g) and not any(
-                 "capete" in m.predictii.get(x, {}) and any(c in g for c in m.predictii[x]["capete"]) for x in m.predictii if x not in g),
-             str(sorted(g)))
-    restul = [x for x in lant if x not in g and "capete" in m.predictii[x]]
-    verifica("grup: nicio legătură rămasă cu un capăt șters (fără fire în aer)",
-             all(c not in g for x in restul for c in m.predictii[x]["capete"]), str(restul))
+    verifica("lanț: ștergerea casei șterge TOT lanțul (casa + toți stâlpii + toate legăturile), n = 10",
+             g == set(lant) and tr["stergere"]["n"] == 10 and not (g & set(m.predictii)), str(sorted(g)))
+    verifica("lanț: elementele de start la care se leagă lanțul rămân (nod/tronson GIS neatinse)",
+             all(not (m.istoric[x][-1].get("retras")) for x in m.net["noduri"] if x not in g and m.istoric[x][-1].get("t0"))
+             and "A-T-001" in ids(m, DEL))
+    # EV4-017 pe un model proaspăt: ștergere din stâlp/casa/legătură = același grup, la fel EV4-012 din mijloc
+    m2 = model_real()
+    s12 = sorted(k for k in m2.predictii if k.startswith("NOU-EV4-012-S"))
+    mijloc = s12[len(s12) // 2]
+    tr2 = m2.apply_event(stergere("DEL-M", mijloc, "stâlp din mijloc"))
+    verifica("lanț: ștergerea unui stâlp din mijloc = același grup (10 elemente)", set(tr2["stergere"]["elemente"]) == set(lant), mijloc)
+    m3 = model_real()
+    tr3 = m3.apply_event(stergere("DEL-L", "NOU-EV4-012-L3", "legătură"))
+    verifica("lanț: ștergerea unei legături = același grup (10 elemente)", set(tr3["stergere"]["elemente"]) == set(lant))
+    m4 = model_real()
+    l17 = sorted(k for k in m4.predictii if k.startswith("NOU-EV4-017-"))
+    verifica("EV4-017: grupul = lanțul (casa + L1), `stergere_n` egal pe fiecare element",
+             l17 == ["NOU-EV4-017-L1", "NOU-EV4-017-casa"] and {prop(m4, INAINTE, x)["stergere_n"] for x in l17} == {2})
+    cap17 = [c for c in m4.predictii["NOU-EV4-017-L1"]["capete"] if c not in l17]
+    tr4 = m4.apply_event(stergere("DEL-17", "NOU-EV4-017-casa"))
+    verifica("EV4-017: ștergerea casei șterge lanțul (2), nodul existent rămâne",
+             set(tr4["stergere"]["elemente"]) == set(l17) and tr4["stergere"]["n"] == 2
+             and cap17 and all(c in m4.net["noduri"] and not m4.istoric[c][-1].get("retras") for c in cap17), str(cap17))
 
     # --- element aplicat din raport (NOU-EV4-023): dispare, nu mai e în net, un raport ulterior nu se mai potrivește cu el
     eid = "NOU-EV4-023"
@@ -170,7 +188,7 @@ def scenariu(m: GridModel):
 
     # --- legătură: stâlpii prezisi rămași fără alte legături cad cu ea; stergibil pe NOU/PLAN/MUT
     for pref in ("NOU-EV4-0", "PLAN-", "MUT-"):
-        e = next((k for k in list(ids(m, INAINTE)) if k.startswith(pref) and prop(m, INAINTE, k)["origine"] == "generat_model"
+        e = next((k for k in sorted(ids(m, INAINTE)) if k.startswith(pref) and m._stergibil(k) and prop(m, INAINTE, k)["origine"] == "generat_model"
                   and not prop(m, INAINTE, k)["t0"]), None)
         verifica(f"`stergibil` true pe {pref}* ({e})", e and prop(m, INAINTE, e)["stergibil"] is True)
     return m

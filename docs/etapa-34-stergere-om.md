@@ -8,7 +8,8 @@ Un om poate șterge din hartă ce a adăugat sistemul după start. Eveniment `ti
 - **Se șterge:** predicțiile punctate (`self.predictii`: `NOU-*`, `MUT-*`, `PLAN-*`, `TRK-*`, lanțuri de racordare), elementele aplicate din rapoarte/tracking (`origine: generat_model`, `t0: false`, ex. `NOU-EV4-023`) și pinurile `VER-*`.
 - **NU se șterge:** rețeaua de start (`t0: true`: GIS/KMZ și `SIM-*`) și elementele deja retrase/șterse. Refuz: decizie `neaplicat` + `trace["eroare"] = {cod, mesaj}`: `nu_se_sterge_retea_start`, `deja_sters` (inclusiv element respins de „Respinge” sau înlocuit de un ID real), `necunoscut` (ID inexistent sau gol). Nimic nu se modifică la refuz.
 - **Efect = retras cu jurnal:** de la data ștergerii elementul nu mai apare în `snapshot`; la datele anterioare apare ca înainte (cu geometria și forma lui). `motive[0].text` = „Șters de om: <motiv>. Retras de la <data> ...” (fără motiv: „Șters de om (fără motiv indicat)”). **Fără penalizare** de metodă (penalizarea rămâne doar la „Respinge”). Scorurile altor elemente nu se schimbă.
-- **Grup:** stâlp = el + legăturile lui ștergibile; legătură = ea + stâlpii ei ștergibili rămași fără alte legături. Stâlpii izolați de ștergerea unei legături cad odată cu ea. O legătură ștergibilă cu un capăt șters se șterge și ea (niciun fir în aer). Niciodată un element de start. Grupul nu se extinde mai departe: dintr-un lanț lung se șterge doar capătul ales (ex. `NOU-EV4-012-casa` șterge casa și `L5`; restul lanțului rămâne, fiecare element se poate șterge separat).
+- **Grup:** stâlp nou = el + legăturile lui ștergibile; legătură = ea + stâlpii ei ștergibili rămași fără alte legături; `TRK-*` + `…-L`, pin: ca înainte. **Lanț de racordare (decizia lui Victor):** ștergerea ORICĂRUI element al lanțului (casa, un stâlp prezis `-S<n>` sau o legătură `-L<n>`) șterge TOT lanțul: casa, toți stâlpii prezisi și toate legăturile aceluiași eveniment de racordare (predicții sau aplicate în model), dacă sunt ștergibile. Elementele existente la care se leagă lanțul (nod/tronson de start, `t0`) nu se șterg. Niciodată un element de start.
+- **Cum se identifică lanțul** (`Stergere._lant_racordare`): id de forma `NOU-<event>-(casa|S<n>|L<n>)` și există `NOU-<event>-casa` în `istoric` (doar `_cerere_racordare` creează casa; `NOU-<ev>-<vecin>-S<k>` de la „nod lipsă” nu se confundă). Grupul = toate elementele `istoric` cu același `<event>` care sunt ștergibile acum. Merge la fel pentru lanțurile aplicate (în `net`) și pentru predicții, fiindcă folosește numele, nu starea. Un câmp marker nu e fiabil: elementele aplicate (`_adauga_in_model`) nu păstrează metadate de lanț.
 
 ## Decizii
 - **Decizia în StepTrace: `sters`** (nu `aplicat`: ar apărea „Aplicat în rețea”). **Eticheta în timeline: `stergere`.** Rezumat: „Șters de om: <n> elemente (<id-uri>)” (primele 8 id-uri + „și încă k”); la refuz „Ștergere neaplicată: <mesaj>”.
@@ -31,15 +32,15 @@ La refuz: `decizie: neaplicat`, `eroare: {cod, mesaj}`, `modificari: []`.
 
 ## Cum se verifică
 ```bash
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_stergere   # 42/42 OK
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_stergere   # 47/47 OK
 EXTRACT_CLI=0 bash scripts/verifica_tot.sh --strict-distributie   # TOT VERDE (smoke_stergere e în SMOKES)
 ```
-Acoperă: lanț de racordare (EV4-017, EV4-012), element aplicat `NOU-EV4-023` (scos din `net`; un raport pe aceeași poziție se potrivea înainte, nu mai după), `TRK-*` + `…-L` (și legătura ca țintă), pin `VER-*`, refuzuri (GIS nod/tronson, `SIM-*`, ID inexistent/gol, a doua ștergere, element respins), „Respinge” neschimbat, `stergibil`/`stergere_n`, fără penalizare, scoruri neschimbate, determinism, eticheta `stergere`, distribuția.
+Acoperă: lanț de racordare (EV4-017: 2 elemente; EV4-012: 10 elemente, din casă, stâlp din mijloc sau legătură; `stergere_n` pe fiecare element; nodul de start rămâne), element aplicat `NOU-EV4-023` (scos din `net`; un raport pe aceeași poziție se potrivea înainte, nu mai după), `TRK-*` + `…-L` (și legătura ca țintă), pin `VER-*`, refuzuri (GIS nod/tronson, `SIM-*`, ID inexistent/gol, a doua ștergere, element respins), „Respinge” neschimbat, `stergibil`/`stergere_n`, fără penalizare, scoruri neschimbate, determinism, eticheta `stergere`, distribuția.
 
 ## Limite
 - Ancorele de căutare pe stradă (`self.ancore`, adrese din rapoarte) nu se șterg odată cu elementul.
 - Ștergerea unui `MUT-*` nu readuce tronsoanele vechi `scos_din_uz` (sunt rețea de start, neatinse).
-- Grupul nu urmărește tot lanțul (vezi „Grup”); ștergerea e ireversibilă (nu există „restaurează”); nu poate fi respinsă o predicție ștearsă, nici șters un element respins.
+- Ștergerea e ireversibilă (nu există „restaurează”); nu poate fi respinsă o predicție ștearsă, nici șters un element respins.
 - `stergibil`/`stergere_n` la o dată trecută reflectă starea de acum.
 - Nu există test prin API: endpointul `POST /element/{id}/stergere` nu e încă făcut (testat doar la nivel de motor).
 
