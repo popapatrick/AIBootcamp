@@ -78,3 +78,27 @@ Concluzie: interpolarea numărului pe stradă nu e mai precisă decât strada, d
 **Propunere de reglaj (NEaplicată):** `scor.scadere_per_30_zile` -0,05 → -0,02; `retea_start.fractie_galben` 0,45 → 0,60; `retea_start.fractie_portocaliu` 0,35 → 0,30; `plafon_locatie.strada` 0,55 → 0,68; `plafon_locatie.analiza_harta` 0,40 → 0,66. Rezultat la ultima dată (13 nov.): verde 72,2 %, galben 14,0 %, portocaliu 8,1 %, roșu 5,6 %: în țintă. Atenție: smoke_sesiune4 pică la 3 aserțiuni (plafon `analiza_harta` 0,40 hardcodat, minim GIS, racordare ≤ 0,40) și trebuie actualizat odată cu reglajul.
 
 **Verificare.** `verifica_reglaje` tipărește „Distribuție culori la <ultima dată>: …: în țintă / în afara țintei” (ținta e `TINTA_DISTRIBUTIE` în cod). Eșec doar cu `--strict-distributie`; `--rapid` o sare. Referința de aur `data/golden/calibrare-referinta.json` a fost rescrisă (ID-urile vechi `EV-0xx` nu mai există, deci nu are rost o diferență).
+
+**Reglaj final al distribuției (decizia lui Victor: se măsoară doar rețeaua).** Criteriul din `distributie_culori` (`backend/engine/verifica_reglaje.py`): intră în procent elementele care fac parte din rețea la data respectivă = ID în `model._elemente()` (GIS, SIM-*, plus ce s-a adăugat/aplicat din rapoarte, căci `net` crește la aplicare) cu nivel `in_model` sau `de_verificat`. NU intră: predicțiile punctate (nivel `predictie`: element_nou, stâlpi prezisi, `PLAN-*`, `MUT-*`), pinurile `VER-*` și elementele retrase; sunt marcaje, nu rețea, și pot rămâne roșii/portocalii. Ele se afișează separat, informativ („predicții: N (verde/galben/portocaliu/roșu)”). Plafoanele `plafon_locatie.*` NU s-au schimbat (D6), deci propunerea veche de mai sus (strada 0,68, analiza_harta 0,66) NU se mai aplică.
+
+Încercări (rețea: verde/galben/portocaliu/roșu la 2026-09-15 | 2026-10-15 | 2026-11-13; ținta 70-82 / 8-15 / 5-10 / 2-6):
+
+| # | Valori | 15 sept. | 15 oct. | 13 nov. |
+|---|---|---|---|---|
+| 0 | actuale (scădere -0,05; galben 0,45; portocaliu 0,35) | 82,2/7,8/7,7/2,3 | 81,6/0,5/9,3/8,6 | 80,7/0,5/9,9/8,9 (galben și roșu în afara țintei) |
+| 1 | scădere -0,02 | 82,2/8,3/7,2/2,3 | 81,6/8,4/7,6/2,3 | 80,7/8,0/8,6/2,6 (în țintă, galben la limită) |
+| 2 | -0,02; galben 0,60; portocaliu 0,30 | 82,2/11,6/5,3/0,9 | 81,6/11,7/5,8/0,9 | 80,7/11,2/6,8/1,2 (roșu sub 2) |
+| 3 | -0,03; galben 0,60; portocaliu 0,30 | 82,2/11,6/5,3/0,9 | 81,6/11,2/6,2/0,9 | 80,7/0,6/13,1/5,5 (galbenul se prăbușește în nov.) |
+| 4 | -0,03; galben 0,50; portocaliu 0,35; scor_galben 0,74 | 82,2/9,7/6,6/1,6 | 81,6/9,3/7,5/1,6 | 80,7/9,4/2,5/7,4 |
+| 5 | -0,02; galben 0,55; portocaliu 0,30 | 82,2/10,6/5,6/1,6 | 81,6/10,7/6,1/1,6 | 80,7/10,3/7,1/1,8 (roșu sub 2) |
+| 6 | -0,025; galben 0,55; portocaliu 0,30 | 82,2/10,6/5,6/1,6 | 81,6/10,7/6,1/1,6 | 80,7/0,6/16,8/1,8 |
+| 7 | -0,03; galben 0,55; portocaliu 0,30; scor_galben 0,72 | 82,2/10,6/5,6/1,6 | 81,6/10,3/6,5/1,6 | 80,7/10,3/2,5/6,5 |
+| 8 | -0,02; galben 0,50; portocaliu 0,32 | 82,2/9,7/6,1/2,0 | 81,6/9,8/6,5/2,0 | 80,7/9,4/7,6/2,3 |
+| 9 | -0,02; galben 0,50; portocaliu 0,35 | 82,2/9,7/6,6/1,6 | 81,6/9,8/7,0/1,6 | 80,7/9,4/8,0/1,8 (roșu sub 2) |
+| **10 (ales)** | **-0,02; galben 0,50; portocaliu 0,30** | **82,2/9,7/5,8/2,3** | **81,6/9,8/6,2/2,3** | **80,7/9,4/7,2/2,6** (în țintă) |
+
+Valori alese: `scor.scadere_per_30_zile` -0,05 → -0,02, `retea_start.fractie_galben` 0,45 → 0,50, `retea_start.fractie_portocaliu` 0,35 → 0,30 (restul SIM = roșu, 20 %). Predicțiile (în afara procentului) la cele 3 date: 33 (1 portocaliu, 32 roșii), 56 (1 galben, 1 portocaliu, 54 roșii), 77 (2 galbene, 1 portocaliu, 74 roșii). Observații: la 15 sept. verdele e 82,2 % (cu 0,2 peste țintă; ținta contează doar la ultima dată). Rețeaua își schimbă culorile în timp mai ales prin ce intră din rapoarte (verde 82,2 → 80,7 %, portocaliu 5,8 → 7,2 %, roșu 2,3 → 2,6 %), nu din scăderea GIS (stabilă, 0,95).
+
+Efect pe calibrare: 2 evenimente schimbă scorul față de referința de aur, nu și decizia: EV4-032 `avarie_semnalata` 0,455 → 0,504 și EV4-033 `avarie_semnalata` 0,425 → 0,474 (scăderea mai mică în timp a elementelor SIM atinse). Referința NU a fost rescrisă (o face verificatorul). Singura aserțiune de test schimbată: `smoke_sesiune4`, „scor_la_data: minim GIS...”, care codifica -0,05 (0,85); acum citește `scor.scadere_per_30_zile` din weights.
+
+Verificare: `EXTRACT_CLI=0 .venv/bin/python -m backend.engine.verifica_reglaje --strict-distributie` tipărește „Distribuție culori (doar rețea) la 2026-11-13: verde 80.7 %, galben 9.4 %, portocaliu 7.2 %, roșu 2.6 % ...: în țintă” și linia „predicții (nu intră în procent): 77 (...)”; cod 0. `scripts/verifica_tot.sh` rulează acum verificarea cu `--strict-distributie` și iese TOT VERDE; dacă un reglaj viitor scoate rețeaua din țintă, scriptul pică.

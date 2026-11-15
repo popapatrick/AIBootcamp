@@ -356,7 +356,7 @@ def main() -> None:
     verifica("scor_la_data: minim GIS nu e ridicat dacă scorul e deja sub el",
              S.scor_la_data(0.60, "2026-08-01", "2027-08-01", w, "gis") == 0.60
              and S.scor_la_data(0.95, "2026-08-01", "2030-08-01", w, "gis") == w["acuratete"]["minim_gis"]
-             and S.scor_la_data(0.9, "2026-08-01", "2026-08-31", w) == 0.85)
+             and abs(S.scor_la_data(0.9, "2026-08-01", "2026-08-31", w) - (0.9 + w["scor"]["scadere_per_30_zile"])) < 1e-9)   # rata normală din weights, nu constantă
     verifica("decizie: executat_teren coboară pragul la 0,50", S.decizie(0.55, w) == "predictie" and S.decizie(0.55, w, executat_teren=True) == "in_model"
              and S.decizie(0.55, w, planificat=True, executat_teren=True) == "predictie")
 

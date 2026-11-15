@@ -8,7 +8,7 @@
 Reguli: aceleași chei ca în `contracts/weights.limits.yaml`, fiecare valoare numerică în [min, max], relațiile dintre
 praguri respectate. Arată ce valori s-au schimbat față de `git HEAD`, ce evenimente de calibrare își schimbă decizia sau
 scorul față de referință (`data/golden/calibrare-referinta.json`, sau față de HEAD dacă lipsește) și rulează smoke-urile.
-Tipărește și distribuția culorilor (benzilor) la ultima dată a scenariului, față de `TINTA_DISTRIBUTIE` (informativ;
+Tipărește și distribuția culorilor (benzilor) doar pe rețea (predicțiile separat) la ultima dată a scenariului, față de `TINTA_DISTRIBUTIE` (informativ;
 eșec doar cu `--strict-distributie`; sărită cu `--rapid`). Tipărește o linie gata de lipit în `board/<laptop>.md`. Cod de ieșire 0 = reglaj bun de împins (commit `reglaj:`).
 """
 from __future__ import annotations
@@ -29,8 +29,12 @@ SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend
           "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
           "backend.trace.smoke_trace", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
 
-# Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2): procente din toate
-# elementele vizibile în snapshot (rețea de start + SIM + adăugate din rapoarte + predicții), interval [min, max].
+# Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2), interval [min, max] în %.
+# Se măsoară DOAR pe rețea (decizia lui Victor): elementele care fac parte din rețea la acea dată = ID prezent în
+# `model._elemente()` (GIS, SIM-*, plus ce a fost adăugat/aplicat din rapoarte, căci `net` crește la aplicare), cu
+# nivelul `in_model` sau `de_verificat`. NU intră: predicțiile punctate (nivel `predictie`, `model.predictii`: element_nou,
+# stâlpi prezisi, PLAN-*, MUT-*), pinurile VER-* (`model.pinuri`) și elementele retrase; sunt marcaje, nu rețea.
+# Predicțiile se raportează separat, informativ.
 TINTA_DISTRIBUTIE = {"verde": (70.0, 82.0), "galben": (8.0, 15.0), "portocaliu": (5.0, 10.0), "rosu": (2.0, 6.0)}
 
 
@@ -108,8 +112,12 @@ def diferenta_calibrare(w: dict) -> tuple[list[str], list[dict]]:
     return [f"referință: {sursa}"] + linii, acum
 
 
-def distributie_culori(w: dict) -> tuple[str, dict, bool]:
-    """Rulează scenariul (calibrare.evenimente) cu ponderile `w`; întoarce (ultima_data, procente pe benzi, în_țintă)."""
+def distributie_culori(w: dict, data: str | None = None) -> tuple[str, dict, bool, dict]:
+    """Rulează scenariul (calibrare.evenimente) cu ponderile `w`; la `data` (implicit ultima dată a scenariului).
+
+    Întoarce (data, procente pe benzi DOAR pe rețea, în_țintă, predicții). Criteriul de rețea: vezi `TINTA_DISTRIBUTIE`
+    (ID în `model._elemente()` și nivel != `predictie`). `predicții` = {"n": N, "verde": .., "galben": .., "portocaliu": .., "rosu": ..}
+    (numere absolute: tot ce e în snapshot și nu e rețea: predicții punctate, pinuri, elemente neaplicate)."""
     from backend.engine import osm
     from backend.engine.calibrare import evenimente
     from backend.engine.model import GridModel
@@ -118,9 +126,17 @@ def distributie_culori(w: dict) -> tuple[str, dict, bool]:
     m.traseu_fn = osm.traseu_fn()
     for e in ev:
         m.apply_event(e)
-    d = m.ultima_data
-    proc = m.statistici(d)["procent_banda"]
-    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items())
+    d = data or m.ultima_data
+    retea_ids = m._elemente()
+    retea = {"verde": 0, "galben": 0, "portocaliu": 0, "rosu": 0}
+    pred = dict(retea)
+    for f in m.snapshot(d)["features"]:
+        p = f["properties"]
+        in_retea = p["element_id"] in retea_ids and p["nivel"] != "predictie"
+        (retea if in_retea else pred)[p["banda"]] += 1
+    n = sum(retea.values()) or 1
+    proc = {b: round(100 * v / n, 1) for b, v in retea.items()}
+    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items()), {"n": sum(pred.values()), **pred}
 
 
 def rulează_smoke() -> list[str]:
@@ -160,10 +176,12 @@ def main() -> int:
         print("   (nicio decizie sau scor schimbat)")
     in_tinta = True
     if "--rapid" not in sys.argv:
-        d, p, in_tinta = distributie_culori(w)
+        d, p, in_tinta, pr = distributie_culori(w)
         tinta = ", ".join(f"{b.replace('rosu', 'roșu')} {lo:g}-{hi:g} %" for b, (lo, hi) in TINTA_DISTRIBUTIE.items())
-        print(f"Distribuție culori la {d}: verde {p['verde']} %, galben {p['galben']} %, portocaliu {p['portocaliu']} %, "
+        print(f"Distribuție culori (doar rețea) la {d}: verde {p['verde']} %, galben {p['galben']} %, portocaliu {p['portocaliu']} %, "
               f"roșu {p['rosu']} % (țintă {tinta}): " + ("în țintă" if in_tinta else "în afara țintei"))
+        print(f"   predicții (nu intră în procent): {pr['n']} (verde {pr['verde']}, galben {pr['galben']}, "
+              f"portocaliu {pr['portocaliu']}, roșu {pr['rosu']})")
         if not in_tinta and "--strict-distributie" not in sys.argv:
             print("   (informativ; devine eșec cu --strict-distributie, după calibrare)")
     if not in_tinta and "--strict-distributie" in sys.argv:
