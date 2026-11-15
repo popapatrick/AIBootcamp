@@ -200,7 +200,7 @@
  {
   "event_id": "EV4-007",
   "echipa_sursa": "mentenanta",
-  "tip": "nod_lipsa",
+  "tip": "activ_inlocuit",
   "referinta": {
    "adresa": "Strada Speranței nr. 22",
    "adresa_structurata": {
@@ -212,21 +212,21 @@
    },
    "coordonate": null,
    "element_id": null,
-   "nr_cadastral": null,
-   "id_client": null
+   "id_client": null,
+   "nr_cadastral": null
   },
   "status": "executat",
   "data": "2026-08-13",
-  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0406\nData: 2026-08-13\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței nr. 22\nConstatare: Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție.\nStatus: executat\n",
-  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0406\nData: 2026-08-13\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: -\nCoordonate: -\nAdresa: Strada Speranței nr. 22\nConstatare: Stâlpul existent a fost înlocuit: cel vechi demontat, cel nou montat în aceeași poziție (înlocuire, nu stâlp suplimentar).\nStatus: executat\n",
   "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
   "incredere_extractie": 0.6,
   "campuri_lipsa": [
    "element_id",
    "coordonate"
   ],
   "detalii": {
-   "observatii": "Stâlp vechi scos din uz, stâlp nou montat în aceeași poziție."
+   "observatii": "Înlocuire stâlp existent: cel vechi demontat, cel nou montat în aceeași poziție (nu stâlp suplimentar). Fișă M-2026-0406."
   }
  },
  {
@@ -697,7 +697,18 @@
  {
   "event_id": "EV4-021",
   "echipa_sursa": "investitii",
-  "tip": "linie_planificata",
+  "tip": "nod_lipsa",
+  "status": "executat",
+  "data": "2026-09-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0114\nData: 2026-09-10\nEchipa: investitii\nTip lucrare: linie nouă executată\nCod element: -\nCoordonate: -\nAdresa: Aleea Bălții, lângă nr. 9\nConstatare: Tronson nou de 40 m montat și pus sub tensiune, cu stâlp nou; lucrare finalizată, nu planificată.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "element_id",
+   "coordonate",
+   "localitate"
+  ],
   "referinta": {
    "adresa": "Aleea Bălții, lângă nr. 9",
    "adresa_structurata": {
@@ -716,25 +727,12 @@
     }
    },
    "coordonate": null,
-   "element_id": null,
-   "id_client": null,
-   "nr_cadastral": null
+   "element_id": null
   },
-  "status": "executat",
-  "data": "2026-09-10",
-  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0114\nData: 2026-09-10\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Aleea Bălții, lângă nr. 9\nConstatare: Tronson nou executat, 40 m de linie.\nStatus: executat\n",
-  "campuri_lipsa": [
-   "element_id",
-   "coordonate",
-   "noduri"
-  ],
   "detalii": {
    "lungime_m": 40,
-   "observatii": "Fișă I-2026-0114, tip lucrare linie nouă; tronson nou executat, 40 m de linie. Cod element lipsă (câmp „-”)."
-  },
-  "forma_sursa": "campuri",
-  "tip_sursa_pondere": "formular",
-  "incredere_extractie": 0.6
+   "observatii": "Tronson nou de 40 m montat și pus sub tensiune, cu stâlp nou; lucrare finalizată, nu planificată. Cod element lipsă în fișă (\"-\")."
+  }
  },
  {
   "event_id": "EV4-022",
@@ -771,7 +769,7 @@
  {
   "event_id": "EV4-023",
   "echipa_sursa": "mentenanta",
-  "tip": "activ_inlocuit",
+  "tip": "nod_lipsa",
   "referinta": {
    "adresa": "Strada Carpati nr. 12",
    "adresa_structurata": {
@@ -782,21 +780,22 @@
     "indiciu": null
    },
    "coordonate": null,
-   "element_id": "6642890",
+   "element_id": null,
    "id_client": null,
    "nr_cadastral": null
   },
   "status": "executat",
   "data": "2026-09-14",
-  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp înlocuit\nCod element: 6642890 (vechi)\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp înlocuit cu unul nou, stâlpul vechi scos din uz.\nStatus: executat\n",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0413\nData: 2026-09-14\nEchipa: mentenanta\nTip lucrare: stâlp nou montat\nCod element: -\nCoordonate: -\nAdresa: Strada Carpati nr. 12\nConstatare: Stâlp nou montat, necartat în GIS. Nu am coordonate.\nStatus: executat\n",
   "tip_sursa_pondere": "formular",
   "forma_sursa": "campuri",
-  "incredere_extractie": 0.9,
+  "incredere_extractie": 0.5,
   "campuri_lipsa": [
+   "element_id",
    "coordonate"
   ],
   "detalii": {
-   "observatii": "Fișa M-2026-0413. Stâlp înlocuit cu unul nou; stâlpul vechi (cod 6642890, marcat „vechi”) scos din uz."
+   "observatii": "Fișa M-2026-0413. Stâlp nou montat, necartat în GIS. Nu am coordonate."
   }
  },
  {
@@ -837,34 +836,34 @@
   "echipa_sursa": "mentenanta",
   "tip": "verificare",
   "referinta": {
-   "adresa": "Strada Carpati",
+   "adresa": "Strada Carpati nr. 12",
    "adresa_structurata": {
     "strada": "Strada Carpati",
-    "numar": null,
+    "numar": "12",
     "localitate": null,
     "reper": null,
     "indiciu": null
    },
    "coordonate": {
-    "lat": 44.281967,
-    "lon": 26.065858
+    "lat": 44.282405,
+    "lon": 26.066262
    },
-   "element_id": "6872907",
+   "element_id": "NOU-EV4-023",
    "id_client": null,
    "nr_cadastral": null
   },
   "status": "executat",
   "data": "2026-09-17",
-  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0414\nData: 2026-09-17\nEchipa: mentenanta\nTip lucrare: verificare rutină, stâlp existent\nCod element: 6872907\nCoordonate: 44.281967, 26.065858\nAdresa: Strada Carpati\nConstatare: Stâlp verificat, poziție confirmată cu GPS.\nStatus: executat\n",
-  "forma_sursa": "campuri",
-  "tip_sursa_pondere": "formular",
-  "incredere_extractie": 0.95,
-  "detalii": {
-   "observatii": "Stâlp verificat, poziție confirmată cu GPS. Tip lucrare: verificare rutină, stâlp existent. Nr. fișă M-2026-0414."
-  },
   "campuri_lipsa": [
-   "numar"
-  ]
+   "localitate"
+  ],
+  "detalii": {
+   "observatii": "Verificare de rutină: stâlpul existent (montat pe 14.09) se află la locul lui, poziție confirmată cu GPS. Nimic montat sau înlocuit."
+  },
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.85,
+  "tip_sursa_pondere": "formular",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0414\nData: 2026-09-17\nEchipa: mentenanta\nTip lucrare: verificare rutină\nCod element: NOU-EV4-023\nCoordonate: 44.282405, 26.066262\nAdresa: Strada Carpati nr. 12\nConstatare: Verificare de rutină: stâlpul existent de aici (montat pe 14.09) e la locul lui, poziție confirmată cu GPS. Nimic montat sau înlocuit.\nStatus: executat\n"
  },
  {
   "event_id": "EV4-026",
@@ -1786,7 +1785,7 @@
  {
   "event_id": "EV4-050",
   "echipa_sursa": "investitii",
-  "tip": "racord_nou",
+  "tip": "nod_lipsa",
   "referinta": {
    "adresa": "Strada Primăverii, la capătul străzii",
    "adresa_structurata": {
@@ -1806,21 +1805,21 @@
    },
    "coordonate": null,
    "element_id": null,
+   "id_client": null,
    "nr_cadastral": null
   },
   "status": "executat",
   "data": "2026-11-06",
-  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Tronson nou executat, racord la rețea.\nStatus: executat\n",
-  "forma_sursa": "campuri",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – INVESTIȚII\nNr. fișă: I-2026-0121\nData: 2026-11-06\nEchipa: investitii\nTip lucrare: linie nouă executată\nCod element: -\nCoordonate: -\nAdresa: Strada Primăverii, la capătul străzii\nConstatare: Stâlp nou montat la capătul străzii și tronson nou până la el; lucrare finalizată. Nu e branșament de client.\nStatus: executat\n",
   "tip_sursa_pondere": "formular",
-  "incredere_extractie": 0.4,
+  "forma_sursa": "campuri",
+  "incredere_extractie": 0.45,
   "campuri_lipsa": [
    "element_id",
    "coordonate"
   ],
   "detalii": {
-   "sectiune_noua": null,
-   "observatii": "Fișa I-2026-0121: tronson nou executat, racord la rețea. Tip lucrare: linie nouă. Cod element lipsă ('-'), coordonate lipsă ('-'); locația este doar stradă și capăt de stradă. Tipul racord_nou este ales pentru racordul la rețea executat; nu există cerere de client în text."
+   "observatii": "Stâlp nou montat la capătul străzii și tronson nou până la el; lucrare finalizată. Nu e branșament de client. Nr. fișă I-2026-0121. Cod element și coordonate lipsesc în fișă ('-')."
   }
  },
  {
@@ -1867,32 +1866,33 @@
   "echipa_sursa": "mentenanta",
   "tip": "verificare_om",
   "referinta": {
-   "adresa": "Strada Carpati",
+   "adresa": "Strada Carpati nr. 12",
    "adresa_structurata": {
     "strada": "Strada Carpati",
-    "numar": null,
+    "numar": "12",
     "localitate": null,
     "reper": null,
     "indiciu": null
    },
    "coordonate": null,
-   "element_id": "6793869",
+   "element_id": "NOU-EV4-023",
    "id_client": null,
    "nr_cadastral": null
   },
   "status": "executat",
   "data": "2026-11-10",
-  "text_original": "DATE FICTIVE\nVerificat de om, pe teren, cu operatorul – 2026-11-10\nElement: 6793869\nAdresa: Strada Carpati\nConstatare: nodul confirmat la fața locului, nimic de corectat.\nStatus: executat\n",
-  "forma_sursa": "campuri",
+  "text_original": "DATE FICTIVE\nVerificat de om, pe teren, cu operatorul – 2026-11-10\nElement: NOU-EV4-023\nAdresa: Strada Carpati nr. 12\nConstatare: stâlpul nou confirmat la fața locului, nimic de corectat.\nStatus: executat\n",
   "tip_sursa_pondere": "formular",
-  "incredere_extractie": 0.9,
+  "incredere_extractie": 0.7,
+  "forma_sursa": "campuri",
   "campuri_lipsa": [
-   "coordonate",
-   "numar"
+   "event_id",
+   "localitate",
+   "coordonate"
   ],
   "detalii": {
-   "tinta_id": "6793869",
-   "observatii": "Verificat de om, pe teren, cu operatorul; nodul confirmat la fața locului, nimic de corectat."
+   "tinta_id": "NOU-EV4-023",
+   "observatii": "Verificat de om, pe teren, cu operatorul. Stâlpul nou confirmat la fața locului, nimic de corectat."
   }
  },
  {
@@ -1994,6 +1994,46 @@
   ],
   "detalii": {
    "observatii": "Racord executat 13.11, lanț trecut pe stâlpul 6872907."
+  }
+ },
+ {
+  "event_id": "EV4-056",
+  "echipa_sursa": "mentenanta",
+  "tip": "avarie_semnalata",
+  "referinta": {
+   "adresa": "Strada Orhideelor, lângă nr. 3",
+   "adresa_structurata": {
+    "strada": "Strada Orhideelor",
+    "numar": "3",
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "langa",
+     "numar": "3",
+     "numar_2": null,
+     "strada_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "nr_cadastral": null,
+   "id_client": null
+  },
+  "status": "semnalat",
+  "data": "2026-11-14",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0441\nData: 2026-11-14\nEchipa: mentenanta\nTip lucrare: avarie, stâlp căzut\nCod element: -\nCoordonate: -\nAdresa: Strada Orhideelor, lângă nr. 3\nConstatare: Stâlp căzut, cablul atârnă pe trotuar. Nu am coordonate.\nStatus: semnalat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.6,
+  "campuri_lipsa": [
+   "coordonate",
+   "element_id"
+  ],
+  "detalii": {
+   "observatii": "Tip lucrare: avarie, stâlp căzut. Constatare: stâlp căzut, cablul atârnă pe trotuar."
   }
  }
 ]
