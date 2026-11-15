@@ -101,7 +101,7 @@
   "event_id": "EV4-015",
   "data": "2026-08-29",
   "tip": "verificare_om",
-  "decizie": "scor_actualizat",
+  "decizie": "aplicat",
   "scor": 1.0
  },
  {
@@ -199,7 +199,7 @@
   "event_id": "EV4-029",
   "data": "2026-09-26",
   "tip": "verificare_om",
-  "decizie": "scor_actualizat",
+  "decizie": "aplicat",
   "scor": 1.0
  },
  {
@@ -297,7 +297,7 @@
   "event_id": "EV4-043",
   "data": "2026-10-18",
   "tip": "verificare_om",
-  "decizie": "scor_actualizat",
+  "decizie": "aplicat",
   "scor": 1.0
  },
  {
@@ -360,7 +360,7 @@
   "event_id": "EV4-052",
   "data": "2026-11-10",
   "tip": "verificare_om",
-  "decizie": "scor_actualizat",
+  "decizie": "aplicat",
   "scor": 1.0
  },
  {
