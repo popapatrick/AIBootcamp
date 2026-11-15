@@ -2,6 +2,11 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, plan sesiunea 4: accent pe căutarea pe stradă (Victor, B)
+Victor a cerut accent pe cazul „stradă + indiciu parțial” (ex. „lângă nr. 15”): modelul caută pe stradă, nu așteaptă coordonate exacte. Planul are acum D11 și V6 rescris: indiciul extras de AI (`numar`, `langa`, `vizavi`, `intre`, `dupa`, `capat`, `colt`, `element`), fereastră de căutare pe stradă (ancore din rapoarte anterioare sau convenția de numerotare, par/impar), apoi căutarea elementelor din fereastră (1 candidat = potrivit, 2–4 = predicție cu alternative, 0 = element nou sau „de verificat”). Pasul nou `cautare_strada` în `pasi`; vizualizare în P3; primul card de pe intro e acest caz; 8 cazuri golden.
+@Claudiu: în textele tale (C4), cel puțin o treime doar stradă + indiciu, fără coordonate.
+Contract atins: nu
+
 ## 2026-11-15, plan sesiunea 4 (prototip gata de prezentat), PROPUNERE (Victor, B)
 Gata: `docs/plan-sesiune-4-prezentare.md`, după cererea lui Victor + nota „Modificări” a lui Claudiu. Măsurat pe main: 620/630 elemente de start la 0,72 (scăderea în timp), elementele noi la 0,96 fără coordonate, 8/29 evenimente `neaplicat`. Decizii luate cu Victor (D1–D10): doar Lovable pentru UI, pagină de intro separată, `in_model` ascuns în UI, analiză hartă pe graful de străzi OSM local, 4 benzi de culoare (verde ≥0,80 / galben / portocaliu / roșu <0,40), GIS t0 0,95 cu scădere lentă, plafon de acuratețe după sursa locației, traseul generat oprit, doar 3 butoane de echipă, „verificat de om” = 1,0 din panoul oricărui element. Patrick nu participă: backend-ul lui trece la B, `data/reports/` la C.
 În lucru: nimic până la aprobare. Primul pas după aprobare: contract `sesiunea 4` (Faza 0) + 5 schimbări OpenSpec + CLAUDE.md.

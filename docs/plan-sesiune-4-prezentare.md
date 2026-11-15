@@ -14,7 +14,7 @@ Prototipul funcționează, dar arată prost la demo din patru motive măsurate p
 |---|---|---|
 | Totul e galben, 50–70 % | rețeaua de start pornește la 0,90 și scade cu 0,05 la 30 de zile: la 15 nov., 620 din 630 de elemente sunt la 0,72 | GIS pornește la 0,95, scade cu 0,01 la 30 de zile, nu coboară sub 0,85 |
 | Ce adaugă modelul iese verde fără coordonate | elementele noi au 0,96 indiferent cum au fost localizate | plafon de acuratețe după sursa locației (coordonate 0,85, adresă 0,70, stradă 0,55, analiză hartă 0,40) |
-| Modelul „se blochează” | 8 din 29 de evenimente ies `neaplicat` | scară de localizare completă + predicție pe străzi; `neaplicat` doar fără niciun indiciu de loc sau în afara zonei |
+| Modelul „se blochează” | 8 din 29 de evenimente ies `neaplicat`; numărul de casă e pus orbește la N/100 din stradă (±200 m), iar o adresă mai vagă de 15 m nu are voie să se potrivească cu niciun element | **căutare pe stradă din indicii parțiale** (ancore, convenție de numerotare, „lângă/între/vizavi/capăt”) + căutarea elementelor în fereastră + predicție pe străzi; `neaplicat` doar fără niciun indiciu de loc sau în afara zonei |
 | Rețeaua nu se schimbă vizibil în timp | 29 de evenimente, aproape toate „scor actualizat” | scenariu nou, ~55 de rapoarte text standardizate cu AI, care adaugă, scot, mută și verifică elemente |
 
 Plus UI: pagină de intro, butoane pentru cele 3 echipe cu zoom și pop-up-uri, panou „Ce a înțeles AI-ul”, hartă tip GIS accesibilă, timeline orizontal derulabil. UI-ul se face **doar în Lovable**.
@@ -37,6 +37,7 @@ Se scot: scenariul extrem, traseul de ultima oră (buton și parametri; generare
 | D8 | „din model” (nota lui Claudiu) | Dispare eticheta „generat de model”. Fiecare eveniment arată textul raportului și ce a extras AI-ul; elementele adăugate poartă „Din raport”. |
 | D9 | Echipe | **Doar 3 butoane**: Mentenanță, Investiții, Racordări. Apelurile clienților rămân doar ca evenimente în timeline. |
 | D10 | Verificat de om | Din panoul **oricărui** element: „Marchează verificat de om” → 1,0, insignă, intrare în timeline; se pierde doar dacă un raport ulterior îl contrazice. |
+| D11 | **Accent:** stradă + indiciu parțial | Când textul are strada și un indiciu („la nr. 12”, „lângă nr. 15”, „între 10 și 20”, „vizavi de”, „la capătul străzii”, „colț cu”), modelul **caută** pe stradă, estimează punctul și caută elementele din jur. Nu așteaptă coordonate exacte. Fără niciun indiciu de loc nu inventează nimic (P3). Detalii: V6. |
 
 ### Propuneri ale mele incluse în plan (confirmă sau schimbă)
 
@@ -51,7 +52,7 @@ Se scot: scenariul extrem, traseul de ultima oră (buton și parametri; generare
   - Cele 55 de puncte simulate SIM-* și 48 de tronsoane = **„Din raport” (rapoarte mai vechi)**, cu scoruri inițiale amestecate, deterministe: ~45 % galben, ~35 % portocaliu, ~20 % roșu.
 
   Harta de la t0 e deci deja realistă.
-- **P3. „Nu se blochează” are o limită.** Dacă textul nu are niciun indiciu de loc (nici ID, nici coordonate, nici stradă, intersecție, reper sau cartier), nu inventăm un punct, conform principiului „nu inventa date lipsă”. Raportul intră în timeline cu „lipsă locație”, apare în lista „Fără locație” din UI și nu pe hartă. Orice alt raport produce ceva pe hartă, chiar și cu acuratețe mică.
+- **P3. „Nu se blochează” are o limită (confirmat de Victor).** Dacă textul nu are niciun indiciu de loc (nici ID, nici coordonate, nici stradă, intersecție, reper sau cartier), nu inventăm un punct, conform principiului „nu inventa date lipsă”. Raportul intră în timeline cu „lipsă locație”, apare în lista „Fără locație” din UI și nu pe hartă. **Orice alt raport, chiar și cu doar strada și un indiciu parțial, produce ceva pe hartă, cu acuratețe mică (D11, V6).**
 - **P4. Buton „Resetează demo”.** `POST /demo/reset` + buton pe pagina de intro: după repetiții, modelul revine la starea de start fără repornirea serverului.
 - **P5. Rezerve pentru ziua demo-ului.**
   - O înregistrare video de 3 minute a parcursului complet, ca rezervă dacă tunelul cade (alegerea D1 nu are plan-B actualizat).
@@ -187,7 +188,7 @@ Limitele noi intră în `contracts/weights.limits.yaml`, iar `verifica_reglaje` 
 
 ## 5. Faza 1B (Victor): motor
 
-Fiecare sarcină are test în `backend/engine/smoke_sesiune4.py` (nou) și doc. Ordinea contează: V1 și V2 schimbă scorurile pe care le folosesc celelalte.
+Fiecare sarcină are test în `backend/engine/smoke_sesiune4.py` (nou) și doc. Ordinea: V1 → V2 → **V6** (accentul, și V3/V4 o folosesc pentru localizare) → V3 → V4 → V5 → V7.
 
 ### V1. Modelul de acuratețe (`model.py`, `scoring.py`)
 1. Scor inițial GIS 0,95. Scăderea în timp e separată pe origine: GIS −0,01/30 zile cu minim 0,85; „Din raport” −0,05/30 zile; „verificat de om” −0,01/30 zile cu minim 0,95.
@@ -250,14 +251,86 @@ Intrare: doar text, fără clic. Exemplu (devine exemplul implicit de pe pagina 
 
 **Test:** stâlp galben → 1,0 verde cu insignă; contradicție ulterioară → pierde insigna; scădere în timp ≥ 0,95.
 
-### V6. „Nu se blochează” (P3; `match.py`, `sesiune2.py`, `model.py`)
-Scara de localizare pentru orice tip de raport:
-1. ID → 2. coordonate din text → 3. adresă cu număr → 4. intersecție → 5. stradă → 6. reper sau cartier (geocodare) → 7. analiză hartă pornind de la elementul sau vecinii numiți → 8. fără locație.
+### V6. Căutare pe stradă din indicii parțiale: modelul nu se mai blochează (D11, P3; **accentul sesiunii**)
+Fișiere: `backend/geo/` (preluat de la A), `backend/extract/extract.py` (prompt), `backend/engine/match.py`, `model.py`, `sesiune2.py`.
 
-- La 2–7 iese mereu un rezultat: aplicat (P1), predicție sau, cel puțin, „de verificat” cu punct și scor mic.
-- `neaplicat` rămâne doar pentru treapta 8 și în afara zonei (eronat în prototip).
+**De ce se blochează azi** (verificat în cod, 15 nov.):
+1. `geo` pune numărul N la fracția N/100 din cea mai lungă cale a străzii, fără par/impar și fără capătul de unde încep numerele, cu precizie fixă ±200 m.
+2. `model.py` interzice potrivirea cu un element existent dacă precizia adresei e peste 15 m (`potrivire.distanta_max_m`). Un raport „stâlp căzut pe Strada Viilor nr. 12” iese deci `nepotrivit` → `neaplicat`, deși pe stradă, în zona aceea, sunt doar 2–3 stâlpi.
 
-**Test:** cele 8 evenimente `neaplicat` de azi se reclasifică; în golden, `g-07`/`g-08` (geocodare necunoscută) → „de verificat” cu stradă, nu `neaplicat`.
+**Ce facem: căutarea are trei pași.**
+
+**Pasul 1. Indiciul din text (AI, Haiku).** Promptul extrage în `adresa_structurata.indiciu` forma indiciului, nu doar numărul:
+
+| Text | `indiciu.tip` | Câmpuri |
+|---|---|---|
+| „la nr. 12”, „nr 12” | `numar` | `numar` |
+| „lângă nr. 15”, „în dreptul nr. 15” | `langa` | `numar` |
+| „vizavi de nr. 15” | `vizavi` | `numar` (partea opusă) |
+| „între nr. 10 și 20” | `intre` | `numar`, `numar_2` |
+| „după nr. 30”, „înainte de nr. 30” | `dupa` / `inainte` | `numar` |
+| „la capătul străzii”, „la intrarea pe stradă” | `capat` / `inceput` | — |
+| „colț cu Strada X”, „aproape de intersecția cu X” | `colt` | `strada_2` |
+| „lângă stâlpul 7101969”, „la 3 stâlpi de PT” | `element` | `element_id`, `distanta_stalpi` |
+| „pe partea cu numere pare/impare” | `parte` | `paritate` |
+
+**Pasul 2. Punctul estimat pe stradă (`geo`, determinist).**
+- **Ancore:** orice adresă deja cunoscută pe aceeași stradă (raport anterior cu adresă + element potrivit sigur, sau cu coordonate) devine o ancoră `(stradă, nr, lat, lon)`, păstrată în model. Numărul N se interpolează liniar pe lungimea străzii între ancorele vecine. Cu ancore, precizia e ±40 m.
+- **Fără ancore, convenția de numerotare:** numerele cresc de la capătul străzii cel mai apropiat de Șoseaua Principală sau de centrul rețelei; ~12 m de stradă la fiecare 2 numere (`metri_per_numar`). Pare pe o parte, impare pe cealaltă (punct decalat 8 m lateral). Precizia e ±100 m.
+- **Indicii relative:**
+  - `intre`: punctul de mijloc, cu precizia egală cu jumătatea distanței;
+  - `dupa`/`inainte`: o fereastră de 60 m după sau înainte de N;
+  - `capat`/`inceput`: capătul străzii, ±50 m;
+  - `colt`: intersecția, ±15 m;
+  - `element`: elementul numit, ±(distanță × 40 m);
+  - `vizavi`: partea opusă.
+- **Ieșire:** nu doar un punct, ci o **fereastră de căutare pe stradă** `{strada, de_la_m, pana_la_m, punct, precizie_m, metoda: ancore|conventie|indiciu}`.
+
+**Pasul 3. Căutarea în rețea în fereastra de pe stradă (motor).** În loc de „precizie > 15 m → nepotrivit”:
+- se iau toate elementele de tipul cerut (stâlp pentru avarie sau înlocuire, tronson pentru fire) din fereastră, plus 15 m lateral de stradă;
+- **1 candidat:** potrivit, cu calitatea redusă după fereastră (`calitate_cautare_unic`, 0,6). Raportul se aplică pe el, cu scorul plafonat la `adresa_numar`;
+- **2–4 candidați:** predicție „probabil <cel mai apropiat de punct>”, scor împărțit după distanță (cel mai apropiat ia cel mai mult). Ceilalți sunt listați ca alternative în „De ce?” și desenați pe hartă cu contur subțire. Un raport ulterior sau „verificat de om” decide;
+- **niciun candidat:** pentru „element nou” (nod lipsă, stâlp montat) se pune elementul nou la punctul estimat, galben/portocaliu (P1 dacă e executat). Pentru „element existent” se pune pin „de verificat” la punct, scor mic, cu motivul „nu există element de tipul X în fereastra de pe Strada Y”;
+- fereastra și candidații intră în pasul nou `cautare_strada` din `pasi`, ca UI-ul să-i deseneze.
+
+**Scara completă de localizare** (orice tip de raport):
+1. ID;
+2. coordonate din text;
+3. adresă cu număr (ancore sau convenție);
+4. stradă + indiciu relativ;
+5. intersecție;
+6. doar stradă: toată strada e fereastra; dacă există un singur candidat, e predicție, altfel „de verificat” pe stradă;
+7. reper sau cartier;
+8. analiză hartă de la elementul sau vecinii numiți;
+9. fără niciun indiciu: lista „Fără locație” (P3).
+
+`neaplicat` rămâne doar pentru treapta 9 și în afara zonei (eronat în prototip).
+
+**Chei noi în `weights.yaml` (în contractul din Faza 0):**
+```yaml
+cautare_strada:
+  metri_per_numar: 6            # ~12 m la 2 numere (o parte a străzii)
+  decalaj_paritate_m: 8
+  precizie_ancore_m: 40
+  precizie_conventie_m: 100
+  fereastra_dupa_m: 60
+  precizie_capat_m: 50
+  latime_laterala_m: 15         # cât de departe de axul străzii se caută elemente
+  calitate_cautare_unic: 0.6
+  max_candidati_predictie: 4    # peste: „de verificat” pe fereastră, nu predicție
+  factor_numere_ancore: 1.0
+  factor_numere_conventie: 0.8  # înmulțește plafonul adresa_numar când nu avem ancore
+```
+
+**Test (în `smoke_sesiune4.py` și golden):**
+- „stâlp căzut pe Strada Viilor nr. 12” (fără coordonate) cu un singur stâlp în fereastră → potrivit, aplicat pe stâlpul acela, scor ≤ 0,70, nu `neaplicat`;
+- același text cu 3 stâlpi în fereastră → predicție pe cel mai apropiat, cu 2 alternative listate;
+- „stâlp nou montat între nr. 10 și 20 pe Strada Bălții” → element nou la mijloc, galben (executat);
+- „lângă stâlpul 7101969, la 2 stâlpi spre capătul străzii” → fereastra pornește de la elementul numit;
+- a doua adresă pe aceeași stradă după o ancoră → precizie ±40 m, nu ±100 m;
+- cele 8 evenimente `neaplicat` de azi se reclasifică;
+- în golden, `g-07`/`g-08` (geocodare necunoscută) → „de verificat” pe stradă, nu `neaplicat`;
+- determinist; niciun punct în afara zonei de 3 km.
 
 ### V7. Curățenie în motor (D7 + scenariul extrem)
 - `trace_generat.activ: false`: `_trace_generat` nu mai rulează. Codul și testele lui rămân, rulate explicit cu `activ: true`.
@@ -265,7 +338,7 @@ Scara de localizare pentru orice tip de raport:
 - `timeline()` nu mai trimite `eronat_prototip` pe fiecare intrare dacă e false (aditiv: UI-ul îl tratează ca absent).
 
 ### V8. Documentație B
-`docs/etapa-26-acuratete-realista.md`, `etapa-27-analiza-harta.md`, `etapa-28-mutare-fire-document.md`, `etapa-29-verificat-om.md`. Actualizate: `backend/engine/README.md`, `docs/calibrare.md` (distribuția nouă), `contracts/interfaces.md`.
+`docs/etapa-26-acuratete-realista.md`, `etapa-27-analiza-harta.md`, `etapa-28-mutare-fire-document.md`, `etapa-29-verificat-om.md`, `etapa-31-cautare-strada.md` (V6), `backend/geo/README.md`. Actualizate: `backend/engine/README.md`, `docs/calibrare.md` (distribuția nouă), `contracts/interfaces.md`.
 
 ---
 
@@ -279,7 +352,7 @@ Scara de localizare pentru orice tip de raport:
 ### C2. Endpointuri noi
 - `POST /element/{id}/verificare` → `engine.apply_event` cu `verificare_om` (V5); 404 dacă elementul nu există.
 - `GET /demo/exemple` → 4 carduri, din `data/reports/demo-intro.json` (nou, C):
-  `{id, titlu, descriere, sursa, text, data_moment, focus}`. Conținut: (1) sens giratoriu, fire mutate (V4); (2) racordare casă departe, traseu pe străzi (V3); (3) stâlp înlocuit raportat cu adresă, aplicat galben, apoi confirmat cu GPS și devenit verde (V1); (4) element verificat de om (V5).
+  `{id, titlu, descriere, sursa, text, data_moment, focus}`. Conținut: (1) **„stâlp căzut lângă nr. 15” fără coordonate: căutare pe stradă, 3 candidați, ales cel mai apropiat (V6, primul card, accentul)**; (2) sens giratoriu, fire mutate (V4); (3) racordare casă departe, traseu pe străzi (V3); (4) stâlp înlocuit raportat cu adresă, aplicat galben, apoi confirmat cu GPS și devenit verde, apoi verificat de om (V1, V5).
 - `POST /demo/reset` → `engine.reset()` + reîncărcarea scenariului.
 - `GET /legenda` → benzi (prag, culoare, text), stiluri de linie (plină = în rețea, punctată = predicție, gri punctat = demontat probabil), insigne.
 
@@ -292,7 +365,8 @@ Scara de localizare pentru orice tip de raport:
                {"camp": "adresa", "valoare": "Strada Viilor 12", "din": "text"},
                {"camp": "coordonate", "valoare": null, "din": "lipsa"}],
    "lipsa": ["coordonate", "vecini"],
-   "localizare": {"sursa": "adresa_numar", "precizie_m": 200, "plafon": 0.70, "text": "Adresă cu număr, geocodată din străzile OSM locale"},
+   "localizare": {"sursa": "adresa_numar", "precizie_m": 100, "plafon": 0.70, "metoda": "conventie",
+                  "indiciu": "lângă nr. 15", "text": "Strada Viilor, lângă nr. 15: fereastră de 120 m, 3 stâlpi găsiți, ales cel mai apropiat"},
    "decizie": {"cod": "aplicat", "text": "Adăugat în rețea", "scor": 0.66, "banda": "galben"}}
   ```
   Etichetele și textele în română sunt făcute în API, nu în Lovable.
@@ -306,7 +380,8 @@ Scara de localizare pentru orice tip de raport:
 
 ### C5. Banca de test (`banc_logica`)
 - Coloane noi: `banda`, `sursa_locatie`, `verificat_om`, `analiza_harta.lungime_m`.
-- Golden nou (cu Victor, `data/golden/`): 3 cazuri de analiză hartă, 3 de mutare fire din document, 2 de verificat de om, 4 de „nu se blochează”.
+- Golden nou (cu Victor, `data/golden/`): **8 cazuri de căutare pe stradă** (nr. fără coordonate cu 1 / 3 / 0 candidați, „între”, „vizavi”, „capătul străzii”, „lângă stâlpul X”, a doua adresă cu ancoră), 3 de analiză hartă, 3 de mutare fire din document, 2 de verificat de om.
+- Texte pentru butoane și scenariu: cel puțin o treime au **doar stradă + indiciu**, fără coordonate, ca demo-ul să arate accentul.
 
 ### C6. Documentație C
 `docs/etapa-30-api-sesiune4.md`, `frontend/README.md`, `docs/demo-checklist-C.md`.
@@ -428,6 +503,13 @@ Trei prompturi, scrise în `frontend/lovable-prompt-sesiune4-P1.md`, `-P2.md`, `
 
 Pentru mutare fire: cercul zonei, tronsoanele marcate roșu și traseul nou.
 
+**Vizualizarea căutării pe stradă** (când există pasul `cautare_strada`; e accentul demo-ului):
+- porțiunea de stradă din fereastră e evidențiată ca bandă semitransparentă;
+- punctul estimat apare cu cercul de precizie;
+- ancorele folosite apar ca puncte mici cu numărul;
+- candidații găsiți au contur, iar cel ales e plin;
+- fișa „Căutare pe stradă” are 3 rânduri: „Indiciu: lângă nr. 15 pe Strada Viilor”, „Fereastră 120 m (convenție de numerotare, fără ancore)”, „3 stâlpi găsiți; ales SIM-021 (cel mai apropiat), alternative SIM-020, SIM-022”.
+
 ---
 
 ## 9. Faza 4: repetiție și închidere
@@ -437,7 +519,7 @@ Pentru mutare fire: cercul zonei, tronsoanele marcate roșu și traseul nou.
    1. intro;
    2. exemplul sens giratoriu;
    3. harta GIS, straturi, Identificare;
-   4. butonul Mentenanță cu un text cu adresă (galben);
+   4. butonul Mentenanță cu „stâlp căzut pe Strada Viilor, lângă nr. 15”, fără coordonate: se vede căutarea pe stradă, candidații și alegerea (accentul);
    5. butonul Racordări cu o casă departe (traseu pe străzi);
    6. „Marchează verificat de om” → verde 1,0;
    7. derulare în timeline înapoi la 1 aug. și înainte la prezent;
