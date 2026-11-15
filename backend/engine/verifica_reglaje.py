@@ -26,7 +26,7 @@ WEIGHTS = ROOT / "contracts" / "weights.yaml"
 LIMITS = ROOT / "contracts" / "weights.limits.yaml"
 REF = ROOT / "data" / "golden" / "calibrare-referinta.json"
 SMOKES = ["backend.engine.smoke_network", "backend.engine.smoke_match", "backend.engine.smoke_engine",
-          "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_tracking_motor", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
+          "backend.engine.smoke_sesiune2", "backend.engine.smoke_sesiune4", "backend.engine.smoke_stergere", "backend.engine.smoke_tracking_motor", "backend.engine.smoke_osm", "backend.geo.smoke_geo",
           "backend.trace.smoke_trace", "backend.tracking.smoke_tracking", "backend.racordare.smoke_racordare", "backend.api.smoke_api"]
 
 # Ținta distribuției benzilor de culoare la ultima dată a scenariului (plan Sesiunea 4, 7.2), interval [min, max] în %.
@@ -136,6 +136,13 @@ def distributie_culori(w: dict, data: str | None = None) -> tuple[str, dict, boo
     for e in ev:
         m.apply_event(e)
     d = data or m.ultima_data
+    proc, in_tinta, pred = distributie_model(m, d)
+    return d, proc, in_tinta, pred
+
+
+def distributie_model(m, d: str) -> tuple[dict, bool, dict]:
+    """Distribuția benzilor pe un model deja rulat, la data `d`: (procente DOAR pe rețea, în_țintă, predicții).
+    Elementele șterse de om (`stergere_om`) sunt retrase: `snapshot` nu le dă, deci nu intră nici în rețea, nici în predicții."""
     retea_ids = m._elemente()
     retea = {"verde": 0, "galben": 0, "portocaliu": 0, "rosu": 0}
     pred = dict(retea)
@@ -149,7 +156,7 @@ def distributie_culori(w: dict, data: str | None = None) -> tuple[str, dict, boo
         (retea if in_retea else pred)[p["banda"]] += 1
     n = sum(retea.values()) or 1
     proc = {b: round(100 * v / n, 1) for b, v in retea.items()}
-    return d, proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items()), {"n": sum(pred.values()), **pred, "scoase_din_uz": scoase}
+    return proc, all(lo <= proc[b] <= hi for b, (lo, hi) in TINTA_DISTRIBUTIE.items()), {"n": sum(pred.values()), **pred, "scoase_din_uz": scoase}
 
 
 def rulează_smoke() -> list[str]:

@@ -26,6 +26,7 @@ from backend.engine.match import match_event
 from backend.engine.network import clasa_element, dist_m, incarca_puncte_simulare
 from backend.engine.linie_planificata import LiniePlanificata
 from backend.engine.sesiune2 import TIPURI_CAUTARE, TIPURI_NOI, Sesiune2
+from backend.engine.stergere import Stergere
 from backend.engine.tracking import Tracking
 from backend.engine.verificare_om import VerificareOm
 from backend.engine.zona import centru_retea, motiv_afara, zona_ok
@@ -35,7 +36,7 @@ START = "2026-08-01"      # data de la care „știe" modelul rețeaua inițial�
 MAX_MOTIVE = 8
 
 
-class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
+class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking, Stergere):
     def __init__(self, net: dict | None = None, weights: dict | None = None, start: str = START):
         self.w = weights or load_weights()
         if net is None:
@@ -131,6 +132,13 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
                  "decizie": None}
         if ajustata:
             trace["nota"] = f"Data {ajustata} e anterioară ultimului eveniment aplicat; folosită {event['data']}."
+        if event["tip"] == "stergere_om":
+            # etapa 34: un om șterge un element adăugat de sistem (grup); fără extracție/potrivire; vezi backend/engine/stergere.py
+            event = {"echipa_sursa": "om_teren", "status": "executat", **event}
+            self._stergere_om(event, trace)
+            tr = self._inchide(event, "stergere_om", trace, {"element_id": ((event.get("detalii") or {}).get("tinta_id") or "").strip() or None, "motiv": ""}, inainte)
+            self.jurnal[-1]["rezumat"] = trace.pop("_rezumat", "")
+            return tr
         if event["tip"] == "tracking_tura":
             # sesiunea 4b: tura unei tablete GPS, deja structurată (fără extracție/potrivire); vezi backend/engine/tracking.py
             self._tracking_tura(event, trace, inainte)
@@ -263,6 +271,8 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
         """Etichetă pentru timeline-ul din UI: mutare_fire | demontat | val_apeluri | racordare | decizie_om | tipul evenimentului."""
         if tip == "verificare_om":
             return "verificat_om"
+        if tip == "stergere_om":
+            return "stergere"
         if event["echipa_sursa"] == "om_teren":
             return "decizie_om"
         if self._val_flag:
@@ -808,8 +818,10 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
         """ElementState (contracts/state.schema.json) pentru StepTrace."""
         out = {k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
                                   "ultima_verificare", "motive", "predictie", "confirmat_de", "origine",
-                                  "sursa_locatie", "t0", "verificat_om", "verificat_om_data", "ultima_validare_tracking") if k in st}
+                                  "sursa_locatie", "t0", "verificat_om", "verificat_om_data", "ultima_validare_tracking",
+                                  "sters", "sters_data", "sters_motiv") if k in st}
         out["banda"] = S.banda(st["scor"], self.w)
+        out["stergibil"] = self._stergibil(eid)
         return out
 
     def _geometrie(self, eid: str) -> dict | None:
@@ -822,7 +834,7 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
         return {"type": "Point", "coordinates": [el["lon"], el["lat"]]}
 
     def _props_element(self, eid: str) -> dict:
-        el = self._elemente().get(eid, {})
+        el = self._elemente().get(eid) or (self.retrase.get(eid) or {}).get("el") or {}    # element aplicat apoi șters: forma din istoric
         keep = {k: v for k, v in el.items() if k not in ("puncte", "lat", "lon", "id", "tip_element")}
         if "capete" in keep:
             keep["capete"] = list(keep["capete"])
@@ -865,13 +877,15 @@ class GridModel(Sesiune2, VerificareOm, LiniePlanificata, Tracking):
             props.update({k: st[k] for k in ("element_id", "tip_element", "nivel", "scor", "valid_de_la",
                                              "ultima_verificare", "motive", "predictie")})
             if eid not in self._elemente():      # predicție sau element neaplicat: clasa după tip
-                props["clasa"] = clasa_element({"tip_element": st["tip_element"]})
+                props["clasa"] = clasa_element((self.retrase.get(eid) or {}).get("el") or {"tip_element": st["tip_element"]})
             props.setdefault("confirmat_de", st.get("confirmat_de"))
             props["banda"] = st["banda"]
             props["t0"] = bool(st.get("t0", False))
             props["sursa_locatie"] = st.get("sursa_locatie")
             if st.get("ultima_validare_tracking"):
                 props["ultima_validare_tracking"] = st["ultima_validare_tracking"]
+            props["stergibil"] = self._stergibil(eid)
+            props["stergere_n"] = len(self._grup_stergere(eid)) if props["stergibil"] else 0     # câte elemente se șterg odată cu el (confirmarea din UI)
             props["verificat_om"] = bool(st.get("verificat_om", False))
             props["verificat_om_data"] = st.get("verificat_om_data")
             props["origine"] = st.get("origine", "generat_model")

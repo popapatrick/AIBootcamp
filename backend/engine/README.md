@@ -11,6 +11,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `model.py` | `GridModel`: apply_event, snapshot, timeline, statistici, decizia omului | `docs/etapa-5-scor-decizie.md`, `etapa-14-verificare-om.md` |
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
 | `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
+| `stergere.py` | mixin `Stergere` (etapa 34): `_stergere_om` = `stergere_om`: un om șterge predicții, elemente aplicate din rapoarte/tracking sau pinuri `VER-*` (nu GIS/SIM-*), cu tot grupul; retras cu jurnal, fără penalizare; `_stergibil`, `_grup_stergere` | `docs/etapa-34-stergere-om.md` |
 | `tracking.py` | mixin `Tracking` (sesiunea 4b, B2): `_tracking_tura` = tura unei tablete GPS (`tracking_tura`): opriri (`gaseste_opriri`, prag 1 min) clasificate `validare` / `stalp_presupus` / `scurta` / `neclara`; validare = confirmare `× tracking_gps × calitate`, stâlp presupus `TRK-<event>-<n>` + legătură pe străzi (predicție); aceeași tură de două ori = `fara_efect` | `docs/etapa-32-tracking-echipe.md` (secțiunea „Motor (B2)”) |
 | `linie_planificata.py` | mixin `LiniePlanificata`: `_planificata` = scara 2 noduri / 2 GPS / ancoră + stradă / fereastră de stradă -> predicție punctată `PLAN-<event>` pe străzi (niciodată aplicat), `neaplicat` fără loc | `docs/etapa-27-analiza-harta.md` (secțiunea „Linie planificată”) |
 | `analiza_harta.py` | analiza hărții (V3): `traseu_pe_strazi(tinta, net, cfg, evita, preferate, exclus)` = drum pe graful de străzi OSM de la stâlpii existenți, stâlpi noi la ~40 m, alternative, acuratețe | `docs/etapa-27-analiza-harta.md` |
@@ -27,6 +28,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 100 verificări (acuratețe V1/V2, analiza hărții V3, căutare pe stradă V6, verificat de om V5)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_stergere   # 42 verificări (ștergere de către om, etapa 34)
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_tracking_motor   # 40 verificări (tracking echipe, B2)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
@@ -68,3 +70,8 @@ Adresă fără ID/coordonate -> `fereastra_strada` (backend.geo) -> candidați d
 ## Linie planificată și distribuția culorilor (sesiunea 4)
 - `linie_planificata.py`: vezi tabelul de mai sus; teste în `smoke_sesiune4.py::teste_linie_planificata` (15 verificări). Constantele `LINIE_IMPLICITA_M`, `LINIE_MAX_M`, `LEGAT_MAX_M` sunt în cod.
 - `verifica_reglaje.py::distributie_culori`: elementele `scos_din_uz` nu sunt rețea (nici în procent, nici în predicții); se întorc separat ca `scoase_din_uz` (`docs/calibrare.md`).
+
+## Ștergere de către om (etapa 34; `docs/etapa-34-stergere-om.md`)
+- `stergere.py`: `Stergere._stergibil(eid)`, `_grup_stergere(tinta)`, `_stergere_om(event, trace)`. Ramura `tip == "stergere_om"` din `model.py::apply_event` vine înaintea extracției (nu cere `status`). Decizia `sters`, eticheta `stergere`; elementele șterse primesc `retras: True` + `sters*` în `istoric`, ies din `predictii`/`pinuri`/`net`, iar geometria (și forma elementului aplicat) rămâne în `self.retrase`.
+- `snapshot()` dă `stergibil` și `stergere_n` pe fiecare feature; `_publica` dă `stergibil`, `sters`, `sters_data`, `sters_motiv`.
+- `verifica_reglaje.py::distributie_model(m, data)` (extras din `distributie_culori`): elementele șterse nu se numără.
