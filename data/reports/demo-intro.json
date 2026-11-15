@@ -11,11 +11,15 @@
   {
     "id": "intro-2",
     "titlu": "Sens giratoriu, fire mutate",
-    "descriere": "Firele mutate la sensul giratoriu de pe Șoseaua Principală: traseul nou apare, cel vechi se scoate.",
+    "descriere": "Fire mutate doar din text, la sensul giratoriu Crinului × Liviu Rebreanu: zona de 55 m se marchează, firele vechi apar «demontat probabil», iar traseul nou pe Strada 1 Mai și Liviu Rebreanu se aplică.",
     "sursa": "mentenanta",
-    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0415\nData: 2026-09-19\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: 5481763 → 6374339\nCoordonate: -\nAdresa: Șoseaua Principală\nConstatare: Firul de la nodul 5481763 mutat pe nodul 6374339 la sensul giratoriu, traseul vechi scos.\nStatus: executat\n",
-    "data_moment": "2026-09-19",
-    "focus": null
+    "text": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0424\nData: 2026-10-10\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: -\nCoordonate: -\nAdresa: intersecția Strada Crinului cu Strada Liviu Rebreanu\nConstatare: Ca urmare a construirii sensului giratoriu de la intersecția Strada Crinului cu Strada Liviu Rebreanu, rețeaua aeriană JT a fost mutată pe Strada 1 Mai.\nStatus: executat\n",
+    "data_moment": "2026-10-10",
+    "focus": {
+      "lat": 44.283675,
+      "lon": 26.062802,
+      "zoom": 17
+    }
   },
   {
     "id": "intro-3",

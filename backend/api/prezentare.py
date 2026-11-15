@@ -32,7 +32,8 @@ def eticheta_origine(origine: str | None) -> str | None:
 
 
 def _pas(out: dict, nume: str) -> dict:
-    return next((p.get("rezultat") or {} for p in out.get("pasi", []) if p.get("nume") == nume), {})
+    # ultimul pas cu numele dat: la mutare_fire, a doua geocodare (intersecția) o rafinează pe prima (mijlocul străzii)
+    return next((p.get("rezultat") or {} for p in reversed(out.get("pasi", [])) if p.get("nume") == nume), {})
 
 
 def standardizare(ev: dict, out: dict, cod: str | None = None) -> dict:
@@ -67,8 +68,11 @@ def standardizare(ev: dict, out: dict, cod: str | None = None) -> dict:
                "text": f"{cs.get('strada')}: fereastră de {round((cs.get('pana_la_m') or 0) - (cs.get('de_la_m') or 0))} m, "
                        f"{len(cs.get('candidati') or [])} găsiți" + (", ales cel mai apropiat" if cs.get("ales") else "")}
     elif geo:
-        loc = {"sursa": sursa, "precizie_m": geo.get("precizie_m"), "metoda": geo.get("metoda"), "indiciu": None,
-               "text": f"Locație din adresă, ±{round(geo['precizie_m'])} m" if geo.get("precizie_m") is not None else "Locație din adresă"}
+        ix = geo.get("intersectie") or {}
+        loc = {"sursa": sursa or ("intersectie" if ix else None), "precizie_m": geo.get("precizie_m"), "metoda": geo.get("metoda"),
+               "indiciu": None,
+               "text": (f"Intersecția {ix.get('strada_1')} cu {ix.get('strada_2')}" if ix else "Locație din adresă")
+                       + (f", ±{round(geo['precizie_m'])} m" if geo.get("precizie_m") is not None else "")}
     elif ref.get("coordonate"):
         loc = {"sursa": sursa or "coordonate", "precizie_m": None, "metoda": "text", "indiciu": None,
                "text": "Coordonate date în text"}

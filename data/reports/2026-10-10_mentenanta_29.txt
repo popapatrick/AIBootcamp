@@ -1,0 +1,11 @@
+DATE FICTIVE
+FIȘĂ DE LUCRARE – MENTENANȚĂ
+Nr. fișă: M-2026-0424
+Data: 2026-10-10
+Echipa: mentenanta
+Tip lucrare: mutare fire, sens giratoriu
+Cod element: -
+Coordonate: -
+Adresa: intersecția Strada Crinului cu Strada Liviu Rebreanu
+Constatare: Ca urmare a construirii sensului giratoriu de la intersecția Strada Crinului cu Strada Liviu Rebreanu, rețeaua aeriană JT a fost mutată pe Strada 1 Mai.
+Status: executat

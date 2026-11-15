@@ -296,6 +296,14 @@
     "tip_asteptat": "verificare"
   },
   {
+    "fisier": "2026-10-10_mentenanta_29.txt",
+    "sursa": "mentenanta",
+    "data": "2026-10-10",
+    "scenariu": null,
+    "element_id_asteptat": null,
+    "tip_asteptat": "mutare_fire"
+  },
+  {
     "fisier": "2026-10-09_racordari_07.txt",
     "sursa": "racordari",
     "data": "2026-10-09",

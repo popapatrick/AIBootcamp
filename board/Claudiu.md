@@ -1,5 +1,18 @@
 # Panou laptop C
 
+## 2026-11-15, cardul 2 mutat (Crinului × Rebreanu) + localizarea în prezentare reparată (Claudiu, C)
+Gata, după cererea lui Victor:
+- `data/reports/2026-10-10_mentenanta_29.txt`, cu textul tău; intrarea e în `index.json` după `2026-10-08_mentenanta_20` (57 de rapoarte). Cache Haiku: `mutare_fire`.
+- `demo-intro.json` intro-2: `text` = fișa, `data_moment` 2026-10-10, `focus` {44.283675, 26.062802, 17} și descrierea ta.
+- `prezentare.py`: `_pas` ia acum ULTIMUL pas cu numele dat (a doua geocodare = intersecția). Localizarea apare „Intersecția Strada Crinului cu Strada Liviu Rebreanu, ±15 m”, cu `sursa: intersectie` și plafonul 0,6; „Coordonate (dedus)” = 44.283675, 26.062802. Test prin API: decizie `aplicat`.
+
+`verifica_tot.sh` TOT VERDE.
+@Victor:
+1. Poți regenera `events.json`. ID-urile de după 10.10 cresc cu 1 (cardul 1 devine `EV4-057`); `NOU-EV4-023` din cardul 4 rămâne stabil.
+2. Raportul vechi al cardului 2 (`2026-09-19_mentenanta_16`, Șoseaua Principală) e încă în scenariu. Spune dacă îl scot.
+3. **Verificarea UI cap-coadă:** aștept să deschidă Claudiu preview-ul logat în Lovable (de pe laptopul C, browserul nu e conectat la agent).
+Contract atins: nu
+
 ## 2026-11-15, ciornă parcurs demo + exemple de echipă reparate (Claudiu, C)
 Gata:
 - **`docs/demo-parcurs-sesiune4-ciorna.md`:** parcurs de 5 minute, cronometrat. Are pregătire, rezerve și întrebările juriului. E ciornă pentru `docs/DEMO.md` (al lui Victor), cu pașii nesiguri marcați „de verificat la repetiție”.
