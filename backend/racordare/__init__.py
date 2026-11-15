@@ -74,6 +74,13 @@ def _treapta_analiza(out, casa, noduri, net, strazi, cfg, sursa, d0):
     out["motiv"] = (f"cel mai apropiat nod e la {d0:.0f} m (peste raza extinsă {r['raza_extinsa_m']} m): "
                     + ("analiza hărții n-a găsit drum pe străzi, linie dreaptă" if ah["fara_drum"] else
                        f"analiza hărții: drum pe străzi de {ales['lungime_m']:g} m"))
+    _lant_din_analiza(out, ah, r)
+    return out
+
+
+def _lant_din_analiza(out, ah, r):
+    """Pune în `out` stâlpii și cablurile din analiza hărții `ah`, tăiate la `max_stalpi_prezisi` (cablul final merge pe stradă până la casă)."""
+    ales = ah["ales"]
     noi, cabluri = ales["stalpi_noi"], [dict(c) for c in ales["cabluri"]]
     if len(noi) > r["max_stalpi_prezisi"]:
         m = r["max_stalpi_prezisi"]
@@ -121,6 +128,15 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict, sursa:
         return _treapta_analiza(out, casa, noduri, net, strazi, cfg, sursa, d0)
     span = median(_lungime(t) for t in tr if len(t) > 1) if tr else 30.0
     drum = _drum_strada(npos, casa, strazi)
+    if not drum and dist_m(npos, casa) > MAX_STRADA_M:
+        # „nu prin case” și la treptele 1-2 (V4): linia dreaptă mai lungă de ~40 m devine drum pe străzi (analiza hărții) de la nod
+        net_m = net if "features" not in net else {"noduri": {i: {"id": i, "lat": p[0], "lon": p[1]} for i, p in noduri}}
+        ah = traseu_pe_strazi(casa, net_m, cfg, sursa=sursa, strazi=strazi, de_la=nid)
+        if ah["ales"] is not None and not ah["fara_drum"]:
+            out["analiza_harta"], out["status"], out["urmeaza_strada"] = ah, "lant", 1.0
+            out["distanta_m"] = ah["ales"]["lungime_m"]
+            out["motiv"] = ((out["motiv"] + "; ") if out["motiv"] else "") + f"analiza hărții: drum pe străzi de {ah['ales']['lungime_m']:g} m în loc de linie dreaptă"
+            return _lant_din_analiza(out, ah, r)
     out["status"] = "lant" if drum else "linie_dreapta"
     out["urmeaza_strada"] = 1.0 if drum else None
     drum = drum or [npos, casa]

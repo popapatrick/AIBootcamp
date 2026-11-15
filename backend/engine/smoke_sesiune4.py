@@ -475,6 +475,132 @@ def teste_analiza_harta() -> None:
     verifica("nod lipsă lângă rețea: fără pas analiza_harta (legături scurte ca înainte)", pas(tn2, "analiza_harta") is None)
 
 
+def teste_mutare_fire_document() -> None:
+    """V4: fire mutate descrise doar în text (fără clic): centrul din intersecție/stradă, zona marcată, traseul nou pe străzi care ocolește zona,
+    aplicat (P1) sau predicție, traseul vechi „demontat probabil” (scos_din_uz, nu șters)."""
+    import copy
+
+    from backend.engine.sesiune2 import _dist_la_linie
+    from backend.engine.zona import zona_ok
+
+    TEXT = ("Ca urmare a construirii sensului giratoriu de la intersecția Șoseaua Principală cu Strada Liviu Rebreanu, rețeaua aeriană JT "
+            "a fost mutată pe Strada Crinului. Lucrare finalizată 10.10.2026.")
+    IX = {"strada_1": "Șoseaua Principală", "strada_2": "Strada Liviu Rebreanu"}
+
+    def mf(i, status="executat", echipa="mentenanta", det=None, text=TEXT, ref=None, model=None):
+        e = ev(i, "2026-10-10", echipa, "mutare_fire", status, ref=ref or {}, det={"motiv_mutare": "sens_giratoriu", **(det or {})}, sursa="formular", inc=0.5)
+        e["text_original"] = text
+        mm = model or mk()
+        return mm, mm.apply_event(e)
+
+    def legaturi(m, t):
+        return [x for x in t["modificari"] if x["element_id"].startswith("MUT-")]
+
+    def geom(m, eid):
+        return m.net["tronsoane"][eid]["puncte"] if eid in m.net["tronsoane"] else m.predictii[eid]["puncte"]
+
+    w = load_weights()
+    cd = w["mutare_fire_document"]
+    # --- exemplul de intro: intersecția + strada nouă, executat de mentenanță
+    m, t = mf("MF-1", det={"intersectie": IX, "strada_noua": "Strada Crinului"})
+    pm, mut = pas(t, "potrivire")["rezultat"], None
+    centru, raza = (pm["centru"]["lat"], pm["centru"]["lon"]), pm["raza_m"]
+    verifica("mutare fire (text): centrul = intersecția geocodată, raza = raza_intersectie_m, sursa intersectie",
+             pm["status"] == "zona" and pm["sursa_centru"] == "intersectie" and raza == cd["raza_intersectie_m"] and abs(centru[0] - 44.282179) < 1e-4
+             and abs(centru[1] - 26.065232) < 1e-4 and pm["strada_noua"] == "Strada Crinului", f"{centru} {raza} {pm['sursa_centru']}")
+    marc = [x for x in t["modificari"] if not x["element_id"].startswith("MUT-")]
+    verifica("mutare fire (text): zonă cu ≥ 1 element marcat, scor ≤ scor_marcat, motiv „Fire mutate”/„Demontat probabil”, nimic șters",
+             len(marc) >= 1 and all(x["scor"] <= w["mutare_fire"]["scor_marcat"] and x["nivel"] in ("de_verificat", "scos_din_uz") for x in marc)
+             and all(x["element_id"] in m.net["noduri"] or x["element_id"] in m.net["tronsoane"] for x in marc), str(len(marc)))
+    mut = legaturi(m, t)
+    verifica("mutare fire (text): ≥ 1 tronson nou MUT-<event>-<n>", len(mut) >= 1 and all(x["tip_element"] == "tronson" for x in mut), str([x["element_id"] for x in mut]))
+    verifica("mutare fire (text): traseul nou nu intră în cercul zonei (niciun segment la ≤ rază de centru)",
+             all(_dist_la_linie(centru, geom(m, x["element_id"])) > raza for x in mut), str([round(_dist_la_linie(centru, geom(m, x["element_id"]))) for x in mut]))
+    ap = [x for x in mut if x["nivel"] == "in_model"]
+    verifica("mutare fire (text): executat de mentenanță -> traseul scurt e aplicat (P1, ≥ 0,50, linie plină), plafon intersectie × factor de lungime",
+             t["decizie"] == "aplicat" and ap and all(x["element_id"] in m.net["tronsoane"] and x["predictie"] is None
+                                                      and x["scor"] >= w["acuratete"]["aplicat_raport_executat"] and x["scor"] <= w["plafon_locatie"]["intersectie"]
+                                                      and x["sursa_locatie"] == "intersectie" for x in ap), str([(x["element_id"], x["scor"]) for x in mut]))
+    old = [x for x in marc if x["nivel"] == "scos_din_uz"]
+    verifica("mutare fire (text): traseul vechi (tronsoane aeriene marcate) trece pe scos_din_uz („demontat probabil”), nu e șters, motiv explicit",
+             old and all(x["tip_element"] == "tronson" and x["element_id"] in m.net["tronsoane"] and "Demontat probabil" in x["motive"][0]["text"] for x in old)
+             and any(s_["ce"] == "scos_din_uz" for s_ in t["schimbari"]), str(len(old)))
+    ah = [p for p in t["pasi"] if p["nume"] == "analiza_harta"]
+    verifica("mutare fire (text): pas analiza_harta pe legătură (ales.traseu, alternative, acuratete, explicatie, evita, legatura)",
+             len(ah) == len(mut) and all(p["rezultat"]["ales"]["traseu"] and "alternative" in p["rezultat"] and p["rezultat"]["explicatie"] and p["rezultat"]["evita"]["raza_m"] == raza
+                                         and p["rezultat"]["legatura"].startswith("MUT-MF-1-") for p in ah), str(len(ah)))
+    strazi_ales = {s_ for p in ah for s_ in p["rezultat"]["ales"]["strazi"]}
+    verifica("mutare fire (text): traseul nou folosește Strada Crinului (există drum pe ea, preferată din document)",
+             "Strada Crinului" in strazi_ales and all(p["rezultat"]["strada_preferata"] == "Strada Crinului" for p in ah), str(sorted(strazi_ales)))
+    ls = [x for x in mut if x["nivel"] == "predictie"]
+    verifica("mutare fire (text): legăturile lungi (scor sub 0,50) rămân predicții punctate, cu traseu, alternative și slaba sub 0,40",
+             ls and all(x["predictie"]["metoda"] == "traseu_pe_strazi" and x["predictie"]["traseu"] and "alternative" in x["predictie"]
+                        and x["predictie"]["slaba"] == (x["scor"] < w["praguri"]["predictie"]) and x["element_id"] not in m.net["tronsoane"] for x in ls),
+             str([(x["element_id"], x["scor"]) for x in ls]))
+    verifica("mutare fire (text): nimic nou în afara zonei de 3 km", all(zona_ok(p[0], p[1], m.net, w)["ok"] for x in mut for p in geom(m, x["element_id"])))
+    m2, t2 = mf("MF-1", det={"intersectie": IX, "strada_noua": "Strada Crinului"})
+    sig = lambda mm, tt: [(x["element_id"], x["nivel"], x["scor"], len(geom(mm, x["element_id"])) if x["element_id"].startswith("MUT-") else 0) for x in tt["modificari"]]
+    verifica("mutare fire (text): determinist (două rulări dau același rezultat)", sig(m, t) == sig(m2, t2))
+
+    # --- fără strada_noua: tot iese un traseu
+    mn, tn = mf("MF-2", det={"intersectie": IX}, text=TEXT.replace("mutată pe Strada Crinului", "mutată"))
+    verifica("mutare fire: fără strada_noua tot iese un traseu nou (fără stradă preferată)",
+             legaturi(mn, tn) and pas(tn, "potrivire")["rezultat"]["strada_noua"] is None
+             and all(p["rezultat"]["strada_preferata"] is None for p in tn["pasi"] if p["nume"] == "analiza_harta"))
+
+    # --- planificat: predicție, nu aplicat; zona rămâne „de verificat"
+    mp, tp = mf("MF-3", "planificat", det={"intersectie": IX, "strada_noua": "Strada Crinului"})
+    lp = legaturi(mp, tp)
+    verifica("mutare fire: status planificat -> traseu nou doar predicție (punctat), nimic aplicat, zona de_verificat",
+             lp and all(x["nivel"] == "predictie" and x["element_id"] not in mp.net["tronsoane"] for x in lp) and tp["decizie"] == "de_verificat"
+             and all(x["nivel"] == "de_verificat" for x in tp["modificari"] if not x["element_id"].startswith("MUT-")), tp["decizie"])
+    ms, ts = mf("MF-4", "semnalat", det={"intersectie": IX})
+    verifica("mutare fire: raport semnalat (nu executat) nu aplică traseul nou",
+             all(x["nivel"] == "predictie" for x in legaturi(ms, ts)) and ts["decizie"] == "de_verificat")
+    mi, ti = mf("MF-5", echipa="investitii", det={"intersectie": IX})
+    verifica("mutare fire: executat de investiții aplică la fel ca mentenanța (P1)", ti["decizie"] == "aplicat" and any(x["nivel"] == "in_model" for x in legaturi(mi, ti)))
+
+    # --- intersecție negăsită -> strada
+    mg, tg = mf("MF-6", det={"intersectie": {"strada_1": "Strada Speranței", "strada_2": "Strada Inexistentă"}})
+    pg = pas(tg, "potrivire")["rezultat"]
+    verifica("mutare fire: intersecție negăsită -> centrul din strada numită (sursa strada, rază dublă), tot marchează o zonă",
+             pg["sursa_centru"] == "strada" and pg["raza_m"] == 2 * cd["raza_intersectie_m"] and tg["decizie"] != "neaplicat" and "intersecția nu a fost găsită" in pg["text_centru"],
+             f"{pg['sursa_centru']} {pg['raza_m']} {tg['decizie']}")
+    # --- nicio stradă -> neaplicat (P3)
+    mz, tz = mf("MF-7", text="S-au mutat firele aeriene din cauza lucrărilor la drum.")
+    verifica("mutare fire: text fără stradă/intersecție/coordonate -> neaplicat, cu motiv", tz["decizie"] == "neaplicat" and not tz["modificari"]
+             and "fără locație" in tz["pasi"][-1]["motive"][0])
+    # --- doar din text (fără detalii.intersectie): regex
+    mt, tt = mf("MF-8")
+    pt = pas(tt, "potrivire")["rezultat"]
+    verifica("mutare fire: doar text_original (fără detalii.intersectie): regex găsește intersecția și strada nouă",
+             pt["sursa_centru"] == "intersectie" and pt["intersectie"]["sursa"] == "regex" and pt["intersectie"]["strada_1"] == "Șoseaua Principală"
+             and pt["strada_noua"] == "Strada Crinului" and pt["strada_noua_sursa"] == "regex" and legaturi(mt, tt), f"{pt['intersectie']} {pt['strada_noua']}")
+    # --- nod din ID (EV4-026-like): zonă din nodul numit, nu neaplicat
+    nid = "5481763"
+    mi2, ti2 = mf("MF-9", ref={"element_id": nid}, text="Firul de la nodul 5481763 mutat la sensul giratoriu.")
+    verifica("mutare fire: doar nodul din ID (fără stradă) -> zonă din nod, sursa id", pas(ti2, "potrivire")["rezultat"]["sursa_centru"] == "id" and ti2["decizie"] != "neaplicat")
+    # --- fără drum de ocolire: legătură fara_drum (linie dreaptă, predicție slabă)
+    w2 = copy.deepcopy(w)
+    w2["mutare_fire_document"]["max_ocolire_m"] = 1
+    m3 = GridModel(weights=w2)
+    m3.traseu_fn = osm.traseu_fn()
+    _, t3 = mf("MF-10", det={"intersectie": IX, "strada_noua": "Strada Crinului"}, model=m3)
+    l3 = legaturi(m3, t3)
+    verifica("mutare fire: niciun drum care ocolește zona -> o legătură fara_drum (linie dreaptă, predicție slabă, de verificat), neaplicată",
+             len(l3) == 1 and l3[0]["predictie"]["fara_drum"] and l3[0]["predictie"]["metoda"] == "linie_dreapta" and l3[0]["nivel"] == "predictie"
+             and l3[0]["predictie"]["slaba"] and t3["decizie"] == "de_verificat", str([(x["element_id"], x["scor"]) for x in l3]))
+    # --- evenimentul real din fixture (EV4-026) nu mai iese neaplicat
+    try:
+        evs = json.load(open("data/events/events.json", encoding="utf-8"))
+        evs = evs if isinstance(evs, list) else evs.get("events", [])
+        e26 = next(e for e in evs if e["event_id"] == "EV4-026")
+        t26 = mk().apply_event(e26)
+        verifica("mutare fire: EV4-026 (doar „Șoseaua Principală” + nodul 5481763) nu mai iese neaplicat", t26["decizie"] != "neaplicat" and t26["modificari"], t26["decizie"])
+    except (OSError, StopIteration):
+        verifica("mutare fire: EV4-026 indisponibil (fixture lipsă)", True)
+
+
 def main() -> None:
     w = load_weights()
     m = mk()
@@ -593,6 +719,7 @@ def main() -> None:
     teste_cautare_strada()
     teste_verificare_om()
     teste_analiza_harta()
+    teste_mutare_fire_document()
 
     ok, tot = sum(OK), len(OK)
     print(f"\nsmoke_sesiune4: {ok}/{tot} OK")

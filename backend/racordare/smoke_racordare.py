@@ -65,6 +65,34 @@ cfg2 = {**cfg, "racordare": {**cfg["racordare"], "max_stalpi_prezisi": 1}}
 r = prezice_lant(casa, net, strada, cfg2)
 ok(len(r["stalpi"]) == 1 and r["ambiguu"] and r["motiv"], r)
 
+# treptele 1-2 „nu prin case” (V4): două străzi legate în L (nici una nu e aproape și de nod, și de casă) -> drum pe străzi, nu linie dreaptă
+lat_m = 1 / 111_320
+L_A = [[la + 5e-5, lo + k * 10 * lon_pas] for k in range(-1, 7)]                    # est, ~60 m, la ~5 m de nod
+L_B = [[la + 5e-5 + k * 10 * lat_m, lo + 60 * lon_pas] for k in range(0, 11)]       # nord de la capătul lui A, ~100 m
+l_strazi = [{"nume": "A", "puncte": L_A}, {"nume": "B", "puncte": L_B}]
+casa_l1 = {"lat": la + 5e-5 + 100 * lat_m, "lon": lo + 63 * lon_pas}                # ~117 m de nod: treapta 1
+ok(dist_m((la, lo), (casa_l1["lat"], casa_l1["lon"])) > 100, "casa în L la > 100 m de nod")
+r = prezice_lant(casa_l1, net, [], cfg)
+ok(r["treapta"] == 1 and r["status"] == "linie_dreapta" and "analiza_harta" not in r, "fără străzi: rămâne linia dreaptă (nu există alternativă)")
+r = prezice_lant(casa_l1, net, l_strazi, cfg)
+ok(r["treapta"] == 1 and r["status"] == "lant" and r["urmeaza_strada"] == 1.0 and r["nod_start"] == r["analiza_harta"]["ales"]["de_la"] and r["analiza_harta"]["ales"]["strazi"] == ["A", "B"], r["motiv"])
+ok(r["distanta_m"] > min(dist_m(p, (casa_l1["lat"], casa_l1["lon"])) for _, p in noduri) and r["cabluri"][-1]["la"] == "casa" and "analiza hărții" in r["motiv"], "drumul pe străzi, mai lung decât linia dreaptă")
+seg_s = [(tuple(u), tuple(v)) for st in l_strazi for u, v in zip(st["puncte"], st["puncte"][1:])]
+from backend.engine import osm as _osm
+d_s = lambda p: min(_osm._proiecteaza(tuple(p), u, v)[1] for u, v in seg_s)
+ok(all(d_s(p) <= 40 for c in r["cabluri"] for p in c["puncte"]) and all(d_s((q["lat"], q["lon"])) <= 15 for q in r["stalpi"]),
+   "cablurile pornesc din stâlp (branșament <= 40 m până la stradă), apoi merg pe străzi; stâlpii noi pe stradă (nicio linie dreaptă prin case)")
+# treapta 2 (nod între raza normală și cea extinsă)
+L_A2 = [[la + 5e-5, lo + k * 10 * lon_pas] for k in range(-1, 13)]
+L_B2 = [[la + 5e-5 + k * 10 * lat_m, lo + 120 * lon_pas] for k in range(0, 21)]
+l2 = [{"nume": "A", "puncte": L_A2}, {"nume": "B", "puncte": L_B2}]
+casa_l2 = {"lat": la + 5e-5 + 200 * lat_m, "lon": lo + 123 * lon_pas}
+r = prezice_lant(casa_l2, net, l2, cfg)
+ok(r["treapta"] == 2 and r["status"] == "lant" and r["analiza_harta"]["ales"]["strazi"] == ["A", "B"] and r["urmeaza_strada"] == 1.0 and "extinsă" in r["motiv"], r)
+# branșamentul scurt (<= 40 m) la casă rămâne drept: casa lângă nod, fără stradă comună -> linie dreaptă, fără analiză
+r = prezice_lant({"lat": la, "lon": lo + 15 * lon_pas}, net, [], cfg)
+ok(r["treapta"] == 1 and r["status"] == "linie_dreapta" and "analiza_harta" not in r, r)
+
 # --- locatie_operator_demo (poziția simulată din textul operatorului), pe străzi OSM reale din cache
 from backend.engine import osm
 

@@ -58,3 +58,7 @@ Pasul apare între `potrivire` și `predictie` (la racordare) sau între `potriv
 - Casă la 800 m sau mai departe de orice stâlp: treapta 4 (doar casa), nu mai linie dreaptă lungă.
 - Branșamentul (stâlp/țintă -> stradă) e o linie dreaptă; poate trece prin case.
 - Calibrare: nicio decizie sau scor din referința de aur nu s-a schimbat; doar cererile de racordare la > 400 m și nodurile lipsă izolate dau rezultate noi.
+
+## Notă V4 (mutare fire din document și racordare pe străzi la treptele 1-2; `docs/etapa-28-mutare-fire-document.md`)
+- `evita` / `preferate` / `exclus` / `de_la` sunt folosite acum de `sesiune2.py::_legaturi_mutare` (fire mutate): câte un apel pe pereche de capete din afara zonei, cu `evita={centru, raza_m}`, `preferate=[strada_noua]`, `exclus` = tot ce e în rază, `de_la` = capătul de plecare, `sursa` = sursa centrului (`intersectie`, `strada`, `coordonate`, `id`). Un pas `analiza_harta` pe legătură, cu `legatura`, `de_la`, `la`, `evita`, `strada_preferata`.
+- Racordare: analiza hărții se folosește și la **treptele 1-2** când ar ieși linie dreaptă mai lungă de 40 m (vezi `docs/etapa-22-racordare-cu-rezerve.md`). Limita „treptele 1-2 folosesc regula veche” de mai sus nu mai e valabilă; rămâne doar branșamentul scurt (≤ 40 m) drept.

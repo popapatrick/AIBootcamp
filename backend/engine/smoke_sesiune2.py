@@ -47,7 +47,7 @@ def main() -> None:
     verifica("mutare_fire: nu șterge nimic", all(snap(m, "2026-10-21", x["element_id"]) for x in marcate))
     prop = [x for x in t["modificari"] if x["nivel"] == "predictie"]
     verifica("mutare_fire: traseu nou propus punctat, neaplicat", len(prop) >= 1 and all(
-        x["predictie"]["metoda"] == "zona_mutata" and x["element_id"] not in m.net["tronsoane"] for x in prop), str(len(prop)))
+        x["predictie"]["metoda"] in ("traseu_pe_strazi", "linie_dreapta") and x["element_id"] not in m.net["tronsoane"] for x in prop), str(len(prop)))   # V4: era „zona_mutata”
     verifica("mutare_fire: schimbari cu de_verificat și predictie",
              {"de_verificat", "predictie"} <= {s["ce"] for s in t["schimbari"]})
     t2 = m.apply_event(ev("M-2", "2026-10-25", "mentenanta", "verificare", "executat", ref={"element_id": marcate[0]["element_id"]},

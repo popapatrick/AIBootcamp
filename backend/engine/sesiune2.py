@@ -18,6 +18,7 @@ from __future__ import annotations
 import math
 import re
 
+from backend.engine import mutare_fire_text as mft
 from backend.engine import scoring as S
 from backend.engine.network import dist_m
 from backend.engine.zona import zona_ok
@@ -29,6 +30,8 @@ TIPURI_NOI = ("nod_lipsa", "racord_nou")
 _CABLU = re.compile(r"\b(tronson\w*|cablu\w*|cabluri\w*|conductor\w*|linia|linie)\b", re.I)
 _STALP = re.compile(r"\b(st[aâ]lp\w*|nod\w*|post\w*)\b", re.I)
 _CU_NUMAR = ("numar", "langa", "vizavi", "intre", "dupa", "inainte")
+MAX_ANCORE = 6         # mutare fire (V4): cel mult atâtea capete din afara zonei se leagă între ele
+MAX_OCOLIRE_M = 1500   # un drum de ocolire mai lung nu se propune (poate fi suprascris prin `mutare_fire_document.max_ocolire_m`)
 
 
 def _dist_la_linie(p: tuple[float, float], puncte: list) -> float:
@@ -469,17 +472,137 @@ class Sesiune2:
             trace["modificari"].append(self._publica(eid, st))
 
     # ------------------------------------------------------------ mutare fire
+    def _centru_mutare(self, event: dict, trace: dict) -> dict | None:
+        """Centrul și raza zonei de mutare. Ordinea: `detalii.centru` > coordonate din raport/clic > intersecția (geocodată,
+        `mutare_fire_document.raza_intersectie_m`) > nodul `referinta.element_id` > strada numită (mijlocul ei, rază dublă).
+        Întoarce {centru, raza, sursa (coordonate|intersectie|id|strada), text, intersectie, strada, geocodare} sau None (fără locație)."""
+        w = self.w
+        det, ref = event.get("detalii") or {}, event.get("referinta") or {}
+        cfg, cfgd = w["mutare_fire"], w["mutare_fire_document"]
+        raza_det = det.get("raza_m")
+        strazi_osm = self._strazi_osm()
+
+        def gata(c, raza, sursa, text, **extra):
+            return {"centru": (c["lat"], c["lon"]), "raza": float(raza_det or raza), "sursa": sursa, "text": text, **extra}
+
+        if det.get("centru"):
+            return gata(det["centru"], cfg["raza_m"], "coordonate", "centrul din raport")
+        c = ref.get("coordonate")
+        if c and not det.get("geocodare"):          # coordonate din text sau clic (cele din geocodarea adresei se refac mai jos)
+            return gata(c, cfg["raza_m"], "coordonate", "coordonatele din raport")
+        ix = mft.intersectie_din_eveniment(event)
+        strada = mft.strada_din_eveniment(event) or (ix["strada_1"] if ix else None)
+        pas_geo = None
+        if ix:
+            try:
+                from backend.geo import geocodeaza
+                g = geocodeaza({"adresa_structurata": {"strada": ix["strada_1"], "reper": ix["strada_2"], "numar": None,
+                                                       "localitate": None, "indiciu": None}}, strazi_osm, w, self.net, self.ancore)
+            except Exception as e:      # fără cache OSM: se continuă cu celelalte surse
+                g = {"status": "necunoscut", "motiv": f"geocodare indisponibilă: {e}"}
+            pas_geo = {"nume": "geocodare", "incredere": g.get("acuratete"), "rezultat": {**{k: v for k, v in g.items() if k != "fereastra"},
+                                                                                         "intersectie": ix}}
+            trace["pasi"].insert(len(trace["pasi"]) - 1, pas_geo)
+            if g.get("status") == "in_afara_zonei":
+                return {"eronat": (g["lat"], g["lon"])}
+            if g.get("status") == "gasit" and self._sursa_din_geocodare(g) == "intersectie":
+                return gata(g, cfgd["raza_intersectie_m"], "intersectie",
+                            f"intersecția {ix['strada_1']} cu {ix['strada_2']} (geocodată, ±{g['precizie_m']:g} m)", intersectie=ix, geocodare=g)
+        eid = (ref.get("element_id") or "").strip()
+        if eid in self.net["noduri"]:
+            n = self.net["noduri"][eid]
+            return gata({"lat": n["lat"], "lon": n["lon"]}, cfg["raza_m"], "id", f"nodul {eid} din raport", intersectie=ix)
+        if strada:
+            try:
+                from backend.geo import geocodeaza
+                g = geocodeaza({"adresa_structurata": {"strada": strada, "numar": None, "localitate": None, "reper": None, "indiciu": None}},
+                               strazi_osm, w, self.net, self.ancore)
+            except Exception as e:
+                g = {"status": "necunoscut", "motiv": f"geocodare indisponibilă: {e}"}
+            if pas_geo is None:
+                trace["pasi"].insert(len(trace["pasi"]) - 1, {"nume": "geocodare", "incredere": g.get("acuratete"),
+                                                              "rezultat": {k: v for k, v in g.items() if k != "fereastra"}})
+            if g.get("status") == "in_afara_zonei":
+                return {"eronat": (g["lat"], g["lon"])}
+            if g.get("status") == "gasit":
+                return gata(g, 2 * cfgd["raza_intersectie_m"], "strada",
+                            f"mijlocul străzii {strada}" + (" (intersecția nu a fost găsită pe hartă)" if ix else ""), intersectie=ix, geocodare=g)
+        return None
+
+    @staticmethod
+    def _strazi_osm() -> list[dict]:
+        from backend.engine import osm
+        return osm.strazi()
+
+    def _ancore_mutare(self, centru, raza: float, in_zona: set) -> list[str]:
+        """Capetele aflate în afara zonei (la > `raza` de centru) ale tronsoanelor aeriene care intră în zonă: cel mult `MAX_ANCORE`, cele mai apropiate."""
+        out = set()
+        for tid, t in self.net["tronsoane"].items():
+            if "subteran" in str(t.get("categorie") or "").casefold() or _dist_la_linie(centru, t["puncte"]) > raza:
+                continue
+            out |= {n for n in t["capete"] if n in self.net["noduri"] and n not in in_zona
+                    and dist_m(centru, (self.net["noduri"][n]["lat"], self.net["noduri"][n]["lon"])) > raza}
+        return sorted(out, key=lambda n: (dist_m(centru, (self.net["noduri"][n]["lat"], self.net["noduri"][n]["lon"])), n))[:MAX_ANCORE]
+
+    def _legaturi_mutare(self, event: dict, centru, raza: float, sursa_plafon: str, strada_noua: str | None, ancore: list[str], in_zona: set) -> list[dict]:
+        """Legăturile noi dintre ancore, pe străzi care ocolesc zona (`traseu_pe_strazi(..., evita=zona, preferate=[strada_noua])`).
+
+        Se calculează drumul pentru fiecare pereche de ancore și se păstrează un arbore de lungime minimă (Kruskal, drumuri <= `MAX_OCOLIRE_M`):
+        ancorele rămân conectate fără legături în plus. Dacă niciun drum nu ocolește zona, o singură legătură `fara_drum` (linie dreaptă, de verificat)
+        între cele mai apropiate două ancore. Întoarce [{de_la, la, ah, fara_drum}] în ordine determinată."""
+        from backend.engine.analiza_harta import traseu_pe_strazi
+        w = self.w
+        pos = lambda n: (self.net["noduri"][n]["lat"], self.net["noduri"][n]["lon"])
+        evita = {"centru": centru, "raza_m": raza}
+        pref = [strada_noua] if strada_noua else None
+        limita = float((w.get("mutare_fire_document") or {}).get("max_ocolire_m", MAX_OCOLIRE_M))
+        muchii = []
+        for i, a in enumerate(ancore):
+            for b in ancore[i + 1:]:
+                ah = traseu_pe_strazi(pos(b), self.net, w, evita=evita, preferate=pref, exclus=in_zona, sursa=sursa_plafon, de_la=a)
+                if ah["ales"] and not ah["fara_drum"] and ah["ales"]["lungime_m"] <= limita:
+                    muchii.append((ah["ales"]["lungime_m"], a, b, ah))
+        muchii.sort(key=lambda x: (x[0], x[1], x[2]))
+        grup = {a: a for a in ancore}
+
+        def rad(x):
+            while grup[x] != x:
+                grup[x] = grup[grup[x]]
+                x = grup[x]
+            return x
+        out = []
+        for L, a, b, ah in muchii:
+            if rad(a) != rad(b):
+                grup[rad(a)] = rad(b)
+                out.append({"de_la": a, "la": b, "ah": ah, "fara_drum": False})
+        if not out and len(ancore) >= 2:
+            a, b = min(((dist_m(pos(x), pos(y)), x, y) for i, x in enumerate(ancore) for y in ancore[i + 1:]))[1:]
+            ah = traseu_pe_strazi(pos(b), self.net, w, exclus=in_zona, sursa=sursa_plafon, de_la=a, strazi=[])     # linie dreaptă, scor fara_drum
+            ah["explicatie"][1] = "Nu există drum pe străzi care să ocolească zona; linie dreaptă, de verificat."
+            out.append({"de_la": a, "la": b, "ah": ah, "fara_drum": True})
+        return out
+
     def _mutare_fire(self, event: dict, trace: dict):
+        """Fire mutate (V4): marchează zona, propune/aplică traseul nou pe străzi care ocolește zona și, dacă e aplicat, trece traseul vechi pe „demontat probabil".
+
+        Centrul vine din `_centru_mutare`; zona = nodurile și tronsoanele la <= rază (cel mult `mutare_fire.max_elemente`, cele mai apropiate)
+        devin `de_verificat`, scor <= `scor_marcat`. Traseul nou: `_legaturi_mutare`; scorul legăturii = min(scorul propunerii, `plafon_locatie[sursa]` ×
+        factorul de lungime al analizei hărții); aplicat (tronson `MUT-<event>-<n>` în rețea) doar dacă raportul e executat de mentenanță/investiții și
+        scorul >= `acuratete.aplicat_raport_executat`; altfel predicție (punctată; sub `praguri.predictie` „predicție slabă", sub `racordare.prag_afisare`
+        nu se creează). Dacă ≥ 1 legătură e aplicată, tronsoanele aeriene marcate trec `scos_din_uz` („demontat probabil", nu se șterg)."""
         w, data = self.w, event["data"]
         cfg = w["mutare_fire"]
-        det, ref = event.get("detalii") or {}, event.get("referinta") or {}
-        c = det.get("centru") or ref.get("coordonate")
-        if not c:
-            return self._neaplicat(event, trace, "Mutare de fire fără locație: nu putem marca nicio zonă (dă coordonate sau clic pe hartă).")
-        if not zona_ok(c["lat"], c["lon"], self.net, w)["ok"]:
-            return self._eronat(event, trace, None, c["lat"], c["lon"])
-        centru = (c["lat"], c["lon"])
-        raza = float(det.get("raza_m") or cfg["raza_m"])
+        det = event.get("detalii") or {}
+        ctr = self._centru_mutare(event, trace)
+        if ctr is None:
+            return self._neaplicat(event, trace, "Mutare de fire fără locație: nicio stradă, intersecție, nod sau coordonate în raport; "
+                                                 "nu putem marca nicio zonă (dă coordonate sau numește strada).")
+        if "eronat" in ctr:
+            return self._eronat(event, trace, None, *ctr["eronat"])
+        if not zona_ok(ctr["centru"][0], ctr["centru"][1], self.net, w)["ok"]:
+            return self._eronat(event, trace, None, *ctr["centru"])
+        centru, raza, sursa = ctr["centru"], ctr["raza"], ctr["sursa"]
+        sursa_plafon = {"coordonate": "coordonate", "id": "id", "intersectie": "intersectie", "strada": "strada"}[sursa]
         motiv = det.get("motiv_mutare") or "mutare fire"
         f = S.fiabilitate(event, w)
         gasite = []
@@ -494,78 +617,118 @@ class Sesiune2:
                 gasite.append((d, eid))
         gasite.sort()
         trunchiat = len(gasite) > cfg["max_elemente"]
+        in_zona = {eid for _, eid in gasite}                     # tot ce e în rază (inclusiv ce depășește plafonul de marcare)
         gasite = gasite[:cfg["max_elemente"]]
+        sn_text, sn_sursa = mft.strada_noua_din_eveniment(event)
+        strada_noua = mft.nume_canonic(sn_text, self._strazi_osm()) if sn_text else None
         trace["pasi"][-1] = {"nume": "potrivire", "incredere": 1.0 if gasite else 0.0,
                              "rezultat": {"status": "zona" if gasite else "absent_din_model", "metoda": "zona",
-                                          "centru": {"lat": centru[0], "lon": centru[1]}, "raza_m": raza,
+                                          "centru": {"lat": centru[0], "lon": centru[1]}, "raza_m": raza, "sursa_centru": sursa,
+                                          "text_centru": ctr["text"], "intersectie": ctr.get("intersectie"),
+                                          "strada_noua": strada_noua, "strada_noua_text": sn_text, "strada_noua_sursa": sn_sursa,
                                           "elemente": len(gasite), "trunchiat": trunchiat, "motiv_mutare": motiv,
                                           "calitate": 1.0 if gasite else 0.0, "semnale": [], "candidati": [], "motiv": ""}}
         if not gasite:
             return self._neaplicat(event, trace, f"Niciun element al rețelei în raza de {raza:g} m: nimic de marcat.")
         trace["pasi"].append({"nume": "predictie", "rezultat": None, "incredere": None})
         marcate = {eid for _, eid in gasite}
+        # --- traseul nou: legături pe străzi care ocolesc zona
+        ancore = self._ancore_mutare(centru, raza, in_zona)
+        legaturi = self._legaturi_mutare(event, centru, raza, sursa_plafon, strada_noua, ancore, in_zona)
+        ex_teren = self._executat_teren(event)
+        planificate, aplicate, slabe, sub_prag = [], [], [], []
+        for i, lg in enumerate(legaturi, 1):
+            ah = lg["ah"]
+            ales = ah["ales"]
+            pe_strazi = not lg["fara_drum"]
+            urm = 1.0 if pe_strazi else None
+            sp_baza, factori = S.scor_propunere(event, cfg["calitate_propunere"], w, urm)
+            sp = round(min(sp_baza, ah["acuratete"]), 3)         # plafon[sursa] × factor de lungime (analiza hărții)
+            niv = S.decizie(sp, w, planificat=event["status"] == "planificat", executat_teren=ex_teren)
+            if niv == "in_model" and not ex_teren:
+                niv = "predictie"                                # doar raportul executat de teren aplică traseul nou
+            slaba = niv == "de_verificat"
+            sid = f"MUT-{event['event_id']}-{i}"
+            lg.update(sid=sid, sp=sp, niv="predictie" if slaba else niv, slaba=slaba, factori=factori, urm=urm)
+            if slaba and sp < w["racordare"]["prag_afisare"]:
+                sub_prag.append(sid)
+                continue
+            (aplicate if niv == "in_model" else planificate).append(lg)
+            if slaba:
+                slabe.append(sid)
+            # pasul analizei hărții, câte unul pe legătură (aceeași formă ca la racordare + câmpuri de legătură)
+            trace["pasi"].insert(len(trace["pasi"]) - 1, {"nume": "analiza_harta", "incredere": ah["acuratete"], "rezultat": {
+                **ah, "legatura": sid, "de_la": lg["de_la"], "la": lg["la"], "evita": {"centru": {"lat": centru[0], "lon": centru[1]}, "raza_m": raza},
+                "strada_preferata": strada_noua}})
+        demontat = bool(aplicate)
+        # --- marcarea zonei (după decizie: tronsoanele aeriene trec „demontat probabil" dacă traseul nou e aplicat)
         for d, eid in gasite:
             cur = self._curent(eid)
             eff = self._eff(cur, data)
             q = 1 - 0.5 * d / raza
             delta = w["scor"]["contradictie"] * f * q
             scor = min(S.clamp(eff + delta, w), cfg["scor_marcat"])
-            t = (f"Mutare de fire în zonă ({motiv}, raza {raza:g} m, la {d:.0f} m de centru, fiabilitate {f}): "
-                 f"nu mai știm sigur că elementul e aici. De verificat în teren.")
-            st = self._pune(eid, cur["tip_element"], data, nivel="de_verificat", scor=scor, predictie=None,
+            el = self._elemente()[eid]
+            vechi = demontat and el["tip_element"] == "tronson" and "subteran" not in str(el.get("categorie") or "").casefold()
+            if vechi:
+                t = (f"Demontat probabil: fire mutate în zonă ({motiv}, raza {raza:g} m, la {d:.0f} m de centru); traseul nou "
+                     f"({', '.join(x['sid'] for x in aplicate)}) e aplicat, traseul vechi nu mai e folosit. Rămâne în model, de confirmat în teren.")
+            else:
+                t = (f"Mutare de fire în zonă ({motiv}, raza {raza:g} m, la {d:.0f} m de centru, fiabilitate {f}): "
+                     f"nu mai știm sigur că elementul e aici. De verificat în teren.")
+            st = self._pune(eid, cur["tip_element"], data, nivel="scos_din_uz" if vechi else "de_verificat", scor=scor, predictie=None,
                             motive=self._motiv(eid, t, scor - eff, event))
             trace["modificari"].append(self._publica(eid, st))
-        # ancore: nodurile din afara zonei legate de tronsoane marcate
-        ancore = set()
-        for eid in marcate:
-            el = self.net["tronsoane"].get(eid)
-            if el:
-                ancore |= {n for n in el["capete"] if n and n not in marcate}
-        ancore = sorted(ancore, key=lambda n: dist_m(centru, (self.net["noduri"][n]["lat"], self.net["noduri"][n]["lon"])))[:4]
-        ancore.sort(key=lambda n: math.atan2(self.net["noduri"][n]["lat"] - centru[0], self.net["noduri"][n]["lon"] - centru[1]))
-        perechi = ([(ancore[i], ancore[(i + 1) % len(ancore)]) for i in range(len(ancore))] if len(ancore) >= 3
-                   else [(ancore[0], ancore[1])] if len(ancore) == 2 else [])
-        propuneri, fara = 0, []
-        for i, (a, b) in enumerate(perechi, 1):
-            na, nb = self.net["noduri"][a], self.net["noduri"][b]
-            pa, pb = (na["lat"], na["lon"]), (nb["lat"], nb["lon"])
-            r = self.traseu_fn(pa, pb) if self.traseu_fn else None
-            urm = r["urmeaza_strada"] if r else None
-            puncte = r["puncte"] if r else [pa, pb]
-            sp, factori = S.scor_propunere(event, cfg["calitate_propunere"], w, urm)
-            if not r:
-                sp = round(sp * cfg["factor_fara_strada"], 3)
-            sp = min(sp, round(S.plafon("analiza_harta", w), 3))     # traseul propus vine din analiza hărții
-            if sp < w["praguri"]["predictie"]:
-                fara.append((a, b, sp))
-                continue
-            sid = f"MUT-{event['event_id']}-{i}"
-            self.predictii[sid] = {"puncte": puncte, "metoda": "traseu_strada_osm" if r else "linie_dreapta",
-                                   "capete": (a, b), "urmeaza": urm,
-                                   "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in puncte]}}
-            txt = (f"Traseu propus între {a} și {b} după mutarea firelor ({motiv}): scor {sp}"
-                   + (f", urmează strada {urm}" if urm is not None else ", fără stradă (linie dreaptă)")
-                   + ". Neaplicat până la confirmarea din teren.")
-            st = self._pune(sid, "tronson", data, nivel="predictie", scor=sp, ultima_verificare=None,
-                            sursa_locatie="analiza_harta", t0=False,
-                            motive=[{"text": txt + " " + S.text_plafon("analiza_harta", w), "efect": 0.0, "eveniment": event["event_id"], "data": data}],
-                            predictie={"metoda": "zona_mutata", "urmeaza_strada": urm,
-                                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp})
-            trace["modificari"].append(self._publica(sid, st))
-            propuneri += 1
+        # --- elementele noi: aplicate în model sau predicții
+        for lg in aplicate + planificate:
+            ah, ales, sid, sp = lg["ah"], lg["ah"]["ales"], lg["sid"], lg["sp"]
+            pts = [tuple(p) for p in ales["traseu"]]
+            metoda = "linie_dreapta" if lg["fara_drum"] else "traseu_pe_strazi"
+            strazi_t = ", ".join(ales["strazi"]) if ales["strazi"] else "fără stradă numită"
+            txt = (f"Traseu nou între {lg['de_la']} și {lg['la']} după mutarea firelor ({motiv}): "
+                   + (f"pe {strazi_t}, {ales['lungime_m']:g} m, ocolește zona de {raza:g} m" if not lg["fara_drum"]
+                      else "nu există drum pe străzi care să ocolească zona; linie dreaptă, de verificat")
+                   + (f"; preferat {strada_noua} (din document)" if strada_noua else "")
+                   + f". Scor {sp} (fiabilitate {lg['factori']['fiabilitate_sursa']}). " + S.text_plafon(sursa_plafon, w) + " "
+                   + " ".join(ah["explicatie"][:2]))
+            spec = {"puncte": pts, "metoda": metoda, "capete": (lg["de_la"], lg["la"]), "urmeaza": lg["urm"], "sursa_locatie": sursa_plafon,
+                    "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}
+            if lg in aplicate:
+                self._adauga_in_model([(sid, "tronson", spec)], event, sp,
+                                      [txt + f" Raport executat, scor peste {w['acuratete']['aplicat_raport_executat']}: aplicat în rețea."], None)
+            else:
+                self.predictii[sid] = {**spec, "metoda": metoda}
+                self._pune(sid, "tronson", data, nivel="predictie", scor=sp, ultima_verificare=None, sursa_locatie=sursa_plafon, t0=False,
+                           motive=[{"text": txt + (" Predicție slabă (punctată)." if lg["slaba"] else "") + " Neaplicat până la confirmarea din teren.",
+                                    "efect": 0.0, "eveniment": event["event_id"], "data": data}],
+                           predictie={"metoda": metoda, "urmeaza_strada": lg["urm"], "propunere": {"proprietate": "element_nou", "valoare": sid},
+                                      "scor_propunere": sp, "slaba": lg["slaba"], "fara_drum": lg["fara_drum"], "traseu": ales["traseu"],
+                                      "alternative": ah["alternative"], "lungime_m": ales["lungime_m"], "strazi": ales["strazi"]})
+            trace["modificari"].append(self._publica(sid, self._curent(sid)))
+        propuneri = len(aplicate) + len(planificate)
         if propuneri:
-            trace["pasi"][-1] = {
-                "nume": "predictie", "incredere": None,
-                "rezultat": {"metoda": "zona_mutata", "propuneri": propuneri, "ancore": ancore}}
-        elif perechi:
-            trace["pasi"][-1]["rezultat"] = {"metoda": "zona_mutata", "propuneri": 0,
-                                             "motiv": "scorul propunerilor sub pragul de predicție"}
+            trace["pasi"][-1] = {"nume": "predictie", "incredere": None,
+                                 "rezultat": {"metoda": "zona_mutata", "propuneri": propuneri, "aplicate": len(aplicate), "slabe": len(slabe),
+                                              "ancore": ancore, "strada_noua": strada_noua,
+                                              "legaturi": [{"element_id": x["sid"], "de_la": x["de_la"], "la": x["la"], "scor": x["sp"],
+                                                            "lungime_m": x["ah"]["ales"]["lungime_m"], "strazi": x["ah"]["ales"]["strazi"],
+                                                            "fara_drum": x["fara_drum"], "nivel": "in_model" if x in aplicate else "predictie"}
+                                                           for x in aplicate + planificate]}}
+        elif legaturi or ancore:
+            trace["pasi"][-1]["rezultat"] = {"metoda": "zona_mutata", "propuneri": 0, "ancore": ancore,
+                                             "motiv": "scorul legăturilor sub pragul de afișare" if legaturi else "niciun drum pe străzi între capetele din afara zonei"}
         n = len(gasite)
-        mesaj = (f"{n} elemente din raza de {raza:g} m marcate «de verificat» ({motiv})"
-                 + (f" (plafon {w['mutare_fire']['max_elemente']}, restul nemarcate)" if trunchiat else "")
-                 + (f"; {propuneri} traseu(ri) nou(i) propus(e) pe străzi, neaplicate." if propuneri
-                    else "; nu s-a putut propune traseu (fără străzi apropiate sau ancore)."))
-        self._scor_pas(trace, "de_verificat", {"nivel": "de_verificat", "elemente_marcate": n, "propuneri": propuneri}, [mesaj])
+        mesaj = (f"{n} elemente din raza de {raza:g} m ({ctr['text']}) marcate «de verificat» ({motiv})"
+                 + (f" (plafon {cfg['max_elemente']}, restul nemarcate)" if trunchiat else "")
+                 + (f"; {len(aplicate)} traseu(ri) nou(i) aplicat(e) pe străzi care ocolesc zona, traseul vechi trece pe «demontat probabil»" if aplicate else "")
+                 + (f"; {len(planificate)} traseu(ri) nou(i) propus(e) pe străzi, neaplicat(e)" if planificate else "")
+                 + ("" if propuneri else "; nu s-a putut propune traseu (fără capete în afara zonei sau fără străzi)")
+                 + (f"; sub pragul de afișare: {', '.join(sub_prag)}" if sub_prag else "") + ".")
+        if aplicate:
+            self._scor_pas(trace, "aplicat", {"nivel": "in_model", "elemente_marcate": n, "propuneri": propuneri, "aplicate": len(aplicate),
+                                              "scos_din_uz": sum(1 for _, e in gasite if self._curent(e)["nivel"] == "scos_din_uz")}, [mesaj])
+        else:
+            self._scor_pas(trace, "de_verificat", {"nivel": "de_verificat", "elemente_marcate": n, "propuneri": propuneri}, [mesaj])
 
     # ------------------------------------------------------------ activ demontat
     def _demontat(self, event: dict, m: dict, trace: dict):
@@ -692,6 +855,8 @@ class Sesiune2:
         # treapta 3 = analiza hărții: factorul vine din ea (scade cu lungimea drumului; `fara_drum` dacă nu e drum pe străzi)
         f_tr = (r["factor_analiza"] if treapta == 3 and ah and ah["ales"] else
                 {1: 1.0, 2: cfg["factor_raza_extinsa"], 3: cfg["factor_linie_dreapta_lunga"], 4: cfg["factor_doar_casa"]}[treapta])
+        if treapta <= 2 and pe_strazi:
+            f_tr *= ah["factor"]        # treptele 1-2 pe străzi (V4): ca la analiza hărții, scorul scade cu lungimea drumului
         sp = round(sp * f_tr, 3)
         if sursa_loc == "operator_simulat":
             sp = round(sp * cfg["factor_locatie_operator"], 3)

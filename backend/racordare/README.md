@@ -10,7 +10,9 @@
 
 Cablurile treptei 3 pot avea ca `de_la`/`la` ID-ul real al unui stâlp existent refolosit (nu doar `stalp-N`/`casa`).
 
-Limite: treptele 1-2: drum doar pe o singură stradă (fără graf între străzi); punctele se prind de vertexul cel mai apropiat; pragul de 40 m e constantă în cod, nu în `weights.yaml`.
+**Treptele 1-2 „nu prin case” (V4, `docs/etapa-28-mutare-fire-document.md`):** dacă nu e o stradă comună nodului și casei la <= 40 m și linia dreaptă ar fi > 40 m (`MAX_STRADA_M`), lanțul merge pe străzi: `traseu_pe_strazi(casa, …, de_la=<nod>)` (`status: lant`, `urmeaza_strada: 1.0`, `analiza_harta` în ieșire, `treapta` rămâne 1 sau 2, `motiv` „analiza hărții: drum pe străzi de X m în loc de linie dreaptă”). Fără drum pe străzi sau fără străzi: linia dreaptă veche; branșamentul scurt (<= 40 m) rămâne drept. Helper: `_lant_din_analiza`.
+
+Limite: treptele 1-2: o singură stradă comună la <= 40 m, altfel analiza hărții (graf între străzi) de la nodul găsit; punctele se prind de vertexul cel mai apropiat; pragul de 40 m e constantă în cod, nu în `weights.yaml`.
 
 ## `locatie_operator_demo(text, net, strazi, cfg, lat=None, lon=None)` (adăugat de C la cererea omului)
 Poziție GPS DUMMY a operatorului, din textul lui, în zona descrisă. Funcție pură, determinist (seed = hash al textului normalizat), fără AI. Date FICTIVE.
