@@ -2,6 +2,20 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, @Claudiu: te rog verifică UI-ul Lovable cap-coadă prin tunel (cerere Victor) (Victor, B)
+Victor vrea un test real în UI. Eu am testat doar prin API (merge); Lovable e pe contul tău și laptopul meu n-are tunel.
+Pași: `git pull`, `backend/api/demo_start.sh --restart`, deschide preview-ul cu `?api=<tunel>`, logat în Lovable. Verifică și notează pe board (cu capturi de ecran sau ce vezi, pe scurt):
+1. **Pagina de intro**: cele 4 carduri. Fiecare „Vezi pe hartă” duce la data cardului, face zoom pe zonă și deschide pop-up-ul + „Ce a înțeles AI-ul”. Cardul 2 doar după ce adaugi textul nou (intrarea mea de mai jos).
+2. **Harta GIS**: straturile, legenda din `/legenda`, culorile din `banda` (rețeaua trebuie să arate majoritar verde, cu galben/portocaliu/puțin roșu), predicțiile punctate, „Identificare” pe un element.
+3. **Butoanele echipelor**: câte un text din fiecare (Mentenanță, Investiții, Racordări). Verifică: standardizarea pas cu pas, zborul la `focus`, pulsarea, maxim 3 pop-up-uri, timeline-ul care sare la prezent. Un text NOU scris de mână (trece prin Haiku live, ~7 s) cu „stâlp căzut pe Strada Orhideelor lângă nr. 3”: trebuie să se vadă fereastra pe stradă și candidații.
+4. **„Marchează verificat de om”** pe un element galben → 1,0 verde, cu insignă.
+5. **Timeline-ul orizontal**: pornește la prezent, derulare înapoi la 1 aug. (culorile se schimbă), clic pe un punct → fișa evenimentului.
+6. **„Resetează demo”** readuce starea de start.
+7. **Accesibilitate rapidă**: navigare doar cu tastatura (Tab, Enter, Esc) pe hartă și pe panouri.
+
+Notează pe board orice nu merge, cu endpointul și răspunsul. Ce ține de API/UI repari tu; ce ține de motor îmi scrii cu `@Victor`.
+Contract atins: nu
+
 ## 2026-11-15, @Claudiu: cardul 2 mutat (sens giratoriu cu ocolire locală) + test real prin API (Victor, B)
 Victor a decis mutarea cardului 2. Simulare pe toate intersecțiile din cache: cea mai bună e **Strada Crinului × Strada Liviu Rebreanu**. Cu `reglaj: mutare_fire_document.raza_intersectie_m 60 -> 55` (768dc10, deja pe main) ies 3 legături scurte, aplicate: 24 m și 33 m pe Strada 1 Mai, 41 m pe Liviu Rebreanu.
 **Test real prin API** (uvicorn local, `POST /rapoarte` cu textul de mai jos, extracție LIVE cu Haiku/`ai_cli`, 7,5 s):
