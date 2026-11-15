@@ -642,16 +642,26 @@ class Sesiune2:
             from backend.racordare import prezice_lant
         except ImportError:
             return self._scor_pas(trace, "neaplicat", {"nivel": None}, ["Modulul backend.racordare lipsește."])
-        r = prezice_lant({"lat": loc["lat"], "lon": loc["lon"]}, self.net, osm.strazi(), w)
+        # sursa locației casei (coordonate/clic -> coordonate, adresă -> tipul geocodării, operator simulat -> strada);
+        # stâlpii și cablurile prezise vin din analiza hărții
+        sursa_casa = ("coordonate" if sursa_loc in ("clic", "text") else
+                      self._sursa_din_geocodare(det["geocodare"]) if sursa_loc == "adresa" else "strada")
+        r = prezice_lant({"lat": loc["lat"], "lon": loc["lon"]}, self.net, osm.strazi(), w, sursa=sursa_casa)
+        ah = r.get("analiza_harta")          # treapta 3: analiza hărții (drum pe străzi); None la treptele 1, 2 și 4 fără analiză
+        pe_strazi = bool(ah and ah["ales"] and not ah["fara_drum"])
+        metoda_r = "traseu_pe_strazi" if pe_strazi else "linie_dreapta" if ah and ah["ales"] else "lant_racordare"
         trace["pasi"][-1] = {"nume": "predictie", "incredere": r.get("urmeaza_strada"),
-                             "rezultat": {"metoda": "lant_racordare", "sursa_locatie": sursa_loc, **{k: r.get(k) for k in
+                             "rezultat": {"metoda": metoda_r, "sursa_locatie": sursa_loc, **{k: r.get(k) for k in
                                           ("status", "nod_start", "distanta_m", "urmeaza_strada", "ambiguu", "motiv")},
                                           "stalpi": len(r.get("stalpi") or [])}}
+        if ah:      # pas nou: ce a „văzut" modelul pe hartă (UI-ul desenează traseul, alternativele și stâlpii noi)
+            trace["pasi"].insert(len(trace["pasi"]) - 1, {"nume": "analiza_harta", "incredere": ah["acuratete"], "rezultat": ah})
         # safeguard: stâlpii prezicși care ar ieși din zona prototipului se taie (lanțul se oprește la primul din afară)
         taiat = False
         for i_, st_ in enumerate(r.get("stalpi") or []):
             if not zona_ok(st_["lat"], st_["lon"], self.net, w)["ok"]:
-                r = {**r, "stalpi": r["stalpi"][:i_], "cabluri": r["cabluri"][:i_]}
+                j_ = next((k for k, c in enumerate(r["cabluri"]) if c["la"] == f"stalp-{st_['ordine']}"), i_)
+                r = {**r, "stalpi": r["stalpi"][:i_], "cabluri": r["cabluri"][:j_]}
                 taiat = True
                 break
         treapta = int(r.get("treapta") or (4 if r["status"] == "fara_nod" or not r.get("nod_start") else 1))
@@ -659,10 +669,6 @@ class Sesiune2:
         ev = event["event_id"]
         nume = {f"stalp-{s['ordine']}": f"NOU-{ev}-S{s['ordine']}" for s in r["stalpi"]}
         nume["casa"] = f"NOU-{ev}-casa"
-        # sursa locației casei (coordonate/clic -> coordonate, adresă -> tipul geocodării, operator simulat -> strada);
-        # stâlpii și cablurile prezise vin din analiza hărții
-        sursa_casa = ("coordonate" if sursa_loc in ("clic", "text") else
-                      self._sursa_din_geocodare(det["geocodare"]) if sursa_loc == "adresa" else "strada")
         specs = []
         for s in r["stalpi"]:
             specs.append((nume[f"stalp-{s['ordine']}"], "nod", {"punct": (s["lat"], s["lon"]), "sursa_locatie": "analiza_harta",
@@ -674,7 +680,7 @@ class Sesiune2:
             a, b = (nume.get(cab["de_la"], cab["de_la"]), nume.get(cab["la"], cab["la"]))
             pts = [tuple(p) for p in cab["puncte"]]
             specs.append((f"NOU-{ev}-L{k + 1}", "tronson", {
-                "puncte": pts, "metoda": "traseu_strada_osm" if urm is not None else "linie_dreapta", "capete": (a, b),
+                "puncte": pts, "metoda": "traseu_pe_strazi" if pe_strazi else "traseu_strada_osm" if urm is not None else "linie_dreapta", "capete": (a, b),
                 "sursa_locatie": "analiza_harta",
                 "urmeaza": urm, "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}))
         q = w["potrivire"]["calitate_dupa_coordonate"] * (0.8 if r.get("ambiguu") else 1.0)
@@ -683,7 +689,10 @@ class Sesiune2:
         sp, factori = S.scor_propunere(event, q, w, urm)
         if urm is None and treapta <= 2:
             sp = round(sp * cfg["factor_fara_strada"], 3)
-        sp = round(sp * {1: 1.0, 2: cfg["factor_raza_extinsa"], 3: cfg["factor_linie_dreapta_lunga"], 4: cfg["factor_doar_casa"]}[treapta], 3)
+        # treapta 3 = analiza hărții: factorul vine din ea (scade cu lungimea drumului; `fara_drum` dacă nu e drum pe străzi)
+        f_tr = (r["factor_analiza"] if treapta == 3 and ah and ah["ales"] else
+                {1: 1.0, 2: cfg["factor_raza_extinsa"], 3: cfg["factor_linie_dreapta_lunga"], 4: cfg["factor_doar_casa"]}[treapta])
+        sp = round(sp * f_tr, 3)
         if sursa_loc == "operator_simulat":
             sp = round(sp * cfg["factor_locatie_operator"], 3)
         cap_casa = S.plafon(sursa_casa, w)
@@ -702,7 +711,9 @@ class Sesiune2:
             txt += " " + S.text_plafon(sursa_casa, w) + f" Stâlpii și cablurile prezise (analiza hărții): cel mult {S.fmt(S.plafon('analiza_harta', w))}."
         if taiat:
             txt += " Lanțul a fost tăiat la limita zonei prototipului (stâlpi în afara razei de 3 km eliminați)."
-        txt += f" Treapta {treapta} din 4 (1 nod în rază, 2 rază extinsă, 3 linie dreaptă, 4 doar casa)."
+        txt += f" Treapta {treapta} din 4 (1 nod în rază, 2 rază extinsă, 3 analiza hărții pe străzi, 4 doar casa)."
+        if ah and ah["ales"]:
+            txt += " " + " ".join(ah["explicatie"])
         slaba = False
         if niv == "de_verificat":
             # fără „neaplicat” din lipsă de date: predicție slabă (punctată), niciodată aplicată fără om
@@ -719,10 +730,12 @@ class Sesiune2:
         else:
             for sid, tip_el, s in specs:
                 self.predictii[sid] = s
-                pr = {"metoda": "lant_racordare" if urm is not None or tip_el == "nod" else "linie_dreapta",
+                pr = {"metoda": metoda_r if ah and ah["ales"] else "lant_racordare" if urm is not None or tip_el == "nod" else "linie_dreapta",
                       "urmeaza_strada": urm if tip_el == "tronson" else None,
                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp,
                       "slaba": slaba, "treapta": treapta}
+                if ah and ah["ales"]:
+                    pr["traseu"], pr["alternative"] = ah["ales"]["traseu"], ah["alternative"]
                 self._pune(sid, tip_el, data, nivel="predictie", scor=min(sp, S.plafon(s.get("sursa_locatie"), w)),
                            ultima_verificare=None, predictie=pr, sursa_locatie=s.get("sursa_locatie"), t0=False,
                            motive=[{"text": txt + f" Sub pragul {w['praguri']['aplicat']}: predicție, neaplicată; fiecare stâlp poate fi "

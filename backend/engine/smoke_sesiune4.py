@@ -342,6 +342,139 @@ def teste_verificare_om() -> None:
         print("SKIP API (fastapi lipsă)")
 
 
+def teste_analiza_harta() -> None:
+    """V3: analiza hărții (`backend.engine.analiza_harta`) pe graful de străzi OSM; integrarea în racordare și în nodul lipsă."""
+    import math
+
+    from backend.engine.analiza_harta import traseu_pe_strazi
+    from backend.engine.network import dist_m
+    from backend.engine.zona import zona_ok
+
+    w, m0 = load_weights(), GridModel()
+    net, a = m0.net, load_weights()["analiza_harta"]
+    S_osm = osm.strazi()
+    segs = [(tuple(u), tuple(v)) for s_ in S_osm for u, v in zip(s_["puncte"], s_["puncte"][1:])]
+    d_strada = lambda p: min(osm._proiecteaza(tuple(p), u, v)[1] for u, v in segs)
+    # casă la ~300 m de rețea, la ~10 m de Strada Liviu Rebreanu (capătul de vest) și una la ~100 m
+    c300, c100 = (44.28482, 26.05638), (44.27731, 26.05886)
+    d300 = min(dist_m(c300, (n["lat"], n["lon"])) for n in net["noduri"].values())
+    d100 = min(dist_m(c100, (n["lat"], n["lon"])) for n in net["noduri"].values())
+    verifica("analiza: casele de test sunt la ~300 m și ~100 m de rețea", 250 <= d300 <= 350 and 90 <= d100 <= 140, f"{d300:.0f} / {d100:.0f}")
+    r3, r1 = traseu_pe_strazi(c300, net, w), traseu_pe_strazi(c100, net, w)
+    al = r3["ales"]
+    verifica("analiza: casă la ~300 m: drum pe străzi (nu fara_drum), cu nume de străzi și stâlpi noi",
+             not r3["fara_drum"] and al["strazi"] and al["stalpi_noi"] and al["lungime_m"] >= d300, f"{al['de_la']} {al['lungime_m']} m {al['strazi']}")
+    verifica("analiza: fiecare punct al traseului (fără capetele de branșament) la ≤ 15 m de o stradă OSM",
+             len(al["traseu"]) > 3 and all(d_strada(p) <= 15 for p in al["traseu"][1:-1]), f"{max(d_strada(p) for p in al['traseu'][1:-1]):.1f} m")
+    verifica("analiza: stâlpii noi sunt pe stradă și la ≥ distanța minimă de nodurile existente",
+             all(d_strada(p) <= 15 for p in al["stalpi_noi"]) and all(
+                 dist_m(tuple(p), (n["lat"], n["lon"])) >= w["potrivire"]["distanta_max_element_nou_m"] for p in al["stalpi_noi"] for n in net["noduri"].values()))
+    verifica("analiza: stâlpii noi la cel mult pas_stalp_m unul de altul",
+             all(dist_m(tuple(x["puncte"][0]), tuple(x["puncte"][-1])) <= a["pas_stalp_m"] + 1 for x in al["cabluri"][:-1]))
+    verifica("analiza: scorul scade cu lungimea (300 m < 100 m)", r3["acuratete"] < r1["acuratete"], f"{r3['acuratete']} < {r1['acuratete']}")
+    verifica("analiza: acuratețea = plafon[sursa] × factor; stâlpii plafonați la analiza_harta",
+             abs(r3["acuratete"] - w["plafon_locatie"]["analiza_harta"] * r3["factor"]) < 0.002 and r3["acuratete_stalpi"] <= w["plafon_locatie"]["analiza_harta"]
+             and traseu_pe_strazi(c300, net, w, sursa="coordonate")["acuratete"] > r3["acuratete"])
+    verifica("analiza: alternativele au traseu și motiv", r3["alternative"] and all(x["traseu"] and x["motiv"] and x["de_la"] for x in r3["alternative"]),
+             str([x["motiv"] for x in r3["alternative"]][:3]))
+    verifica("analiza: explicația are 3 fraze", len(r3["explicatie"]) == 3 and all(isinstance(x, str) and x for x in r3["explicatie"]), str(r3["explicatie"]))
+    verifica("analiza: determinist (două rulări identice)", json.dumps(traseu_pe_strazi(c300, net, w), sort_keys=True) == json.dumps(r3, sort_keys=True))
+    verifica("analiza: ținta peste max_bransament_m scade acuratețea",
+             traseu_pe_strazi((c300[0] + 100 / 111_320, c300[1]), net, w)["factor"] < r3["factor"] and traseu_pe_strazi((c300[0] + 100 / 111_320, c300[1]), net, w)["bransament_m"] > a["max_bransament_m"])
+    # safeguard: cu zona restrânsă, niciun stâlp nou în afara ei
+    wz = load_weights()
+    wz["zona"]["raza_max_m"] = dist_m(net["_zona_centru"], (net["noduri"][al["de_la"]]["lat"], net["noduri"][al["de_la"]]["lon"])) + 60
+    rz = traseu_pe_strazi(c300, net, wz)
+    verifica("analiza: stâlpii noi în afara zonei sunt tăiați (tăiat, toți în zonă)",
+             rz["ales"]["taiat"] and all(zona_ok(p[0], p[1], net, wz)["ok"] for p in rz["ales"]["stalpi_noi"]) and len(rz["ales"]["stalpi_noi"]) < len(al["stalpi_noi"]),
+             f"{len(rz['ales']['stalpi_noi'])} < {len(al['stalpi_noi'])}")
+    verifica("analiza: pe rularea normală niciun stâlp nou în afara zonei de 3 km", all(zona_ok(p[0], p[1], net, w)["ok"] for p in al["stalpi_noi"]))
+
+    # --- rețea sintetică (metri față de un punct de lângă rețea): reutilizare, fără drum, evită, preferate
+    la0, lo0 = 44.2800, 26.0600
+    P = lambda x, y: (round(la0 + y / 111_320, 7), round(lo0 + x / (111_320 * math.cos(math.radians(la0))), 7))
+    st = lambda nume, *pts: {"nume": nume, "puncte": [list(P(*p)) for p in pts]}
+    nod = lambda i, x, y: (i, {"id": i, "lat": P(x, y)[0], "lon": P(x, y)[1]})
+    net_s = {"noduri": dict([nod("A", 0, 0), nod("Q", 100, 3)]), "tronsoane": {}}
+    r_n = traseu_pe_strazi(P(250, 0), net_s, w, strazi=[st("Test", (0, 0), (300, 0))])
+    verifica("analiza: pornește din stâlpul existent cel mai bun (Q, la 150 m de țintă, nu A la 250 m)", r_n["ales"]["de_la"] == "Q" and r_n["ales"]["lungime_m"] < 160,
+             f"{r_n['ales']['de_la']} {r_n['ales']['lungime_m']}")
+    r = traseu_pe_strazi(P(250, 0), net_s, w, strazi=[st("Test", (0, 0), (300, 0))], de_la="A")
+    verifica("analiza: stâlp existent pe drum (la 3 m) refolosit, fără stâlp nou lângă el",
+             r["ales"]["de_la"] == "A" and r["ales"]["stalpi_reutilizati"] == ["Q"] and all(dist_m(tuple(p), P(100, 3)) > 10 for p in r["ales"]["stalpi_noi"])
+             and any(c["la"] == "Q" for c in r["ales"]["cabluri"]), str(r["ales"]["stalpi_reutilizati"]))
+    verifica("analiza: `exclus` scoate stâlpul din plecare/reutilizare",
+             traseu_pe_strazi(P(250, 0), net_s, w, strazi=[st("Test", (0, 0), (300, 0))], exclus={"A", "Q"})["ales"] is None)
+    # fără drum: două străzi nelegate
+    net_f = {"noduri": dict([nod("A", 0, 0)]), "tronsoane": {}}
+    rf = traseu_pe_strazi(P(250, 100), net_f, w, strazi=[st("Vest", (-20, 0), (60, 0)), st("Est", (200, 100), (300, 100))])
+    verifica("analiza: punct fără legătură pe străzi -> fara_drum, scor analiza_harta.fara_drum, linie dreaptă",
+             rf["fara_drum"] and rf["acuratete"] == a["fara_drum"] and rf["ales"]["strazi"] == [] and len(rf["ales"]["traseu"]) == 2
+             and "Nu există drum pe străzi; linie dreaptă, de verificat." in rf["explicatie"], str(rf["explicatie"]))
+    verifica("analiza: fara_drum fără stâlp în raza de căutare -> ales None",
+             traseu_pe_strazi(P(5000, 0), net_f, w, strazi=[st("Vest", (-20, 0), (60, 0))])["ales"] is None)
+    # evită: drum direct (y=0) vs ocol (y=80); cercul pe drumul direct îl blochează
+    s2 = [st("Direct", (0, 0), (200, 0)), st("Ocol", (0, 0), (0, 80), (200, 80), (200, 0))]
+    net_e = {"noduri": dict([nod("A", 0, 0)]), "tronsoane": {}}
+    r_d = traseu_pe_strazi(P(200, 0), net_e, w, strazi=s2)
+    r_e = traseu_pe_strazi(P(200, 0), net_e, w, strazi=s2, evita={"centru": P(100, 0), "raza_m": 20})
+    cen = P(100, 0)
+    verifica("analiza: fără evită drumul direct, cu evită ocolește cercul (≥ 20 m de centru)",
+             r_d["ales"]["lungime_m"] < 210 and r_e["ales"]["lungime_m"] > 350 and all(
+                 osm._proiecteaza(cen, tuple(u), tuple(v))[1] >= 20 for u, v in zip(r_e["ales"]["traseu"], r_e["ales"]["traseu"][1:])),
+             f"{r_d['ales']['lungime_m']} / {r_e['ales']['lungime_m']}")
+    verifica("analiza: cercul pe unicul drum -> fara_drum",
+             traseu_pe_strazi(P(200, 0), net_e, w, strazi=[s2[0]], evita={"centru": P(100, 0), "raza_m": 20})["fara_drum"])
+    # preferate: două drumuri apropiate (200 m și 240 m); strada preferată costă 0,5×
+    s3 = [st("Scurta", (0, 0), (200, 0)), st("Noua", (0, 0), (0, 20), (200, 20), (200, 0))]
+    r_n, r_p = traseu_pe_strazi(P(200, 0), net_e, w, strazi=s3), traseu_pe_strazi(P(200, 0), net_e, w, strazi=s3, preferate=["Noua"])
+    verifica("analiza: `preferate` schimbă alegerea (Scurta -> Noua), lungimea raportată rămâne reală",
+             r_n["ales"]["strazi"] == ["Scurta"] and r_p["ales"]["strazi"] == ["Noua"] and r_p["ales"]["lungime_m"] > r_n["ales"]["lungime_m"],
+             f"{r_n['ales']['strazi']} -> {r_p['ales']['strazi']}")
+
+    # --- racordare: casă la ~480 m (treapta 3, analiza hărții), pas nou `analiza_harta`, elemente `traseu_pe_strazi`
+    far = {"lat": 44.28466, "lon": 26.05401}
+    t = mk().apply_event(ev("AH-1", "2026-11-10", "racordari", "cerere_racordare", "semnalat", ref={"coordonate": far}, sursa="formular", forma="text_liber", inc=0.95))
+    pa, pp = pas(t, "analiza_harta"), pas(t, "predictie")
+    ras = (pa or {}).get("rezultat") or {}
+    verifica("racordare: treapta 3 are pasul analiza_harta (înainte de predictie) cu drum pe străzi",
+             pa and ras["ales"] and not ras["fara_drum"] and ras["ales"]["strazi"] and pp["rezultat"]["treapta"] == 3
+             and t["pasi"].index(pa) < t["pasi"].index(pp) and pp["rezultat"]["metoda"] == "traseu_pe_strazi", str(pp["rezultat"].get("treapta")))
+    mod = {x["element_id"]: x for x in t["modificari"]}
+    stalpi = [x for k, x in mod.items() if "-S" in k]
+    verifica("racordare: stâlpii prezisi au sursa analiza_harta, metoda traseu_pe_strazi, traseu și alternative",
+             stalpi and all(x["sursa_locatie"] == "analiza_harta" and x["scor"] <= w["plafon_locatie"]["analiza_harta"] and
+                            x["predictie"]["metoda"] == "traseu_pe_strazi" and x["predictie"]["traseu"] and x["predictie"]["alternative"] is not None and
+                            x["predictie"]["treapta"] == 3 for x in stalpi))
+    verifica("racordare: scorul scade față de o casă din treapta 2 la aceeași sursă",
+             t["pasi"][-1]["rezultat"]["scor_propunere"] < mk().apply_event(ev("AH-1b", "2026-11-10", "racordari", "cerere_racordare", "semnalat",
+                 ref={"coordonate": {"lat": c300[0], "lon": c300[1]}}, sursa="formular", forma="text_liber", inc=0.95))["pasi"][-1]["rezultat"]["scor_propunere"])
+    # fără stâlp în raza de căutare (3 km de centru, în zonă): treapta 4, doar casa, pasul analiza_harta cu ales None
+    c0 = net["_zona_centru"]
+    t4 = mk().apply_event(ev("AH-4", "2026-11-10", "racordari", "cerere_racordare", "semnalat",
+                             ref={"coordonate": {"lat": c0[0] - 2500 / 111_320, "lon": c0[1]}}, sursa="formular", forma="text_liber", inc=0.95))
+    p4 = pas(t4, "analiza_harta")
+    verifica("racordare: fără stâlp în raza de căutare -> treapta 4, doar casa", p4 and p4["rezultat"]["ales"] is None and pas(t4, "predictie")["rezultat"]["treapta"] == 4
+             and [x["element_id"] for x in t4["modificari"]] == ["NOU-AH-4-casa"], str([x["element_id"] for x in t4["modificari"]]))
+    verifica("racordare: pasul analiza_harta e doar la treapta 3 (treapta 1 nu-l are)",
+             pas(mk().apply_event(ev("AH-5", "2026-11-10", "racordari", "cerere_racordare", "semnalat", ref={"coordonate": {"lat": c0[0] + 20 / 111_320, "lon": c0[1]}},
+                                     sursa="formular", forma="text_liber", inc=0.95)), "analiza_harta") is None)
+
+    # --- nod lipsă departe de rețea (> 80 m de orice tronson), legătură lungă care ar fi linie dreaptă: pe străzi
+    pt = {"lat": far["lat"] + 60 / 111_320, "lon": far["lon"]}
+    nodes = sorted(m0.net["noduri"].values(), key=lambda n: dist_m((pt["lat"], pt["lon"]), (n["lat"], n["lon"])))
+    tn = mk().apply_event(ev("AH-2", "2026-11-10", "mentenanta", "nod_lipsa", "executat", ref={"coordonate": pt}, det={"noduri_vecine": [n["id"] for n in nodes[:2]]}))
+    pn = pas(tn, "analiza_harta")
+    mn = {x["element_id"]: x for x in tn["modificari"]}
+    verifica("nod lipsă departe: legătura lungă are pasul analiza_harta și stâlpi intermediari plafonați (sursa analiza_harta)",
+             pn and pn["rezultat"]["vecin"] and any("-S" in k for k in mn) and all(
+                 x["sursa_locatie"] == "analiza_harta" and x["scor"] <= w["plafon_locatie"]["analiza_harta"] for k, x in mn.items() if "-S" in k), str(list(mn)[:4]))
+    tn2 = mk().apply_event(ev("AH-3", "2026-11-10", "mentenanta", "nod_lipsa", "executat",
+                              ref={"coordonate": {"lat": c0[0] + 15 / 111_320, "lon": c0[1]}}, det={"noduri_vecine": [n["id"] for n in sorted(
+                                  m0.net["noduri"].values(), key=lambda n: dist_m(c0, (n["lat"], n["lon"])))[:2]]}))
+    verifica("nod lipsă lângă rețea: fără pas analiza_harta (legături scurte ca înainte)", pas(tn2, "analiza_harta") is None)
+
+
 def main() -> None:
     w = load_weights()
     m = mk()
@@ -459,6 +592,7 @@ def main() -> None:
 
     teste_cautare_strada()
     teste_verificare_om()
+    teste_analiza_harta()
 
     ok, tot = sum(OK), len(OK)
     print(f"\nsmoke_sesiune4: {ok}/{tot} OK")

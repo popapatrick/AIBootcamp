@@ -11,6 +11,7 @@ Motorul modelului: rețeaua în graf, potrivire, scor, decizie, traseu pe străz
 | `model.py` | `GridModel`: apply_event, snapshot, timeline, statistici, decizia omului | `docs/etapa-5-scor-decizie.md`, `etapa-14-verificare-om.md` |
 | `sesiune2.py` | mutare fire, demontat, val de apeluri, trace, cerere de racordare | `docs/etapa-15-motor-sesiune2.md` |
 | `verificare_om.py` | verificat de om (D10): `verificare_om`, acceptare = verificare, contradicție | `docs/etapa-29-verificat-om.md` |
+| `analiza_harta.py` | analiza hărții (V3): `traseu_pe_strazi(tinta, net, cfg, evita, preferate, exclus)` = drum pe graful de străzi OSM de la stâlpii existenți, stâlpi noi la ~40 m, alternative, acuratețe | `docs/etapa-27-analiza-harta.md` |
 | `osm.py` | traseu pe străzi, `strazi()` pentru modulele lui A (cache `data/model/osm/`) | `docs/etapa-6-traseu-osm.md` |
 | `engine.py` | interfața publică pentru API: `apply_event`, `snapshot`, `timeline`, `statistici`, `aplica_decizie`, `reset` (scenariul extrem `model_scenariu` a fost scos în sesiunea 4) | `contracts/interfaces.md` |
 | `calibrare.py`, `fallback_events.py` | rulare pe evenimente reale, rezervă fără date de la A | `docs/calibrare.md` |
@@ -23,7 +24,7 @@ python3 -m venv .venv && .venv/bin/pip install -r backend/engine/requirements.tx
 .venv/bin/python -m backend.engine.smoke_engine     # 39 verificări
 .venv/bin/python -m backend.engine.smoke_sesiune2   # 66 verificări
 .venv/bin/python -m backend.engine.smoke_osm        # 10 verificări
-EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 72 verificări (acuratețe V1/V2, căutare pe stradă V6, verificat de om V5)
+EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune4   # 100 verificări (acuratețe V1/V2, analiza hărții V3, căutare pe stradă V6, verificat de om V5)
 .venv/bin/python -m backend.engine.calibrare        # decizii pe evenimentele reale
 ```
 
@@ -51,3 +52,7 @@ Adresă fără ID/coordonate -> `fereastra_strada` (backend.geo) -> candidați d
 - **Tipuri noi (`nod_lipsa`, `racord_nou`; decizia lui Victor, 15 nov.):** mereu element nou la `fereastra.punct`, indiferent câți stâlpi sunt în fereastră (0, 1, 2–4, > 4); stâlpii existenți nu se potrivesc și nu dau `de_verificat`, ci apar informativ (`candidati` cu `ales` null în pas, `predictie.alternative` sau „De ce?” + `stalpi_existenti_in_fereastra` pe elementul nou). Regulile pentru tipurile despre elemente existente rămân (1 / 2–4 / > 4 / 0).
 - `smoke_sesiune4.py`: `teste_cautare_strada()` (29 verificări: 1 candidat, 2–4, peste maxim, 0 candidați, pin, element numit, ancore, doar stradă, determinism).
 
+## Analiza hărții (V3; `docs/etapa-27-analiza-harta.md`)
+- `analiza_harta.py`: `traseu_pe_strazi(tinta, net, cfg, evita=None, preferate=None, exclus=None, *, sursa=None, de_la=None, strazi=None)`. Pură, deterministă; graful de străzi vine din `osm.strazi()` (cu nume). `evita` și `preferate` sunt pentru V4 (mutare fire).
+- `sesiune2.py::_cerere_racordare`: treapta 3 = analiza hărții (pas nou `analiza_harta` în `pasi`, înainte de `predictie`); treapta 4 doar fără stâlp în `raza_cautare_m`. Elementele prezise: `predictie.metoda: traseu_pe_strazi`, `predictie.traseu`, `predictie.alternative`, stâlpii cu `sursa_locatie: analiza_harta`.
+- `model.py::_propune_element_nou`: nod nou la > 80 m de orice tronson și legătură > 80 m care ar fi linie dreaptă -> legătura pe străzi, cu stâlpi intermediari (`NOU-<id>-<vecin>-S<k>`) și pas `analiza_harta` (cu `vecin`).

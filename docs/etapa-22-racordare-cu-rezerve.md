@@ -9,6 +9,8 @@ Date FICTIVE. Feature OpenSpec: `openspec/changes/racordare-fara-neaplicat/`.
 - **Predicție slabă**: sub `praguri.predictie` nu mai e `neaplicat`; apare ca predicție cu `predictie.slaba: true` (punctată în UI), niciodată aplicată fără decizia omului. Sub `racordare.prag_afisare` rămâne doar punctul casei (fără lanț), tot ca predicție slabă. Motivul spune scorul, treapta și ce lipsește.
 - **Singurele `neaplicat`:** fără locație deductibilă (motiv „locația casei", cu sursele încercate) și în afara zonei prototipului (`eronat_prototip`).
 
+> **Sesiunea 4 (V3, `docs/etapa-27-analiza-harta.md`): treapta 3 nouă.** Treapta 3 nu mai e „linie dreaptă la cel mai apropiat nod": e **analiza hărții pe străzi** (drum pe graful OSM, stâlpi la ~40 m, refolosire stâlpi existenți). Fără drum pe străzi rămâne linie dreaptă, cu scorul `analiza_harta.fara_drum`. Treapta 4 = niciun stâlp existent în `analiza_harta.raza_cautare_m` (doar casa). Scorul treptei 3 = scorul propunerii × `factor` din analiză (scade cu lungimea drumului), nu `factor_linie_dreapta_lunga` (rămas doar ca rezervă în cod). Treptele 1-2 neschimbate.
+
 ## Cum se verifică
 ```bash
 EXTRACT_CLI=0 .venv/bin/python -m backend.engine.smoke_sesiune2   # blocul „racordare cu rezerve” (58 verificări)

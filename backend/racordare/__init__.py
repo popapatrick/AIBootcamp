@@ -1,6 +1,7 @@
 """Predicția lanțului de stâlpi pentru o cerere de racordare (rol A). Vezi README.md."""
 from statistics import median
 
+from backend.engine.analiza_harta import traseu_pe_strazi
 from backend.engine.network import dist_m
 
 MAX_STRADA_M = 40  # shortcut: prag fix pentru "stradă lângă casă/nod", nu e în weights.yaml; mută-l acolo dacă se calibrează
@@ -56,15 +57,53 @@ def _la_distanta(drum, d):
         d -= l
 
 
-def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dict:
+def _treapta_analiza(out, casa, noduri, net, strazi, cfg, sursa, d0):
+    """Treapta 3: analiza hărții (drum pe străzi) în loc de linia dreaptă; 4 dacă nu există stâlp în zonă."""
+    r = cfg["racordare"]
+    net_m = net if "features" not in net else {"noduri": {i: {"id": i, "lat": p[0], "lon": p[1]} for i, p in noduri}}
+    ah = traseu_pe_strazi(casa, net_m, cfg, sursa=sursa, strazi=strazi)
+    out["analiza_harta"], out["factor_analiza"] = ah, ah["factor"]
+    ales = ah["ales"]
+    if ales is None:
+        out.update(treapta=4, nod_start=None, status="fara_nod",
+                   motiv=f"niciun stâlp existent în {cfg['analiza_harta']['raza_cautare_m']:g} m: doar punctul casei")
+        return out
+    out["nod_start"], out["distanta_m"] = ales["de_la"], ales["lungime_m"]
+    out["status"] = "linie_dreapta" if ah["fara_drum"] else "lant"
+    out["urmeaza_strada"] = None if ah["fara_drum"] else 1.0
+    out["motiv"] = (f"cel mai apropiat nod e la {d0:.0f} m (peste raza extinsă {r['raza_extinsa_m']} m): "
+                    + ("analiza hărții n-a găsit drum pe străzi, linie dreaptă" if ah["fara_drum"] else
+                       f"analiza hărții: drum pe străzi de {ales['lungime_m']:g} m"))
+    noi, cabluri = ales["stalpi_noi"], [dict(c) for c in ales["cabluri"]]
+    if len(noi) > r["max_stalpi_prezisi"]:
+        m = r["max_stalpi_prezisi"]
+        i = next(k for k, c in enumerate(cabluri) if c["la"] == f"stalp-{m}")
+        pct = [cabluri[i]["puncte"][-1]]
+        for c in cabluri[i + 1:]:
+            pct += [q for q in c["puncte"] if q != pct[-1]]
+        cabluri = cabluri[:i + 1] + [{"de_la": f"stalp-{m}", "la": "casa", "puncte": pct}]
+        noi = noi[:m]
+        out["ambiguu"], out["motiv"] = True, f"lanț mai lung decât {m} stâlpi; prezis doar începutul; {out['motiv']}"
+    out["stalpi"] = [{"ordine": k, "lat": round(p[0], 7), "lon": round(p[1], 7)} for k, p in enumerate(noi, 1)]
+    out["cabluri"] = cabluri
+    return out
+
+
+def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict, sursa: str | None = None) -> dict:
     """Lanț prezis de la cel mai apropiat nod până la casa `locatie` {lat, lon}.
 
-    net: network.geojson sau dict-ul motorului. strazi: osm.strazi(). cfg: weights.yaml.
+    net: network.geojson sau dict-ul motorului. strazi: osm.strazi(). cfg: weights.yaml. sursa: sursa locației casei
+    (cheie din `plafon_locatie`), doar pentru acuratețea analizei hărții.
     Întoarce {status: lant|linie_dreapta|fara_nod, treapta, nod_start, distanta_m, stalpi, cabluri,
-    urmeaza_strada, ambiguu, motiv}. Scara: 1 nod în raza_nod_m; 2 nod în raza_extinsa_m; 3 cel mai apropiat
-    nod, linie dreaptă; 4 niciun nod în rețea: doar casa (status fara_nod, fără lanț). Scorul îl calculează motorul
-    din `treapta` (factor_*), nu această funcție. Stâlpii la distanța mediană a tronsoanelor existente;
-    peste cfg.racordare.max_stalpi_prezisi se taie și rezultatul e ambiguu. Pură."""
+    urmeaza_strada, ambiguu, motiv} (+ `analiza_harta` și `factor_analiza` la treapta 3). Scara (Sesiunea 4):
+    1 nod în raza_nod_m; 2 nod în raza_extinsa_m (stâlpi la distanța mediană a tronsoanelor); 3 casa e mai departe de
+    raza extinsă: ANALIZA HĂRȚII (`backend.engine.analiza_harta.traseu_pe_strazi`): drumul cel mai scurt pe străzi de la
+    unul dintre cei mai apropiați stâlpi, stâlpi la ~40 m (status `lant`), sau, fără drum pe străzi, linie dreaptă spre
+    cel mai apropiat stâlp (status `linie_dreapta`, scor `analiza_harta.fara_drum`); 4 niciun stâlp existent în
+    `analiza_harta.raza_cautare_m` (sau rețea goală): doar casa (status fara_nod, fără lanț). Scorul îl calculează motorul
+    din `treapta` (factor_*; la treapta 3 din `factor_analiza`), nu această funcție. Stâlpii refolosiți apar în cabluri
+    cu ID-ul lor real; cei noi sunt `stalp-k` (doar ei sunt în `stalpi`). Peste cfg.racordare.max_stalpi_prezisi se taie
+    și rezultatul e ambiguu. Pură."""
     r = cfg["racordare"]
     casa = (locatie["lat"], locatie["lon"])
     out = {"status": "fara_nod", "treapta": 4, "nod_start": None, "distanta_m": None, "stalpi": [], "cabluri": [],
@@ -78,8 +117,10 @@ def prezice_lant(locatie: dict, net: dict, strazi: list[dict], cfg: dict) -> dic
     if out["treapta"] > 1:
         out["motiv"] = f"cel mai apropiat nod e la {d0:.0f} m (raza {r['raza_nod_m']} m, extinsă {r['raza_extinsa_m']} m)"
     out["nod_start"] = nid
+    if out["treapta"] == 3:
+        return _treapta_analiza(out, casa, noduri, net, strazi, cfg, sursa, d0)
     span = median(_lungime(t) for t in tr if len(t) > 1) if tr else 30.0
-    drum = _drum_strada(npos, casa, strazi) if out["treapta"] < 3 else None  # treapta 3: linie dreaptă
+    drum = _drum_strada(npos, casa, strazi)
     out["status"] = "lant" if drum else "linie_dreapta"
     out["urmeaza_strada"] = 1.0 if drum else None
     drum = drum or [npos, casa]

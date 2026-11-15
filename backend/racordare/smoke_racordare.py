@@ -41,11 +41,23 @@ r = prezice_lant(la_m(rz["raza_nod_m"] - 20), net, [], cfg)
 ok(r["treapta"] == 1 and r["status"] == "linie_dreapta" and r["motiv"] is None, r)
 r = prezice_lant(la_m(rz["raza_nod_m"] + 20), net, strada, cfg)
 ok(r["treapta"] == 2 and r["nod_start"] == nid and r["stalpi"] and "extinsă" in r["motiv"], r)
-r = prezice_lant(la_m(rz["raza_extinsa_m"] + 20), net, strada, cfg)  # strada există, dar treapta 3 e linie dreaptă
-ok(r["treapta"] == 3 and r["status"] == "linie_dreapta" and r["urmeaza_strada"] is None and r["nod_start"] == nid, r)
-ok(r["cabluri"] and r["cabluri"][-1]["la"] == "casa" and r["motiv"], r)
+# treapta 3 (Sesiunea 4) = analiza hărții: drum pe stradă (aici strada sintetică se oprește la ~150 m), nu linie dreaptă
+r = prezice_lant(la_m(rz["raza_extinsa_m"] + 20), net, strada, cfg)
+ok(r["treapta"] == 3 and r["status"] == "lant" and r["urmeaza_strada"] == 1.0 and r["nod_start"] == nid, r)
+ok(r["analiza_harta"]["ales"]["strazi"] == ["Test"] and r["factor_analiza"] == r["analiza_harta"]["factor"] and r["cabluri"][-1]["la"] == "casa" and r["motiv"], r)
+r = prezice_lant(la_m(rz["raza_extinsa_m"] + 20), net, [], cfg)   # fără străzi: fără drum, linie dreaptă spre cel mai apropiat stâlp
+ok(r["treapta"] == 3 and r["status"] == "linie_dreapta" and r["urmeaza_strada"] is None and r["nod_start"] == nid and r["analiza_harta"]["fara_drum"], r)
+ok(r["analiza_harta"]["acuratete"] == cfg["analiza_harta"]["fara_drum"] and r["cabluri"] and r["cabluri"][-1]["la"] == "casa" and r["motiv"], r)
+# stradă lungă (~1 km) până la casă: lanț de stâlpi pe stradă, tăiat la max_stalpi_prezisi (ambiguu)
+strada_l = [{"nume": "Lunga", "puncte": [[la + 5e-5, lo + k * 10 * lon_pas] for k in range(-1, 110)]}]
+casa_l = {"lat": la + 5e-5, "lon": lo + 700 * lon_pas}
+r = prezice_lant(casa_l, net, strada_l, cfg)
+ok(r["treapta"] == 3 and r["status"] == "lant" and r["ambiguu"] and len(r["stalpi"]) == rz["max_stalpi_prezisi"], r["motiv"])
+ok(r["cabluri"][-1]["la"] == "casa" and r["cabluri"][-1]["de_la"] == f"stalp-{rz['max_stalpi_prezisi']}" and len(r["cabluri"]) == len(r["stalpi"]) + 1, "cablul final până la casă")
+ok(all(abs(dist_m((s["lat"], s["lon"]), (strada_l[0]["puncte"][0][0], s["lon"]))) < 6 for s in r["stalpi"]), "stâlpii pe stradă")
+# treapta 4: niciun stâlp în raza de căutare (casa la 11 km): doar casa, pasul analizei fără `ales`
 r = prezice_lant({"lat": la + 0.1, "lon": lo}, net, strada, cfg)
-ok(r["treapta"] == 3 and r["ambiguu"] and len(r["stalpi"]) == rz["max_stalpi_prezisi"], r)
+ok(r["treapta"] == 4 and r["status"] == "fara_nod" and r["nod_start"] is None and r["stalpi"] == [] and r["cabluri"] == [] and r["analiza_harta"]["ales"] is None, r)
 r = prezice_lant(casa, {"type": "FeatureCollection", "features": []}, strada, cfg)
 ok(r["treapta"] == 4 and r["status"] == "fara_nod" and r["nod_start"] is None and r["stalpi"] == [] and r["cabluri"] == [] and r["motiv"], r)
 

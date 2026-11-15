@@ -18,6 +18,7 @@ import json
 import re
 from pathlib import Path
 
+from backend.engine import analiza_harta as AH
 from backend.engine import scoring as S
 from backend.engine.config import load_weights
 from backend.engine.defects import build
@@ -516,10 +517,28 @@ class GridModel(Sesiune2, VerificareOm):
 
         # geometria legăturilor: traseu OSM dacă există (etapa 6), altfel linie dreaptă
         legaturi, urm, info_leg = [], [], []
+        analiza_leg: dict[str, dict] = {}      # vecin -> rezultatul analizei hărții (nod departe de rețea, legătură lungă)
+        departe = None
         for v in vecini:
             nv = self.net["noduri"][v]
             a, b = pt, (nv["lat"], nv["lon"])
             r = self.traseu_fn(a, b) if self.traseu_fn else None
+            if not r and dist_m(a, b) > AH.LEGATURA_LUNGA_M:
+                # legătură lungă care ar fi linie dreaptă: dacă nodul e departe de orice tronson, merge pe străzi (V3)
+                if departe is None:
+                    departe = AH.departe_de_tronsoane(pt, self.net, AH.NOD_DEPARTE_M)
+                if departe:
+                    ah = AH.traseu_pe_strazi(pt, self.net, w, de_la=v, sursa=self._sursa_eveniment(event, pozitie_dedusa))
+                    if ah["ales"] and not ah["fara_drum"] and not ah["ales"]["taiat"]:
+                        analiza_leg[v] = ah
+                        L = ah["ales"]["lungime_m"]
+                        legaturi.append((v, [tuple(q) for q in reversed(ah["ales"]["traseu"])], "traseu_pe_strazi"))
+                        urm.append(ah["factor"])
+                        info_leg.append({"vecin": v, "metoda": "traseu_pe_strazi", "urmeaza_strada": ah["factor"], "lungime_m": L,
+                                         "lungime_dreapta_m": round(dist_m(a, b), 1), "analiza_harta": True})
+                        trace["pasi"].append({"nume": "analiza_harta", "incredere": ah["acuratete"],
+                                              "rezultat": {**ah, "vecin": v}})
+                        continue
             if r:
                 legaturi.append((v, r["puncte"], "traseu_strada_osm"))
                 urm.append(r["urmeaza_strada"])
@@ -535,7 +554,7 @@ class GridModel(Sesiune2, VerificareOm):
         # nici infirmată); dacă nicio legătură nu are traseu, factorul lipsește și ponderile se renormalizează
         urmeaza = (round(sum(0.5 if u is None else u for u in urm) / len(urm), 3)
                    if any(u is not None for u in urm) else None)
-        metoda = "traseu_strada_osm" if urmeaza is not None else "linie_dreapta"
+        metoda = "traseu_pe_strazi" if analiza_leg else "traseu_strada_osm" if urmeaza is not None else "linie_dreapta"
 
         # există deja o predicție pentru același element? atunci acest raport o întărește
         vechi_ids: list[str] = []
@@ -602,6 +621,9 @@ class GridModel(Sesiune2, VerificareOm):
                                "geometrie": {"type": "Point", "coordinates": [pt[1], pt[0]]}})]
         for (v, puncte, met), u_leg in zip(legaturi, urm):
             tid = f"{eid}-{v}" if eid.startswith("NOU-") else f"NOU-{eid}-{v}"
+            if v in analiza_leg:
+                specs += self._specs_leg_pe_strazi(eid, v, tid, analiza_leg[v])
+                continue
             specs.append((tid, "tronson", {"puncte": puncte, "metoda": met, "capete": (eid, v), "urmeaza": u_leg, "sursa_locatie": sursa,
                                            "geometrie": {"type": "LineString",
                                                          "coordinates": [[o, a] for a, o in puncte]}}))
@@ -615,6 +637,8 @@ class GridModel(Sesiune2, VerificareOm):
                       "propunere": {"proprietate": "element_nou", "valoare": sid}, "scor_propunere": sp}
                 if alt_info and sid == eid:
                     pr["alternative"] = alt_info
+                if sp_.get("analiza"):
+                    pr["traseu"], pr["alternative"] = sp_["analiza"]["traseu"], sp_["analiza"]["alternative"]
                 if sid in self.istoric:
                     mot = self._motiv(sid, txt + " Sub prag: rămâne predicție.", 0.0, event)
                 else:
@@ -630,6 +654,27 @@ class GridModel(Sesiune2, VerificareOm):
         for sid, _, _ in specs:
             trace["modificari"].append(self._publica(sid, self._curent(sid)))
         self._scor_pas(trace, dec, {**rez, "scor_nou": sp, "nivel": "in_model"}, motive + [txt], sp)
+
+    def _specs_leg_pe_strazi(self, eid: str, v: str, tid: str, ah: dict) -> list:
+        """Elementele unei legături prezise pe străzi între nodul nou `eid` și vecinul `v`: stâlpii intermediari noi
+        (sursa de locație `analiza_harta`, deci plafonați) și tronsoanele lanțului, de la `eid` spre `v`."""
+        ales = ah["ales"]
+        baza = eid if eid.startswith("NOU-") else f"NOU-{eid}"
+        nume = {f"stalp-{k}": f"{baza}-{v}-S{k}" for k in range(1, len(ales["stalpi_noi"]) + 1)}
+        nume["casa"] = eid
+        an = {"traseu": ales["traseu"], "alternative": ah["alternative"]}
+        specs = [(nume[f"stalp-{k}"], "nod", {"punct": tuple(p), "sursa_locatie": "analiza_harta", "metoda": "traseu_pe_strazi",
+                                               "geometrie": {"type": "Point", "coordinates": [p[1], p[0]]}, "analiza": an})
+                 for k, p in enumerate(ales["stalpi_noi"], 1)]
+        cabluri = ales["cabluri"]
+        for i, c in enumerate(reversed(cabluri)):     # de la nodul nou spre vecin
+            pts = [tuple(q) for q in reversed(c["puncte"])]
+            a, b = nume.get(c["la"], c["la"]), nume.get(c["de_la"], c["de_la"])
+            specs.append((tid if i == 0 else f"{tid}-L{i + 1}", "tronson", {
+                "puncte": pts, "metoda": "traseu_pe_strazi", "capete": (a, b), "urmeaza": ah["factor"],
+                "sursa_locatie": "analiza_harta", "analiza": an,
+                "geometrie": {"type": "LineString", "coordinates": [[o, la] for la, o in pts]}}))
+        return specs
 
     def _adauga_in_model(self, specs, event, sp, motive, pid, plafoneaza: bool = True):
         """Pune în model elementele din `specs`. `plafoneaza`: scorul fiecăruia nu depășește plafonul sursei lui de locație
