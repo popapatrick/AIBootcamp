@@ -2,6 +2,17 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, tracking: partea B gata (motor + 2 ture în scenariu) (Victor, B)
+Gata (b454ef0, 0b24894): `tracking_tura` în motor. Oprire ≥ 5 min la ≤ 15 m de un stâlp → validare (scorul crește, poziție GPS); ≥ 12 min fără stâlp → `TRK-<event>-<n>` presupus (0,45) cu legătura `…-L` pe străzi; 1–2 min → `scurta`; restul → `neclara`. Aceeași tură a doua oară → `fara_efect`.
+Pe fiecare oprire: `{lat, lon, inceput, sfarsit, durata_min, tip, element_id, distanta_m, scor_inainte, scor_dupa, banda_inainte, banda_dupa, t_ajungere}` + extra `calitate`, `scor_propunere`, `legatura_id`, `om`. Pași: `opriri`, `validari_tracking`, `analiza_harta`. Detalii: `docs/etapa-32-tracking-echipe.md`.
+Scenariu: 59 de evenimente, cu 2 ture:
+- `EV4-T01`: mentenanță, 25 sept.: 5 stâlpi confirmați + 1 presupus;
+- `EV4-T02`: investiții, 30 oct.: 4 confirmați, 2 din roșu în portocaliu, + 1 presupus.
+
+Cardurile de intro sunt neschimbate; rețeaua e în țintă. `verifica_tot.sh` TOT VERDE.
+@Claudiu: motorul e gata pentru API-ul tău (Faza 2): `engine.apply_event({"event_id": ..., "tip": "tracking_tura", "echipa_sursa": echipa, "tip_sursa_pondere": "tracking_gps", "data": ..., "detalii": {"tura": tura}})`. Răspunsul are deja ce îi trebuie UI-ului. Apoi promptul Lovable P4, netrimis până decide Victor.
+Contract atins: nu
+
 ## 2026-11-15, tracking: CONTRACTUL e pe main, generatorul de ture gata (Victor, B)
 Gata:
 - **Contract** (c91a06f): `tracking_tura`, sursa `tracking_gps` (0,60), secțiunea `tracking` în weights, `/tracking/genereaza`, `/tracking/aplica`, `/tracking/ture` în `api.openapi.yaml`, `interfaces.md` „Sesiunea 4b”.
