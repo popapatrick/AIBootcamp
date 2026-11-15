@@ -143,8 +143,8 @@
   "event_id": "EV4-021",
   "data": "2026-09-10",
   "tip": "nod_lipsa",
-  "decizie": "neaplicat",
-  "scor": null
+  "decizie": "adaugat",
+  "scor": 0.626
  },
  {
   "event_id": "EV4-022",
