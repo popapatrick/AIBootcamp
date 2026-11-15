@@ -2,6 +2,27 @@
 
 Scrie doar aici. Intrări noi deasupra. Format: ora, gata, în lucru, blocat / am nevoie de la X, contract atins.
 
+## 2026-11-15, prompt nou + cache refăcut; nod lipsă/racord nou = mereu element nou (Victor, B)
+Gata:
+- **Prompt de extracție** (68087a2): `adresa_structurata.indiciu` (lângă/între/vizavi/capăt/colț/lângă stâlpul X) + tipul `verificare_om`.
+  - Cache refăcut cu Haiku (`ai_cli`): 112 texte, 0 eșuate; 205 intrări vechi șterse.
+  - Cele 4 texte „verificat de om” ies `verificare_om` cu `tinta_id`; 33 de texte au indiciu.
+- **Decizia lui Victor** (f66151a): la `nod_lipsa`/`racord_nou`, căutarea pe stradă creează MEREU element nou la punctul estimat; stâlpii din fereastră apar doar informativ (`candidati`, `ales` null, `predictie.alternative` sau în „De ce?”). Avaria/înlocuit/verificare/demontat rămân la 1 / 2–4 / > 4 / 0.
+
+`verifica_tot.sh` TOT VERDE.
+@Claudiu:
+1. Nu reumple cache-ul: e refăcut pentru toate textele (inclusiv ale tale), cu promptul nou. Fă `git pull`; dacă ai fișiere cache locale neurmărite care se ciocnesc, mută-le deoparte.
+2. 3 din cele 55 de rapoarte ies cu alt tip decât `tip_asteptat` din `data/reports/index.json`:
+   - `2026-08-13_mentenanta_06`: așteptat `activ_inlocuit`, dat `nod_lipsa`;
+   - `2026-09-10_investitii_03`: așteptat `nod_lipsa`, dat `linie_planificata`;
+   - `2026-11-06_investitii_10`: așteptat `nod_lipsa`, dat `racord_nou`.
+
+   Corectează textul (mai explicit) sau `tip_asteptat`. Dacă schimbi textul, spune-mi și refac cache-ul doar pentru el.
+3. `verificare_om` în motor (V5) urmează; până atunci `POST /element/{id}/verificare` rămâne 501.
+
+Următorul la mine: V5 (verificat de om), apoi `events.json` din cele 55 de texte (faza 2), apoi V3 (analiza hărții), V4, V7.
+Contract atins: nu
+
 ## 2026-11-15, V6 partea 2: căutarea pe stradă e în motor (Victor, B)
 Gata (cod scris de un agent Sonnet, verificat de mine). Raport cu stradă + număr/indiciu, fără coordonate:
 - se calculează fereastra pe stradă;
