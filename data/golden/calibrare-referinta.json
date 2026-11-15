@@ -267,125 +267,132 @@
  },
  {
   "event_id": "EV4-039",
+  "data": "2026-10-10",
+  "tip": "mutare_fire",
+  "decizie": "aplicat",
+  "scor": null
+ },
+ {
+  "event_id": "EV4-040",
   "data": "2026-10-13",
   "tip": "activ_demontat",
   "decizie": "de_verificat",
   "scor": 0.35
  },
  {
-  "event_id": "EV4-040",
+  "event_id": "EV4-041",
   "data": "2026-10-14",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV4-041",
+  "event_id": "EV4-042",
   "data": "2026-10-16",
   "tip": "mutare_fire",
   "decizie": "de_verificat",
   "scor": null
  },
  {
-  "event_id": "EV4-042",
+  "event_id": "EV4-043",
   "data": "2026-10-17",
   "tip": "racord_nou",
   "decizie": "adaugat",
   "scor": 0.57
  },
  {
-  "event_id": "EV4-043",
+  "event_id": "EV4-044",
   "data": "2026-10-18",
   "tip": "verificare_om",
   "decizie": "aplicat",
   "scor": 1.0
  },
  {
-  "event_id": "EV4-044",
+  "event_id": "EV4-045",
   "data": "2026-10-22",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
   "scor": 0.555
  },
  {
-  "event_id": "EV4-045",
+  "event_id": "EV4-046",
   "data": "2026-10-26",
   "tip": "linie_planificata",
   "decizie": "neaplicat",
   "scor": null
  },
  {
-  "event_id": "EV4-046",
+  "event_id": "EV4-047",
   "data": "2026-10-28",
   "tip": "cerere_racordare",
   "decizie": "predictie",
   "scor": 0.677
  },
  {
-  "event_id": "EV4-047",
+  "event_id": "EV4-048",
   "data": "2026-10-29",
   "tip": "verificare",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV4-048",
+  "event_id": "EV4-049",
   "data": "2026-10-30",
   "tip": "racord_nou",
   "decizie": "adaugat",
   "scor": 0.57
  },
  {
-  "event_id": "EV4-049",
+  "event_id": "EV4-050",
   "data": "2026-11-03",
   "tip": "avarie_semnalata",
   "decizie": "predictie",
   "scor": 0.205
  },
  {
-  "event_id": "EV4-050",
+  "event_id": "EV4-051",
   "data": "2026-11-06",
   "tip": "nod_lipsa",
   "decizie": "adaugat",
   "scor": 0.55
  },
  {
-  "event_id": "EV4-051",
+  "event_id": "EV4-052",
   "data": "2026-11-07",
   "tip": "cerere_racordare",
   "decizie": "predictie",
   "scor": 0.551
  },
  {
-  "event_id": "EV4-052",
+  "event_id": "EV4-053",
   "data": "2026-11-10",
   "tip": "verificare_om",
   "decizie": "aplicat",
   "scor": 1.0
  },
  {
-  "event_id": "EV4-053",
+  "event_id": "EV4-054",
   "data": "2026-11-11",
   "tip": "avarie_semnalata",
   "decizie": "scor_actualizat",
-  "scor": 0.881
+  "scor": 0.315
  },
  {
-  "event_id": "EV4-054",
+  "event_id": "EV4-055",
   "data": "2026-11-12",
   "tip": "activ_demontat",
   "decizie": "scor_actualizat",
   "scor": 0.766
  },
  {
-  "event_id": "EV4-055",
+  "event_id": "EV4-056",
   "data": "2026-11-13",
   "tip": "racord_nou",
   "decizie": "scor_actualizat",
   "scor": 1.0
  },
  {
-  "event_id": "EV4-056",
+  "event_id": "EV4-057",
   "data": "2026-11-14",
   "tip": "avarie_semnalata",
   "decizie": "predictie",

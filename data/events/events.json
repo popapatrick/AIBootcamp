@@ -1368,6 +1368,54 @@
  },
  {
   "event_id": "EV4-039",
+  "echipa_sursa": "mentenanta",
+  "tip": "mutare_fire",
+  "referinta": {
+   "adresa": "intersecția Strada Crinului cu Strada Liviu Rebreanu",
+   "adresa_structurata": {
+    "strada": "Strada Crinului",
+    "numar": null,
+    "localitate": null,
+    "reper": null,
+    "indiciu": {
+     "tip": "colt",
+     "strada_2": "Strada Liviu Rebreanu",
+     "numar": null,
+     "numar_2": null,
+     "element_id": null,
+     "distanta_stalpi": null,
+     "paritate": null
+    }
+   },
+   "coordonate": null,
+   "element_id": null,
+   "id_client": null,
+   "nr_cadastral": null
+  },
+  "status": "executat",
+  "data": "2026-10-10",
+  "text_original": "DATE FICTIVE\nFIȘĂ DE LUCRARE – MENTENANȚĂ\nNr. fișă: M-2026-0424\nData: 2026-10-10\nEchipa: mentenanta\nTip lucrare: mutare fire, sens giratoriu\nCod element: -\nCoordonate: -\nAdresa: intersecția Strada Crinului cu Strada Liviu Rebreanu\nConstatare: Ca urmare a construirii sensului giratoriu de la intersecția Strada Crinului cu Strada Liviu Rebreanu, rețeaua aeriană JT a fost mutată pe Strada 1 Mai.\nStatus: executat\n",
+  "forma_sursa": "campuri",
+  "tip_sursa_pondere": "formular",
+  "incredere_extractie": 0.5,
+  "campuri_lipsa": [
+   "centru",
+   "raza_m",
+   "coordonate"
+  ],
+  "detalii": {
+   "intersectie": {
+    "strada_1": "Strada Crinului",
+    "strada_2": "Strada Liviu Rebreanu"
+   },
+   "motiv_mutare": "sens_giratoriu",
+   "strada_noua": "Strada 1 Mai",
+   "raza_m": null,
+   "observatii": "Ca urmare a construirii sensului giratoriu de la intersecția Strada Crinului cu Strada Liviu Rebreanu, rețeaua aeriană JT a fost mutată pe Strada 1 Mai."
+  }
+ },
+ {
+  "event_id": "EV4-040",
   "echipa_sursa": "investitii",
   "tip": "activ_demontat",
   "referinta": {
@@ -1407,7 +1455,7 @@
   }
  },
  {
-  "event_id": "EV4-040",
+  "event_id": "EV4-041",
   "echipa_sursa": "mentenanta",
   "tip": "avarie_semnalata",
   "referinta": {
@@ -1439,7 +1487,7 @@
   }
  },
  {
-  "event_id": "EV4-041",
+  "event_id": "EV4-042",
   "echipa_sursa": "mentenanta",
   "tip": "mutare_fire",
   "referinta": {
@@ -1486,7 +1534,7 @@
   }
  },
  {
-  "event_id": "EV4-042",
+  "event_id": "EV4-043",
   "echipa_sursa": "racordari",
   "tip": "racord_nou",
   "referinta": {
@@ -1526,7 +1574,7 @@
   }
  },
  {
-  "event_id": "EV4-043",
+  "event_id": "EV4-044",
   "echipa_sursa": "mentenanta",
   "tip": "verificare_om",
   "referinta": {
@@ -1559,7 +1607,7 @@
   "event_id_placeholder": "null"
  },
  {
-  "event_id": "EV4-044",
+  "event_id": "EV4-045",
   "echipa_sursa": "mentenanta",
   "tip": "nod_lipsa",
   "referinta": {
@@ -1600,7 +1648,7 @@
   }
  },
  {
-  "event_id": "EV4-045",
+  "event_id": "EV4-046",
   "echipa_sursa": "investitii",
   "tip": "linie_planificata",
   "referinta": {
@@ -1642,7 +1690,7 @@
   }
  },
  {
-  "event_id": "EV4-046",
+  "event_id": "EV4-047",
   "echipa_sursa": "racordari",
   "tip": "cerere_racordare",
   "referinta": {
@@ -1673,7 +1721,7 @@
   }
  },
  {
-  "event_id": "EV4-047",
+  "event_id": "EV4-048",
   "echipa_sursa": "mentenanta",
   "tip": "verificare",
   "referinta": {
@@ -1708,7 +1756,7 @@
   "tip_sursa_pondere": "formular"
  },
  {
-  "event_id": "EV4-048",
+  "event_id": "EV4-049",
   "echipa_sursa": "racordari",
   "tip": "racord_nou",
   "referinta": {
@@ -1741,7 +1789,7 @@
   }
  },
  {
-  "event_id": "EV4-049",
+  "event_id": "EV4-050",
   "echipa_sursa": "mentenanta",
   "tip": "avarie_semnalata",
   "referinta": {
@@ -1783,7 +1831,7 @@
   }
  },
  {
-  "event_id": "EV4-050",
+  "event_id": "EV4-051",
   "echipa_sursa": "investitii",
   "tip": "nod_lipsa",
   "referinta": {
@@ -1823,7 +1871,7 @@
   }
  },
  {
-  "event_id": "EV4-051",
+  "event_id": "EV4-052",
   "echipa_sursa": "racordari",
   "tip": "cerere_racordare",
   "referinta": {
@@ -1862,7 +1910,7 @@
   }
  },
  {
-  "event_id": "EV4-052",
+  "event_id": "EV4-053",
   "echipa_sursa": "mentenanta",
   "tip": "verificare_om",
   "referinta": {
@@ -1896,7 +1944,7 @@
   }
  },
  {
-  "event_id": "EV4-053",
+  "event_id": "EV4-054",
   "echipa_sursa": "apel_client",
   "tip": "avarie_semnalata",
   "referinta": {
@@ -1933,7 +1981,7 @@
   }
  },
  {
-  "event_id": "EV4-054",
+  "event_id": "EV4-055",
   "echipa_sursa": "investitii",
   "tip": "activ_demontat",
   "referinta": {
@@ -1965,7 +2013,7 @@
   "incredere_extractie": 0.85
  },
  {
-  "event_id": "EV4-055",
+  "event_id": "EV4-056",
   "echipa_sursa": "racordari",
   "tip": "racord_nou",
   "referinta": {
@@ -1997,7 +2045,7 @@
   }
  },
  {
-  "event_id": "EV4-056",
+  "event_id": "EV4-057",
   "echipa_sursa": "mentenanta",
   "tip": "avarie_semnalata",
   "referinta": {
